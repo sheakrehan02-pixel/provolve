@@ -7,7 +7,7 @@ export async function GET(context: APIContext) {
   return rss({
     title: 'Provolve Blog',
     description: 'A student-led platform exploring medicine, innovation, and healthcare challenges.',
-    site: context.site,
+    site: context.site || 'https://provolve.net',
     items: blog.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
