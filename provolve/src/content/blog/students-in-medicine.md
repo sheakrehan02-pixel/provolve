@@ -1,6 +1,6 @@
 ---
 title: "Why Students Matter in Medicine"
-pubDate: 2025-01-04
+pubDate: 2025-12-31
 description: "The importance of early engagement in healthcare and medical research."
 ---
 

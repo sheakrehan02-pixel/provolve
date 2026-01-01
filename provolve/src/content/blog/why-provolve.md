@@ -1,6 +1,6 @@
 ---
 title: "Why Provolve Exists"
-pubDate: 2025-01-01
+pubDate: 2025-12-31
 description: "A student-led platform exploring medicine, innovation, and healthcare challenges."
 ---
 

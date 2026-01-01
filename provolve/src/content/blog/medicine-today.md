@@ -1,6 +1,6 @@
 ---
 title: "Medicine Today: Where Are We Now?"
-pubDate: 2025-01-02
+pubDate: 2025-12-31
 description: "An overview of the most impactful changes shaping modern healthcare."
 ---
 

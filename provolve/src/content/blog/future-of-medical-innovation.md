@@ -1,6 +1,6 @@
 ---
 title: "The Future of Medical Innovation"
-pubDate: 2025-01-03
+pubDate: 2025-12-31
 description: "How research, AI, and biotechnology are redefining healthcare."
 ---
 
