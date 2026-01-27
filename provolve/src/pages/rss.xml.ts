@@ -4,15 +4,16 @@ import type { APIContext } from 'astro';
 
 export async function GET(context: APIContext) {
   const blog = await getCollection('blog');
+  const site = context.site ?? new URL('https://hilarious-kheer-939495.netlify.app');
   return rss({
     title: 'Provolve Blog',
     description: 'A student-led platform exploring medicine, innovation, and healthcare challenges.',
-    site: context.site || 'https://provolve.net',
+    site,
     items: blog.map((post) => ({
       title: post.data.title,
       pubDate: post.data.pubDate,
       description: post.data.description,
-      link: `${context.site || 'https://provolve.net'}/blog/${post.slug}/`,
+      link: `${site}/blog/${post.slug}/`,
     })),
   });
 }
