@@ -7,7 +7,7 @@ import tailwind from '@astrojs/tailwind';
 export default defineConfig({
   site: 'https://provolve.net',
   base: '/',
-  outDir: 'docs',
+  outDir: '../docs',
   integrations: [mdx(), sitemap(), tailwind()],
 });
 
