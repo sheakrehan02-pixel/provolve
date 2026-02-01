@@ -5,7 +5,7 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://hilarious-kheer-939495.netlify.app',
+  site: 'https://provolve.net',
   base: '/',
   integrations: [mdx(), sitemap(), tailwind()],
 });

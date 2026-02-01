@@ -18,18 +18,124 @@ const { Content } = await post.render();
 ---
 
 <Layout title={post.data.title}>
-  <article>
-    <h1 class="text-4xl font-bold mb-4">{post.data.title}</h1>
-    <time class="text-gray-600">
-      {post.data.pubDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      })}
-    </time>
-    <div class="prose prose-lg mt-8">
+  <!-- Teleportation entry overlay -->
+  <div id="teleport-entry" class="fixed inset-0 z-[9999] pointer-events-none opacity-0"></div>
+  
+  <article class="max-w-4xl mx-auto teleport-entry">
+    <!-- Back button -->
+    <a href="/" class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-indigo-600 mb-8 group transition-colors duration-300 animate-fade-in-down">
+      <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+      </svg>
+      Back to Blog
+    </a>
+
+    <!-- Header section -->
+    <header class="mb-12 animate-fade-in-up">
+      <div class="mb-6">
+        <span class="px-4 py-2 text-sm font-semibold text-purple-600 bg-purple-100 rounded-full inline-block">
+          {post.data.pubDate.toLocaleDateString('en-US', {
+            month: 'long',
+            day: 'numeric',
+            year: 'numeric',
+          })}
+        </span>
+      </div>
+      <h1 class="text-5xl md:text-6xl font-extrabold mb-6 leading-tight animate-fade-in-up" style="animation-delay: 0.1s;">
+        <span class="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 bg-clip-text text-transparent">
+          {post.data.title}
+        </span>
+      </h1>
+      {post.data.description && (
+        <p class="text-xl text-gray-600 leading-relaxed animate-fade-in-up" style="animation-delay: 0.2s;">
+          {post.data.description}
+        </p>
+      )}
+    </header>
+
+    <!-- Content section -->
+    <div class="prose prose-lg prose-headings:font-bold prose-headings:text-gray-800 prose-h1:text-4xl prose-h2:text-3xl prose-h3:text-2xl prose-h2:mt-12 prose-h3:mt-8 prose-p:text-gray-700 prose-p:leading-relaxed prose-a:text-purple-600 prose-a:font-semibold prose-a:no-underline hover:prose-a:underline prose-strong:text-gray-900 prose-code:text-purple-600 prose-code:bg-purple-50 prose-code:px-2 prose-code:py-1 prose-code:rounded prose-pre:bg-gray-900 prose-blockquote:border-l-4 prose-blockquote:border-purple-500 prose-blockquote:pl-4 prose-blockquote:italic prose-blockquote:text-gray-700 max-w-none animate-fade-in-up" style="animation-delay: 0.3s;">
       <Content />
     </div>
+
+    <!-- Footer navigation -->
+    <footer class="mt-16 pt-8 border-t border-gray-200 animate-fade-in-up" style="animation-delay: 0.4s;">
+      <a href="/" class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-full hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to All Posts
+      </a>
+    </footer>
   </article>
+
+  <script>
+    // Teleportation entry animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const wasTeleported = sessionStorage.getItem('teleported') === 'true';
+      const teleportX = sessionStorage.getItem('teleportX');
+      const teleportY = sessionStorage.getItem('teleportY');
+      const article = document.querySelector('.teleport-entry');
+      const entryOverlay = document.getElementById('teleport-entry');
+      
+      if (wasTeleported && teleportX && teleportY && entryOverlay) {
+        // Create entry circle animation
+        const maxDimension = Math.max(window.innerWidth, window.innerHeight);
+        const size = maxDimension * 2;
+        
+        entryOverlay.innerHTML = `
+          <div class="teleport-entry-circle absolute bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 opacity-1" style="left: ${teleportX}px; top: ${teleportY}px; width: ${size}px; height: ${size}px; transform: translate(-50%, -50%); border-radius: 50%;"></div>
+        `;
+        
+        const circle = entryOverlay.querySelector('.teleport-entry-circle');
+        entryOverlay.style.opacity = '1';
+        
+        // Animate entry circle collapsing
+        setTimeout(() => {
+          circle.style.transition = 'width 0.6s ease-out, height 0.6s ease-out, opacity 0.6s ease-out';
+          circle.style.width = '0';
+          circle.style.height = '0';
+          circle.style.opacity = '0';
+        }, 10);
+        
+        // Animate article content appearing
+        if (article) {
+          article.style.opacity = '0';
+          article.style.transform = 'scale(0.95)';
+          article.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+          
+          setTimeout(() => {
+            article.style.opacity = '1';
+            article.style.transform = 'scale(1)';
+          }, 300);
+        }
+        
+        // Clean up overlay
+        setTimeout(() => {
+          if (entryOverlay) {
+            entryOverlay.style.opacity = '0';
+            setTimeout(() => entryOverlay.remove(), 600);
+          }
+        }, 600);
+        
+        // Clean up session storage
+        sessionStorage.removeItem('teleported');
+        sessionStorage.removeItem('teleportX');
+        sessionStorage.removeItem('teleportY');
+      } else {
+        // Normal fade-in if not teleported
+        if (article) {
+          article.style.opacity = '0';
+          article.style.transform = 'translateY(20px)';
+          article.style.transition = 'opacity 0.8s ease-out, transform 0.8s ease-out';
+          
+          setTimeout(() => {
+            article.style.opacity = '1';
+            article.style.transform = 'translateY(0)';
+          }, 50);
+        }
+      }
+    });
+  </script>
 </Layout>
 
