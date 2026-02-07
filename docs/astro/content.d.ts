@@ -152,9 +152,37 @@ declare module 'astro:content' {
 
 	type ContentEntryMap = {
 		"blog": {
+"chronotherapy-timing-medicine.md": {
+	id: "chronotherapy-timing-medicine.md";
+  slug: "chronotherapy-timing-medicine";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"cold-exposure-science.md": {
+	id: "cold-exposure-science.md";
+  slug: "cold-exposure-science";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "future-of-medical-innovation.md": {
 	id: "future-of-medical-innovation.md";
   slug: "future-of-medical-innovation";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"gut-brain-axis-mental-health.md": {
+	id: "gut-brain-axis-mental-health.md";
+  slug: "gut-brain-axis-mental-health";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"long-covid-mitochondria.md": {
+	id: "long-covid-mitochondria.md";
+  slug: "long-covid-mitochondria";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
