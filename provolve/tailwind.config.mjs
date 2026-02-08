@@ -3,6 +3,14 @@ export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
   theme: {
     extend: {
+      colors: {
+        truffle: {
+          cream: '#FDFBD4',
+          caramel: '#C05800',
+          brown: '#713600',
+          'dark-brown': '#38240D',
+        },
+      },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in-out',
         'fade-in-up': 'fadeInUp 0.8s ease-out',

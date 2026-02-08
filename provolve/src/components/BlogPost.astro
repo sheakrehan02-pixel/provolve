@@ -8,191 +8,31 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<div class="group relative blog-card">
-  <a href={`/blog/${post.slug}/`} class="block h-full teleport-link" data-slug={post.slug}>
-    <div class="relative overflow-hidden rounded-2xl bg-white/80 backdrop-blur-sm border border-gray-200/50 p-6 h-full transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/20 hover:-translate-y-2 hover:scale-[1.02] hover:border-purple-300 click-animate">
-      <!-- Animated gradient overlay on hover -->
-      <div class="absolute inset-0 bg-gradient-to-br from-purple-500/0 via-blue-500/0 to-indigo-500/0 group-hover:from-purple-500/10 group-hover:via-blue-500/10 group-hover:to-indigo-500/10 transition-all duration-500 rounded-2xl"></div>
+<a href={`/blog/${post.slug}/`} class="group block h-full">
+  <article class="relative overflow-hidden rounded-xl bg-white/70 backdrop-blur-sm border border-truffle-brown/15 p-6 h-full transition-all duration-200 hover:border-truffle-caramel/30 hover:shadow-lg hover:shadow-truffle-brown/5">
+    <div class="relative z-10">
+      <span class="inline-block px-3 py-1 text-xs font-medium text-truffle-caramel bg-truffle-caramel/10 rounded-full mb-4">
+        {post.data.pubDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+        })}
+      </span>
       
-      <!-- Shimmer effect -->
-      <div class="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+      <h2 class="text-xl font-semibold mb-3 text-truffle-dark-brown group-hover:text-truffle-caramel transition-colors duration-200">
+        {post.data.title}
+      </h2>
       
-      <div class="relative z-10">
-        <!-- Date badge -->
-        <div class="inline-block mb-4">
-          <span class="px-3 py-1 text-xs font-semibold text-purple-600 bg-purple-100 rounded-full">
-            {post.data.pubDate.toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </span>
-        </div>
-        
-        <h2 class="text-2xl font-bold mb-3 text-gray-800 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-purple-600 group-hover:to-indigo-600 transition-all duration-300">
-          {post.data.title}
-        </h2>
-        
-        <p class="text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-          {post.data.description}
-        </p>
-        
-        <!-- Read more indicator -->
-        <div class="flex items-center text-sm font-semibold text-purple-600 group-hover:text-indigo-600 transition-colors duration-300">
-          Read more
-          <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-          </svg>
-        </div>
-      </div>
+      <p class="text-truffle-brown/90 mb-4 line-clamp-3 leading-relaxed text-[15px]">
+        {post.data.description}
+      </p>
       
-      <!-- Decorative corner elements -->
-      <div class="absolute top-0 right-0 w-20 h-20 bg-gradient-to-br from-purple-400/20 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      <div class="absolute bottom-0 left-0 w-16 h-16 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-tr-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-      
-      <!-- Teleportation particles on click -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-        <div class="teleport-particles"></div>
-      </div>
-      
-      <!-- Ripple effect on click -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-        <div class="ripple-effect hidden"></div>
-      </div>
-      
-      <!-- Vortex effect -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden rounded-2xl">
-        <div class="vortex-effect hidden"></div>
-      </div>
+      <span class="inline-flex items-center text-sm font-medium text-truffle-caramel group-hover:text-truffle-brown transition-colors duration-200">
+        Read more
+        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+        </svg>
+      </span>
     </div>
-  </a>
-</div>
-
-<script>
-  // Add click teleportation effect
-  document.addEventListener('DOMContentLoaded', () => {
-    const links = document.querySelectorAll('.teleport-link');
-    
-    links.forEach((link) => {
-      link.addEventListener('click', function(e) {
-        const card = this.closest('.blog-card');
-        const clickTarget = this.querySelector('.click-animate');
-        const ripple = this.querySelector('.ripple-effect');
-        const vortex = this.querySelector('.vortex-effect');
-        const particles = this.querySelector('.teleport-particles');
-        
-        if (!clickTarget || !ripple || !vortex) return;
-        
-        // Get click position relative to card and screen
-        const rect = clickTarget.getBoundingClientRect();
-        const cardX = e.clientX - rect.left;
-        const cardY = e.clientY - rect.top;
-        const screenX = e.clientX;
-        const screenY = e.clientY;
-        
-        // Create ripple
-        ripple.style.left = cardX + 'px';
-        ripple.style.top = cardY + 'px';
-        ripple.classList.remove('hidden');
-        ripple.style.animation = 'ripple 0.6s ease-out forwards';
-        
-        // Create vortex
-        vortex.style.left = cardX + 'px';
-        vortex.style.top = cardY + 'px';
-        vortex.classList.remove('hidden');
-        vortex.style.animation = 'vortex 0.8s ease-out forwards';
-        
-        // Create particles
-        particles.innerHTML = '';
-        for (let i = 0; i < 20; i++) {
-          const particle = document.createElement('div');
-          const angle = (Math.PI * 2 * i) / 20;
-          const distance = 100 + Math.random() * 100;
-          const tx = Math.cos(angle) * distance;
-          const ty = Math.sin(angle) * distance;
-          
-          particle.className = 'absolute w-2 h-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full';
-          particle.style.left = cardX + 'px';
-          particle.style.top = cardY + 'px';
-          particle.style.transform = 'translate(-50%, -50%)';
-          particle.style.setProperty('--tx', tx + 'px');
-          particle.style.setProperty('--ty', ty + 'px');
-          particle.style.animation = `particle 1s ease-out forwards`;
-          particle.style.animationDelay = (i * 0.05) + 's';
-          particles.appendChild(particle);
-        }
-        
-        // Animate card teleportation
-        clickTarget.style.animation = 'teleport 0.6s ease-out forwards';
-        
-        // Show teleportation overlay using screen coordinates
-        showTeleportOverlay(screenX, screenY);
-        
-        // Store teleportation state for entry animation
-        sessionStorage.setItem('teleported', 'true');
-        sessionStorage.setItem('teleportX', screenX.toString());
-        sessionStorage.setItem('teleportY', screenY.toString());
-        
-        // Don't prevent default - let navigation happen
-      });
-    });
-  });
-  
-  function showTeleportOverlay(x, y) {
-    let overlay = document.getElementById('teleport-overlay');
-    if (!overlay) {
-      overlay = document.createElement('div');
-      overlay.id = 'teleport-overlay';
-      overlay.className = 'fixed inset-0 z-[9999] pointer-events-none';
-      document.body.appendChild(overlay);
-    }
-    
-    // Calculate size needed to cover entire screen
-    const maxDimension = Math.max(window.innerWidth, window.innerHeight);
-    const size = maxDimension * 2;
-    
-    // Create expanding circle from click point
-    overlay.innerHTML = `
-      <div class="teleport-circle absolute bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-600 opacity-0" style="left: ${x}px; top: ${y}px; width: 0; height: 0; transform: translate(-50%, -50%); border-radius: 50%;"></div>
-    `;
-    
-    const circle = overlay.querySelector('.teleport-circle');
-    // Animate to full screen
-    circle.style.transition = 'width 0.5s ease-in, height 0.5s ease-in, opacity 0.5s ease-in';
-    setTimeout(() => {
-      circle.style.width = size + 'px';
-      circle.style.height = size + 'px';
-      circle.style.opacity = '1';
-    }, 10);
-    
-    setTimeout(() => {
-      if (overlay) overlay.remove();
-    }, 600);
-  }
-</script>
-
-<style>
-  .teleport-particles {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-  }
-  
-  .ripple-effect {
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, rgba(139, 92, 246, 0.6) 0%, transparent 70%);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  .vortex-effect {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    background: conic-gradient(from 0deg, transparent, rgba(139, 92, 246, 0.4), transparent);
-    border-radius: 50%;
-    transform: translate(-50%, -50%);
-  }
-</style>
+  </article>
+</a>
