@@ -9,9 +9,12 @@ const { post } = Astro.props;
 ---
 
 <a href={`/blog/${post.slug}/`} class="group block h-full">
-  <article class="relative overflow-hidden rounded-xl bg-white/70 backdrop-blur-sm border border-truffle-brown/15 p-6 h-full transition-all duration-200 hover:border-truffle-caramel/30 hover:shadow-lg hover:shadow-truffle-brown/5">
-    <div class="relative z-10">
-      <span class="inline-block px-3 py-1 text-xs font-medium text-truffle-caramel bg-truffle-caramel/10 rounded-full mb-4">
+  <article class="relative overflow-hidden h-full transition-all duration-500 ease-out hover:-translate-y-2">
+    <!-- Decorative accent line -->
+    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-truffle-caramel/40 to-truffle-brown/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+    
+    <div class="pl-6 py-8 pr-6 bg-white/60 backdrop-blur-sm border border-truffle-brown/10 rounded-r-xl h-full group-hover:border-truffle-brown/20 group-hover:bg-white/80 group-hover:shadow-xl group-hover:shadow-truffle-brown/5 transition-all duration-500">
+      <span class="inline-block text-xs font-medium text-truffle-caramel uppercase tracking-widest mb-5">
         {post.data.pubDate.toLocaleDateString('en-US', {
           month: 'short',
           day: 'numeric',
@@ -19,18 +22,18 @@ const { post } = Astro.props;
         })}
       </span>
       
-      <h2 class="text-xl font-semibold mb-3 text-truffle-dark-brown group-hover:text-truffle-caramel transition-colors duration-200">
+      <h2 class="font-serif text-2xl font-semibold mb-5 text-truffle-dark-brown leading-snug group-hover:text-truffle-caramel transition-colors duration-300">
         {post.data.title}
       </h2>
       
-      <p class="text-truffle-brown/90 mb-4 line-clamp-3 leading-relaxed text-[15px]">
+      <p class="text-truffle-brown/85 leading-[1.7] line-clamp-3 text-base mb-6">
         {post.data.description}
       </p>
       
-      <span class="inline-flex items-center text-sm font-medium text-truffle-caramel group-hover:text-truffle-brown transition-colors duration-200">
-        Read more
-        <svg class="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+      <span class="inline-flex items-center gap-2 text-sm font-medium text-truffle-caramel group-hover:gap-3 transition-all duration-300">
+        Read article
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
         </svg>
       </span>
     </div>
