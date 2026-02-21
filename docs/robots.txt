@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://provolve.net/sitemap.xml
+Sitemap: https://provolve.net/sitemap-index.xml
