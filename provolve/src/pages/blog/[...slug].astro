@@ -24,140 +24,133 @@ const relatedPosts = allPosts
 ---
 
 <Layout title={post.data.title} description={post.data.description} canonicalURL={`https://provolve.net/blog/${post.slug}/`}>
-  <article class="max-w-3xl mx-auto">
-    <a href="/" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-brown/80 hover:text-truffle-caramel mb-12 group transition-colors duration-300">
-      <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-      </svg>
+  <article class="max-w-[72ch] mx-auto">
+    <a href="/" class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-brown/70 hover:text-truffle-caramel mb-8 link-underline transition-colors duration-200">
+      <span aria-hidden="true">←</span>
       Back to all articles
     </a>
 
-    <header class="mb-20">
-      <span class="inline-block text-xs font-medium text-truffle-caramel uppercase tracking-[0.2em] mb-8">
-        {post.data.pubDate.toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric',
-          year: 'numeric',
-        })}
-      </span>
-      <h1 class="font-serif text-4xl md:text-5xl lg:text-6xl font-semibold text-truffle-dark-brown leading-[1.2] tracking-tight mb-10">
+    <header class="mb-10">
+      <time class="text-xs text-truffle-brown/55" datetime={post.data.pubDate.toISOString()}>
+        {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+      </time>
+      <h1 class="font-serif text-2xl sm:text-3xl md:text-[2.25rem] font-semibold text-truffle-dark-brown leading-[1.25] mt-2">
         {post.data.title}
       </h1>
       {post.data.description && (
-        <p class="text-xl md:text-2xl text-truffle-brown/90 leading-[1.7] max-w-2xl">
+        <p class="text-lg text-truffle-brown/85 leading-relaxed mt-4 max-w-[65ch]">
           {post.data.description}
         </p>
       )}
-      <div class="mt-14 flex items-center gap-4">
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-truffle-brown/25"></div>
-        <span class="text-truffle-brown/30 text-xl">◆</span>
-        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-truffle-brown/25"></div>
-      </div>
+      <div class="mt-8 h-px bg-gradient-to-r from-transparent via-truffle-brown/15 to-transparent"></div>
     </header>
 
-    <div class="blog-content max-w-2xl">
+    <div class="blog-content">
       <Content />
     </div>
 
     <style>
       .blog-content {
+        font-size: 1.0625rem;
+        line-height: 1.68;
+        color: var(--text-body, rgba(56, 36, 13, 0.88));
+        max-width: 65ch;
+      }
+      .blog-content > * + * {
+        margin-top: 1.25rem;
+      }
+      .blog-content p:first-of-type {
         font-size: 1.125rem;
-        line-height: 2;
-        color: rgb(56 36 13 / 0.9);
+        line-height: 1.7;
+        color: rgba(56, 36, 13, 0.92);
       }
       .blog-content p {
-        margin-bottom: 2rem;
-        letter-spacing: 0.01em;
-      }
-      .blog-content p:last-child {
         margin-bottom: 0;
       }
       .blog-content h2 {
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-size: 1.75rem;
+        font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+        font-size: 1.5rem;
         font-weight: 600;
-        color: #38240D;
-        margin-top: 4rem;
-        margin-bottom: 1.5rem;
-        padding-bottom: 0.75rem;
-        border-bottom: 2px solid rgb(192 88 0 / 0.3);
+        color: var(--text-heading, #38240D);
+        margin-top: 2.5rem;
+        margin-bottom: 0.75rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid rgba(192, 88, 0, 0.2);
       }
       .blog-content h2:first-child {
         margin-top: 0;
       }
       .blog-content h3 {
-        font-family: 'Cormorant Garamond', Georgia, serif;
-        font-size: 1.35rem;
+        font-family: var(--font-serif);
+        font-size: 1.25rem;
         font-weight: 600;
-        color: #38240D;
-        margin-top: 3rem;
-        margin-bottom: 1rem;
+        color: var(--text-heading);
+        margin-top: 2rem;
+        margin-bottom: 0.5rem;
       }
       .blog-content strong {
         font-weight: 600;
-        color: #38240D;
+        color: var(--text-heading);
       }
       .blog-content a {
         color: #C05800;
         font-weight: 500;
         text-decoration: none;
-        border-bottom: 1px solid rgb(192 88 0 / 0.4);
+        border-bottom: 1px solid rgba(192, 88, 0, 0.35);
+        transition: color 0.2s, border-color 0.2s;
       }
       .blog-content a:hover {
         color: #713600;
         border-bottom-color: #713600;
       }
       .blog-content blockquote {
-        margin: 2.5rem 0;
-        padding: 1.5rem 1.5rem 1.5rem 2rem;
-        border-left: 4px solid #C05800;
-        background: rgb(192 88 0 / 0.05);
+        margin: 1.75rem 0;
+        padding: 1rem 0 1rem 1.25rem;
+        border-left: 3px solid #C05800;
+        background: rgba(192, 88, 0, 0.04);
         font-style: italic;
-        color: rgb(56 36 13 / 0.85);
+        color: rgba(56, 36, 13, 0.85);
       }
       .blog-content ul, .blog-content ol {
-        margin: 2rem 0;
-        padding-left: 1.5rem;
+        margin: 1.25rem 0;
+        padding-left: 1.35rem;
       }
       .blog-content li {
-        margin-bottom: 0.75rem;
-        line-height: 1.9;
+        margin-bottom: 0.35rem;
+        line-height: 1.65;
       }
       .blog-content hr {
-        margin: 3rem 0;
+        margin: 2rem 0;
         border: none;
         height: 1px;
-        background: linear-gradient(90deg, transparent, rgb(113 54 0 / 0.2), transparent);
+        background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
       }
       .blog-content code {
-        background: rgb(192 88 0 / 0.1);
+        background: rgba(192, 88, 0, 0.1);
         color: #C05800;
-        padding: 0.2em 0.5em;
-        border-radius: 4px;
+        padding: 0.15em 0.4em;
+        border-radius: 3px;
         font-size: 0.9em;
       }
     </style>
 
-    <footer class="mt-20 pt-10 border-t border-truffle-brown/15">
+    <footer class="mt-14 pt-8 border-t border-truffle-brown/10">
       {relatedPosts.length > 0 && (
-        <div class="mb-12">
-          <h2 class="font-serif text-xl font-semibold text-truffle-dark-brown mb-6">More articles</h2>
-          <ul class="space-y-4">
+        <div class="mb-8">
+          <h2 class="font-serif text-lg font-semibold text-truffle-dark-brown mb-4">More articles</h2>
+          <ul class="space-y-3">
             {relatedPosts.map((p) => (
               <li>
-                <a href={`/blog/${p.slug}/`} class="group flex items-baseline gap-3 text-truffle-brown/90 hover:text-truffle-caramel transition-colors duration-300">
-                  <span class="text-truffle-caramel/60 group-hover:text-truffle-caramel">→</span>
-                  <span class="font-medium">{p.data.title}</span>
+                <a href={`/blog/${p.slug}/`} class="link-underline text-truffle-brown/85 hover:text-truffle-caramel transition-colors duration-200 font-medium">
+                  {p.data.title}
                 </a>
               </li>
             ))}
           </ul>
         </div>
       )}
-      <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-truffle-dark-brown text-truffle-cream font-medium rounded-full hover:bg-truffle-caramel transition-all duration-300 group">
-        <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
+      <a href="/" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-dark-brown/90 hover:text-truffle-caramel link-underline transition-colors duration-200">
+        <span aria-hidden="true">←</span>
         Back to all posts
       </a>
     </footer>

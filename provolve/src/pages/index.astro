@@ -4,56 +4,61 @@ import Layout from '../layouts/Layout.astro';
 import BlogPost from '../components/BlogPost.astro';
 
 const allPosts = await getCollection('blog');
-const sortedPosts = allPosts.sort((a, b) => 
+const sortedPosts = allPosts.sort((a, b) =>
   b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---
 
 <Layout title="Provolve Blog" description="Evidence-based articles on medicine, research, and healthcare innovation for students and curious minds." canonicalURL="https://provolve.net/">
-  <main class="animate-fade-in opacity-0" style="animation: fadeIn 0.6s ease-out 0.2s forwards;">
-    <!-- Hero Section -->
-    <section class="relative mb-24 mt-8 overflow-hidden">
-      <div class="max-w-3xl">
-        <p class="text-sm font-medium text-truffle-caramel uppercase tracking-[0.2em] mb-6 animate-fade-in-up opacity-0" style="animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;">
-          Medicine · Research · Healthcare Innovation
-        </p>
-        <h1 class="font-serif text-5xl md:text-6xl lg:text-7xl font-semibold text-truffle-dark-brown leading-[1.1] tracking-tight mb-8 animate-fade-in-up opacity-0" style="animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;">
-          Helping students understand medicine and research
-        </h1>
-        <p class="text-xl md:text-2xl text-truffle-brown/90 leading-relaxed mb-12 max-w-2xl animate-fade-in-up opacity-0" style="animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;">
-          Clear, evidence-based articles on healthcare, innovation, and under-researched topics—written for students and lifelong learners.
-        </p>
-        <a href="#posts" class="inline-flex items-center gap-2 px-8 py-4 bg-truffle-dark-brown text-truffle-cream font-medium rounded-full hover:bg-truffle-caramel transition-all duration-300 animate-fade-in-up opacity-0 group" style="animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.4s forwards;">
-          Read the latest
-          <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-          </svg>
-        </a>
-      </div>
-      <!-- Decorative divider -->
-      <div class="mt-20 flex items-center gap-4">
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-truffle-brown/20"></div>
-        <span class="text-truffle-brown/30 text-2xl">◆</span>
-        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-truffle-brown/20"></div>
-      </div>
+  <main>
+    <!-- Hero: tight → loose rhythm -->
+    <section class="mb-16 sm:mb-20">
+      <p class="text-xs font-medium text-truffle-caramel/90 uppercase tracking-widest mb-4 animate-fade-in opacity-0" style="animation: fadeIn 0.5s ease-out 0.1s forwards;">
+        Medicine · Research · Healthcare
+      </p>
+      <h1 class="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-semibold text-truffle-dark-brown leading-[1.2] mb-5 max-w-[28ch] animate-fade-in-up opacity-0" style="animation: fadeInUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
+        Helping students understand medicine and research
+      </h1>
+      <p class="text-lg text-truffle-brown/85 leading-relaxed max-w-[42ch] mb-8 animate-fade-in-up opacity-0" style="animation: fadeInUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;">
+        Clear, evidence-based articles on healthcare and under-researched topics—for students and lifelong learners.
+      </p>
+      <a href="#posts" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-caramel hover:text-truffle-brown transition-colors duration-200 animate-fade-in opacity-0 link-underline" style="animation: fadeIn 0.5s ease-out 0.3s forwards;">
+        Read the latest
+        <span aria-hidden="true">→</span>
+      </a>
+      <!-- Soft divider -->
+      <div class="mt-12 pt-8 border-t border-truffle-brown/10"></div>
     </section>
 
-    <!-- Blog Posts Section -->
-    <section id="posts" class="mb-24">
-      <div class="flex items-baseline justify-between gap-4 mb-16">
-        <h2 class="font-serif text-3xl md:text-4xl font-semibold text-truffle-dark-brown">
-          Latest Articles
+    <!-- Posts -->
+    <section id="posts" class="scroll-reveal">
+      <div class="flex items-baseline justify-between gap-4 mb-10">
+        <h2 class="font-serif text-2xl font-semibold text-truffle-dark-brown">
+          Latest articles
         </h2>
-        <span class="text-sm text-truffle-brown/60">{sortedPosts.length} posts</span>
+        <span class="text-xs text-truffle-brown/50">{sortedPosts.length} posts</span>
       </div>
-      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 lg:gap-12">
+      <ul class="space-y-6 sm:space-y-8">
         {sortedPosts.map((post, index) => (
-          <div class="animate-fade-in-up opacity-0" style={`animation: fadeInUp 0.7s cubic-bezier(0.22,1,0.36,1) ${0.1 + index * 0.08}s forwards;`}>
+          <li class="scroll-reveal" style={`animation-delay: ${index * 0.06}s`}>
             <BlogPost post={post} />
-          </div>
+          </li>
         ))}
-      </div>
+      </ul>
     </section>
   </main>
-</Layout>
 
+  <style>
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(14px);
+      animation: scrollReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes scrollReveal {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</Layout>

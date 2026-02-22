@@ -8,34 +8,24 @@ interface Props {
 const { post } = Astro.props;
 ---
 
-<a href={`/blog/${post.slug}/`} class="group block h-full">
-  <article class="relative overflow-hidden h-full transition-all duration-500 ease-out hover:-translate-y-2">
-    <!-- Decorative accent line -->
-    <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-truffle-caramel/40 to-truffle-brown/20 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-    
-    <div class="pl-6 py-8 pr-6 bg-white/60 backdrop-blur-sm border border-truffle-brown/10 rounded-r-xl h-full group-hover:border-truffle-brown/20 group-hover:bg-white/80 group-hover:shadow-xl group-hover:shadow-truffle-brown/5 transition-all duration-500">
-      <span class="inline-block text-xs font-medium text-truffle-caramel uppercase tracking-widest mb-5">
-        {post.data.pubDate.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric',
-        })}
+<a href={`/blog/${post.slug}/`} class="group block py-5 border-b border-truffle-brown/10 last:border-0 hover:border-truffle-brown/20 transition-colors duration-200">
+  <article class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
+    <div class="min-w-0 flex-1">
+      <span class="text-xs text-truffle-brown/55">
+        {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
       </span>
-      
-      <h2 class="font-serif text-2xl font-semibold mb-5 text-truffle-dark-brown leading-snug group-hover:text-truffle-caramel transition-colors duration-300">
+      <h2 class="font-serif text-xl sm:text-2xl font-semibold text-truffle-dark-brown mt-1 group-hover:text-truffle-caramel transition-colors duration-200 leading-snug">
         {post.data.title}
       </h2>
-      
-      <p class="text-truffle-brown/85 leading-[1.7] line-clamp-3 text-base mb-6">
-        {post.data.description}
-      </p>
-      
-      <span class="inline-flex items-center gap-2 text-sm font-medium text-truffle-caramel group-hover:gap-3 transition-all duration-300">
-        Read article
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-        </svg>
-      </span>
+      {post.data.description && (
+        <p class="text-truffle-brown/75 text-base leading-relaxed mt-2 line-clamp-2 max-w-[65ch]">
+          {post.data.description}
+        </p>
+      )}
     </div>
+    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-caramel/80 group-hover:text-truffle-caramel mt-2 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">
+      Read
+      <span class="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
+    </span>
   </article>
 </a>

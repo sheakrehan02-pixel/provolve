@@ -25,60 +25,87 @@ const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
-    <style>
+    <style is:global>
       :root {
         --font-serif: 'Cormorant Garamond', Georgia, serif;
         --font-sans: 'Source Sans 3', system-ui, sans-serif;
+        --text-body: rgba(56, 36, 13, 0.88);
+        --text-heading: #38240D;
+        --bg-warm: #FCF9ED;
       }
       @keyframes fadeIn {
         from { opacity: 0; }
         to { opacity: 1; }
       }
       @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(24px); }
+        from { opacity: 0; transform: translateY(12px); }
         to { opacity: 1; transform: translateY(0); }
       }
       @keyframes float {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-8px); }
+        50% { transform: translateY(-6px); }
       }
-      .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-      .animate-fade-in-up { animation: fadeInUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
-      .animate-float { animation: float 10s ease-in-out infinite; }
+      .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+      .animate-fade-in-up { animation: fadeInUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards; }
+      .animate-float { animation: float 12s ease-in-out infinite; }
       .font-serif { font-family: var(--font-serif); }
       .font-sans { font-family: var(--font-sans); }
+      .link-underline {
+        position: relative;
+      }
+      .link-underline::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100%;
+        height: 1px;
+        background: currentColor;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.25s ease;
+      }
+      .link-underline:hover::after {
+        transform: scaleX(1);
+        transform-origin: left;
+      }
+      .grain {
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
     </style>
   </head>
-  <body class="min-h-screen bg-truffle-cream text-truffle-dark-brown antialiased font-sans">
-    <!-- Decorative background -->
+  <body class="min-h-screen text-truffle-dark-brown antialiased font-sans" style="background-color: var(--bg-warm);">
+    <!-- Subtle grain overlay -->
+    <div class="grain fixed inset-0 pointer-events-none -z-10"></div>
+    <!-- Soft orbs -->
     <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
-      <div class="absolute top-0 right-0 w-[600px] h-[600px] rounded-full bg-truffle-caramel/6 blur-3xl animate-float"></div>
-      <div class="absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full bg-truffle-brown/8 blur-3xl animate-float" style="animation-delay: 3s;"></div>
-      <div class="absolute top-1/2 left-0 w-px h-32 bg-gradient-to-b from-transparent via-truffle-brown/20 to-transparent"></div>
-      <div class="absolute top-1/2 right-0 w-px h-32 bg-gradient-to-b from-transparent via-truffle-brown/20 to-transparent"></div>
+      <div class="absolute top-0 right-0 w-[480px] h-[480px] rounded-full bg-truffle-caramel/[0.06] blur-3xl animate-float"></div>
+      <div class="absolute bottom-0 left-0 w-[400px] h-[400px] rounded-full bg-truffle-brown/[0.06] blur-3xl animate-float" style="animation-delay: 2s;"></div>
     </div>
 
-    <header class="sticky top-0 z-50 bg-truffle-cream/95 backdrop-blur-md border-b border-truffle-brown/15">
-      <nav class="max-w-5xl mx-auto px-6 lg:px-8 py-5">
-        <a href="/" class="font-serif text-2xl font-semibold text-truffle-dark-brown hover:text-truffle-caramel transition-colors duration-300 tracking-tight">
+    <header class="sticky top-0 z-50 border-b border-truffle-brown/10" style="background-color: rgba(252, 249, 237, 0.92); backdrop-filter: blur(12px);">
+      <nav class="max-w-3xl mx-auto px-5 sm:px-6 py-4">
+        <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-semibold text-truffle-dark-brown hover:text-truffle-caramel transition-colors duration-200">
+          <img src="/favicon.svg" alt="" class="w-6 h-6" width="24" height="24" />
           Provolve
         </a>
-        <span class="mx-2 text-truffle-brown/40">·</span>
-        <a href="/" class="text-sm font-medium text-truffle-brown/80 hover:text-truffle-caramel transition-colors duration-300">
+        <span class="mx-2 text-truffle-brown/30">·</span>
+        <a href="/" class="link-underline text-sm font-medium text-truffle-brown/80 hover:text-truffle-caramel transition-colors duration-200">
           Blog
         </a>
       </nav>
     </header>
-    <main class="max-w-5xl mx-auto px-6 lg:px-8 py-12 lg:py-16 relative z-10">
+    <main class="max-w-3xl mx-auto px-5 sm:px-6 py-8 sm:py-10 relative z-10">
       <slot />
     </main>
-    <footer class="mt-24 py-12 border-t border-truffle-brown/15">
-      <div class="max-w-5xl mx-auto px-6 lg:px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
-          <p class="text-truffle-brown/70 text-sm font-medium">
-            &copy; {new Date().getFullYear()} Provolve. All rights reserved.
+    <footer class="mt-16 py-10 border-t border-truffle-brown/10">
+      <div class="max-w-3xl mx-auto px-5 sm:px-6">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <p class="text-truffle-brown/60 text-sm">
+            &copy; {new Date().getFullYear()} Provolve
           </p>
-          <a href="/" class="text-sm font-medium text-truffle-caramel hover:text-truffle-brown transition-colors duration-300">
+          <a href="/" class="link-underline text-sm font-medium text-truffle-brown/70 hover:text-truffle-caramel transition-colors duration-200">
             Back to top ↑
           </a>
         </div>
@@ -86,4 +113,3 @@ const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog
     </footer>
   </body>
 </html>
-
