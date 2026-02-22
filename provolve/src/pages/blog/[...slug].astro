@@ -24,13 +24,13 @@ const relatedPosts = allPosts
 ---
 
 <Layout title={post.data.title} description={post.data.description} canonicalURL={`https://provolve.net/blog/${post.slug}/`}>
-  <article class="max-w-[72ch] mx-auto">
-    <a href="/" class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-brown/70 hover:text-truffle-caramel mb-8 link-underline transition-colors duration-200">
+  <article class="max-w-[75ch] mx-auto pb-6">
+    <a href="/" class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-brown/70 hover:text-truffle-caramel mb-10 link-underline transition-colors duration-200">
       <span aria-hidden="true">←</span>
       Back to all articles
     </a>
 
-    <header class="mb-10">
+    <header class="mb-12">
       <time class="text-xs text-truffle-brown/55" datetime={post.data.pubDate.toISOString()}>
         {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
       </time>
@@ -38,31 +38,72 @@ const relatedPosts = allPosts
         {post.data.title}
       </h1>
       {post.data.description && (
-        <p class="text-lg text-truffle-brown/85 leading-relaxed mt-4 max-w-[65ch]">
+        <p class="text-lg text-truffle-brown/85 leading-relaxed mt-5 max-w-[65ch]">
           {post.data.description}
         </p>
       )}
-      <div class="mt-8 h-px bg-gradient-to-r from-transparent via-truffle-brown/15 to-transparent"></div>
+      <!-- Decorative divider with flourish -->
+      <div class="mt-10 flex items-center gap-4" aria-hidden="true">
+        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-truffle-brown/20"></div>
+        <svg class="w-8 h-8 text-truffle-caramel/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+          <path d="M12 3v18M3 12h18M6 6l12 12M18 6L6 18"/>
+          <circle cx="12" cy="12" r="2.5" fill="currentColor" opacity="0.4"/>
+        </svg>
+        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-truffle-brown/20"></div>
+      </div>
     </header>
 
-    <div class="blog-content">
-      <Content />
+    <!-- Optional hero image -->
+    {post.data.heroImage && (
+      <figure class="mb-12 rounded-xl overflow-hidden border border-truffle-brown/10 shadow-lg shadow-truffle-brown/5">
+        <img src={post.data.heroImage} alt="" class="w-full h-auto object-cover" />
+      </figure>
+    )}
+
+    <!-- Decorative corner - top of content -->
+    <div class="blog-content-wrapper relative">
+      <div class="absolute -left-2 top-0 w-16 h-16 opacity-20 pointer-events-none" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" class="w-full h-full text-truffle-caramel">
+          <path d="M0 64V0h64" stroke="currentColor" stroke-width="1.5" fill="none"/>
+          <path d="M8 56V8h48" stroke="currentColor" stroke-width="0.75" opacity="0.6" fill="none"/>
+        </svg>
+      </div>
+      <div class="blog-content">
+        <Content />
+      </div>
     </div>
 
     <style>
+      .blog-content-wrapper {
+        padding-left: 0.5rem;
+      }
       .blog-content {
         font-size: 1.0625rem;
-        line-height: 1.68;
+        line-height: 1.72;
         color: var(--text-body, rgba(56, 36, 13, 0.88));
         max-width: 65ch;
       }
-      .blog-content > * + * {
-        margin-top: 1.25rem;
+      /* More space between paragraphs - no cramming */
+      .blog-content p + p {
+        margin-top: 2rem;
+      }
+      .blog-content > * + *:not(p) {
+        margin-top: 2rem;
       }
       .blog-content p:first-of-type {
         font-size: 1.125rem;
-        line-height: 1.7;
+        line-height: 1.75;
         color: rgba(56, 36, 13, 0.92);
+      }
+      /* Fancy drop cap at start of every article */
+      .blog-content p:first-of-type::first-letter {
+        font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+        font-size: 4.5rem;
+        line-height: 1;
+        font-weight: 600;
+        float: left;
+        margin: 0.08em 0.12em 0 -0.02em;
+        color: #713600;
       }
       .blog-content p {
         margin-bottom: 0;
@@ -72,8 +113,8 @@ const relatedPosts = allPosts
         font-size: 1.5rem;
         font-weight: 600;
         color: var(--text-heading, #38240D);
-        margin-top: 2.5rem;
-        margin-bottom: 0.75rem;
+        margin-top: 3rem;
+        margin-bottom: 1rem;
         padding-bottom: 0.5rem;
         border-bottom: 1px solid rgba(192, 88, 0, 0.2);
       }
@@ -85,7 +126,7 @@ const relatedPosts = allPosts
         font-size: 1.25rem;
         font-weight: 600;
         color: var(--text-heading);
-        margin-top: 2rem;
+        margin-top: 2.5rem;
         margin-bottom: 0.5rem;
       }
       .blog-content strong {
@@ -104,23 +145,26 @@ const relatedPosts = allPosts
         border-bottom-color: #713600;
       }
       .blog-content blockquote {
-        margin: 1.75rem 0;
-        padding: 1rem 0 1rem 1.25rem;
+        margin: 2.5rem 0;
+        padding: 1.25rem 0 1.25rem 1.5rem;
         border-left: 3px solid #C05800;
-        background: rgba(192, 88, 0, 0.04);
+        background: rgba(192, 88, 0, 0.05);
         font-style: italic;
         color: rgba(56, 36, 13, 0.85);
       }
       .blog-content ul, .blog-content ol {
-        margin: 1.25rem 0;
+        margin: 2rem 0;
         padding-left: 1.35rem;
       }
       .blog-content li {
-        margin-bottom: 0.35rem;
-        line-height: 1.65;
+        margin-bottom: 0.5rem;
+        line-height: 1.7;
+      }
+      .blog-content li + li {
+        margin-top: 0.35rem;
       }
       .blog-content hr {
-        margin: 2rem 0;
+        margin: 2.5rem 0;
         border: none;
         height: 1px;
         background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
@@ -134,11 +178,20 @@ const relatedPosts = allPosts
       }
     </style>
 
-    <footer class="mt-14 pt-8 border-t border-truffle-brown/10">
+    <!-- Decorative section before footer -->
+    <div class="my-14 flex justify-center" aria-hidden="true">
+      <svg class="w-12 h-12 text-truffle-brown/15" viewBox="0 0 48 48" fill="none">
+        <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1"/>
+        <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="0.75" opacity="0.6"/>
+        <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <footer class="mt-12 pt-10 border-t border-truffle-brown/10">
       {relatedPosts.length > 0 && (
-        <div class="mb-8">
-          <h2 class="font-serif text-lg font-semibold text-truffle-dark-brown mb-4">More articles</h2>
-          <ul class="space-y-3">
+        <div class="mb-10">
+          <h2 class="font-serif text-lg font-semibold text-truffle-dark-brown mb-5">More articles</h2>
+          <ul class="space-y-4">
             {relatedPosts.map((p) => (
               <li>
                 <a href={`/blog/${p.slug}/`} class="link-underline text-truffle-brown/85 hover:text-truffle-caramel transition-colors duration-200 font-medium">

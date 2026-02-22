@@ -2,7 +2,7 @@
 
 A student-led platform exploring medicine, innovation, and healthcare challenges.
 
-## 🚀 Project Structure
+## Project Structure
 
 ```
 /
