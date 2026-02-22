@@ -15,9 +15,15 @@ type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
 const { Content } = await post.render();
+
+const allPosts = await getCollection('blog');
+const relatedPosts = allPosts
+  .filter((p) => p.slug !== post.slug)
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
-<Layout title={post.data.title}>
+<Layout title={post.data.title} description={post.data.description} canonicalURL={`https://provolve.net/blog/${post.slug}/`}>
   <article class="max-w-3xl mx-auto">
     <a href="/" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-brown/80 hover:text-truffle-caramel mb-12 group transition-colors duration-300">
       <svg class="w-4 h-4 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -133,6 +139,21 @@ const { Content } = await post.render();
     </style>
 
     <footer class="mt-20 pt-10 border-t border-truffle-brown/15">
+      {relatedPosts.length > 0 && (
+        <div class="mb-12">
+          <h2 class="font-serif text-xl font-semibold text-truffle-dark-brown mb-6">More articles</h2>
+          <ul class="space-y-4">
+            {relatedPosts.map((p) => (
+              <li>
+                <a href={`/blog/${p.slug}/`} class="group flex items-baseline gap-3 text-truffle-brown/90 hover:text-truffle-caramel transition-colors duration-300">
+                  <span class="text-truffle-caramel/60 group-hover:text-truffle-caramel">→</span>
+                  <span class="font-medium">{p.data.title}</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <a href="/" class="inline-flex items-center gap-2 px-8 py-4 bg-truffle-dark-brown text-truffle-cream font-medium rounded-full hover:bg-truffle-caramel transition-all duration-300 group">
         <svg class="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>

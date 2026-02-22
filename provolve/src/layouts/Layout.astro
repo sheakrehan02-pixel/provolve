@@ -2,9 +2,11 @@
 interface Props {
   title: string;
   description?: string;
+  canonicalURL?: string;
 }
 
-const { title, description = "A student-led platform exploring medicine, innovation, and healthcare challenges." } = Astro.props;
+const { title, description = "A student-led platform exploring medicine, innovation, and healthcare challenges.", canonicalURL } = Astro.props;
+const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog`;
 ---
 
 <!doctype html>
@@ -13,12 +15,16 @@ const { title, description = "A student-led platform exploring medicine, innovat
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
     <meta name="viewport" content="width=device-width" />
+    {canonicalURL && <link rel="canonical" href={canonicalURL} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <meta name="generator" content={Astro.generator} />
-    <title>{title} | Provolve Blog</title>
+    <title>{fullTitle}</title>
     <style>
       :root {
         --font-serif: 'Cormorant Garamond', Georgia, serif;
