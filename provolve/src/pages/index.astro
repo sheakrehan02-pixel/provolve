@@ -45,7 +45,7 @@ const sortedPosts = allPosts.sort((a, b) =>
       <ul class="space-y-6 sm:space-y-8">
         {sortedPosts.map((post, index) => (
           <li class="scroll-reveal" style={`animation-delay: ${index * 0.06}s`}>
-            <BlogPost post={post} />
+            <BlogPost post={post} isLatest={index === 0} />
           </li>
         ))}
       </ul>

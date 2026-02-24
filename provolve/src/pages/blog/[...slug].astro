@@ -78,21 +78,27 @@ const relatedPosts = allPosts
         padding-left: 0.5rem;
       }
       .blog-content {
-        font-size: 1.0625rem;
-        line-height: 1.72;
+        font-size: 1.09375rem;
+        line-height: 1.88;
+        letter-spacing: 0.02em;
         color: var(--text-body, rgba(56, 36, 13, 0.88));
-        max-width: 65ch;
+        max-width: 62ch;
+      }
+      .blog-content p {
+        margin-bottom: 0;
+        word-spacing: 0.02em;
       }
       /* More space between paragraphs - no cramming */
       .blog-content p + p {
-        margin-top: 2rem;
+        margin-top: 2.25rem;
       }
       .blog-content > * + *:not(p) {
-        margin-top: 2rem;
+        margin-top: 2.25rem;
       }
       .blog-content p:first-of-type {
-        font-size: 1.125rem;
-        line-height: 1.75;
+        font-size: 1.15625rem;
+        line-height: 1.85;
+        letter-spacing: 0.015em;
         color: rgba(56, 36, 13, 0.92);
       }
       /* Fancy drop cap at start of every article */
@@ -105,17 +111,15 @@ const relatedPosts = allPosts
         margin: 0.08em 0.12em 0 -0.02em;
         color: #713600;
       }
-      .blog-content p {
-        margin-bottom: 0;
-      }
       .blog-content h2 {
         font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
         font-size: 1.5rem;
         font-weight: 600;
+        letter-spacing: 0.01em;
         color: var(--text-heading, #38240D);
-        margin-top: 3rem;
-        margin-bottom: 1rem;
-        padding-bottom: 0.5rem;
+        margin-top: 3.5rem;
+        margin-bottom: 1.25rem;
+        padding-bottom: 0.6rem;
         border-bottom: 1px solid rgba(192, 88, 0, 0.2);
       }
       .blog-content h2:first-child {
@@ -125,9 +129,10 @@ const relatedPosts = allPosts
         font-family: var(--font-serif);
         font-size: 1.25rem;
         font-weight: 600;
+        letter-spacing: 0.01em;
         color: var(--text-heading);
-        margin-top: 2.5rem;
-        margin-bottom: 0.5rem;
+        margin-top: 2.75rem;
+        margin-bottom: 0.75rem;
       }
       .blog-content strong {
         font-weight: 600;
@@ -145,26 +150,29 @@ const relatedPosts = allPosts
         border-bottom-color: #713600;
       }
       .blog-content blockquote {
-        margin: 2.5rem 0;
-        padding: 1.25rem 0 1.25rem 1.5rem;
+        margin: 2.75rem 0;
+        padding: 1.5rem 0 1.5rem 1.75rem;
         border-left: 3px solid #C05800;
         background: rgba(192, 88, 0, 0.05);
         font-style: italic;
         color: rgba(56, 36, 13, 0.85);
+        letter-spacing: 0.01em;
+        line-height: 1.8;
       }
       .blog-content ul, .blog-content ol {
-        margin: 2rem 0;
-        padding-left: 1.35rem;
+        margin: 2.25rem 0;
+        padding-left: 1.5rem;
+        letter-spacing: 0.01em;
       }
       .blog-content li {
-        margin-bottom: 0.5rem;
-        line-height: 1.7;
+        margin-bottom: 0.6rem;
+        line-height: 1.82;
       }
       .blog-content li + li {
-        margin-top: 0.35rem;
+        margin-top: 0.4rem;
       }
       .blog-content hr {
-        margin: 2.5rem 0;
+        margin: 2.75rem 0;
         border: none;
         height: 1px;
         background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
@@ -175,6 +183,31 @@ const relatedPosts = allPosts
         padding: 0.15em 0.4em;
         border-radius: 3px;
         font-size: 0.9em;
+      }
+      /* Diagram / figure styling */
+      .blog-content .article-diagram {
+        margin: 2.75rem 0;
+        padding: 1.5rem;
+        background: rgba(113, 54, 0, 0.04);
+        border: 1px solid rgba(113, 54, 0, 0.12);
+        border-radius: 12px;
+      }
+      .blog-content .article-diagram figcaption {
+        font-size: 0.9rem;
+        color: rgba(56, 36, 13, 0.7);
+        margin-top: 1rem;
+        text-align: center;
+        letter-spacing: 0.02em;
+      }
+      .blog-content .callout {
+        margin: 2.5rem 0;
+        padding: 1.5rem 1.75rem;
+        background: rgba(192, 88, 0, 0.06);
+        border-left: 4px solid #C05800;
+        border-radius: 0 8px 8px 0;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        letter-spacing: 0.015em;
       }
     </style>
 

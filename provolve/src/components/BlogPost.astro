@@ -3,27 +3,35 @@ import type { CollectionEntry } from 'astro:content';
 
 interface Props {
   post: CollectionEntry<'blog'>;
+  isLatest?: boolean;
 }
 
-const { post } = Astro.props;
+const { post, isLatest = false } = Astro.props;
 ---
 
-<a href={`/blog/${post.slug}/`} class="group block py-5 border-b border-truffle-brown/10 last:border-0 hover:border-truffle-brown/20 transition-colors duration-200">
+<a href={`/blog/${post.slug}/`} class="group block py-6 border-b border-truffle-brown/10 last:border-0 hover:border-truffle-brown/20 transition-colors duration-200">
   <article class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
     <div class="min-w-0 flex-1">
-      <span class="text-xs text-truffle-brown/55">
-        {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-      </span>
-      <h2 class="font-serif text-xl sm:text-2xl font-semibold text-truffle-dark-brown mt-1 group-hover:text-truffle-caramel transition-colors duration-200 leading-snug">
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="text-xs text-truffle-brown/55 tracking-wide">
+          {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        </span>
+        {isLatest && (
+          <span class="text-xs font-semibold uppercase tracking-wider text-truffle-caramel border border-truffle-caramel/40 rounded px-2 py-0.5">
+            Latest
+          </span>
+        )}
+      </div>
+      <h2 class="font-serif text-xl sm:text-2xl font-semibold text-truffle-dark-brown mt-2 group-hover:text-truffle-caramel transition-colors duration-200 leading-snug tracking-tight">
         {post.data.title}
       </h2>
       {post.data.description && (
-        <p class="text-truffle-brown/75 text-base leading-relaxed mt-2 line-clamp-2 max-w-[65ch]">
+        <p class="text-truffle-brown/75 text-base leading-relaxed mt-3 line-clamp-2 max-w-[65ch] tracking-wide" style="letter-spacing: 0.01em;">
           {post.data.description}
         </p>
       )}
     </div>
-    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-caramel/80 group-hover:text-truffle-caramel mt-2 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">
+    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-caramel/80 group-hover:text-truffle-caramel mt-3 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">
       Read
       <span class="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
     </span>
