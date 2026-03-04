@@ -85,7 +85,7 @@ const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog
     </div>
 
     <header class="sticky top-0 z-50 border-b border-truffle-brown/10" style="background-color: rgba(252, 249, 237, 0.92); backdrop-filter: blur(12px);">
-      <nav class="w-full max-w-[min(100%,1400px)] mx-auto px-5 sm:px-8 md:px-12 py-4">
+      <nav class="max-w-3xl mx-auto px-5 sm:px-6 py-4">
         <a href="/" class="inline-flex items-center gap-2.5 font-serif text-xl font-semibold text-truffle-dark-brown hover:text-truffle-caramel transition-colors duration-200">
           <img src="/favicon.svg" alt="" class="w-6 h-6" width="24" height="24" />
           Provolve
@@ -96,11 +96,11 @@ const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog
         </a>
       </nav>
     </header>
-    <main class="w-full max-w-[min(100%,1400px)] mx-auto px-5 sm:px-8 md:px-12 py-8 sm:py-10 relative z-10">
+    <main class="max-w-3xl mx-auto px-5 sm:px-6 py-8 sm:py-10 relative z-10">
       <slot />
     </main>
     <footer class="mt-16 py-10 border-t border-truffle-brown/10">
-      <div class="w-full max-w-[min(100%,1400px)] mx-auto px-5 sm:px-8 md:px-12">
+      <div class="max-w-3xl mx-auto px-5 sm:px-6">
         <div class="flex flex-col sm:flex-row justify-between items-center gap-3">
           <p class="text-truffle-brown/60 text-sm">
             &copy; {new Date().getFullYear()} Provolve
