@@ -24,221 +24,408 @@ const relatedPosts = allPosts
 ---
 
 <Layout title={post.data.title} description={post.data.description} canonicalURL={`https://provolve.net/blog/${post.slug}/`}>
-  <article class="max-w-[75ch] mx-auto pb-6">
-    <a href="/" class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-brown/70 hover:text-truffle-caramel mb-10 link-underline transition-colors duration-200">
-      <span aria-hidden="true">←</span>
-      Back to all articles
-    </a>
+  <article class="article-editorial" data-page="post">
+    <nav class="article-nav">
+      <a href="/" class="article-back link-underline">
+        <span aria-hidden="true">←</span> Back to all articles
+      </a>
+    </nav>
 
-    <header class="mb-12">
-      <time class="text-xs text-truffle-brown/55" datetime={post.data.pubDate.toISOString()}>
+    <header class="article-header">
+      <time class="article-date" datetime={post.data.pubDate.toISOString()}>
         {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
       </time>
-      <h1 class="font-serif text-2xl sm:text-3xl md:text-[2.25rem] font-semibold text-truffle-dark-brown leading-[1.25] mt-2">
-        {post.data.title}
-      </h1>
+      <h1 class="article-title">{post.data.title}</h1>
       {post.data.description && (
-        <p class="text-lg text-truffle-brown/85 leading-relaxed mt-5 max-w-[65ch]">
-          {post.data.description}
-        </p>
+        <p class="article-description">{post.data.description}</p>
       )}
-      <!-- Decorative divider with flourish -->
-      <div class="mt-10 flex items-center gap-4" aria-hidden="true">
-        <div class="h-px flex-1 bg-gradient-to-r from-transparent to-truffle-brown/20"></div>
-        <svg class="w-8 h-8 text-truffle-caramel/50" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-          <path d="M12 3v18M3 12h18M6 6l12 12M18 6L6 18"/>
-          <circle cx="12" cy="12" r="2.5" fill="currentColor" opacity="0.4"/>
-        </svg>
-        <div class="h-px flex-1 bg-gradient-to-l from-transparent to-truffle-brown/20"></div>
-      </div>
+      <div class="article-header-divider" aria-hidden="true"></div>
     </header>
 
-    <!-- Optional hero image -->
     {post.data.heroImage && (
-      <figure class="mb-12 rounded-xl overflow-hidden border border-truffle-brown/10 shadow-lg shadow-truffle-brown/5">
-        <img src={post.data.heroImage} alt="" class="w-full h-auto object-cover" />
+      <figure class="article-hero">
+        <img src={post.data.heroImage} alt="" />
       </figure>
     )}
 
-    <!-- Decorative corner - top of content -->
-    <div class="blog-content-wrapper relative">
-      <div class="absolute -left-2 top-0 w-16 h-16 opacity-20 pointer-events-none" aria-hidden="true">
-        <svg viewBox="0 0 64 64" fill="none" class="w-full h-full text-truffle-caramel">
-          <path d="M0 64V0h64" stroke="currentColor" stroke-width="1.5" fill="none"/>
-          <path d="M8 56V8h48" stroke="currentColor" stroke-width="0.75" opacity="0.6" fill="none"/>
-        </svg>
-      </div>
-      <div class="blog-content">
+    <div class="article-body">
+      <div class="blog-content prose">
         <Content />
       </div>
     </div>
 
-    <style>
-      .blog-content-wrapper {
-        padding-left: 0.5rem;
-      }
-      .blog-content {
-        font-size: 1.09375rem;
-        line-height: 1.88;
-        letter-spacing: 0.02em;
-        color: var(--text-body, rgba(56, 36, 13, 0.88));
-        max-width: 62ch;
-      }
-      .blog-content p {
-        margin-bottom: 0;
-        word-spacing: 0.02em;
-      }
-      /* More space between paragraphs - no cramming */
-      .blog-content p + p {
-        margin-top: 2.25rem;
-      }
-      .blog-content > * + *:not(p) {
-        margin-top: 2.25rem;
-      }
-      .blog-content p:first-of-type {
-        font-size: 1.15625rem;
-        line-height: 1.85;
-        letter-spacing: 0.015em;
-        color: rgba(56, 36, 13, 0.92);
-      }
-      /* Fancy drop cap at start of every article */
-      .blog-content p:first-of-type::first-letter {
-        font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
-        font-size: 4.5rem;
-        line-height: 1;
-        font-weight: 600;
-        float: left;
-        margin: 0.08em 0.12em 0 -0.02em;
-        color: #713600;
-      }
-      .blog-content h2 {
-        font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
-        font-size: 1.5rem;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        color: var(--text-heading, #38240D);
-        margin-top: 3.5rem;
-        margin-bottom: 1.25rem;
-        padding-bottom: 0.6rem;
-        border-bottom: 1px solid rgba(192, 88, 0, 0.2);
-      }
-      .blog-content h2:first-child {
-        margin-top: 0;
-      }
-      .blog-content h3 {
-        font-family: var(--font-serif);
-        font-size: 1.25rem;
-        font-weight: 600;
-        letter-spacing: 0.01em;
-        color: var(--text-heading);
-        margin-top: 2.75rem;
-        margin-bottom: 0.75rem;
-      }
-      .blog-content strong {
-        font-weight: 600;
-        color: var(--text-heading);
-      }
-      .blog-content a {
-        color: #C05800;
-        font-weight: 500;
-        text-decoration: none;
-        border-bottom: 1px solid rgba(192, 88, 0, 0.35);
-        transition: color 0.2s, border-color 0.2s;
-      }
-      .blog-content a:hover {
-        color: #713600;
-        border-bottom-color: #713600;
-      }
-      .blog-content blockquote {
-        margin: 2.75rem 0;
-        padding: 1.5rem 0 1.5rem 1.75rem;
-        border-left: 3px solid #C05800;
-        background: rgba(192, 88, 0, 0.05);
-        font-style: italic;
-        color: rgba(56, 36, 13, 0.85);
-        letter-spacing: 0.01em;
-        line-height: 1.8;
-      }
-      .blog-content ul, .blog-content ol {
-        margin: 2.25rem 0;
-        padding-left: 1.5rem;
-        letter-spacing: 0.01em;
-      }
-      .blog-content li {
-        margin-bottom: 0.6rem;
-        line-height: 1.82;
-      }
-      .blog-content li + li {
-        margin-top: 0.4rem;
-      }
-      .blog-content hr {
-        margin: 2.75rem 0;
-        border: none;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
-      }
-      .blog-content code {
-        background: rgba(192, 88, 0, 0.1);
-        color: #C05800;
-        padding: 0.15em 0.4em;
-        border-radius: 3px;
-        font-size: 0.9em;
-      }
-      /* Diagram / figure styling */
-      .blog-content .article-diagram {
-        margin: 2.75rem 0;
-        padding: 1.5rem;
-        background: rgba(113, 54, 0, 0.04);
-        border: 1px solid rgba(113, 54, 0, 0.12);
-        border-radius: 12px;
-      }
-      .blog-content .article-diagram figcaption {
-        font-size: 0.9rem;
-        color: rgba(56, 36, 13, 0.7);
-        margin-top: 1rem;
-        text-align: center;
-        letter-spacing: 0.02em;
-      }
-      .blog-content .callout {
-        margin: 2.5rem 0;
-        padding: 1.5rem 1.75rem;
-        background: rgba(192, 88, 0, 0.06);
-        border-left: 4px solid #C05800;
-        border-radius: 0 8px 8px 0;
-        font-size: 1.05rem;
-        line-height: 1.8;
-        letter-spacing: 0.015em;
-      }
-    </style>
+    <div class="article-end-divider" aria-hidden="true"></div>
 
-    <!-- Decorative section before footer -->
-    <div class="my-14 flex justify-center" aria-hidden="true">
-      <svg class="w-12 h-12 text-truffle-brown/15" viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="24" r="20" stroke="currentColor" stroke-width="1"/>
-        <circle cx="24" cy="24" r="12" stroke="currentColor" stroke-width="0.75" opacity="0.6"/>
-        <circle cx="24" cy="24" r="4" fill="currentColor" opacity="0.4"/>
-      </svg>
-    </div>
-
-    <footer class="mt-12 pt-10 border-t border-truffle-brown/10">
+    <footer class="article-footer">
       {relatedPosts.length > 0 && (
-        <div class="mb-10">
-          <h2 class="font-serif text-lg font-semibold text-truffle-dark-brown mb-5">More articles</h2>
-          <ul class="space-y-4">
+        <div class="article-related">
+          <h2 class="article-related-title">More articles</h2>
+          <ul class="article-related-list">
             {relatedPosts.map((p) => (
               <li>
-                <a href={`/blog/${p.slug}/`} class="link-underline text-truffle-brown/85 hover:text-truffle-caramel transition-colors duration-200 font-medium">
-                  {p.data.title}
-                </a>
+                <a href={`/blog/${p.slug}/`} class="link-underline">{p.data.title}</a>
               </li>
             ))}
           </ul>
         </div>
       )}
-      <a href="/" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-dark-brown/90 hover:text-truffle-caramel link-underline transition-colors duration-200">
-        <span aria-hidden="true">←</span>
-        Back to all posts
+      <a href="/" class="article-back link-underline">
+        <span aria-hidden="true">←</span> Back to all posts
       </a>
     </footer>
   </article>
+
+  <style>
+    /* —— Article container: max 720px, warm spacing —— */
+    .article-editorial {
+      max-width: 720px;
+      margin: 0 auto;
+      padding-bottom: 4rem;
+    }
+
+    .article-nav {
+      margin-bottom: 2.5rem;
+    }
+
+    .article-back {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: rgba(56, 36, 13, 0.65);
+      transition: color 0.2s ease;
+    }
+    .article-back:hover {
+      color: #C05800;
+    }
+
+    /* —— Header: H1 bold, large, spacious —— */
+    .article-header {
+      margin-bottom: 3.5rem;
+    }
+
+    .article-date {
+      display: block;
+      font-size: 0.8125rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(56, 36, 13, 0.55);
+      margin-bottom: 1rem;
+    }
+
+    .article-title {
+      font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: #38240D;
+      margin: 0 0 1.25rem;
+      max-width: 20ch;
+    }
+
+    .article-description {
+      font-size: 1.1875rem;
+      line-height: 1.65;
+      color: rgba(56, 36, 13, 0.82);
+      margin: 0;
+      max-width: 50ch;
+    }
+
+    .article-header-divider {
+      margin-top: 2.5rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.18), transparent);
+    }
+
+    .article-hero {
+      margin: 0 0 3rem;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(113, 54, 0, 0.1);
+    }
+    .article-hero img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .article-body {
+      position: relative;
+    }
+
+    /* —— Prose: 680px max, line-height 1.65–1.75, rhythm —— */
+    .prose {
+      max-width: 680px;
+      font-size: 1.0625rem;
+      line-height: 1.72;
+      letter-spacing: 0.015em;
+      color: rgba(56, 36, 13, 0.88);
+    }
+
+    .prose p {
+      margin: 0 0 1.75rem;
+      word-spacing: 0.01em;
+    }
+    .prose p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Lead paragraph + drop cap */
+    .prose > p:first-of-type {
+      font-size: 1.1875rem;
+      line-height: 1.7;
+      color: rgba(56, 36, 13, 0.92);
+      margin-bottom: 2rem;
+    }
+
+    .prose > p:first-of-type::first-letter {
+      font-family: var(--font-serif);
+      font-size: 4.25rem;
+      line-height: 1;
+      font-weight: 600;
+      float: left;
+      margin: 0.06em 0.1em 0 -0.02em;
+      color: #713600;
+    }
+
+    /* —— Section spacing: 80–120px between major sections —— */
+    .prose h2 {
+      font-family: var(--font-serif);
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      color: #38240D;
+      margin: 5rem 0 1.25rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(192, 88, 0, 0.22);
+      transition: color 0.2s ease;
+    }
+    .prose h2:first-of-type {
+      margin-top: 0;
+    }
+    .prose h2:hover {
+      color: #713600;
+    }
+
+    .prose h3 {
+      font-family: var(--font-serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #38240D;
+      margin: 2.5rem 0 0.75rem;
+      transition: color 0.2s ease;
+    }
+    .prose h3:hover {
+      color: rgba(113, 54, 0, 0.9);
+    }
+
+    /* Section separator after each h2 block (optional visual break) */
+    .prose h2 + p {
+      margin-top: 1.25rem;
+    }
+
+    .prose strong {
+      font-weight: 600;
+      color: #38240D;
+    }
+
+    .prose a {
+      color: #C05800;
+      font-weight: 500;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(192, 88, 0, 0.35);
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .prose a:hover {
+      color: #713600;
+      border-bottom-color: #713600;
+    }
+
+    /* —— Quote formatting: larger, indented, soft bg, italic, left accent —— */
+    .prose blockquote {
+      margin: 2.5rem 0;
+      padding: 1.5rem 0 1.5rem 1.75rem;
+      border-left: 4px solid #C05800;
+      background: rgba(192, 88, 0, 0.06);
+      font-style: italic;
+      font-size: 1.0625rem;
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      color: rgba(56, 36, 13, 0.85);
+      border-radius: 0 8px 8px 0;
+    }
+
+    /* Question-quote list (use class="question-quotes" on a wrapper in content) */
+    .prose .question-quotes {
+      margin: 2rem 0;
+      padding: 1.5rem 0 1.5rem 1.5rem;
+      border-left: 4px solid rgba(192, 88, 0, 0.5);
+      background: rgba(192, 88, 0, 0.05);
+      border-radius: 0 8px 8px 0;
+    }
+    .prose .question-quotes ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .prose .question-quotes li {
+      font-size: 1.0625rem;
+      line-height: 1.7;
+      color: rgba(56, 36, 13, 0.88);
+      margin-bottom: 0.85rem;
+      padding-left: 1.25rem;
+      position: relative;
+      font-style: italic;
+    }
+    .prose .question-quotes li:last-child {
+      margin-bottom: 0;
+    }
+    .prose .question-quotes li::before {
+      content: '"';
+      position: absolute;
+      left: 0;
+      color: rgba(192, 88, 0, 0.5);
+      font-family: var(--font-serif);
+      font-size: 1.25em;
+    }
+
+    /* —— Lists: better vertical spacing, clear bullets —— */
+    .prose ul,
+    .prose ol {
+      margin: 2rem 0;
+      padding-left: 1.5rem;
+      letter-spacing: 0.01em;
+    }
+
+    .prose li {
+      margin-bottom: 0.65rem;
+      line-height: 1.75;
+      padding-left: 0.35rem;
+    }
+    .prose li + li {
+      margin-top: 0.25rem;
+    }
+
+    .prose ul li::marker {
+      color: #C05800;
+      font-size: 0.85em;
+    }
+
+    /* Mobile: reduce section spacing for smaller viewports */
+    @media (max-width: 640px) {
+      .article-title {
+        max-width: none;
+      }
+      .prose h2 {
+        margin-top: 3.5rem;
+      }
+      .prose h3 {
+        margin-top: 2rem;
+      }
+    }
+
+    .prose hr {
+      margin: 3rem 0;
+      border: none;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.12), transparent);
+    }
+
+    .prose code {
+      background: rgba(192, 88, 0, 0.1);
+      color: #C05800;
+      padding: 0.2em 0.45em;
+      border-radius: 4px;
+      font-size: 0.9em;
+    }
+
+    /* Diagrams & callouts */
+    .prose .article-diagram {
+      margin: 2.75rem 0;
+      padding: 1.5rem;
+      background: rgba(113, 54, 0, 0.04);
+      border: 1px solid rgba(113, 54, 0, 0.1);
+      border-radius: 12px;
+    }
+    .prose .article-diagram figcaption {
+      font-size: 0.875rem;
+      color: rgba(56, 36, 13, 0.65);
+      margin-top: 1rem;
+      text-align: center;
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+
+    .prose .callout {
+      margin: 2.5rem 0;
+      padding: 1.5rem 1.75rem;
+      background: rgba(192, 88, 0, 0.06);
+      border-left: 4px solid #C05800;
+      border-radius: 0 8px 8px 0;
+      font-size: 1.03125rem;
+      line-height: 1.72;
+      letter-spacing: 0.012em;
+    }
+
+    .article-end-divider {
+      margin: 3.5rem 0 2rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
+    }
+
+    .article-footer {
+      padding-top: 0.5rem;
+    }
+
+    .article-related {
+      margin-bottom: 2rem;
+    }
+
+    .article-related-title {
+      font-family: var(--font-serif);
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: #38240D;
+      margin: 0 0 1rem;
+    }
+
+    .article-related-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .article-related-list li {
+      margin-bottom: 0.5rem;
+    }
+    .article-related-list a {
+      font-weight: 500;
+      color: rgba(56, 36, 13, 0.82);
+      transition: color 0.2s ease;
+    }
+    .article-related-list a:hover {
+      color: #C05800;
+    }
+
+    /* Subtle fade-in on load (respect reduced motion) */
+    @media (prefers-reduced-motion: no-preference) {
+      .prose > * {
+        animation: editorialFadeIn 0.5s ease-out both;
+      }
+      .prose > *:nth-child(1) { animation-delay: 0.05s; }
+      .prose > *:nth-child(2) { animation-delay: 0.08s; }
+      .prose > *:nth-child(3) { animation-delay: 0.11s; }
+      .prose > *:nth-child(4) { animation-delay: 0.14s; }
+      .prose > *:nth-child(5) { animation-delay: 0.17s; }
+      .prose > *:nth-child(n+6) { animation-delay: 0.2s; }
+    }
+    @keyframes editorialFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
 </Layout>
