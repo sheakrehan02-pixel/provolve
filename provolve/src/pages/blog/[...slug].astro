@@ -86,13 +86,13 @@ const relatedPosts = allPosts
       --s6: 3rem;
       --s7: 4rem;
       --s8: 5rem;
-      --measure: 60ch; /* equal line length everywhere */
     }
 
-    /* —— Article: centered, max 720px —— */
+    /* —— Article: full page width (Google Docs style) —— */
     .article-editorial {
-      max-width: 720px;
-      margin: 0 auto;
+      width: 100%;
+      max-width: none;
+      margin: 0;
       padding-bottom: var(--s7);
       text-align: center;
     }
@@ -143,7 +143,7 @@ const relatedPosts = allPosts
       line-height: 1.65;
       color: rgba(56, 36, 13, 0.82);
       margin: 0 auto;
-      max-width: var(--measure);
+      max-width: none;
     }
 
     .article-header-divider {
@@ -169,18 +169,17 @@ const relatedPosts = allPosts
       text-align: center;
     }
 
-    /* —— Prose: equal line length (measure), centered block —— */
+    /* —— Prose: full width (Google Docs style) —— */
     .prose {
-      max-width: var(--measure);
-      margin-left: auto;
-      margin-right: auto;
+      width: 100%;
+      max-width: none;
+      margin-left: 0;
+      margin-right: 0;
       font-size: 1.0625rem;
       line-height: 1.75;
       letter-spacing: 0.015em;
       color: rgba(56, 36, 13, 0.88);
-      text-align: justify;
-      text-align-last: left;
-      hyphens: auto;
+      text-align: left;
     }
 
     .prose p {
