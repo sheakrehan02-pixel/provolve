@@ -4,7 +4,8 @@ pubDate: 2026-01-26
 description: "A medical analysis of raw diets, hormones, and 'recreating puberty'—what science says about craniofacial growth, bone remodeling, and what's possible after growth plates close."
 ---
 
-Over the past few years, Reddit communities like r/rawprimal, r/Biohackers, r/LooksmaxingAdvice, and r/Testosterone have seen a surge in posts asking:
+Over the past few years, Reddit communities like r/rawprimal, r/Biohackers,
+r/LooksmaxingAdvice, and r/Testosterone have seen a surge in posts asking:
 
 <div class="question-quotes">
 
@@ -15,9 +16,12 @@ Over the past few years, Reddit communities like r/rawprimal, r/Biohackers, r/Lo
 
 </div>
 
-The desire is understandable. Facial structure strongly influences perceived attractiveness, symmetry, and sexual dimorphism. But the biological reality is often misunderstood.
+The desire is understandable. Facial structure strongly influences perceived
+attractiveness, symmetry, and sexual dimorphism. But the biological reality
+is often misunderstood.
 
-This article examines the science behind craniofacial growth, bone remodeling, hormones, and what is — and is not — possible after puberty.
+This article examines the science behind craniofacial growth, bone remodeling,
+hormones, and what is — and is not — possible after puberty.
 
 ## 1. How Facial Bones Actually Grow
 
@@ -29,7 +33,9 @@ Most craniofacial structure is determined during:
 - Infancy
 - Early childhood
 
-Skull size is largely driven by brain growth. The maxilla and mandible develop under genetic control and are influenced by nutrition and hormones during these critical periods.
+Skull size is largely driven by brain growth. The maxilla and mandible develop
+under genetic control and are influenced by nutrition and hormones during
+these critical periods.
 
 By adolescence, much of the structural "blueprint" is already established.
 
@@ -76,7 +82,8 @@ In males, most facial growth slows significantly by ages 17–21.
 
 ## 2. Can You Increase Facial Bone Mass at 15–18?
 
-Posts in r/LooksmaxingAdvice often ask whether lifting weights or "boosting testosterone naturally" can increase facial bone mass in teenagers.
+Posts in r/LooksmaxingAdvice often ask whether lifting weights or "boosting
+testosterone naturally" can increase facial bone mass in teenagers.
 
 **The Evidence-Based Answer:**
 
@@ -121,7 +128,8 @@ Undernourished individuals may normalize testosterone.
 - Significant skeletal widening in adults
 - New maxillary expansion without mechanical intervention
 
-Bone density can increase. Bone shape rarely changes substantially after skeletal maturity.
+Bone density can increase. Bone shape rarely changes substantially after
+skeletal maturity.
 
 ## 4. "Recreating Puberty" With Hormones
 
@@ -133,7 +141,8 @@ In r/Biohackers, some propose boosting:
 - SARMs
 - HCG combinations
 
-**The theory:** If puberty hormones caused growth once, raising them again should recreate it.
+**The theory:** If puberty hormones caused growth once, raising them again
+should recreate it.
 
 ### The Problem
 
@@ -146,13 +155,16 @@ High-dose GH in adults can cause:
 - Cardiovascular strain
 - Acromegalic changes (often undesirable)
 
-Even in professional bodybuilders using supraphysiologic doses, dramatic aesthetic facial restructuring is rare and unpredictable.
+Even in professional bodybuilders using supraphysiologic doses, dramatic
+aesthetic facial restructuring is rare and unpredictable.
 
-There is no safe, medically validated protocol for "second puberty facial remodeling."
+There is no safe, medically validated protocol for "second puberty facial
+remodeling."
 
 ## 5. Low Testosterone During Puberty: Permanent Effects?
 
-In r/Testosterone, users with diagnosed hypogonadism ask whether low testosterone caused:
+In r/Testosterone, users with diagnosed hypogonadism ask whether low
+testosterone caused:
 
 - Smaller hands
 - Thinner bones
@@ -219,7 +231,8 @@ Even when skull dimensions remain stable, appearance can change through:
 - Reduced inflammation
 - Improved skin quality
 
-These changes can significantly enhance perceived facial structure — without altering bone anatomy.
+These changes can significantly enhance perceived facial structure — without
+altering bone anatomy.
 
 <figure class="article-diagram" aria-hidden="true">
   <svg viewBox="0 0 340 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
@@ -244,9 +257,11 @@ Adult skeletal changes are possible through:
 - Orthognathic surgery (e.g., LeFort procedures)
 - Distraction osteogenesis
 
-These are medical procedures with risks and should only be evaluated by qualified specialists.
+These are medical procedures with risks and should only be evaluated by
+qualified specialists.
 
-There is currently no supplement-based alternative that replicates surgical skeletal movement.
+There is currently no supplement-based alternative that replicates surgical
+skeletal movement.
 
 ## 9. Psychological Considerations
 
@@ -256,9 +271,11 @@ Many threads in r/LooksmaxingAdvice reveal a common pattern:
 - Escalation toward hormone manipulation
 - Dismissal of mental health suggestions
 
-It's important to acknowledge that appearance concerns are real. But extreme biological interventions rarely produce proportional psychological relief.
+It's important to acknowledge that appearance concerns are real. But extreme
+biological interventions rarely produce proportional psychological relief.
 
-Optimizing health often improves confidence more than attempting skeletal redesign.
+Optimizing health often improves confidence more than attempting skeletal
+redesign.
 
 <div class="callout" role="note">
   <strong>Bottom line:</strong> Optimize sleep, nutrition, and resistance training within normal ranges. Avoid unregulated hormones. For structural change, consult orthodontics or maxillofacial surgery—not Reddit protocols.
