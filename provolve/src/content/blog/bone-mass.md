@@ -18,6 +18,24 @@ However, this growth depends on open epiphyseal plates. Longitudinal bone expans
 
 The central question, therefore, is not whether hormones influence growth — they do — but whether those mechanisms remain available after fusion.
 
+<figure class="article-diagram" aria-hidden="true">
+  <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <line x1="20" y1="50" x2="380" y2="50" stroke="#713600" stroke-width="1.5" opacity="0.25"/>
+    <text x="70" y="38" text-anchor="middle" font-size="12" fill="#38240D" font-family="system-ui,sans-serif">Fetal / Infant</text>
+    <text x="70" y="58" text-anchor="middle" font-size="10" fill="#713600" opacity="0.85">Primary growth</text>
+    <rect x="45" y="42" width="50" height="22" rx="4" fill="#C05800" opacity="0.12"/>
+    <text x="170" y="38" text-anchor="middle" font-size="12" fill="#38240D" font-family="system-ui,sans-serif">Childhood</text>
+    <rect x="145" y="42" width="50" height="22" rx="4" fill="#C05800" opacity="0.15"/>
+    <text x="260" y="38" text-anchor="middle" font-size="12" fill="#38240D" font-family="system-ui,sans-serif">Puberty</text>
+    <text x="260" y="58" text-anchor="middle" font-size="10" fill="#713600" opacity="0.85">GH, T, IGF-1</text>
+    <rect x="235" y="42" width="50" height="22" rx="4" fill="#C05800" opacity="0.2"/>
+    <text x="340" y="38" text-anchor="middle" font-size="12" fill="#38240D" font-family="system-ui,sans-serif">~17–21+</text>
+    <text x="340" y="58" text-anchor="middle" font-size="10" fill="#713600" opacity="0.85">Plates fuse</text>
+    <rect x="315" y="42" width="50" height="22" rx="4" fill="#713600" opacity="0.1"/>
+  </svg>
+  <figcaption>Craniofacial growth phases. Structural change is concentrated before and during puberty; after plate fusion, bone shape changes little.</figcaption>
+</figure>
+
 ## Bone Growth vs. Bone Remodeling: A Critical Distinction
 
 Much confusion arises from conflating bone growth with bone remodeling.
@@ -29,6 +47,25 @@ Bone remodeling, in contrast, is lifelong. Osteoclasts resorb bone while osteobl
 Numerous studies demonstrate that resistance training increases bone mineral density and cortical thickness in adults. However, increases in density do not equate to macroscopic widening of the mandible or expansion of the midface. The external contour of craniofacial bones remains largely stable after fusion.
 
 This distinction is foundational: density can change; structural size rarely does.
+
+<figure class="article-diagram" aria-hidden="true">
+  <svg viewBox="0 0 360 130" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="10" y="8" width="165" height="114" rx="6" fill="rgba(192,88,0,0.05)" stroke="#C05800" stroke-width="1" opacity="0.4"/>
+    <text x="92" y="28" text-anchor="middle" font-size="13" font-weight="600" fill="#38240D" font-family="system-ui,sans-serif">Bone growth</text>
+    <text x="92" y="48" text-anchor="middle" font-size="11" fill="#713600">Growth plates</text>
+    <text x="92" y="65" text-anchor="middle" font-size="11" fill="#713600">Length / size ↑</text>
+    <text x="92" y="82" text-anchor="middle" font-size="11" fill="#713600">Ends at fusion</text>
+    <text x="92" y="108" text-anchor="middle" font-size="10" fill="#713600" opacity="0.9">One-time</text>
+    <rect x="185" y="8" width="165" height="114" rx="6" fill="rgba(113,54,0,0.05)" stroke="#713600" stroke-width="1" opacity="0.4"/>
+    <text x="267" y="28" text-anchor="middle" font-size="13" font-weight="600" fill="#38240D" font-family="system-ui,sans-serif">Bone remodeling</text>
+    <text x="267" y="48" text-anchor="middle" font-size="11" fill="#713600">Lifelong</text>
+    <text x="267" y="65" text-anchor="middle" font-size="11" fill="#713600">Density / strength</text>
+    <text x="267" y="82" text-anchor="middle" font-size="11" fill="#713600">Microarchitecture</text>
+    <text x="267" y="99" text-anchor="middle" font-size="11" fill="#713600">No major shape change</text>
+    <text x="267" y="108" text-anchor="middle" font-size="10" fill="#713600" opacity="0.9">Ongoing</text>
+  </svg>
+  <figcaption>Growth adds size at growth plates; remodeling maintains strength and density without changing overall facial structure in adults.</figcaption>
+</figure>
 
 ## Hormonal Manipulation and the "Second Puberty" Hypothesis
 
@@ -65,6 +102,21 @@ Although bone dimensions stabilize, adult facial appearance remains modifiable t
 These factors can meaningfully change appearance without altering skeletal architecture. Because human perception integrates soft tissue contour with bone structure, improvements in muscle tone and leanness can produce noticeable aesthetic differences.
 
 However, these changes should not be confused with true skeletal growth.
+
+<figure class="article-diagram" aria-hidden="true">
+  <svg viewBox="0 0 260 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="18" font-size="12" font-weight="600" fill="#38240D" font-family="system-ui,sans-serif">What can improve appearance (adults)</text>
+    <circle cx="10" cy="38" r="4" fill="#C05800" opacity="0.25"/>
+    <text x="22" y="42" font-size="11" fill="#38240D" font-family="system-ui,sans-serif">Masseter / jaw muscles</text>
+    <circle cx="10" cy="54" r="4" fill="#C05800" opacity="0.25"/>
+    <text x="22" y="58" font-size="11" fill="#38240D" font-family="system-ui,sans-serif">Posture, neck, traps</text>
+    <circle cx="10" cy="70" r="4" fill="#C05800" opacity="0.25"/>
+    <text x="22" y="74" font-size="11" fill="#38240D" font-family="system-ui,sans-serif">Fat distribution</text>
+    <circle cx="10" cy="86" r="4" fill="#C05800" opacity="0.25"/>
+    <text x="22" y="90" font-size="11" fill="#38240D" font-family="system-ui,sans-serif">Skin, inflammation</text>
+  </svg>
+  <figcaption>Factors that can change how the face looks without altering underlying bone dimensions.</figcaption>
+</figure>
 
 ## Surgical and Orthodontic Intervention
 

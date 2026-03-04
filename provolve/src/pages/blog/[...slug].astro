@@ -185,22 +185,29 @@ const relatedPosts = allPosts
     }
 
     .prose .article-diagram {
-      margin: 1.75rem 0;
-      padding: 1.25rem;
+      margin: 2rem 0;
+      padding: 1.5rem;
       background: rgba(113, 54, 0, 0.04);
-      border: 1px solid rgba(113, 54, 0, 0.1);
+      border: 1px solid rgba(113, 54, 0, 0.12);
       border-radius: 8px;
+      width: 100%;
+      box-sizing: border-box;
     }
     .prose .article-diagram svg {
+      display: block;
+      width: 100%;
       max-width: 100%;
       height: auto;
-      display: block;
+      margin: 0 auto;
     }
     .prose .article-diagram figcaption {
       font-size: 0.8125rem;
-      color: rgba(56, 36, 13, 0.6);
-      margin-top: 0.75rem;
+      color: rgba(56, 36, 13, 0.65);
+      margin-top: 1rem;
+      padding-top: 0;
       line-height: 1.5;
+      text-align: left;
+      max-width: 100%;
     }
 
     .prose .callout {
