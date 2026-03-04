@@ -169,12 +169,11 @@ const relatedPosts = allPosts
       text-align: center;
     }
 
-    /* —— Prose: full width (Google Docs style) —— */
+    /* —— Prose: comfortable line length (not too wide) —— */
     .prose {
-      width: 100%;
-      max-width: none;
-      margin-left: 0;
-      margin-right: 0;
+      max-width: 65ch;
+      margin-left: auto;
+      margin-right: auto;
       font-size: 1.0625rem;
       line-height: 1.75;
       letter-spacing: 0.015em;
@@ -359,11 +358,19 @@ const relatedPosts = allPosts
     }
 
     .prose .article-diagram {
-      margin: var(--s5) 0;
+      margin: var(--s5) auto;
       padding: var(--s3);
       background: rgba(113, 54, 0, 0.04);
       border: 1px solid rgba(113, 54, 0, 0.1);
       border-radius: 12px;
+      width: max-content;
+      max-width: 100%;
+    }
+    .prose .article-diagram svg {
+      width: auto;
+      height: auto;
+      max-width: 400px;
+      display: block;
     }
     .prose .article-diagram figcaption {
       font-size: 0.875rem;

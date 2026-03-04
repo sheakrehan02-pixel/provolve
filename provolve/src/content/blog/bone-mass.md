@@ -4,66 +4,14 @@ pubDate: 2026-01-26
 description: "A medical analysis of raw diets, hormones, and 'recreating puberty'—what science says about craniofacial growth, bone remodeling, and what's possible after growth plates close."
 ---
 
-Over the past few years, Reddit communities like r/rawprimal, r/Biohackers,
-r/LooksmaxingAdvice, and r/Testosterone have seen a surge in posts asking:
-
-<div class="question-quotes">
-
-- "Can I increase my skull size at 17?"
-- "Will raw milk make my jaw grow?"
-- "Can I recreate puberty with HGH?"
-- "Did low testosterone during puberty stunt my bone structure?"
-
-</div>
-
-The desire is understandable. Facial structure strongly influences perceived
-attractiveness, symmetry, and sexual dimorphism. But the biological reality
-is often misunderstood.
-
-This article examines the science behind craniofacial growth, bone remodeling,
-hormones, and what is — and is not — possible after puberty.
+Over the past few years, Reddit communities like r/rawprimal, r/Biohackers, r/LooksmaxingAdvice, and r/Testosterone have seen a surge in posts asking: "Can I increase my skull size at 17?" "Will raw milk make my jaw grow?" "Can I recreate puberty with HGH?" "Did low testosterone during puberty stunt my bone structure?" The desire is understandable. Facial structure strongly influences perceived attractiveness, symmetry, and sexual dimorphism. But the biological reality is often misunderstood. This article examines the science behind craniofacial growth, bone remodeling, hormones, and what is — and is not — possible after puberty.
 
 ## 1. How Facial Bones Actually Grow
 
-### Early Life: The Primary Growth Window
-
-Most craniofacial structure is determined during:
-
-- Fetal development
-- Infancy
-- Early childhood
-
-Skull size is largely driven by brain growth. The maxilla and mandible develop
-under genetic control and are influenced by nutrition and hormones during
-these critical periods.
-
-By adolescence, much of the structural "blueprint" is already established.
-
-### Puberty: The Secondary Growth Phase
-
-Puberty introduces:
-
-- Increased testosterone
-- Increased growth hormone (GH)
-- Increased IGF-1
-
-These hormones contribute to:
-
-- Mandibular lengthening
-- Increased bone thickness
-- Brow ridge development
-- Changes in facial proportions
-
-However, this growth is constrained by:
-
-- Genetic programming
-- Growth plate activity
-- Timing of epiphyseal fusion
-
-In males, most facial growth slows significantly by ages 17–21.
+Most craniofacial structure is determined during fetal development, infancy, and early childhood. Skull size is largely driven by brain growth. The maxilla and mandible develop under genetic control and are influenced by nutrition and hormones during these critical periods. By adolescence, much of the structural "blueprint" is already established. Puberty introduces increased testosterone, growth hormone (GH), and IGF-1. These hormones contribute to mandibular lengthening, increased bone thickness, brow ridge development, and changes in facial proportions. However, this growth is constrained by genetic programming, growth plate activity, and the timing of epiphyseal fusion. In males, most facial growth slows significantly by ages 17–21.
 
 <figure class="article-diagram" aria-hidden="true">
-  <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
+  <svg viewBox="0 0 400 100" fill="none" xmlns="http://www.w3.org/2000/svg" width="400" height="100">
     <line x1="20" y1="50" x2="380" y2="50" stroke="#713600" stroke-width="2" opacity="0.3"/>
     <text x="50" y="35" font-size="11" fill="#38240D" font-family="system-ui,sans-serif">Fetal / Infant</text>
     <text x="50" y="55" font-size="9" fill="#713600" opacity="0.8">Primary growth</text>
@@ -82,22 +30,7 @@ In males, most facial growth slows significantly by ages 17–21.
 
 ## 2. Can You Increase Facial Bone Mass at 15–18?
 
-Posts in r/LooksmaxingAdvice often ask whether lifting weights or "boosting
-testosterone naturally" can increase facial bone mass in teenagers.
-
-**The Evidence-Based Answer:**
-
-If growth plates are still open:
-
-- Adequate nutrition and sleep can optimize growth.
-- Resistance training improves bone density.
-- Severe caloric restriction or hormone suppression can impair development.
-
-But even during adolescence:
-
-- You cannot override your genetic framework.
-- You cannot transform into a radically different craniofacial phenotype.
-- Healthy habits optimize potential — they do not rewrite it.
+Posts in r/LooksmaxingAdvice often ask whether lifting weights or "boosting testosterone naturally" can increase facial bone mass in teenagers. The evidence-based answer depends on whether growth plates are still open. If they are, adequate nutrition and sleep can optimize growth, resistance training improves bone density, and severe caloric restriction or hormone suppression can impair development. But even during adolescence, you cannot override your genetic framework or transform into a radically different craniofacial phenotype. Healthy habits optimize potential — they do not rewrite it.
 
 <div class="callout" role="note">
   <strong>Takeaway:</strong> Before plates fuse, nutrition and sleep matter. After fusion, you can improve bone density and soft tissue—not fundamental skull shape.
@@ -105,103 +38,22 @@ But even during adolescence:
 
 ## 3. The Raw Milk & Primal Diet Claims
 
-In r/rawprimal, users report:
-
-- Jaw widening after raw milk consumption
-- Increased cheekbone prominence
-- Helmet size increasing after carnivore diets
-
-### What Might Actually Be Happening?
-
-**Improved Protein Intake → Muscle Hypertrophy**
-
-The masseter muscle enlarges with heavy chewing.
-
-**Improved Caloric Intake → Hormonal Stabilization**
-
-Undernourished individuals may normalize testosterone.
-
-**Increased Body Mass → Facial Fullness**
-
-### What is unlikely:
-
-- Significant skeletal widening in adults
-- New maxillary expansion without mechanical intervention
-
-Bone density can increase. Bone shape rarely changes substantially after
-skeletal maturity.
+In r/rawprimal, users report jaw widening after raw milk consumption, increased cheekbone prominence, and even helmet size increasing after carnivore diets. What might actually be happening? Improved protein intake can lead to muscle hypertrophy — the masseter muscle enlarges with heavy chewing. Improved caloric intake can help undernourished individuals normalize testosterone. Increased body mass can add facial fullness. What is unlikely is significant skeletal widening in adults or new maxillary expansion without mechanical intervention. Bone density can increase, but bone shape rarely changes substantially after skeletal maturity.
 
 ## 4. "Recreating Puberty" With Hormones
 
-In r/Biohackers, some propose boosting:
-
-- Growth hormone (GH)
-- MK-677
-- Testosterone replacement therapy (TRT)
-- SARMs
-- HCG combinations
-
-**The theory:** If puberty hormones caused growth once, raising them again
-should recreate it.
-
-### The Problem
-
-Once growth plates close, longitudinal bone growth stops.
-
-High-dose GH in adults can cause:
-
-- Soft tissue overgrowth
-- Insulin resistance
-- Cardiovascular strain
-- Acromegalic changes (often undesirable)
-
-Even in professional bodybuilders using supraphysiologic doses, dramatic
-aesthetic facial restructuring is rare and unpredictable.
-
-There is no safe, medically validated protocol for "second puberty facial
-remodeling."
+In r/Biohackers, some propose boosting growth hormone (GH), MK-677, testosterone replacement therapy (TRT), SARMs, or HCG combinations. The theory is that if puberty hormones caused growth once, raising them again should recreate it. The problem is that once growth plates close, longitudinal bone growth stops. High-dose GH in adults can cause soft tissue overgrowth, insulin resistance, cardiovascular strain, and acromegalic changes that are often undesirable. Even in professional bodybuilders using supraphysiologic doses, dramatic aesthetic facial restructuring is rare and unpredictable. There is no safe, medically validated protocol for "second puberty facial remodeling."
 
 ## 5. Low Testosterone During Puberty: Permanent Effects?
 
-In r/Testosterone, users with diagnosed hypogonadism ask whether low
-testosterone caused:
-
-- Smaller hands
-- Thinner bones
-- Narrow facial structure
-
-Testosterone plays a role in:
-
-- Bone mineral density
-- Periosteal bone growth
-- Muscle development
-
-Severe hypogonadism during puberty can affect skeletal development. However:
-
-- TRT in adulthood improves bone density.
-- It does not reliably enlarge bone dimensions after fusion.
+In r/Testosterone, users with diagnosed hypogonadism ask whether low testosterone caused smaller hands, thinner bones, or narrow facial structure. Testosterone plays a role in bone mineral density, periosteal bone growth, and muscle development. Severe hypogonadism during puberty can affect skeletal development. However, TRT in adulthood improves bone density but does not reliably enlarge bone dimensions after fusion.
 
 ## 6. Bone Remodeling vs. Bone Growth
 
-This distinction is critical.
-
-**Bone Growth**
-
-- Occurs at growth plates.
-- Increases length and structural dimensions.
-- Ends when plates fuse.
-
-**Bone Remodeling**
-
-- Lifelong process.
-- Maintains bone strength.
-- Alters density and microarchitecture.
-- Does NOT dramatically reshape adult facial structure.
-
-Many online discussions confuse remodeling with growth.
+This distinction is critical. Bone growth occurs at growth plates, increases length and structural dimensions, and ends when plates fuse. Bone remodeling is a lifelong process that maintains bone strength and alters density and microarchitecture, but it does not dramatically reshape adult facial structure. Many online discussions confuse remodeling with growth.
 
 <figure class="article-diagram" aria-hidden="true">
-  <svg viewBox="0 0 360 140" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
+  <svg viewBox="0 0 360 140" fill="none" xmlns="http://www.w3.org/2000/svg" width="360" height="140">
     <rect x="20" y="10" width="150" height="120" rx="8" fill="rgba(192,88,0,0.06)" stroke="#C05800" stroke-width="1" opacity="0.5"/>
     <text x="95" y="32" text-anchor="middle" font-size="13" font-weight="600" fill="#38240D" font-family="system-ui,sans-serif">Bone growth</text>
     <text x="95" y="52" text-anchor="middle" font-size="10" fill="#713600">Growth plates</text>
@@ -222,20 +74,10 @@ Many online discussions confuse remodeling with growth.
 
 ## 7. What Actually Changes Facial Appearance in Adults?
 
-Even when skull dimensions remain stable, appearance can change through:
-
-- Increased masseter size
-- Neck and trap hypertrophy
-- Fat redistribution
-- Improved posture
-- Reduced inflammation
-- Improved skin quality
-
-These changes can significantly enhance perceived facial structure — without
-altering bone anatomy.
+Even when skull dimensions remain stable, appearance can change through increased masseter size, neck and trap hypertrophy, fat redistribution, improved posture, reduced inflammation, and improved skin quality. These changes can significantly enhance perceived facial structure without altering bone anatomy.
 
 <figure class="article-diagram" aria-hidden="true">
-  <svg viewBox="0 0 340 90" fill="none" xmlns="http://www.w3.org/2000/svg" style="max-width: 100%; height: auto;">
+  <svg viewBox="0 0 340 90" fill="none" xmlns="http://www.w3.org/2000/svg" width="340" height="90">
     <text x="20" y="22" font-size="12" font-weight="600" fill="#38240D" font-family="system-ui,sans-serif">What can improve appearance (adults)</text>
     <circle cx="40" cy="48" r="8" fill="#C05800" opacity="0.2"/>
     <text x="58" y="52" font-size="11" fill="#38240D">Masseter / jaw muscles</text>
@@ -251,31 +93,11 @@ altering bone anatomy.
 
 ## 8. Orthodontics and Surgery
 
-Adult skeletal changes are possible through:
-
-- Surgically assisted expansion
-- Orthognathic surgery (e.g., LeFort procedures)
-- Distraction osteogenesis
-
-These are medical procedures with risks and should only be evaluated by
-qualified specialists.
-
-There is currently no supplement-based alternative that replicates surgical
-skeletal movement.
+Adult skeletal changes are possible through surgically assisted expansion, orthognathic surgery (e.g., LeFort procedures), and distraction osteogenesis. These are medical procedures with risks and should only be evaluated by qualified specialists. There is currently no supplement-based alternative that replicates surgical skeletal movement.
 
 ## 9. Psychological Considerations
 
-Many threads in r/LooksmaxingAdvice reveal a common pattern:
-
-- Fixation on perceived bone deficiencies
-- Escalation toward hormone manipulation
-- Dismissal of mental health suggestions
-
-It's important to acknowledge that appearance concerns are real. But extreme
-biological interventions rarely produce proportional psychological relief.
-
-Optimizing health often improves confidence more than attempting skeletal
-redesign.
+Many threads in r/LooksmaxingAdvice reveal a common pattern: fixation on perceived bone deficiencies, escalation toward hormone manipulation, and dismissal of mental health suggestions. It's important to acknowledge that appearance concerns are real. But extreme biological interventions rarely produce proportional psychological relief. Optimizing health often improves confidence more than attempting skeletal redesign.
 
 <div class="callout" role="note">
   <strong>Bottom line:</strong> Optimize sleep, nutrition, and resistance training within normal ranges. Avoid unregulated hormones. For structural change, consult orthodontics or maxillofacial surgery—not Reddit protocols.
@@ -283,17 +105,4 @@ redesign.
 
 ## 10. Evidence-Based Recommendations
 
-### For Adolescents:
-
-- Prioritize sleep (8–9 hours)
-- Consume adequate protein
-- Ensure sufficient vitamin D
-- Avoid chronic stress
-- Avoid extreme dieting
-
-### For Adults:
-
-- Lift heavy resistance (improves bone density)
-- Maintain healthy testosterone levels naturally
-- Support bone health (calcium, vitamin D, K2 in balanced diet)
-- Avoid unregulated hormone experimentation
+For adolescents, the evidence supports prioritizing sleep (8–9 hours), consuming adequate protein, ensuring sufficient vitamin D, and avoiding chronic stress and extreme dieting. For adults, lifting heavy resistance improves bone density, maintaining healthy testosterone levels naturally is beneficial, and supporting bone health with calcium, vitamin D, and K2 in a balanced diet is recommended. Unregulated hormone experimentation should be avoided.
