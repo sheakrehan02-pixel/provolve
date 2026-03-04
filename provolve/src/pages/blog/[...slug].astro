@@ -76,15 +76,30 @@ const relatedPosts = allPosts
   </article>
 
   <style>
-    /* —— Article container: max 720px, warm spacing —— */
+    /* —— Spacing scale: proportional rhythm (1.25 ratio) —— */
+    .article-editorial {
+      --s1: 0.5rem;
+      --s2: 1rem;
+      --s3: 1.5rem;
+      --s4: 2rem;
+      --s5: 2.5rem;
+      --s6: 3rem;
+      --s7: 4rem;
+      --s8: 5rem;
+      --measure: 60ch; /* equal line length everywhere */
+    }
+
+    /* —— Article: centered, max 720px —— */
     .article-editorial {
       max-width: 720px;
       margin: 0 auto;
-      padding-bottom: 4rem;
+      padding-bottom: var(--s7);
+      text-align: center;
     }
 
     .article-nav {
-      margin-bottom: 2.5rem;
+      margin-bottom: var(--s5);
+      text-align: center;
     }
 
     .article-back {
@@ -97,9 +112,10 @@ const relatedPosts = allPosts
       color: #C05800;
     }
 
-    /* —— Header: H1 bold, large, spacious —— */
+    /* —— Header: centered, H1 bold & spacious —— */
     .article-header {
-      margin-bottom: 3.5rem;
+      margin-bottom: var(--s7);
+      text-align: center;
     }
 
     .article-date {
@@ -108,36 +124,36 @@ const relatedPosts = allPosts
       letter-spacing: 0.08em;
       text-transform: uppercase;
       color: rgba(56, 36, 13, 0.55);
-      margin-bottom: 1rem;
+      margin-bottom: var(--s2);
     }
 
     .article-title {
       font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
       font-size: clamp(2rem, 5vw, 3rem);
       font-weight: 700;
-      line-height: 1.18;
+      line-height: 1.2;
       letter-spacing: -0.01em;
       color: #38240D;
-      margin: 0 0 1.25rem;
-      max-width: 20ch;
+      margin: 0 auto var(--s3);
+      max-width: 22ch;
     }
 
     .article-description {
       font-size: 1.1875rem;
       line-height: 1.65;
       color: rgba(56, 36, 13, 0.82);
-      margin: 0;
-      max-width: 50ch;
+      margin: 0 auto;
+      max-width: var(--measure);
     }
 
     .article-header-divider {
-      margin-top: 2.5rem;
+      margin-top: var(--s5);
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.18), transparent);
     }
 
     .article-hero {
-      margin: 0 0 3rem;
+      margin: 0 auto var(--s6);
       border-radius: 12px;
       overflow: hidden;
       border: 1px solid rgba(113, 54, 0, 0.1);
@@ -150,19 +166,23 @@ const relatedPosts = allPosts
 
     .article-body {
       position: relative;
+      text-align: center;
     }
 
-    /* —— Prose: 680px max, line-height 1.65–1.75, rhythm —— */
+    /* —— Prose: equal line length (measure), centered block —— */
     .prose {
-      max-width: 680px;
+      max-width: var(--measure);
+      margin-left: auto;
+      margin-right: auto;
       font-size: 1.0625rem;
-      line-height: 1.72;
+      line-height: 1.75;
       letter-spacing: 0.015em;
       color: rgba(56, 36, 13, 0.88);
+      text-align: left;
     }
 
     .prose p {
-      margin: 0 0 1.75rem;
+      margin: 0 0 var(--s4);
       word-spacing: 0.01em;
     }
     .prose p:last-child {
@@ -174,7 +194,7 @@ const relatedPosts = allPosts
       font-size: 1.1875rem;
       line-height: 1.7;
       color: rgba(56, 36, 13, 0.92);
-      margin-bottom: 2rem;
+      margin-bottom: var(--s4);
     }
 
     .prose > p:first-of-type::first-letter {
@@ -187,17 +207,18 @@ const relatedPosts = allPosts
       color: #713600;
     }
 
-    /* —— Section spacing: 80–120px between major sections —— */
+    /* —— H2 / H3: centered, equal spacing —— */
     .prose h2 {
       font-family: var(--font-serif);
       font-size: 1.5rem;
       font-weight: 600;
       letter-spacing: 0.01em;
       color: #38240D;
-      margin: 5rem 0 1.25rem;
-      padding-bottom: 0.6rem;
+      margin: var(--s8) 0 var(--s3);
+      padding-bottom: var(--s1);
       border-bottom: 1px solid rgba(192, 88, 0, 0.22);
       transition: color 0.2s ease;
+      text-align: center;
     }
     .prose h2:first-of-type {
       margin-top: 0;
@@ -211,16 +232,16 @@ const relatedPosts = allPosts
       font-size: 1.25rem;
       font-weight: 600;
       color: #38240D;
-      margin: 2.5rem 0 0.75rem;
+      margin: var(--s5) 0 var(--s2);
       transition: color 0.2s ease;
+      text-align: center;
     }
     .prose h3:hover {
       color: rgba(113, 54, 0, 0.9);
     }
 
-    /* Section separator after each h2 block (optional visual break) */
     .prose h2 + p {
-      margin-top: 1.25rem;
+      margin-top: var(--s3);
     }
 
     .prose strong {
@@ -240,10 +261,10 @@ const relatedPosts = allPosts
       border-bottom-color: #713600;
     }
 
-    /* —— Quote formatting: larger, indented, soft bg, italic, left accent —— */
+    /* —— Quote formatting: proportional spacing —— */
     .prose blockquote {
-      margin: 2.5rem 0;
-      padding: 1.5rem 0 1.5rem 1.75rem;
+      margin: var(--s5) 0;
+      padding: var(--s3) 0 var(--s3) var(--s3);
       border-left: 4px solid #C05800;
       background: rgba(192, 88, 0, 0.06);
       font-style: italic;
@@ -254,10 +275,9 @@ const relatedPosts = allPosts
       border-radius: 0 8px 8px 0;
     }
 
-    /* Question-quote list (use class="question-quotes" on a wrapper in content) */
     .prose .question-quotes {
-      margin: 2rem 0;
-      padding: 1.5rem 0 1.5rem 1.5rem;
+      margin: var(--s4) 0;
+      padding: var(--s3) 0 var(--s3) var(--s3);
       border-left: 4px solid rgba(192, 88, 0, 0.5);
       background: rgba(192, 88, 0, 0.05);
       border-radius: 0 8px 8px 0;
@@ -271,8 +291,8 @@ const relatedPosts = allPosts
       font-size: 1.0625rem;
       line-height: 1.7;
       color: rgba(56, 36, 13, 0.88);
-      margin-bottom: 0.85rem;
-      padding-left: 1.25rem;
+      margin-bottom: var(--s2);
+      padding-left: var(--s3);
       position: relative;
       font-style: italic;
     }
@@ -288,21 +308,21 @@ const relatedPosts = allPosts
       font-size: 1.25em;
     }
 
-    /* —— Lists: better vertical spacing, clear bullets —— */
+    /* —— Lists: equal vertical spacing —— */
     .prose ul,
     .prose ol {
-      margin: 2rem 0;
-      padding-left: 1.5rem;
+      margin: var(--s4) 0;
+      padding-left: var(--s3);
       letter-spacing: 0.01em;
     }
 
     .prose li {
-      margin-bottom: 0.65rem;
+      margin-bottom: var(--s1);
       line-height: 1.75;
-      padding-left: 0.35rem;
+      padding-left: var(--s1);
     }
     .prose li + li {
-      margin-top: 0.25rem;
+      margin-top: var(--s1);
     }
 
     .prose ul li::marker {
@@ -310,21 +330,20 @@ const relatedPosts = allPosts
       font-size: 0.85em;
     }
 
-    /* Mobile: reduce section spacing for smaller viewports */
     @media (max-width: 640px) {
       .article-title {
         max-width: none;
       }
       .prose h2 {
-        margin-top: 3.5rem;
+        margin-top: var(--s7);
       }
       .prose h3 {
-        margin-top: 2rem;
+        margin-top: var(--s4);
       }
     }
 
     .prose hr {
-      margin: 3rem 0;
+      margin: var(--s6) 0;
       border: none;
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.12), transparent);
@@ -338,10 +357,9 @@ const relatedPosts = allPosts
       font-size: 0.9em;
     }
 
-    /* Diagrams & callouts */
     .prose .article-diagram {
-      margin: 2.75rem 0;
-      padding: 1.5rem;
+      margin: var(--s5) 0;
+      padding: var(--s3);
       background: rgba(113, 54, 0, 0.04);
       border: 1px solid rgba(113, 54, 0, 0.1);
       border-radius: 12px;
@@ -349,15 +367,15 @@ const relatedPosts = allPosts
     .prose .article-diagram figcaption {
       font-size: 0.875rem;
       color: rgba(56, 36, 13, 0.65);
-      margin-top: 1rem;
+      margin-top: var(--s2);
       text-align: center;
       letter-spacing: 0.02em;
       line-height: 1.5;
     }
 
     .prose .callout {
-      margin: 2.5rem 0;
-      padding: 1.5rem 1.75rem;
+      margin: var(--s5) 0;
+      padding: var(--s3) var(--s3);
       background: rgba(192, 88, 0, 0.06);
       border-left: 4px solid #C05800;
       border-radius: 0 8px 8px 0;
@@ -367,17 +385,18 @@ const relatedPosts = allPosts
     }
 
     .article-end-divider {
-      margin: 3.5rem 0 2rem;
+      margin: var(--s7) 0 var(--s4);
       height: 1px;
       background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.15), transparent);
     }
 
     .article-footer {
-      padding-top: 0.5rem;
+      padding-top: var(--s1);
+      text-align: center;
     }
 
     .article-related {
-      margin-bottom: 2rem;
+      margin-bottom: var(--s4);
     }
 
     .article-related-title {
@@ -385,16 +404,20 @@ const relatedPosts = allPosts
       font-size: 1.125rem;
       font-weight: 600;
       color: #38240D;
-      margin: 0 0 1rem;
+      margin: 0 0 var(--s2);
     }
 
     .article-related-list {
       list-style: none;
       padding: 0;
       margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: var(--s1);
     }
     .article-related-list li {
-      margin-bottom: 0.5rem;
+      margin-bottom: 0;
     }
     .article-related-list a {
       font-weight: 500;
