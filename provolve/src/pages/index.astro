@@ -11,40 +11,40 @@ const sortedPosts = allPosts.sort((a, b) =>
 
 <Layout title="Provolve Blog" description="Evidence-based articles on medicine, research, and healthcare innovation for students and curious minds." canonicalURL="https://provolve.net/">
   <main>
-    <!-- Hero: tight → loose rhythm -->
+    <!-- Hero -->
     <section class="mb-16 sm:mb-20">
-      <p class="text-xs font-medium text-truffle-caramel/90 uppercase tracking-widest mb-4 animate-fade-in opacity-0" style="animation: fadeIn 0.5s ease-out 0.1s forwards;">
-        Medicine · Research · Healthcare
-      </p>
-      <h1 class="font-serif text-3xl sm:text-4xl md:text-[2.75rem] font-semibold text-truffle-dark-brown leading-[1.2] mb-5 max-w-[28ch] animate-fade-in-up opacity-0" style="animation: fadeInUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
+      <div class="inline-block px-3 py-1.5 rounded-full bg-truffle-caramel/10 border border-truffle-caramel/20 mb-6 animate-fade-in opacity-0" style="animation: fadeIn 0.5s ease-out 0.1s forwards;">
+        <p class="text-xs font-semibold text-truffle-caramel/95 uppercase tracking-widest">
+          Medicine · Research · Healthcare
+        </p>
+      </div>
+      <h1 class="font-serif text-3xl sm:text-4xl md:text-[2.85rem] font-semibold text-truffle-dark-brown leading-[1.18] mb-5 max-w-[26ch] animate-fade-in-up opacity-0 tracking-tight" style="animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;">
         Helping students understand medicine and research
       </h1>
-      <p class="text-lg text-truffle-brown/85 leading-relaxed max-w-[42ch] mb-8 animate-fade-in-up opacity-0" style="animation: fadeInUp 0.5s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;">
+      <p class="text-lg sm:text-xl text-truffle-brown/82 leading-relaxed max-w-[40ch] mb-9 animate-fade-in-up opacity-0" style="animation: fadeInUp 0.55s cubic-bezier(0.22,1,0.36,1) 0.22s forwards;">
         Clear, evidence-based articles on healthcare and under-researched topics—for students and lifelong learners.
       </p>
-      <a href="#posts" class="inline-flex items-center gap-2 text-sm font-medium text-truffle-caramel hover:text-truffle-brown transition-colors duration-200 animate-fade-in opacity-0 link-underline" style="animation: fadeIn 0.5s ease-out 0.3s forwards;">
+      <a href="#posts" class="group inline-flex items-center gap-2.5 px-5 py-2.5 rounded-lg text-sm font-semibold text-truffle-caramel bg-truffle-caramel/10 border border-truffle-caramel/25 hover:bg-truffle-caramel/15 hover:border-truffle-caramel/35 transition-all duration-200 animate-fade-in opacity-0" style="animation: fadeIn 0.5s ease-out 0.32s forwards;">
         Read the latest
-        <span aria-hidden="true">→</span>
+        <span aria-hidden="true" class="transition-transform duration-200 group-hover:translate-x-0.5">→</span>
       </a>
-      <!-- Decorative image -->
-      <div class="mt-14 flex justify-end max-w-[28ch] ml-auto" aria-hidden="true">
-        <img src="/images/decoration-article.svg" alt="" class="w-24 h-24 sm:w-28 sm:h-28 opacity-80" />
+      <div class="mt-16 flex justify-end max-w-[28ch] ml-auto" aria-hidden="true">
+        <img src="/images/decoration-article.svg" alt="" class="w-24 h-24 sm:w-28 sm:h-28 opacity-70" />
       </div>
-      <!-- Soft divider -->
-      <div class="mt-12 pt-8 border-t border-truffle-brown/10"></div>
+      <div class="mt-14 pt-10 border-t border-truffle-brown/12"></div>
     </section>
 
     <!-- Posts -->
     <section id="posts" class="scroll-reveal">
-      <div class="flex items-baseline justify-between gap-4 mb-10">
-        <h2 class="font-serif text-2xl font-semibold text-truffle-dark-brown">
+      <div class="flex items-baseline justify-between gap-4 mb-8">
+        <h2 class="font-serif text-2xl sm:text-[1.6rem] font-semibold text-truffle-dark-brown">
           Latest articles
         </h2>
-        <span class="text-xs text-truffle-brown/50">{sortedPosts.length} posts</span>
+        <span class="text-xs font-medium text-truffle-brown/55 tabular-nums">{sortedPosts.length} posts</span>
       </div>
-      <ul class="space-y-6 sm:space-y-8">
+      <ul class="space-y-2">
         {sortedPosts.map((post, index) => (
-          <li class="scroll-reveal" style={`animation-delay: ${index * 0.06}s`}>
+          <li class="scroll-reveal" style={`animation-delay: ${index * 0.05}s`}>
             <BlogPost post={post} isLatest={index === 0} />
           </li>
         ))}
@@ -55,8 +55,8 @@ const sortedPosts = allPosts.sort((a, b) =>
   <style>
     .scroll-reveal {
       opacity: 0;
-      transform: translateY(14px);
-      animation: scrollReveal 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      transform: translateY(12px);
+      animation: scrollReveal 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
     }
     @keyframes scrollReveal {
       to {

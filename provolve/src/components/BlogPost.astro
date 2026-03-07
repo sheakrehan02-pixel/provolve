@@ -9,15 +9,15 @@ interface Props {
 const { post, isLatest = false } = Astro.props;
 ---
 
-<a href={`/blog/${post.slug}/`} class="group block py-6 border-b border-truffle-brown/10 last:border-0 hover:border-truffle-brown/20 transition-colors duration-200">
+<a href={`/blog/${post.slug}/`} class="group block rounded-xl py-5 px-5 sm:py-6 sm:px-6 border border-transparent bg-truffle-brown/[0.02] hover:bg-truffle-caramel/[0.06] hover:border-truffle-brown/10 transition-all duration-200">
   <article class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-3 flex-wrap">
-        <span class="text-xs text-truffle-brown/55 tracking-wide">
+        <span class="text-xs font-medium text-truffle-brown/55 tracking-wide">
           {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </span>
         {isLatest && (
-          <span class="text-xs font-semibold uppercase tracking-wider text-truffle-caramel border border-truffle-caramel/40 rounded px-2 py-0.5">
+          <span class="text-xs font-semibold uppercase tracking-wider text-truffle-caramel border border-truffle-caramel/40 rounded-full px-2.5 py-0.5 bg-truffle-caramel/10">
             Latest
           </span>
         )}
@@ -31,7 +31,7 @@ const { post, isLatest = false } = Astro.props;
         </p>
       )}
     </div>
-    <span class="inline-flex items-center gap-1.5 text-sm font-medium text-truffle-caramel/80 group-hover:text-truffle-caramel mt-3 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">
+    <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-truffle-caramel/85 group-hover:text-truffle-caramel mt-3 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">
       Read
       <span class="group-hover:translate-x-0.5 transition-transform duration-200">→</span>
     </span>
