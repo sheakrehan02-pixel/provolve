@@ -173,6 +173,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"experimental-melanoma-vaccine-immune-response.md": {
+	id: "experimental-melanoma-vaccine-immune-response.md";
+  slug: "experimental-melanoma-vaccine-immune-response";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "future-of-medical-innovation.md": {
 	id: "future-of-medical-innovation.md";
   slug: "future-of-medical-innovation";
