@@ -1,7 +1,10 @@
 ---
 import { getCollection } from 'astro:content';
+import { createMarkdownProcessor } from '@astrojs/markdown-remark';
 import Layout from '../../layouts/Layout.astro';
 import type { CollectionEntry } from 'astro:content';
+import { getPostNumber } from '../../utils/postHelpers';
+import '../../styles/editorial.css';
 
 export async function getStaticPaths() {
   const blogPosts = await getCollection('blog');
@@ -14,312 +17,62 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<'blog'>;
 
 const post = Astro.props;
-const { Content } = await post.render();
-
 const allPosts = await getCollection('blog');
+const postNumber = getPostNumber(post, allPosts);
+
+const processor = await createMarkdownProcessor();
+const bodyHtml = (await processor.render(post.body)).code;
+
 const relatedPosts = allPosts
   .filter((p) => p.slug !== post.slug)
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   .slice(0, 3);
 ---
 
-<Layout title={post.data.title} description={post.data.description} canonicalURL={`https://provolve.net/blog/${post.slug}/`}>
-  <article class="article-post">
-    <a href="/" class="article-back link-underline">← Back to all articles</a>
+<Layout
+  title={post.data.title}
+  description={post.data.description}
+  canonicalURL={`https://provolve.net/blog/${post.slug}/`}
+  variant="editorial"
+>
+  <article class="editorial-article">
+    <a href="/" class="editorial-back">← All posts</a>
 
-    <header class="article-header">
-      <time class="article-date" datetime={post.data.pubDate.toISOString()}>
+    <div class="editorial-masthead">
+      <span class="editorial-masthead-label">Provolve blog</span>
+      <span class="editorial-masthead-number">#{postNumber}</span>
+    </div>
+
+    <header class="editorial-header">
+      <time class="editorial-date" datetime={post.data.pubDate.toISOString()}>
         {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
       </time>
-      <h1 class="article-title">{post.data.title}</h1>
-      {post.data.description && <p class="article-description">{post.data.description}</p>}
-      <div class="article-header-rule" aria-hidden="true"></div>
+      <h1 class="editorial-title">{post.data.title}</h1>
+      {post.data.description && (
+        <p class="editorial-dek">{post.data.description}</p>
+      )}
     </header>
 
     {post.data.heroImage && (
-      <figure class="article-hero">
+      <figure class="editorial-hero">
         <img src={post.data.heroImage} alt="" />
       </figure>
     )}
 
-    <div class="prose">
-      <Content />
-    </div>
+    <div class="editorial-prose" set:html={bodyHtml} />
 
-    <footer class="article-footer">
+    <footer class="editorial-footer">
       {relatedPosts.length > 0 && (
-        <div class="article-related">
-          <h2 class="article-related-title">More articles</h2>
-          <ul class="article-related-list">
+        <>
+          <h2 class="editorial-related-title">More articles</h2>
+          <ul class="editorial-related-list">
             {relatedPosts.map((p) => (
-              <li><a href={`/blog/${p.slug}/`} class="link-underline">{p.data.title}</a></li>
+              <li><a href={`/blog/${p.slug}/`}>{p.data.title}</a></li>
             ))}
           </ul>
-        </div>
+        </>
       )}
-      <a href="/" class="article-back link-underline">← Back to all posts</a>
+      <p class="editorial-handle">@provolve.net</p>
     </footer>
   </article>
-
-  <style>
-    .article-post {
-      max-width: 720px;
-      margin: 0 auto;
-      padding-bottom: 3.5rem;
-    }
-
-    .article-back {
-      display: inline-block;
-      font-size: 0.9375rem;
-      font-weight: 500;
-      color: rgba(56, 36, 13, 0.6);
-      margin-bottom: 2rem;
-      transition: color 0.2s ease;
-    }
-    .article-back:hover { color: #C05800; }
-
-    .article-header { margin-bottom: 2.75rem; }
-
-    .article-date {
-      display: block;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-      color: rgba(56, 36, 13, 0.5);
-      margin-bottom: 0.5rem;
-    }
-
-    .article-title {
-      font-family: var(--font-serif, 'Cormorant Garamond', Georgia, serif);
-      font-size: 2.125rem;
-      font-weight: 700;
-      line-height: 1.22;
-      letter-spacing: -0.01em;
-      color: #38240D;
-      margin: 0 0 0.75rem;
-    }
-
-    .article-description {
-      font-size: 1.125rem;
-      line-height: 1.68;
-      letter-spacing: 0.01em;
-      color: rgba(45, 32, 18, 0.82);
-      margin: 0;
-      max-width: 60ch;
-    }
-
-    .article-header-rule {
-      margin-top: 1.75rem;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(192, 88, 0, 0.25) 0%, transparent 70%);
-    }
-
-    .article-hero {
-      margin: 0 0 2rem;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .article-hero img { width: 100%; height: auto; display: block; }
-
-    .prose {
-      font-size: 1.125rem;
-      line-height: 1.78;
-      letter-spacing: 0.015em;
-      color: rgba(45, 32, 18, 0.9);
-      max-width: 65ch;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    .prose p {
-      margin: 0 0 2.5rem;
-      word-spacing: 0.02em;
-    }
-    .prose p:last-child { margin-bottom: 0; }
-
-    /* Lead paragraph: slightly larger, clear separation after */
-    .prose > p:first-of-type {
-      font-size: 1.1875rem;
-      line-height: 1.75;
-      margin-bottom: 2.5rem;
-    }
-
-    .prose > p:first-of-type::first-letter {
-      font-family: var(--font-serif);
-      font-size: 3.5rem;
-      line-height: 1;
-      font-weight: 600;
-      float: left;
-      margin: 0.02em 0.08em 0 -0.02em;
-      color: #713600;
-    }
-
-    .prose h2 {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: #38240D;
-      margin: 3rem 0 1rem;
-      padding-top: 2rem;
-      padding-bottom: 0.5rem;
-      border-top: 1px solid rgba(113, 54, 0, 0.18);
-      border-bottom: 1px solid rgba(192, 88, 0, 0.22);
-      line-height: 1.3;
-    }
-    .prose h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
-
-    .prose h3 {
-      font-family: var(--font-serif);
-      font-size: 1.2rem;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      color: #38240D;
-      margin: 2rem 0 0.65rem;
-      line-height: 1.35;
-    }
-
-    .prose strong {
-      font-weight: 600;
-      color: #38240D;
-      letter-spacing: 0.01em;
-    }
-
-    .prose a {
-      color: #B84F00;
-      font-weight: 500;
-      text-decoration: none;
-      border-bottom: 1px solid rgba(184, 79, 0, 0.35);
-      padding-bottom: 0.05em;
-      transition: color 0.2s ease, border-color 0.2s ease;
-    }
-    .prose a:hover {
-      color: #713600;
-      border-bottom-color: #713600;
-    }
-
-    .prose blockquote {
-      margin: 2.25rem 0;
-      padding: 1.5rem 0 1.5rem 1.75rem;
-      border-left: 4px solid #C05800;
-      background: rgba(192, 88, 0, 0.06);
-      border-radius: 0 10px 10px 0;
-      font-style: italic;
-      font-size: 1.0625rem;
-      line-height: 1.7;
-      color: rgba(45, 32, 18, 0.88);
-      letter-spacing: 0.01em;
-    }
-
-    .prose ul, .prose ol {
-      margin: 1.75rem 0;
-      padding-left: 1.75rem;
-    }
-    .prose li {
-      margin-bottom: 0.6rem;
-      line-height: 1.72;
-      letter-spacing: 0.01em;
-    }
-    .prose ul li::marker { color: #C05800; }
-    .prose ol li::marker { color: #713600; font-weight: 600; }
-
-    .prose hr {
-      margin: 2.75rem 0;
-      border: none;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(113, 54, 0, 0.2) 20% 80%, transparent);
-    }
-
-    .prose code {
-      background: rgba(192, 88, 0, 0.1);
-      color: #713600;
-      padding: 0.2em 0.45em;
-      border-radius: 6px;
-      font-size: 0.9em;
-      font-weight: 500;
-      letter-spacing: 0.02em;
-    }
-
-    .prose .article-figure,
-    .prose .article-diagram {
-      margin: 2.5rem 0;
-      padding: 1.5rem;
-      background: rgba(113, 54, 0, 0.05);
-      border: 1px solid rgba(113, 54, 0, 0.14);
-      border-radius: 10px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    .prose .article-figure img {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto;
-      border-radius: 6px;
-    }
-    .prose .article-figure figcaption {
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      color: rgba(45, 32, 18, 0.62);
-      margin-top: 1rem;
-      line-height: 1.55;
-    }
-    .prose .article-diagram svg {
-      display: block;
-      width: 100%;
-      max-width: 100%;
-      height: auto;
-      margin: 0 auto;
-    }
-    .prose .article-diagram figcaption {
-      font-size: 0.875rem;
-      letter-spacing: 0.02em;
-      color: rgba(45, 32, 18, 0.62);
-      margin-top: 1rem;
-      padding-top: 0;
-      line-height: 1.55;
-      text-align: left;
-      max-width: 100%;
-    }
-
-    .prose .callout {
-      margin: 1.75rem 0;
-      padding: 1.35rem 1.5rem;
-      background: rgba(192, 88, 0, 0.06);
-      border-left: 4px solid #C05800;
-      border-radius: 0 8px 8px 0;
-      font-size: 1.0625rem;
-      line-height: 1.7;
-      letter-spacing: 0.01em;
-    }
-
-    .article-footer {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(113, 54, 0, 0.12);
-    }
-
-    .article-related-title {
-      font-family: var(--font-serif);
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: #38240D;
-      margin: 0 0 1rem;
-    }
-
-    .article-related-list { list-style: none; padding: 0; margin: 0 0 1.5rem; }
-    .article-related-list li {
-      margin-bottom: 0.5rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(113, 54, 0, 0.06);
-    }
-    .article-related-list li:last-child { border-bottom: none; }
-    .article-related-list a {
-      font-weight: 500;
-      color: rgba(56, 36, 13, 0.82);
-      transition: color 0.2s ease;
-    }
-    .article-related-list a:hover { color: #C05800; }
-  </style>
 </Layout>
