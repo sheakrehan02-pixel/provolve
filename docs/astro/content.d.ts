@@ -180,6 +180,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"first-ai-designed-vaccine-human-trials.md": {
+	id: "first-ai-designed-vaccine-human-trials.md";
+  slug: "first-ai-designed-vaccine-human-trials";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "future-of-medical-innovation.md": {
 	id: "future-of-medical-innovation.md";
   slug: "future-of-medical-innovation";
