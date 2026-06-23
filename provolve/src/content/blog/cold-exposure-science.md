@@ -2,21 +2,37 @@
 title: "Cold Exposure and Immunity: What Does the Science Actually Say?"
 pubDate: 2026-02-14
 description: "Separating fact from hype in the cold plunge and cryotherapy craze—what we know, what we don't, and where the research is heading."
+heroImage: "/images/cold-exposure/hero-ice-plunge.png"
 ---
 
 Cold plunges, ice baths, and cryotherapy have exploded in popularity. Athletes swear by them for recovery. Wellness influencers tout immune benefits. But when you strip away the hype, what does the scientific literature actually support?
 
 The answer is more nuanced than either enthusiasts or skeptics typically acknowledge. Cold exposure research exists—but it's scattered, often small-scale, and frequently misinterpreted. This makes it an ideal topic for students learning to critically evaluate emerging health trends.
 
+<figure class="article-figure">
+  <img src="/images/cold-exposure/immune-shields.png" alt="Three shield icons representing immune defense, protection, and medical health." />
+  <figcaption>Cold exposure is often marketed as an immune booster—but the evidence behind that claim is thinner than many headlines suggest.</figcaption>
+</figure>
+
 ## What We Think We Know
 
 Acute cold exposure triggers a suite of physiological responses: vasoconstriction, norepinephrine release, activation of brown adipose tissue (brown fat), and shifts in immune cell distribution. Some studies suggest that regular cold water immersion may increase circulating levels of certain immune markers, including interleukin-6 and possibly natural killer cell activity. The "Wim Hof method"—combining breathing exercises with cold exposure—has been studied in small trials, with some showing reduced inflammatory response to endotoxin challenge.
+
+<figure class="article-figure">
+  <img src="/images/cold-exposure/cellular-response.png" alt="Glowing blue spherical cells suspended in a dark fluid environment, suggesting microscopic biological activity." />
+  <figcaption>Cold exposure activates brown adipose tissue and shifts immune cell distribution—but cellular changes do not automatically mean better health outcomes.</figcaption>
+</figure>
 
 But here's the catch: immune marker changes don't automatically translate to fewer infections or better health outcomes. We're measuring proxies, not clinical endpoints. The leap from "cold exposure alters immune parameters" to "cold exposure strengthens immunity" remains largely unproven.
 
 ## The Under-Researched Questions
 
 Do regular cold plungers get fewer colds? We don't have good data. Does cold exposure improve long-term immune function, or could repeated stress actually suppress it? Unclear. Are the benefits (if any) due to cold itself, or to the mindset, community, and lifestyle factors of people who choose to take ice baths? Possibly confounded.
+
+<figure class="article-figure">
+  <img src="/images/cold-exposure/immune-response.png" alt="A translucent blue human torso surrounded by red virus-like particles, illustrating the body's immune environment." />
+  <figcaption>Whether cold exposure actually reduces infections—or merely changes immune markers—remains one of the biggest unanswered questions in the field.</figcaption>
+</figure>
 
 The research landscape is ripe for rigorous investigation. Randomized controlled trials with sufficient sample sizes are scarce. Mechanistic studies—understanding exactly how cold affects immune cell function, cytokine profiles, and susceptibility to infection—would add critical depth. Comparative studies across different cold exposure protocols (duration, temperature, frequency) are almost entirely lacking.
 
