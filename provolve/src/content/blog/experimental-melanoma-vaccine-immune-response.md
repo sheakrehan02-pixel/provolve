@@ -2,17 +2,33 @@
 title: "Experimental Melanoma Vaccine Shows Encouraging Immune Responses"
 pubDate: 2026-06-10
 description: "Researchers are reporting promising immune responses from personalized melanoma vaccines, highlighting a potential breakthrough in cancer immunotherapy."
+heroImage: "/images/melanoma-vaccine/hero-immune-response.png"
 ---
 
 For decades, cancer researchers have pursued a simple but ambitious goal: train the body's own immune system to recognize and destroy cancer cells. New data presented in recent melanoma vaccine studies suggest that this vision may be moving closer to reality. Researchers are reporting encouraging immune responses from experimental melanoma vaccines, particularly those using personalized mRNA technology.
 
 Personalized cancer vaccines represent a rapidly growing field, and melanoma has become one of its most important targets. Because melanoma carries a high number of genetic mutations, it produces many abnormal proteins that the immune system can potentially learn to recognize—making it especially well suited to vaccine-based approaches.
 
+<figure class="article-figure">
+  <img src="/images/melanoma-vaccine/dermatology-skin-exam.png" alt="A dermatologist using a dermatoscope to examine moles on a patient's upper back during a skin cancer screening." />
+  <figcaption>Melanoma often begins as changes in skin lesions—early detection and treatment remain critical while vaccine research advances.</figcaption>
+</figure>
+
 ## A Personalized Approach to Cancer
 
 Unlike traditional vaccines that prevent infectious diseases, cancer vaccines are designed to help the immune system recognize existing tumors. Many of the latest melanoma vaccines are personalized, meaning they are tailored to the unique genetic mutations found in an individual patient's cancer.
 
 Researchers first sequence a patient's tumor DNA, identify abnormal proteins known as neoantigens, and then create an mRNA vaccine that teaches the immune system to target those specific markers. The goal is to generate a powerful T-cell response capable of seeking out and eliminating cancer cells while sparing healthy tissue.
+
+<figure class="article-figure">
+  <img src="/images/melanoma-vaccine/mrna-molecule.png" alt="A 3D illustration of a single-stranded mRNA molecule with a helical backbone and protruding nucleobases." />
+  <figcaption>Personalized melanoma vaccines use mRNA to deliver instructions that train the immune system to recognize tumor-specific neoantigens.</figcaption>
+</figure>
+
+<figure class="article-figure">
+  <img src="/images/melanoma-vaccine/mrna-vaccine-vial.png" alt="A labeled mRNA vaccine vial and syringe on a light blue background." />
+  <figcaption>mRNA vaccine platforms—proven during the COVID-19 pandemic—are now being adapted to teach the body to fight existing cancers.</figcaption>
+</figure>
 
 ## Promising Clinical Results
 
@@ -31,6 +47,11 @@ Recent preclinical research has also demonstrated that novel vaccine platforms c
 Despite the encouraging results, significant hurdles remain. Personalized vaccines require sophisticated genetic sequencing, rapid manufacturing, and careful patient-specific design. Scientists must also address challenges such as tumor evolution, immune suppression within the tumor microenvironment, and the high cost of individualized treatments.
 
 Additionally, most melanoma vaccine candidates remain experimental. Larger Phase III clinical trials will be necessary before regulators can determine whether these therapies should become standard treatment options.
+
+<figure class="article-figure">
+  <img src="/images/melanoma-vaccine/lab-research.png" alt="A researcher in blue gloves pipetting a sample onto a microscope slide in a bright laboratory." />
+  <figcaption>Developing personalized cancer vaccines requires rapid genomic sequencing, precise manufacturing, and rigorous laboratory validation.</figcaption>
+</figure>
 
 ## Looking Forward
 
