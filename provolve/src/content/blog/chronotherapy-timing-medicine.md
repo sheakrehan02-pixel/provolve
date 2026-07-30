@@ -2,6 +2,8 @@
 title: "Chronotherapy: Why When You Take Medicine Matters"
 pubDate: 2026-01-15
 description: "Exploring the emerging field of circadian medicine—how the timing of medications can dramatically affect their efficacy and side effects."
+label: "Timing"
+tags: ["chronotherapy", "circadian rhythms", "pharmacology", "clinical research"]
 ---
 
 Most of us take our medications at whatever time is convenient. Morning with breakfast. Right before bed. When we remember. But emerging research suggests that **when** we take a drug may be just as important as **what** we take.

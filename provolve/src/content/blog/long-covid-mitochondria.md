@@ -2,6 +2,8 @@
 title: "Long COVID and Mitochondrial Dysfunction: A New Paradigm"
 pubDate: 2026-02-01
 description: "Examining the emerging theory that persistent COVID-19 symptoms may stem from viral damage to cellular powerhouses—and what it means for treatment."
+label: "Mitochondria"
+tags: ["long COVID", "mitochondrial dysfunction", "cellular biology", "chronic illness"]
 ---
 
 For millions of people, COVID-19 didn't end when the acute infection cleared. Fatigue, brain fog, exercise intolerance, and a host of other symptoms persist for months or years—a condition we now call Long COVID. The underlying cause remains elusive. But a growing body of research points to an unexpected culprit: the mitochondria.

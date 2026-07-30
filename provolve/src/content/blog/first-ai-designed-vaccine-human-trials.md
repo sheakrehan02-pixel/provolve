@@ -2,6 +2,8 @@
 title: "The First AI-Designed Vaccine Has Entered Human Trials"
 pubDate: 2026-06-14
 description: "Researchers at Cambridge and DIOSynVax have completed Phase 1 testing of the world's first vaccine whose key protective component was designed entirely by artificial intelligence—a milestone that could reshape pandemic preparedness."
+label: "Vaccines"
+tags: ["artificial intelligence", "vaccine design", "clinical trials", "pandemic preparedness"]
 heroImage: "/images/ai-vaccine/hero-ai-chips.png"
 ---
 

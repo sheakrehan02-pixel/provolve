@@ -13,6 +13,9 @@ const { post, isLatest = false } = Astro.props;
   <article class="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-6">
     <div class="min-w-0 flex-1">
       <div class="flex items-center gap-3 flex-wrap">
+        <span class="text-xs font-semibold uppercase tracking-wider text-truffle-caramel/90">
+          {post.data.label}
+        </span>
         <span class="text-xs font-medium text-truffle-brown/55 tracking-wide">
           {post.data.pubDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
         </span>
@@ -29,6 +32,15 @@ const { post, isLatest = false } = Astro.props;
         <p class="text-truffle-brown/75 text-base leading-relaxed mt-3 line-clamp-2 max-w-[65ch] tracking-wide" style="letter-spacing: 0.01em;">
           {post.data.description}
         </p>
+      )}
+      {post.data.tags?.length > 0 && (
+        <ul class="flex flex-wrap gap-2 mt-3">
+          {post.data.tags.map((tag) => (
+            <li class="text-[0.6875rem] font-medium tracking-wide text-truffle-brown/60 border border-truffle-brown/15 rounded-md px-2 py-0.5">
+              {tag}
+            </li>
+          ))}
+        </ul>
       )}
     </div>
     <span class="inline-flex items-center gap-1.5 text-sm font-semibold text-truffle-caramel/85 group-hover:text-truffle-caramel mt-3 sm:mt-0 sm:flex-shrink-0 transition-colors duration-200">

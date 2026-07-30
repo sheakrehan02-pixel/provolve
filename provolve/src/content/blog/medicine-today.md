@@ -2,6 +2,8 @@
 title: "Medicine Today: Where Are We Now?"
 pubDate: 2025-12-31
 description: "An overview of the most impactful changes shaping modern healthcare."
+label: "Overview"
+tags: ["healthcare systems", "diagnostics", "artificial intelligence", "modern medicine"]
 ---
 
 Healthcare today sits at the intersection of science, technology, and human-centered care.

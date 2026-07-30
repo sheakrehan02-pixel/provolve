@@ -39,17 +39,27 @@ const relatedPosts = allPosts
     <a href="/" class="editorial-back">← All posts</a>
 
     <div class="editorial-masthead">
-      <span class="editorial-masthead-label">Provolve blog</span>
+      <span class="editorial-masthead-label">Academic blog</span>
       <span class="editorial-masthead-number">#{postNumber}</span>
     </div>
 
     <header class="editorial-header">
-      <time class="editorial-date" datetime={post.data.pubDate.toISOString()}>
-        {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-      </time>
+      <div class="editorial-meta">
+        <span class="editorial-label">{post.data.label}</span>
+        <time class="editorial-date" datetime={post.data.pubDate.toISOString()}>
+          {post.data.pubDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
+        </time>
+      </div>
       <h1 class="editorial-title">{post.data.title}</h1>
       {post.data.description && (
         <p class="editorial-dek">{post.data.description}</p>
+      )}
+      {post.data.tags?.length > 0 && (
+        <ul class="editorial-tags">
+          {post.data.tags.map((tag) => (
+            <li>{tag}</li>
+          ))}
+        </ul>
       )}
     </header>
 

@@ -2,6 +2,8 @@
 title: "The Future of Medical Innovation"
 pubDate: 2025-12-31
 description: "How research, AI, and biotechnology are redefining healthcare."
+label: "Innovation"
+tags: ["biotechnology", "artificial intelligence", "precision medicine", "research"]
 ---
 
 Medical innovation is no longer limited to laboratories and hospitals.

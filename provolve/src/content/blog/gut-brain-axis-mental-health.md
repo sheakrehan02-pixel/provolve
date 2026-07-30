@@ -2,6 +2,8 @@
 title: "The Gut-Brain Axis: Your Microbiome's Role in Mental Health"
 pubDate: 2026-01-22
 description: "An in-depth look at how gut bacteria communicate with the brain—and what it could mean for treating depression, anxiety, and neurodegenerative disease."
+label: "Microbiome"
+tags: ["gut-brain axis", "mental health", "neuroscience", "microbiology"]
 ---
 
 We've long accepted that the brain controls the body. But what if the gut—home to trillions of bacteria—is sending signals *back* to the brain, influencing mood, cognition, and even the risk of psychiatric disease?

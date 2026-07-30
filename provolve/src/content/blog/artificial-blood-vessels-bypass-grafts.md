@@ -2,6 +2,8 @@
 title: "Could Artificial Blood Vessels Replace Traditional Bypass Grafts?"
 pubDate: 2026-06-22
 description: "Tissue engineering may soon offer lab-grown blood vessels that function like natural arteries—potentially transforming coronary bypass surgery and vascular medicine."
+label: "Vascular"
+tags: ["tissue engineering", "cardiology", "regenerative medicine", "surgery"]
 heroImage: "/images/bioengineered-vessels/hero-heart.png"
 ---
 

@@ -6,7 +6,7 @@ interface Props {
   variant?: 'default' | 'editorial';
 }
 
-const { title, description = "A student-led platform exploring medicine, innovation, and healthcare challenges.", canonicalURL, variant = 'default' } = Astro.props;
+const { title, description = "A student-led platform exploring academic research, ideas, and inquiry.", canonicalURL, variant = 'default' } = Astro.props;
 const fullTitle = title.includes('Provolve') ? title : `${title} | Provolve Blog`;
 const isEditorial = variant === 'editorial';
 ---
@@ -156,7 +156,7 @@ const isEditorial = variant === 'editorial';
           </p>
         ) : (
           <>
-            <p class="text-truffle-brown/50 text-sm font-medium mb-1">Medicine · Research · Healthcare</p>
+            <p class="text-truffle-brown/50 text-sm font-medium mb-1">Academia · Research · Ideas</p>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mt-4">
               <p class="text-truffle-brown/60 text-sm">
                 &copy; {new Date().getFullYear()} Provolve

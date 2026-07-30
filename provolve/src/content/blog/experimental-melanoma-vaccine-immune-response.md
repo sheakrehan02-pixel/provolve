@@ -2,6 +2,8 @@
 title: "Experimental Melanoma Vaccine Shows Encouraging Immune Responses"
 pubDate: 2026-06-10
 description: "Researchers are reporting promising immune responses from personalized melanoma vaccines, highlighting a potential breakthrough in cancer immunotherapy."
+label: "Oncology"
+tags: ["cancer vaccine", "immunotherapy", "melanoma", "personalized medicine"]
 heroImage: "/images/melanoma-vaccine/hero-immune-response.png"
 ---
 

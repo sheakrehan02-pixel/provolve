@@ -2,6 +2,8 @@
 title: "Cold Exposure and Immunity: What Does the Science Actually Say?"
 pubDate: 2026-02-14
 description: "Separating fact from hype in the cold plunge and cryotherapy craze—what we know, what we don't, and where the research is heading."
+label: "Immunity"
+tags: ["cold exposure", "immune system", "physiology", "evidence review"]
 heroImage: "/images/cold-exposure/hero-ice-plunge.png"
 ---
 
