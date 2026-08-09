@@ -236,6 +236,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"whiteboard-mastery-method.md": {
+	id: "whiteboard-mastery-method.md";
+  slug: "whiteboard-mastery-method";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "why-provolve.md": {
 	id: "why-provolve.md";
   slug: "why-provolve";

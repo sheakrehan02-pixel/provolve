@@ -201,6 +201,27 @@
   color: rgba(26, 26, 26, 0.85);
 }
 
+.editorial-prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 var(--editorial-gap);
+  font-size: 0.9375rem;
+}
+
+.editorial-prose th,
+.editorial-prose td {
+  padding: 0.55rem 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--editorial-rule);
+  vertical-align: top;
+  line-height: 1.5;
+}
+
+.editorial-prose th {
+  font-weight: 600;
+  color: var(--editorial-ink);
+}
+
 .editorial-prose hr {
   border: none;
   border-top: 1px solid var(--editorial-rule);
