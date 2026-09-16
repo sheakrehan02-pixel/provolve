@@ -215,6 +215,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"gut-brain-axis-migraine.md": {
+	id: "gut-brain-axis-migraine.md";
+  slug: "gut-brain-axis-migraine";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "long-covid-mitochondria.md": {
 	id: "long-covid-mitochondria.md";
   slug: "long-covid-mitochondria";
@@ -232,6 +239,13 @@ declare module 'astro:content' {
 "students-in-medicine.md": {
 	id: "students-in-medicine.md";
   slug: "students-in-medicine";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"the-crystal-that-ticks.md": {
+	id: "the-crystal-that-ticks.md";
+  slug: "the-crystal-that-ticks";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
