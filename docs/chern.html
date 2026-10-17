@@ -1,0 +1,1152 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Integer That Won't Go Away</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,300..900&family=Spectral:ital,wght@0,300;0,400;0,500;1,300;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* Layout: a dark observatory. A faint k-space grid behind a 680px reading column; instruments break out to 1080px; concept breaks go edge to edge in pure black. Single dark theme by design. */
+:root{
+  --void:#07080C; --black:#000000; --panel:#0D0F16; --panel2:#12151F; --gridline:#121621;
+  --line:#242a3a; --text:#E8E9EE; --dim:#8D93A6; --faint:#4E5468;
+  --pos:#FFB547; --neg:#58D5E8; --zero:#7A8094; --warn:#FF6B5B;
+  --topo:#FFB547;
+  --display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --body:"Spectral",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--void);color:var(--text);font-family:var(--body);font-size:20px;line-height:1.62;font-weight:400;padding-inline:16px;
+  background-image:linear-gradient(var(--gridline) 1px,transparent 1px),linear-gradient(90deg,var(--gridline) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+img{max-width:100%}
+a{color:var(--topo)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--topo);outline-offset:3px}
+math{font-size:1.06em}
+strong{font-weight:500;color:#fff}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;margin-inline:-16px;padding:9px 16px;background:rgba(7,8,12,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.home{font-family:var(--mono);font-size:12px;color:var(--dim);text-decoration:none;white-space:nowrap}
+.home b{color:var(--text);font-weight:600}
+.home:hover b{color:var(--topo)}
+.lv{display:flex;gap:4px;flex:1;min-width:0;flex-wrap:wrap}
+.lv a{font-family:var(--mono);font-size:10px;width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;color:var(--dim);text-decoration:none}
+.lv a.done{background:var(--topo);border-color:var(--topo);color:var(--black)}
+.charge{font-family:var(--mono);font-size:11px;color:var(--dim);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.charge b{color:var(--topo);font-weight:600}
+.cbar{width:80px;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.cbar i{display:block;height:100%;width:0;background:var(--topo);transition:width .5s}
+
+/* type */
+.wrap{max-width:1080px;margin:0 auto;padding-block:36px 40px}
+.col{max-width:680px;margin:0 auto}
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim)}
+h1{font-family:var(--display);font-stretch:118%;font-weight:850;text-transform:uppercase;font-size:clamp(48px,8.6vw,108px);line-height:.88;letter-spacing:-.025em;margin:.2em 0 .25em;text-wrap:balance}
+h1 span{color:var(--topo);transition:color .4s}
+h2{font-family:var(--display);font-stretch:112%;font-weight:800;text-transform:uppercase;font-size:clamp(30px,4.6vw,46px);line-height:.95;letter-spacing:-.015em;margin:0 0 .45em;text-wrap:balance}
+h3{font-family:var(--display);font-stretch:100%;font-weight:650;font-size:19px;margin:0 0 .35em;letter-spacing:.005em}
+.deck{font-size:clamp(22px,2.6vw,28px);line-height:1.3;font-weight:300;color:var(--dim);margin:0 0 1em;font-style:italic}
+p{margin:0 0 1em}
+.byline{font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;gap:16px;flex-wrap:wrap}
+.disp{overflow-x:auto;overflow-y:hidden;padding:14px 0;text-align:center;font-size:24px}
+.pull{border-left:2px solid var(--topo);padding:4px 0 4px 18px;margin:1.3em 0;font-size:22px;line-height:1.4;color:#fff}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:36px;align-items:center;padding-block:20px 10px}
+@media (max-width:860px){.hero{grid-template-columns:1fr}}
+.inst{border:1px solid var(--line);background:rgba(13,15,22,.92);border-radius:4px;padding:20px;position:relative;overflow:hidden}
+.inst.flash{animation:flash .9s}
+@keyframes flash{0%{background:var(--warn)}100%{background:rgba(13,15,22,.92)}}
+.giant{font-family:var(--display);font-stretch:62%;font-weight:900;font-size:clamp(150px,22vw,250px);line-height:.8;color:var(--topo);text-align:center;font-variant-numeric:tabular-nums;transition:color .4s;text-shadow:0 0 60px color-mix(in srgb,var(--topo) 35%,transparent);margin:6px 0 2px}
+.giant-cap{text-align:center;font-size:17px;color:var(--dim);margin-bottom:14px;font-style:italic}
+.heroGrid{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;align-items:start}
+.heroGrid canvas{width:120px;height:120px;border:1px solid var(--line)}
+@media (max-width:480px){.heroGrid{grid-template-columns:84px minmax(0,1fr);gap:12px}.heroGrid canvas{width:84px;height:84px}}
+@media (max-width:640px){.lv{display:none}.bar-in{justify-content:space-between}}
+
+/* instruments */
+.lab{border:1px solid var(--line);background:rgba(13,15,22,.94);border-radius:4px;padding:22px;margin:28px 0}
+.lab.wide{margin-inline:0}
+.labhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.labhead .label{color:var(--topo)}
+.labhead .q{font-style:italic;color:var(--dim);font-size:17px}
+.g2{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px;align-items:start}
+.g2.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:820px){.g2,.g2.even{grid-template-columns:1fr}}
+canvas{display:block;width:100%;max-width:100%;background:var(--black);border-radius:2px}
+canvas.drag{touch-action:none;cursor:crosshair}
+canvas.rot{touch-action:none;cursor:grab}
+.ctrl{display:grid;gap:5px;margin-bottom:14px}
+.ctrl label{font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;justify-content:space-between;gap:8px}
+.ctrl output{color:var(--text);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--topo)}
+.ro{border-top:1px solid var(--line)}
+.ro div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.ro span:first-child{color:var(--dim)}
+.ro span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.bigC{font-family:var(--display);font-stretch:70%;font-weight:900;font-size:64px;line-height:1;font-variant-numeric:tabular-nums}
+.msg{margin-top:12px;padding:11px 13px;border:1px solid var(--line);border-radius:3px;font-size:16px;line-height:1.45;color:var(--dim)}
+.msg b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text);margin-bottom:3px}
+.msg.hot{border-color:var(--warn)} .msg.hot b{color:var(--warn)}
+.msg.topo{border-color:var(--topo)} .msg.topo b{color:var(--topo)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip,.btn{border:1px solid var(--line);background:var(--panel2);border-radius:2px;padding:6px 11px;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--black);border-color:var(--text)}
+.btn:hover,.chip:hover{border-color:var(--dim)}
+.btn.go{background:var(--topo);color:var(--black);border-color:var(--topo);font-weight:600}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.note{font-size:16px;color:var(--dim);line-height:1.5}
+
+/* sections */
+section.level{padding-top:90px;scroll-margin-top:56px}
+.tag{display:flex;align-items:center;gap:10px;margin-bottom:14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.tag .n{color:var(--black);background:var(--text);padding:2px 7px;border-radius:2px}
+.tag .ok{margin-left:auto;color:var(--topo);opacity:0;transition:opacity .3s}
+.level.complete .tag .ok{opacity:1}
+
+/* quiz */
+.q{margin:0 0 20px}
+.q .prompt{font-weight:500;margin-bottom:9px;color:#fff}
+.opts{display:grid;gap:7px}
+.opt{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:3px;padding:10px 13px;cursor:pointer;font-size:17px;line-height:1.4;display:flex;gap:12px;align-items:baseline;font-family:var(--body)}
+.opt:hover{border-color:var(--dim)}
+.opt .k{font-family:var(--mono);font-size:11px;color:var(--dim);flex:none}
+.opt.picked{border-color:var(--text);box-shadow:inset 0 0 0 1px var(--text)}
+.opt.right{border-color:var(--pos);box-shadow:inset 0 0 0 1px var(--pos)}
+.opt.right .k{color:var(--pos)}
+.opt.wrong{border-color:var(--warn);opacity:.75}
+.opt:disabled{cursor:default}
+.fb{font-size:16px;color:var(--dim);margin:8px 0 0}
+
+/* holes game */
+.objs{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.obj{border:1px solid var(--line);border-radius:3px;padding:12px;background:var(--panel2);display:grid;gap:8px;justify-items:center;text-align:center}
+.obj svg{width:84px;height:84px;color:var(--text)}
+.obj .nm{font-family:var(--mono);font-size:12px}
+.obj .hb{display:flex;gap:4px}
+.obj .hb button{width:28px;height:28px;border:1px solid var(--line);background:var(--void);border-radius:2px;font-family:var(--mono);font-size:12px;cursor:pointer}
+.obj.right{border-color:var(--pos)} .obj.right .hb button.sel{background:var(--pos);color:var(--black);border-color:var(--pos)}
+.obj.wrong .hb button.sel{border-color:var(--warn);color:var(--warn)}
+.obj .ex{font-size:13px;line-height:1.35;color:var(--dim);min-height:2.6em}
+
+/* concept break */
+.break{background:var(--black);margin:110px 0 0;padding:110px 0;box-shadow:0 0 0 100vmax var(--black);clip-path:inset(0 -100vmax)}
+.break p{max-width:960px;margin:0 auto;font-family:var(--display);font-stretch:105%;font-weight:750;text-transform:uppercase;font-size:clamp(30px,5.4vw,64px);line-height:1;letter-spacing:-.01em;text-wrap:balance}
+.break p + p{margin-top:.6em;color:var(--topo)}
+.break .small{font-family:var(--body);text-transform:none;font-weight:300;font-size:20px;line-height:1.55;color:var(--dim);max-width:640px;margin-top:2em;letter-spacing:0;font-stretch:100%}
+
+/* chain diagram */
+.chain{display:grid;gap:0;justify-items:center;max-width:420px;margin:10px auto}
+.node{width:100%;border:1px solid var(--line);background:var(--panel2);border-radius:3px;padding:12px 16px;display:flex;justify-content:space-between;align-items:baseline;cursor:pointer;text-align:left;gap:10px}
+.node:hover{border-color:var(--topo)}
+.node span:first-child{font-family:var(--display);font-stretch:110%;font-weight:700;text-transform:uppercase;font-size:15px;letter-spacing:.02em}
+.node span:last-child{font-family:var(--mono);font-size:11px;color:var(--dim)}
+.node.key{border-color:var(--topo)} .node.key span:first-child{color:var(--topo)}
+.link{font-family:var(--mono);font-size:11px;color:var(--faint);height:30px;display:flex;align-items:center;gap:8px}
+.link::before{content:"";width:1px;height:100%;background:var(--line)}
+
+/* matrices */
+.mats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:10px}
+.mat{font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:3px;padding:10px;overflow-x:auto}
+.mat table{border-collapse:collapse;margin-top:6px}
+.mat td{padding:2px 8px;text-align:right;font-variant-numeric:tabular-nums}
+
+/* challenge */
+.probes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:14px}
+@media (max-width:640px){.probes{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.probe{border:1px solid var(--line);background:var(--panel2);border-radius:3px;padding:10px;text-align:left;cursor:pointer;display:grid;gap:3px}
+.probe b{font-family:var(--mono);font-size:12px;font-weight:600}
+.probe span{font-size:13px;color:var(--dim);line-height:1.3}
+.probe[aria-pressed="true"]{border-color:var(--topo)}
+.answer{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.answer .btn{min-width:64px;font-size:15px;padding:9px 14px}
+
+/* last question */
+.last{min-height:70vh;display:grid;place-items:center;text-align:center;background:var(--black);margin:110px 0 0;padding:80px 0;box-shadow:0 0 0 100vmax var(--black);clip-path:inset(0 -100vmax)}
+.last h2{font-size:clamp(34px,6vw,76px);max-width:980px;margin:0 auto .6em}
+.last .reveal{font-family:var(--display);font-stretch:80%;font-weight:900;font-size:clamp(60px,10vw,130px);color:var(--topo);line-height:1;margin:.1em 0 .3em}
+.last ul{list-style:none;padding:0;margin:0 auto;max-width:520px;text-align:left;font-size:19px;color:var(--dim)}
+.last li{border-top:1px solid var(--line);padding:9px 0;display:flex;justify-content:space-between;gap:12px}
+.last li b{font-family:var(--mono);font-size:12px;color:var(--text);font-weight:500;text-transform:uppercase;letter-spacing:.08em}
+
+/* review & ext */
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid var(--line);border-radius:3px;margin-bottom:10px}
+.rv div{padding:12px 14px;font-size:16px;line-height:1.45}
+.rv div + div{border-left:1px solid var(--line)}
+.rv .label{display:block;margin-bottom:4px}
+@media (max-width:560px){.rv{grid-template-columns:1fr}.rv div + div{border-left:0;border-top:1px solid var(--line)}}
+details{border-top:1px solid var(--line);padding:12px 0}
+details:last-of-type{border-bottom:1px solid var(--line)}
+summary{cursor:pointer;font-family:var(--display);font-weight:650;font-size:18px;list-style:none;display:flex;justify-content:space-between;gap:10px}
+summary::after{content:"+";font-family:var(--mono);color:var(--dim)}
+details[open] summary::after{content:"−"}
+details p{margin:.6em 0 0;font-size:17px;color:var(--dim)}
+.sum{border:1px solid var(--topo);border-radius:3px;padding:22px;margin:30px 0;font-size:23px;line-height:1.4;color:#fff}
+.next{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line);border-radius:3px;padding:20px 22px;margin-top:40px;background:var(--panel)}
+.next .t{font-family:var(--display);font-weight:750;font-stretch:108%;font-size:22px;text-transform:uppercase;line-height:1.05}
+.next a{text-decoration:none}
+footer{font-family:var(--mono);font-size:11px;color:var(--faint);text-align:center;margin-top:40px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);background:var(--topo);color:var(--black);font-family:var(--mono);font-size:12px;font-weight:600;padding:9px 15px;border-radius:2px;transition:transform .35s;z-index:40;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="home" href="index.html">← <b>Simplify/It</b></a>
+    <nav class="lv" id="lvnav" aria-label="Levels"></nav>
+    <div class="charge">Charge <b id="xpn">0</b><div class="cbar"><i id="xpf"></i></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <!-- HERO -->
+  <div class="hero">
+    <div>
+      <div class="label">Simplify It · Issue 02 · Mathematical physics</div>
+      <h1>The integer that <span>won't</span> go away</h1>
+      <p class="deck">How geometry hides inside quantum mechanics, and why an electron can know the shape of a space it never visits.</p>
+      <div class="byline"><span>~40 min</span><span>13 levels</span><span>Starts at "what is an arrow?"</span><span>Ends at Chern classes</span></div>
+    </div>
+    <div class="inst" id="heroInst">
+      <div class="label" style="color:var(--topo)">Try to destroy it</div>
+      <div class="giant" id="heroInt">1</div>
+      <div class="giant-cap" id="heroCap">This number survives while almost everything else changes.</div>
+      <div class="heroGrid">
+        <canvas id="cvHeroMap" width="160" height="160" aria-label="Map of the material's quantum geometry"></canvas>
+        <div>
+          <div class="ctrl"><label for="hStretch">Stretch the band <output id="oStretch">0%</output></label><input type="range" id="hStretch" min="0" max="1" step="0.01" value="0"></div>
+          <div class="ctrl"><label for="hTwist">Twist it <output id="oTwist">0%</output></label><input type="range" id="hTwist" min="0" max="1" step="0.01" value="0"></div>
+          <div class="ctrl"><label for="hNoise">Add impurities <output id="oNoise">0%</output></label><input type="range" id="hNoise" min="0" max="1" step="0.01" value="0"></div>
+          <div class="ctrl"><label for="hGap">Squeeze the energy gap <output id="oGap">open</output></label><input type="range" id="hGap" min="1" max="3" step="0.01" value="1"></div>
+        </div>
+      </div>
+      <div class="msg" id="heroMsg"><b>Live simulation</b>Each slider reshapes a real model of a quantum material. The big number is recomputed from scratch every time.</div>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="level" id="intro" style="padding-top:60px">
+      <h3 class="label" style="margin-bottom:12px">A strange experiment</h3>
+      <p>Take a thin sheet of material. You don't know its exact atomic structure. It has impurities. Its atoms jiggle. Its surface is rough, and you scratched it on the way to the lab. Cool it down, put it in a strong magnetic field, push a current through it, and measure the sideways voltage. The conductance you get is:</p>
+      <div class="disp" data-tex="G = n\,\dfrac{e^2}{h},\qquad n = 1, 2, 3, \dots" data-display></div>
+      <p>Here <span data-tex="e"></span> is the charge of one electron and <span data-tex="h"></span> is Planck's constant. The result isn't <em>roughly</em> a whole-number multiple. Measurements of this effect agree with whole numbers to about one part in a billion, so precisely that labs use it as a resistance standard. Swap the sample, distort it, add dirt: same integer.</p>
+      <p>So what is the material hiding? The answer is <strong>topology</strong>. Not the shape of the sheet itself, but the shape of its <em>quantum states</em>. To get there, we start with something that looks completely unrelated: an arrow.</p>
+      <p class="note">How this issue works: you guess first, then play with the real physics until the idea is obvious, and only then do we write down the math. Every slider runs an actual calculation. The model under the hood is the Qi–Wu–Zhang model, a standard textbook "Chern insulator".</p>
+    </section>
+
+    <!-- LEVEL 0 -->
+    <section class="level" id="s0">
+      <div class="tag"><span class="n">00</span>Gut check · no wrong answers<span class="ok">✓ cleared</span></div>
+      <h2>Guess before you know anything</h2>
+      <p>Lock in an answer for each. We'll grade your intuition at the end.</p>
+      <div class="lab" id="pretest"></div>
+    </section>
+
+    <!-- LEVEL 1 -->
+    <section class="level" id="s1">
+      <div class="tag"><span class="n">01</span>Play · arrows and windings<span class="ok">✓ cleared</span></div>
+      <h2>An arrow at every point</h2>
+      <p>Walk across a field and plant a tiny arrow at every spot: the wind direction, or where a compass needle points. That's a <strong>vector field</strong>, written <span data-tex="\mathbf v(x,y)"></span>: at position <span data-tex="(x,y)"></span>, which way does the arrow point? For example, <span data-tex="\mathbf v(x,y) = (-y,\,x)"></span> makes arrows that swirl around the center.</p>
+      <p>Now the game. <strong>Draw a closed loop on the field.</strong> A walker goes around your loop, and the dial on the right tracks how far the arrow under its feet has turned. Watch the turn counter as it goes. Mid-loop it can read any fraction. When the walker gets home, see what's left.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 01 · Winding counter</span><span class="q">Can an arrow turn 0.37 times around a closed loop?</span></div>
+    <div class="g2">
+      <div>
+        <div class="chips" id="fieldChips"></div>
+        <canvas id="cvField" class="drag" width="900" height="540" aria-label="Vector field; drag to draw a loop"></canvas>
+        <p class="note" style="margin-top:8px">Drag on the field to draw your own loop. Release to close it.</p>
+      </div>
+      <div>
+        <canvas id="cvDial" width="300" height="300" aria-label="Phase dial"></canvas>
+        <div class="ro" style="margin-top:12px">
+          <div><span>Turns so far</span><span id="wSoFar">0.00</span></div>
+          <div><span>Turns for full loop</span><span id="wTotal">+1</span></div>
+        </div>
+        <div class="btnrow">
+          <button class="btn" id="loopCenter">Loop around center</button>
+          <button class="btn" id="loopSide">Loop off to the side</button>
+        </div>
+        <div class="msg topo" id="wMsg"><b>Winding number +1</b>The arrow came home having turned exactly once.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Try every field and every loop you like. Mid-walk, the counter can show any decimal. At the end it always lands on a whole number. A loop that comes back to where it started can only make the arrow turn a <em>whole</em> number of times, because the arrow has to end where it began. That whole number is the <strong>winding number</strong>, and it only changes if your loop crosses one of the special points where the arrow isn't defined.</p>
+    <div class="lab">
+      <div class="q" id="windQuiz">
+        <p class="prompt">The arrow rotated by a full 2π and ended up pointing exactly where it started. How much has it really changed?</p>
+        <div class="opts">
+          <button class="opt" data-j="0"><span class="k">A</span>Nothing. It's back where it started.</button>
+          <button class="opt" data-j="1"><span class="k">B</span>It completed one winding, and that's information.</button>
+          <button class="opt" data-j="2"><span class="k">C</span>Two complete windings.</button>
+          <button class="opt" data-j="3"><span class="k">D</span>It depends on the radius of the loop.</button>
+        </div>
+        <p class="fb" id="windFb"></p>
+      </div>
+    </div>
+    <p>Quantum mechanics has a version of this arrow. A quantum state is described by a complex number <span data-tex="\psi = |\psi|\,e^{i\phi}"></span>: a size <span data-tex="|\psi|"></span> and an angle <span data-tex="\phi"></span> called the <strong>phase</strong>. The phase behaves like the hand of a tiny clock. Every quantum state carries one, so quantum mechanics has a clock hand at every point. Clock hands can wind.</p>
+
+    <!-- LEVEL 2 -->
+    <section class="level" id="s2">
+      <div class="tag"><span class="n">02</span>Play · counting holes<span class="ok">✓ cleared</span></div>
+      <h2>The donut and the sphere</h2>
+      <p><strong>Topology</strong> is the study of properties that survive smooth deformation. Stretch a rubber ball, squash it, dent it: as long as you don't tear it or glue bits together, it's still "a sphere" to a topologist. A donut has a hole, and no amount of smooth squishing will close it. The number of holes is a <em>topological invariant</em>: a number that can't change unless you do something drastic.</p>
+      <p>Your turn. How many holes does each object have, to a topologist?</p>
+      <div class="lab"><div class="objs" id="objs"></div><p class="fb" id="objFb" style="margin-top:12px">0 of 7 sorted.</p></div>
+      <p>Here's the jump. Instead of asking "what shape is the material?", ask "what shape is the space of its quantum states?"</p>
+      <p>An electron in a crystal is labeled by a <strong>momentum</strong> <span data-tex="\mathbf k = (k_x, k_y)"></span>. Because the crystal repeats, momentum repeats too: go past <span data-tex="2\pi"></span> in any direction and you're back at the start. The space of allowed momenta, the <strong>Brillouin zone</strong>, is a square whose opposite edges are glued together. Glue a square's edges like that and you get a donut.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 02 · Momentum space is a donut</span><span class="q">What happens when you walk off the edge of the Brillouin zone?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvBZ" class="drag" width="440" height="440" aria-label="Brillouin zone square"></canvas><p class="note" style="margin-top:8px">Drag the dot, or let it walk. It leaves through one edge and comes back through the opposite one.</p></div>
+      <div><canvas id="cvTorus" width="440" height="440" aria-label="The same path drawn on a torus"></canvas>
+        <div class="btnrow"><button class="btn" id="bzWalk">Pause walk</button><button class="btn" id="bzClear">Clear trail</button><button class="btn" id="bzSlope">Change direction</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>So our electron isn't only moving through ordinary space. Its quantum state is laid out over this hidden donut. That's where geometry starts becoming physical.</p>
+
+    <!-- LEVEL 3 -->
+    <section class="level" id="s3">
+      <div class="tag"><span class="n">03</span>Play · the band landscape<span class="ok">✓ cleared</span></div>
+      <h2>Energy is a landscape</h2>
+      <p>In a crystal, electrons can't have just any energy. For each momentum <span data-tex="\mathbf k"></span> there are a few allowed energies <span data-tex="E_n(\mathbf k)"></span>, where <span data-tex="n"></span> labels the <strong>band</strong>. Picture a landscape: the floor is the Brillouin zone, height is energy. Each band is a rolling surface floating above the floor.</p>
+      <p>Our material has two bands, one above the other. The empty space between them is the <strong>energy gap</strong>. The gap is what makes the material an insulator, and it will turn out to be the bodyguard of our integer.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 03 · Band explorer</span><span class="q">What does the gap look like, and what happens when it shrinks?</span></div>
+    <div class="g2">
+      <canvas id="cvBand" class="rot" width="900" height="600" aria-label="3D band structure; drag to rotate"></canvas>
+      <div>
+        <div class="ctrl"><label for="bM">Material parameter m <output id="obM">1.00</output></label><input type="range" id="bM" min="-3" max="3" step="0.02" value="1"></div>
+        <div class="chips"><button class="chip" id="bCurv" aria-pressed="false">Color by Berry curvature</button><button class="chip" id="bGapT" aria-pressed="true">Mark the gap</button></div>
+        <div class="ro"><div><span>Energy gap ΔE</span><span id="bGap">2.00</span></div><div><span>Gap location</span><span id="bWhere">(π, π)</span></div></div>
+        <p class="note" style="margin-top:12px">Drag the picture to rotate it. Upper band on top, lower band underneath. Slide <span data-tex="m"></span> toward 2 or 0 and watch the two sheets reach for each other.</p>
+        <div class="msg" id="bMsg"><b>Gap open</b>The two bands never touch.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The landscape is more than a surface, though. At every point <span data-tex="\mathbf k"></span>, the electron has a quantum state <span data-tex="|u(\mathbf k)\rangle"></span>, and that state has a phase: a clock hand. So the floor of our landscape is covered in little clocks, one per momentum. The question that drives the rest of this issue: <strong>what happens to the clock when you move around momentum space?</strong></p>
+
+    <!-- LEVEL 4 -->
+    <section class="level" id="s4">
+      <div class="tag"><span class="n">04</span>Play · Berry phase and curvature<span class="ok">✓ cleared</span></div>
+      <h2>The phase that remembers the path</h2>
+      <p>Slowly carry a quantum state around a closed loop in momentum space and bring it home. You might expect it to come back exactly as it was. It comes back with an extra twist of its clock hand, called the <strong>Berry phase</strong> <span data-tex="\gamma"></span>, after Michael Berry, who explained it in 1984:</p>
+      <div class="disp" data-tex="\gamma = \oint_C \mathbf A(\mathbf k)\cdot d\mathbf k,\qquad \mathbf A(\mathbf k) = i\,\langle u(\mathbf k)\,|\,\nabla_{\mathbf k}\,u(\mathbf k)\rangle" data-display></div>
+      <p>Don't panic about the symbols. <span data-tex="\mathbf A"></span>, the <strong>Berry connection</strong>, measures how much the state's clock twists as you take a small step. Add up the twists around the loop and you get <span data-tex="\gamma"></span>.</p>
+      <p>There's a second way to count the same thing. The curl of <span data-tex="\mathbf A"></span> is the <strong>Berry curvature</strong> <span data-tex="\Omega(\mathbf k) = \nabla_{\mathbf k}\times\mathbf A"></span>. Think of it as a height map painted over the Brillouin zone: hills where it's positive, valleys where it's negative. Stokes' theorem says the twist collected around a loop equals the curvature enclosed by it:</p>
+      <div class="disp" data-tex="\oint_C \mathbf A\cdot d\mathbf k \;=\; \int_S \Omega\, d^2k \quad\Longleftrightarrow\quad \text{phase around the loop} = \text{curvature inside it}" data-display></div>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 04 · Curvature painter</span><span class="q">How much phase does a loop collect?</span></div>
+    <div class="g2">
+      <div><canvas id="cvCurv" class="drag" width="640" height="640" aria-label="Berry curvature map with a draggable loop"></canvas>
+        <div class="legend"><span><i style="background:var(--pos)"></i>positive curvature (hills)</span><span><i style="background:var(--neg)"></i>negative (valleys)</span><span>axes: k<sub>x</sub>, k<sub>y</sub> from 0 to 2π</span></div></div>
+      <div>
+        <div class="ctrl"><label for="cR">Loop radius <output id="ocR">0.90</output></label><input type="range" id="cR" min="0.15" max="3.0" step="0.01" value="0.9"></div>
+        <div class="ctrl"><label for="cM">Material parameter m <output id="ocM">1.50</output></label><input type="range" id="cM" min="-3" max="3" step="0.02" value="1.5"></div>
+        <div class="ro">
+          <div><span>Berry phase γ</span><span id="cGam">0.00π</span></div>
+          <div><span>Share of all curvature</span><span id="cShare">0%</span></div>
+        </div>
+        <div class="btnrow"><button class="btn go" id="cAll">Enclose the whole zone</button></div>
+        <div class="msg" id="cMsg"><b>Drag the loop</b>Move the circle over the hills and valleys. The phase updates live.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="lab">
+      <div class="q" id="curvQuiz">
+        <p class="prompt">If a loop encloses twice as much Berry curvature, what happens to the phase it collects?</p>
+        <div class="opts">
+          <button class="opt" data-j="0"><span class="k">A</span>Stays the same; phase only depends on where you start.</button>
+          <button class="opt" data-j="1"><span class="k">B</span>Doubles.</button>
+          <button class="opt" data-j="2"><span class="k">C</span>Halves.</button>
+          <button class="opt" data-j="3"><span class="k">D</span>Jumps to the nearest integer.</button>
+        </div>
+        <p class="fb" id="curvFb"></p>
+      </div>
+    </div>
+    <p>Small loops collect any amount you like. But press <em>Enclose the whole zone</em> and something odd happens: the total is always a whole multiple of <span data-tex="2\pi"></span>. Divide by <span data-tex="2\pi"></span> and you get the star of this issue.</p>
+    <div class="disp" data-tex="C = \frac{1}{2\pi}\int_{\mathrm{BZ}} \Omega(\mathbf k)\, d^2k \qquad\qquad \boxed{C \in \mathbb Z}" data-display></div>
+    <p>This is the <strong>Chern number</strong>. Not approximately an integer. Not "usually close". An integer: <span data-tex="\dots,-2,-1,0,1,2,\dots"></span> It describes a global property of the whole band, the same way the hole count describes a whole donut.</p>
+
+    <!-- LEVEL 5 -->
+    <section class="level" id="s5">
+      <div class="tag"><span class="n">05</span>Play · why not 0.37?<span class="ok">✓ cleared</span></div>
+      <h2>Wrap the sphere</h2>
+      <p>Why must it be an integer? Here's the picture that makes it obvious. Our material's quantum state at each momentum can be drawn as an arrow pointing somewhere on a sphere. Call it <span data-tex="\hat{\mathbf d}(\mathbf k)"></span>. As <span data-tex="\mathbf k"></span> ranges over the donut-shaped Brillouin zone, the arrow tip paints the sphere.</p>
+      <p>Painting a sphere is like wrapping a gift. You can wrap it zero times, once, twice, or once in the reverse direction. You can't wrap it 0.37 times: a partial wrap would leave a ragged edge, and the Brillouin zone has no edge. <strong>The Chern number counts how many times the sphere is wrapped.</strong></p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 05 · Sphere wrapper</span><span class="q">Try to make C = ½.</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvSphere" class="rot" width="560" height="560" aria-label="Sphere painted by the quantum-state map"></canvas>
+        <div class="ro" style="margin-top:10px"><div><span>Sphere covered</span><span id="sCov">100%</span></div><div><span>Chern number</span><span id="sC">+1</span></div></div></div>
+      <div>
+        <div class="ctrl"><label for="sM">Material parameter m <output id="osM">1.00</output></label><input type="range" id="sM" min="-4" max="4" step="0.02" value="1"></div>
+        <div class="ctrl"><label for="sD">Distort the map <output id="osD">0%</output></label><input type="range" id="sD" min="0" max="1" step="0.01" value="0"></div>
+        <canvas id="cvStep" width="560" height="300" aria-label="Chern number versus m"></canvas>
+        <div class="btnrow"><button class="btn go" id="sHalf">Try to make C = ½</button></div>
+        <div class="msg" id="sMsg"><b>Wrapped once</b>Every direction on the sphere is reached. Distort it as much as you want.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The step chart says it all. The value is flat, then it <em>jumps</em>. Smooth changes to the material change the geometry, the arrangement of points on the sphere, but they can't change the wrapping count. To change it, something has to break.</p>
+
+    <!-- LEVEL 6 -->
+    <section class="level" id="s6">
+      <div class="tag"><span class="n">06</span>Play · break the gap<span class="ok">✓ cleared</span></div>
+      <h2>Topology has a weak spot</h2>
+      <p>Topology doesn't mean "nothing can ever change". It means the invariant can't change under smooth deformations <em>that keep certain conditions true</em>. For our material, the condition is that the energy gap stays open.</p>
+      <p>Under the hood, the material is a small machine. Feed it a momentum and it returns a 2×2 quantum Hamiltonian:</p>
+      <div class="disp" data-tex="H(\mathbf k) = d_x(\mathbf k)\,\sigma_x + d_y(\mathbf k)\,\sigma_y + d_z(\mathbf k)\,\sigma_z" data-display></div>
+      <div class="disp" data-tex="d_x = \sin k_x,\quad d_y = \sin k_y,\quad d_z = m + t\,(\cos k_x + \cos k_y)" data-display></div>
+      <p>The <span data-tex="\sigma"></span>'s are the Pauli matrices, the basic 2×2 building blocks of quantum mechanics. The two energies are <span data-tex="E_\pm = \pm|\mathbf d(\mathbf k)|"></span>. The gap closes only where <span data-tex="\mathbf d = 0"></span>. Your challenge: <strong>change the Chern number without closing the gap.</strong></p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 06 · Gap breaker</span><span class="q">Can you change C without closing the gap?</span></div>
+    <div class="g2">
+      <div><canvas id="cvCut" width="900" height="420" aria-label="Band energies along a path through the Brillouin zone"></canvas>
+        <canvas id="cvPhase" class="drag" width="900" height="300" aria-label="Phase diagram, click to choose a material" style="margin-top:12px"></canvas></div>
+      <div>
+        <div class="ctrl"><label for="gM">Mass m <output id="ogM">1.00</output></label><input type="range" id="gM" min="-3" max="3" step="0.01" value="1"></div>
+        <div class="ctrl"><label for="gT">Hopping t <output id="ogT">1.00</output></label><input type="range" id="gT" min="0.2" max="1.5" step="0.01" value="1"></div>
+        <div style="display:flex;align-items:baseline;gap:16px"><div class="bigC" id="gC">+1</div><div class="ro" style="flex:1"><div><span>Gap ΔE</span><span id="gGap">2.00</span></div><div><span>Transitions seen</span><span id="gTr">0</span></div></div></div>
+        <p class="note">Click anywhere on the phase map (bottom left) to jump to that material. Each colored region is a different topological phase.</p>
+        <div class="msg" id="gMsg"><b>Gap open</b>C is locked.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>You can't do it. Every route from one color to another crosses a boundary line, and on those lines <span data-tex="\Delta E = 0"></span>. That's a <strong>topological phase transition</strong>: the only moment the integer is allowed to change.</p>
+    <div class="pull">Topology changes only when the system passes through a singular event. Here that event is the gap closing.</div>
+  </div>
+
+  <div class="break">
+    <p>You are not looking at the shape of the material.</p>
+    <p>You are looking at the shape of its quantum-state map.</p>
+    <p class="small">A topological phase isn't "a material with a weird shape". It's a family of quantum states, spread over momentum space, with a global structure that can't be smoothly turned into a different one without hitting an obstruction. The sheet can be any shape at all.</p>
+  </div>
+
+  <div class="col">
+    <!-- LEVEL 7 -->
+    <section class="level" id="s7">
+      <div class="tag"><span class="n">07</span>Play · bulk and boundary<span class="ok">✓ cleared</span></div>
+      <h2>Cut the universe</h2>
+      <p>So far our material had no edges: the momentum donut wraps around in every direction. Real samples end somewhere. Suppose the bulk has <span data-tex="C = 1"></span>. What happens at its edge?</p>
+      <p>You'd expect a cut to change nothing interesting. Grab the scissors and see.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 07 · Scissors</span><span class="q">What lives at the edge of a topological material?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvLat" width="560" height="380" aria-label="Lattice strip with edge currents"></canvas>
+        <div class="btnrow"><button class="btn go" id="lCut">Cut the lattice</button><button class="btn" id="lDis">Add disorder</button></div>
+        <div class="msg" id="lMsg"><b>No edge yet</b>The lattice wraps around on itself, like the momentum donut. There's nowhere for an edge state to live.</div></div>
+      <div><canvas id="cvRib" width="560" height="460" aria-label="Energy spectrum of the strip versus momentum"></canvas>
+        <div class="legend"><span><i style="background:var(--pos)"></i>top-edge states</span><span><i style="background:var(--neg)"></i>bottom-edge states</span><span><i style="background:var(--faint)"></i>bulk</span></div>
+        <div class="ctrl" style="margin-top:10px"><label for="lM">Material parameter m <output id="olM">1.00</output></label><input type="range" id="lM" min="-3" max="3" step="0.05" value="1"></div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The cut creates states that live only on the edges and cross straight through the gap. On one edge they move one way; on the opposite edge, the other way. These are <strong>chiral edge states</strong>. Count the crossings on one edge: you get <span data-tex="|C|"></span>. Set <span data-tex="m"></span> beyond 2, where <span data-tex="C = 0"></span>, and they vanish.</p>
+    <p>This is the <strong>bulk–boundary correspondence</strong>: a topological property of the inside forces something physical to appear at the boundary. And you can't scrub it off. Disorder, a rough edge, a bent lattice: the wave packet wiggles around them but can't turn back, because there is no state going the other way on its edge. To remove the edge states you'd have to change the bulk's topology, and that means closing the bulk gap.</p>
+
+    <!-- LEVEL 8 -->
+    <section class="level" id="s8">
+      <div class="tag"><span class="n">08</span>Play · Laughlin's pump<span class="ok">✓ cleared</span></div>
+      <h2>Pump one flux quantum</h2>
+      <p>In 1981 Robert Laughlin gave a thought experiment that explains the exact integer. Roll the sheet into a cylinder. Thread a magnetic flux <span data-tex="\Phi"></span> through the hole, and slowly increase it by one <strong>flux quantum</strong>, <span data-tex="\Phi_0 = h/e"></span>.</p>
+      <p>After exactly one flux quantum, the physics is identical to where you started: the energy levels return to the same set. But they've been shuffled along the way. Watch what that shuffle does to the charge.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 08 · Flux pump</span><span class="q">Why does exactly one electron move?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvCyl" width="560" height="400" aria-label="Cylinder with magnetic flux through it"></canvas>
+        <div class="ro" style="margin-top:10px"><div><span>Charge moved to top edge</span><span id="pQ">+0.000 e</span></div><div><span>Chern number of this material</span><span id="pC">+1</span></div></div></div>
+      <div>
+        <div class="chips" id="pMat"><button class="chip" data-m="1" aria-pressed="true">C = +1 material</button><button class="chip" data-m="-1" aria-pressed="false">C = −1</button><button class="chip" data-m="3" aria-pressed="false">C = 0</button></div>
+        <div class="ctrl"><label for="pF">Flux Φ / Φ₀ <output id="opF">0.00</output></label><input type="range" id="pF" min="0" max="1" step="0.005" value="0"></div>
+        <canvas id="cvFlow" width="560" height="360" aria-label="Energy levels flowing with flux"></canvas>
+        <div class="btnrow"><button class="btn go" id="pPump">Pump one flux quantum</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Each flux quantum slides every allowed momentum one notch along. The edge levels flow: one rises out of the filled sea on one edge while another sinks in on the other. Net result: exactly <span data-tex="C"></span> electrons carried from one edge to the other per flux quantum. The charge counter isn't rounded; it's computed from the occupied quantum states, and it lands on a whole electron because of the Chern number.</p>
+    <p>That's the quantum Hall effect. The Hall conductance is</p>
+    <div class="disp" data-tex="\sigma_{xy} = C\,\frac{e^2}{h},\qquad \frac{h}{e^2} = 25\,812.807\ \Omega" data-display></div>
+    <p>An abstract wrapping number, computed from an integral over a donut nobody can see, sets a resistance you can read off a meter. The integer from the opening experiment <em>is</em> the Chern number (up to sign conventions). Mathematics has turned into an experimental prediction. Klaus von Klitzing measured it in 1980 and won the 1985 Nobel Prize; David Thouless and Duncan Haldane shared the 2016 prize for the topology behind it.</p>
+
+    <!-- LEVEL 9 -->
+    <section class="level" id="s9">
+      <div class="tag"><span class="n">09</span>Play · gauge freedom<span class="ok">✓ cleared</span></div>
+      <h2>Change the description</h2>
+      <p>A subtlety. The phase of a quantum state isn't fixed by nature. You can rotate every clock by a different amount, <span data-tex="|u(\mathbf k)\rangle \to e^{i\chi(\mathbf k)}|u(\mathbf k)\rangle"></span>, and it describes exactly the same physics. This is called a <strong>gauge transformation</strong>. It changes the Berry connection <span data-tex="\mathbf A"></span> completely. Does it change <span data-tex="C"></span>?</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 09 · Gauge shifter</span><span class="q">What survives when you change how you describe the state?</span></div>
+    <div class="g2 even">
+      <div><div class="label" style="margin-bottom:6px">Panel A · Berry connection A(k)</div><canvas id="cvGauge" width="560" height="560" aria-label="Berry connection arrows"></canvas></div>
+      <div>
+        <div class="label" style="margin-bottom:6px">Panel B · The invariant</div>
+        <div style="display:flex;align-items:baseline;gap:16px;margin-bottom:10px"><div class="bigC" id="gaC">+1</div><div class="ro" style="flex:1"><div><span>(1/2π) Σ curvature</span><span id="gaRaw">1.000000</span></div><div><span>Gauges tried</span><span id="gaN">1</span></div></div></div>
+        <div class="ctrl"><label for="gaA">Gauge strength χ <output id="ogaA">0.0</output></label><input type="range" id="gaA" min="0" max="6" step="0.05" value="0"></div>
+        <div class="btnrow"><button class="btn go" id="gaRand">Scramble the gauge</button></div>
+        <div class="msg topo" id="gaMsg"><b>Description changed. Topology didn't.</b>Every arrow in panel A can change. The integer in panel B can't.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The lesson reaches far beyond this material: the mathematical object you write down isn't always the thing you can observe. <span data-tex="\mathbf A"></span> depends on your choice of description. <span data-tex="C"></span> survives every choice. In physics, the quantities that survive a change of description are usually the ones with direct physical meaning.</p>
+
+    <!-- LEVEL 10 -->
+    <section class="level" id="s10">
+      <div class="tag"><span class="n">10</span>Play · beyond one band<span class="ok">✓ cleared</span></div>
+      <h2>When phases become matrices</h2>
+      <p>So far one band, one clock. Now suppose several quantum states share the same energy, a "degenerate" set. Carry them around a loop and they don't just pick up a phase <span data-tex="e^{i\gamma}"></span>. They get mixed together by a matrix:</p>
+      <div class="disp" data-tex="\mathcal A^{mn}_\mu = i\,\langle u_m|\partial_\mu u_n\rangle,\qquad U = \mathcal P \exp\!\left(i\oint \mathcal A_\mu\, d\lambda^\mu\right)" data-display></div>
+      <p>Numbers multiply in any order: <span data-tex="2\times 3 = 3\times 2"></span>. Matrices don't have to. When the order of two loops matters, the geometry is called <strong>non-Abelian</strong>. Rotations of an object in 3D are the easiest matrices to see, so here they stand in for the real thing.</p>
+    </section>
+  </div>
+
+  <div class="lab wide">
+    <div class="labhead"><span class="label">Instrument 10 · Loop walker</span><span class="q">Do loop A and loop B commute?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvFrames" width="560" height="320" aria-label="Two frames rotated in different orders"></canvas>
+        <div class="mats"><div class="mat"><span class="label">A then B · U<sub>B</sub>U<sub>A</sub></span><table id="mAB"></table></div><div class="mat"><span class="label">B then A · U<sub>A</sub>U<sub>B</sub></span><table id="mBA"></table></div></div></div>
+      <div>
+        <div class="ctrl"><label for="nTh">Size of each loop (rotation angle) <output id="onTh">90°</output></label><input type="range" id="nTh" min="0" max="180" step="1" value="90"></div>
+        <div class="btnrow"><button class="btn go" id="nPlay">Walk both loops</button></div>
+        <div class="ro" style="margin-top:12px"><div><span>Difference ‖U<sub>A</sub>U<sub>B</sub> − U<sub>B</sub>U<sub>A</sub>‖</span><span id="nDiff">0</span></div></div>
+        <div class="msg" id="nMsg"><b>Order matters</b>Same two loops, different order, different final state.</div>
+        <p class="note" style="margin-top:12px">Loop A turns the frame about the red axis, loop B about the cyan axis. Shrink the loops toward 0° and the difference fades: small non-Abelian loops almost commute. Real holonomies in quantum systems are complex unitary matrices; the rotations here are an honest stand-in for how the ordering works.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>This idea opens doors to gauge theory, Wilson loops, and a proposal for quantum computers that store information in the order of braiding operations. It also climbs dimensions. In four dimensions, a related construction gives a <strong>second Chern number</strong>:</p>
+    <div class="disp" data-tex="C_2 = \frac{1}{8\pi^2}\int \mathrm{Tr}\,(F\wedge F) \;\in\; \mathbb Z" data-display></div>
+    <p>Again: an integer. Our world has three spatial dimensions, but physicists can manufacture extra <strong>synthetic dimensions</strong> out of tunable parameters, and experiments with cold atoms and light have observed signatures of this four-dimensional quantum Hall physics.</p>
+
+    <!-- LEVEL 11 -->
+    <section class="level" id="s11">
+      <div class="tag"><span class="n">11</span>Derive · the whole chain<span class="ok">✓ cleared</span></div>
+      <h2>Now you're ready for the math</h2>
+      <p>Here is everything you've played with, as the four equations a physicist would write. Each step turns local information into something more global.</p>
+      <div class="lab">
+        <div class="disp" data-tex="H(\mathbf k)\,|u_n(\mathbf k)\rangle = E_n(\mathbf k)\,|u_n(\mathbf k)\rangle" data-display></div>
+        <p class="note" style="text-align:center;margin-top:-4px">The band equation. You flew over <span data-tex="E_n"></span> in Instrument 03.</p>
+        <div class="disp" data-tex="\mathbf A_n(\mathbf k) = i\,\langle u_n(\mathbf k)\,|\,\nabla_{\mathbf k}\,u_n(\mathbf k)\rangle" data-display></div>
+        <p class="note" style="text-align:center;margin-top:-4px">The Berry connection: twist per step. You scrambled it in Instrument 09.</p>
+        <div class="disp" data-tex="\Omega_n(\mathbf k) = \nabla_{\mathbf k}\times\mathbf A_n(\mathbf k)" data-display></div>
+        <p class="note" style="text-align:center;margin-top:-4px">The Berry curvature: twist per area. You painted with it in Instrument 04.</p>
+        <div class="disp" data-tex="C_n = \frac{1}{2\pi}\int_{\mathrm{BZ}} \Omega_n(\mathbf k)\, d^2k \;\in\; \mathbb Z" data-display></div>
+        <p class="note" style="text-align:center;margin-top:-4px">The Chern number: total twist, counted in whole wraps. You failed to make it ½ in Instrument 05.</p>
+      </div>
+      <p>And here's the whole issue in one diagram. Tap any box to jump to where you met it.</p>
+      <div class="chain" id="chain"></div>
+    </section>
+
+    <!-- LEVEL 12 -->
+    <section class="level" id="s12">
+      <div class="tag"><span class="n">12</span>Solve · boss level<span class="ok">✓ cleared</span></div>
+      <h2>What phase are you in?</h2>
+      <p>A lab hands you a mystery material. Its Chern number is hidden. You can run four measurements, but each one costs points, and the Hall measurement is the expensive one because it nearly gives the answer away. Reason like a physicist: <em>band gap → Berry curvature → edge states → topology</em>.</p>
+    </section>
+  </div>
+
+  <div class="lab wide" id="boss">
+    <div class="labhead"><span class="label">Instrument 12 · Mystery sample <span id="bossId">#1</span></span><span class="q">Score: <b id="bossScore" style="color:var(--text)">100</b> points left</span></div>
+    <div class="probes">
+      <button class="probe" data-p="gap" aria-pressed="false"><b>Band gap</b><span>Is it an insulator? −10</span></button>
+      <button class="probe" data-p="curv" aria-pressed="false"><b>Berry curvature</b><span>Map of hills and valleys. −15</span></button>
+      <button class="probe" data-p="edge" aria-pressed="false"><b>Edge spectrum</b><span>Cut it and look. −20</span></button>
+      <button class="probe" data-p="hall" aria-pressed="false"><b>Hall response</b><span>Read the meter. −60</span></button>
+    </div>
+    <div class="g2 even">
+      <canvas id="cvBoss" width="560" height="420" aria-label="Measurement display"></canvas>
+      <div>
+        <div class="msg" id="bossRead"><b>No measurements yet</b>Pick a probe. Edge states that slope upward on the top edge mean C = +1 (compare Instrument 07).</div>
+        <div class="answer"><span class="label">Your answer: C =</span><button class="btn" data-a="-1">−1</button><button class="btn" data-a="0">0</button><button class="btn" data-a="1">+1</button></div>
+        <div class="msg" id="bossRes" hidden></div>
+        <div class="btnrow"><button class="btn" id="bossNew">New sample</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="last" id="lastQ">
+    <div>
+      <h2>Where does the physics end and the mathematics begin?</h2>
+      <button class="btn go" id="lastBtn">Think about it. Then reveal.</button>
+      <div id="lastAns" hidden>
+        <div class="reveal">It doesn't.</div>
+        <ul>
+          <li><span>The quantum state</span><b>physical</b></li>
+          <li><span>The Berry curvature</span><b>geometric</b></li>
+          <li><span>The Chern number</span><b>topological</b></li>
+          <li><span>The Hall response</span><b>measurable</b></li>
+        </ul>
+        <p class="note" style="margin-top:16px">One mathematical structure connects all four.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="level" id="debrief" style="padding-top:80px">
+      <div class="tag"><span class="n">∞</span>Debrief</div>
+      <h2>How did your gut do?</h2>
+      <div id="review"></div>
+      <h3 style="margin-top:40px">Epilogue</h3>
+      <p>The most interesting part of topology in physics isn't that math can describe strange materials. It's that math can predict something microscopic details are powerless to change. A material can be dirty; its atoms can move; its bands can deform. A global invariant can still remain, because it isn't a tiny object hidden inside the material. It's a property of the <strong>entire family of quantum states</strong>.</p>
+      <div class="pull">Some physical information is global rather than local. Once you learn to look for global structure, you start seeing topology everywhere.</div>
+      <h3 style="margin-top:40px">Going further: research-level questions</h3>
+      <details><summary>Why exactly is the Chern number an integer?</summary><p>Fiber bundles, characteristic classes, transition functions between gauge patches, homotopy, de Rham cohomology. The sphere-wrapping picture is the two-band case of a general theorem.</p></details>
+      <details><summary>Why do boundaries know about bulk topology?</summary><p>Bulk–boundary correspondence, index theorems, spectral flow (what you watched in the flux pump), K-theory.</p></details>
+      <details><summary>What if time-reversal symmetry is preserved?</summary><p>The Chern number must vanish, but a different invariant, a ℤ₂ index, can take over: quantum spin Hall systems and topological insulators.</p></details>
+      <details><summary>What if particles interact strongly?</summary><p>Fractional quantum Hall states, anyons, topological order, Chern–Simons theory, and links to topological and conformal field theory.</p></details>
+      <details><summary>What if the Berry connection becomes non-Abelian?</summary><p>Matrix-valued connections, holonomy and Wilson loops, the mathematics of gauge fields.</p></details>
+      <details><summary>What happens in four dimensions?</summary><p>The second Chern number, the 4D quantum Hall effect, and synthetic dimensions as laboratories for pure geometry.</p></details>
+      <div class="sum">A quantum system can carry a global topological invariant in the geometry of its quantum states, and that abstract integer can force itself into measurable physical behavior. <span style="color:var(--topo)">That is the integer that won't go away.</span></div>
+      <p class="note">Further reading: M. V. Berry, "Quantal phase factors accompanying adiabatic changes" (1984); Thouless, Kohmoto, Nightingale &amp; den Nijs (1982); F. D. M. Haldane, Nobel lecture (2016); Xiao, Chang &amp; Niu, "Berry phase effects on electronic properties", Rev. Mod. Phys. (2010). The Chern numbers on this page are computed with the Fukui–Hatsugai–Suzuki lattice method.</p>
+    </section>
+    <div class="next">
+      <div><div class="label">Up next · Issue 03</div><div class="t">The patient you cannot see</div></div>
+      <a class="btn" href="patient.html">Play Issue 03 →</a>
+    </div>
+    <footer>Simplify It · Issue 02 · built as a sample of the format</footer>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* QWZ physics core. d(k) = (sin kx + pert, sin ky + pert, m + cos kx + cos ky + pert) */
+const PHYS=(function(){
+const TAU=Math.PI*2;
+function dvec(kx,ky,m,p){
+  p=p||{};const e1=p.stretch||0,e2=p.twist||0,e3=p.noise||0,t=(p.t===undefined?1:p.t);
+  let dx=Math.sin(kx)+e2*0.6*Math.sin(kx+ky)+e3*0.35*Math.sin(2*kx-ky);
+  let dy=Math.sin(ky)+e2*0.6*Math.sin(ky-kx)+e3*0.35*Math.cos(3*ky)*Math.sin(ky);
+  let dz=m+t*(Math.cos(kx)+Math.cos(ky))+e1*0.5*Math.cos(kx-ky)+e3*0.3*Math.cos(2*kx+ky);
+  return [dx,dy,dz];
+}
+// lower-band eigenvector of d.sigma as complex pair [ar,ai,br,bi]
+function lower(d){
+  const [dx,dy,dz]=d,E=Math.hypot(dx,dy,dz)||1e-12;
+  let v;
+  if(dz<0){ v=[E-dz,0,-dx,-dy]; }          // (E-dz, -(dx+i dy)), safe when dz<0
+  else { v=[dx,-dy,-(dz+E),0]; }           // (dx - i dy, -(dz+E)), safe when dz>=0
+  const n=Math.hypot(v[0],v[1],v[2],v[3])||1e-12;
+  return [v[0]/n,v[1]/n,v[2]/n,v[3]/n];
+}
+function mulPhase(u,chi){const c=Math.cos(chi),s=Math.sin(chi);return [u[0]*c-u[1]*s,u[0]*s+u[1]*c,u[2]*c-u[3]*s,u[2]*s+u[3]*c]}
+// <a|b>
+function inner(a,b){return [a[0]*b[0]+a[1]*b[1]+a[2]*b[2]+a[3]*b[3], a[0]*b[1]-a[1]*b[0]+a[2]*b[3]-a[3]*b[2]]}
+function cmul(a,b){return [a[0]*b[0]-a[1]*b[1],a[0]*b[1]+a[1]*b[0]]}
+function conj(a){return [a[0],-a[1]]}
+// Fukui-Hatsugai: returns {C, F (N*N plaquette fluxes, index i+N*j), gap, link (Ux phases, Uy phases)}
+function chern(m,p,N,chiFn){
+  N=N||24;const us=new Array(N*N);let gap=Infinity;
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const kx=TAU*i/N,ky=TAU*j/N;const d=dvec(kx,ky,m,p);gap=Math.min(gap,2*Math.hypot(d[0],d[1],d[2]));let u=lower(d);if(chiFn)u=mulPhase(u,chiFn(kx,ky));us[i+N*j]=u}
+  const U=(a,b)=>{const z=inner(a,b);const r=Math.hypot(z[0],z[1])||1e-12;return [z[0]/r,z[1]/r]};
+  const F=new Float64Array(N*N),Ax=new Float64Array(N*N),Ay=new Float64Array(N*N);let S=0;
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const i1=(i+1)%N,j1=(j+1)%N;
+    const u00=us[i+N*j],u10=us[i1+N*j],u11=us[i1+N*j1],u01=us[i+N*j1];
+    const ux=U(u00,u10),uy1=U(u10,u11),ux1=U(u01,u11),uy=U(u00,u01);
+    Ax[i+N*j]=Math.atan2(ux[1],ux[0]);Ay[i+N*j]=Math.atan2(uy[1],uy[0]);
+    const z=cmul(cmul(ux,uy1),cmul(conj(ux1),conj(uy)));const f=Math.atan2(z[1],z[0]);F[i+N*j]=f;S+=f}
+  return {C:Math.round(S/TAU),raw:S/TAU,F,Ax,Ay,N,gap};
+}
+// Ribbon: open (or periodic) in y with Ny cells, momentum kx. Real symmetric 2Ny matrix.
+function ribbonH(kx,m,Ny,periodic){
+  const n=2*Ny,H=[];for(let i=0;i<n;i++)H.push(new Float64Array(n));
+  const c=m+Math.cos(kx),s=Math.sin(kx);
+  for(let y=0;y<Ny;y++){const a=2*y;H[a][a]=c;H[a+1][a+1]=-c;H[a][a+1]=s;H[a+1][a]=s}
+  const T=[[0.5,-0.5],[0.5,-0.5]];
+  const link=(y,y2)=>{const a=2*y,b=2*y2;for(let r=0;r<2;r++)for(let q=0;q<2;q++){H[a+r][b+q]+=T[r][q];H[b+q][a+r]+=T[r][q]}};
+  for(let y=0;y<Ny-1;y++)link(y,y+1);
+  if(periodic)link(Ny-1,0);
+  return H;
+}
+// Cyclic Jacobi eigen-decomposition for real symmetric matrices
+function jacobi(A){
+  const n=A.length,a=A.map(r=>Float64Array.from(r)),V=[];for(let i=0;i<n;i++){V.push(new Float64Array(n));V[i][i]=1}
+  for(let sweep=0;sweep<60;sweep++){let off=0;for(let p=0;p<n;p++)for(let q=p+1;q<n;q++)off+=a[p][q]*a[p][q];if(off<1e-18)break;
+    for(let p=0;p<n;p++)for(let q=p+1;q<n;q++){const apq=a[p][q];if(Math.abs(apq)<1e-14)continue;
+      const th=(a[q][q]-a[p][p])/(2*apq),t=Math.sign(th||1)/(Math.abs(th)+Math.sqrt(th*th+1)),c=1/Math.sqrt(t*t+1),s=t*c;
+      for(let k=0;k<n;k++){const akp=a[k][p],akq=a[k][q];a[k][p]=c*akp-s*akq;a[k][q]=s*akp+c*akq}
+      for(let k=0;k<n;k++){const apk=a[p][k],aqk=a[q][k];a[p][k]=c*apk-s*aqk;a[q][k]=s*apk+c*aqk}
+      for(let k=0;k<n;k++){const vkp=V[k][p],vkq=V[k][q];V[k][p]=c*vkp-s*vkq;V[k][q]=s*vkp+c*vkq}}}
+  const idx=[...Array(n).keys()].sort((x,y)=>a[x][x]-a[y][y]);
+  return {vals:idx.map(i=>a[i][i]),vecs:idx.map(i=>V.map(r=>r[i]))};
+}
+// ribbon spectrum with edge weights: returns [{E, top, bot}] for one kx
+function ribbonSpec(kx,m,Ny,periodic){
+  const {vals,vecs}=jacobi(ribbonH(kx,m,Ny,periodic));
+  return vals.map((E,i)=>{const v=vecs[i];let top=0,bot=0;for(let r=0;r<4;r++){top+=v[r]*v[r];bot+=v[v.length-1-r]*v[v.length-1-r]}return {E,top,bot}});
+}
+// charge on the top half of the ribbon summed over occupied states (E<EF), Nx allowed momenta shifted by flux f
+function topCharge(m,f,Nx,Ny,EF){let q=0;EF=EF||0;for(let n=0;n<Nx;n++){const kx=TAU*(n+f)/Nx;const {vals,vecs}=jacobi(ribbonH(kx,m,Ny,false));vals.forEach((E,i)=>{if(E<EF){const v=vecs[i];for(let r=0;r<Ny;r++)q+=v[r]*v[r]}})}return q}
+return {dvec,lower,chern,ribbonSpec,jacobi,topCharge,TAU};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const TAU=Math.PI*2;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const COL={};['void','black','panel','panel2','line','text','dim','faint','pos','neg','zero','warn'].forEach(k=>COL[k]=css('--'+k));
+function rgb(hex){hex=hex.replace('#','');const n=parseInt(hex,16);return [n>>16&255,n>>8&255,n&255]}
+function rgba(hex,a){const c=rgb(hex);return `rgba(${c[0]},${c[1]},${c[2]},${a})`}
+const topo=C=>C>0?COL.pos:C<0?COL.neg:COL.zero;
+const sC=C=>C>0?'+'+C:C<0?'−'+(-C):'0';
+const bigInt=C=>C<0?'−'+(-C):String(C);
+function tex(s,d){try{return katex.renderToString(s,{output:'mathml',displayMode:!!d,throwOnError:false})}catch(e){return s}}
+$$('[data-tex]').forEach(el=>{el.innerHTML=tex(el.dataset.tex,el.hasAttribute('data-display'))});
+function cpos(e,cv){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+function visible(el,cb){if(!('IntersectionObserver' in window)){cb(true);return}new IntersectionObserver(es=>es.forEach(e=>cb(e.isIntersecting)),{rootMargin:'100px'}).observe(el)}
+function arrow(g,x,y,ang,len,col,w,head){g.strokeStyle=col;g.fillStyle=col;g.lineWidth=w||1.5;const dx=Math.cos(ang)*len,dy=-Math.sin(ang)*len;g.beginPath();g.moveTo(x-dx/2,y-dy/2);g.lineTo(x+dx/2,y+dy/2);g.stroke();const h=head||len*0.35,a=Math.atan2(-dy,dx);g.beginPath();g.moveTo(x+dx/2,y+dy/2);g.lineTo(x+dx/2-h*Math.cos(a-0.45),y+dy/2+h*Math.sin(a-0.45));g.lineTo(x+dx/2-h*Math.cos(a+0.45),y+dy/2+h*Math.sin(a+0.45));g.closePath();g.fill()}
+function heat(F,N,mx){const oc=document.createElement('canvas');oc.width=N;oc.height=N;const g=oc.getContext('2d'),im=g.createImageData(N,N);const P=rgb(COL.pos),Q=rgb(COL.neg),B=rgb(COL.black);
+  if(!mx){mx=1e-9;for(let i=0;i<F.length;i++)mx=Math.max(mx,Math.abs(F[i]))}
+  for(let j=0;j<N;j++)for(let i=0;i<N;i++){const f=F[i+N*j]/mx,a=Math.pow(Math.min(1,Math.abs(f)),0.6),c=f>=0?P:Q,o=4*(i+N*(N-1-j));im.data[o]=B[0]+(c[0]-B[0])*a;im.data[o+1]=B[1]+(c[1]-B[1])*a;im.data[o+2]=B[2]+(c[2]-B[2])*a;im.data[o+3]=255}
+  g.putImageData(im,0,0);return oc}
+
+/* ---------- progress ---------- */
+const LEVELS=['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12'];
+const STORE='simplifyit:chern',MAXXP=1500;let xp=0;const got=new Set(),cleared=new Set();
+$('#lvnav').innerHTML=LEVELS.map((s,i)=>`<a href="#${s}" data-s="${s}" title="Level ${i}">${i}</a>`).join('');
+function save(){try{localStorage.setItem(STORE,JSON.stringify({xp,cleared:[...cleared],total:LEVELS.length}))}catch(e){}}
+function paintXP(){$('#xpn').textContent=xp;$('#xpf').style.width=Math.min(100,xp/MAXXP*100)+'%'}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+function award(id,pts,m){if(got.has(id))return;got.add(id);xp+=pts;paintXP();toast('+'+pts+' · '+m);save()}
+function markDone(s){cleared.add(s);const sec=document.getElementById(s);if(sec)sec.classList.add('complete');const a=$(`#lvnav a[data-s="${s}"]`);if(a)a.classList.add('done')}
+function complete(s,m){if(cleared.has(s))return;markDone(s);award('lvl-'+s,60,m||'Level cleared');save()}
+try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){xp=d.xp||0;(d.cleared||[]).forEach(s=>{markDone(s);got.add('lvl-'+s)});paintXP()}}catch(e){}
+
+/* ---------- HERO ---------- */
+const H={m:1,stretch:0,twist:0,noise:0,C:1,changes:0};
+const cvHM=$('#cvHeroMap'),gHM=cvHM.getContext('2d');
+function heroUpdate(){
+  const p={stretch:H.stretch,twist:H.twist,noise:H.noise};const r=PHYS.chern(H.m,p,40);const prev=H.C;H.C=r.C;
+  $('#heroInt').textContent=bigInt(r.C);document.documentElement.style.setProperty('--topo',topo(r.C));
+  gHM.imageSmoothingEnabled=true;gHM.drawImage(heat(r.F,40),0,0,cvHM.width,cvHM.height);
+  $('#oStretch').textContent=Math.round(H.stretch*100)+'%';$('#oTwist').textContent=Math.round(H.twist*100)+'%';$('#oNoise').textContent=Math.round(H.noise*100)+'%';
+  $('#oGap').textContent='ΔE ≈ '+r.gap.toFixed(2);
+  const msg=$('#heroMsg'),dist=Math.round((H.stretch+H.twist+H.noise)/3*100);
+  if(prev!==r.C){H.changes++;const inst=$('#heroInst');inst.classList.remove('flash');void inst.offsetWidth;inst.classList.add('flash');
+    msg.className='msg hot';msg.innerHTML=`<b>Gap closed · ${bigInt(prev)} → ${bigInt(r.C)}</b>The two energy bands touched for an instant, and only then could the integer change. Everything that follows explains why.`;
+    $('#heroCap').textContent=r.C===0?'Destroyed. But only by closing the gap.':'Back. The integer only moves when the gap closes.';award('hero-break',40,'Broke the integer')}
+  else if(r.C!==0&&dist>0){msg.className='msg topo';msg.innerHTML=`<b>Distorted ${dist}% · still ${bigInt(r.C)}</b>The map on the left shows the material's quantum geometry rearranging. The integer hasn't moved. Now try squeezing the gap.`;if(dist>40)award('hero-dist',20,'Distorted the band')}
+}
+[['hStretch','stretch'],['hTwist','twist'],['hNoise','noise']].forEach(([id,k])=>$('#'+id).addEventListener('input',e=>{H[k]=+e.target.value;heroUpdate()}));
+$('#hGap').addEventListener('input',e=>{H.m=+e.target.value;heroUpdate()});
+heroUpdate();
+
+/* ---------- LEVEL 0: pretest ---------- */
+const PRE=[
+ {q:'You measure the same electrical quantity in 100 different samples. Each is a bit dirtier, rougher or more scratched than the last. What do you expect?',
+  o:['A spread of values; dirtier samples read worse','The same value in every sample, to about one part in a billion','Random values that average to something sensible'],best:1,
+  why:'In the quantum Hall effect the conductance is pinned to C·e²/h. Microscopic mess cannot change a topological integer.'},
+ {q:'An arrow is carried around a closed loop and ends up pointing where it started. How many full turns could it have made along the way?',
+  o:['Any amount, like 0.37','Only whole numbers','Always exactly zero'],best:1,
+  why:'Ending where it began forces a whole number of turns: the winding number from Instrument 01.'},
+ {q:'Can you smoothly reshape a donut into a ball, without tearing or gluing?',
+  o:['Yes, with enough squishing','No, the hole can\'t disappear smoothly','Only in four dimensions'],best:1,
+  why:'The number of holes is a topological invariant. Same logic, different object: the Chern number counts how a band wraps a sphere.'},
+ {q:'To change a topological integer inside a material, you would need to…',
+  o:['Push on it hard enough','Close the energy gap','Heat it gently','Nothing can ever change it'],best:1,
+  why:'Smooth changes can\'t move the integer; a gap closing (a topological phase transition) can. "Nothing can change it" overshoots.'}];
+const pre={};
+$('#pretest').innerHTML=PRE.map((p,i)=>`<div class="q"><p class="prompt">${i+1}. ${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="k">${'ABCD'[j]}</span>${o}</button>`).join('')}</div></div>`).join('')+'<p class="fb" id="preFb">0 of 4 locked in.</p>';
+$('#pretest').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const q=+b.dataset.q;$$(`#pretest .opt[data-q="${q}"]`).forEach(x=>x.classList.toggle('picked',x===b));pre[q]=+b.dataset.j;
+  const n=Object.keys(pre).length;$('#preFb').textContent=n<4?`${n} of 4 locked in.`:'All four locked in. Graded in the debrief.';if(n===4)complete('s0','Gut check done');renderReview()});
+function renderReview(){$('#review').innerHTML=PRE.map((p,i)=>{const a=pre[i];const you=a===undefined?'<em>Not answered. Scroll up to Level 0.</em>':p.o[a]+(a===p.best?' <span style="color:var(--pos)">✓</span>':'');return `<div class="rv"><div><span class="label">You guessed · Q${i+1}</span>${you}</div><div><span class="label">The physics</span>${p.why}</div></div>`}).join('')}
+renderReview();
+
+/* ---------- LEVEL 1: winding ---------- */
+const FIELDS={
+ vortex:{n:'Vortex',f:(x,y)=>[-y,x],sing:[[0,0]]},
+ source:{n:'Source',f:(x,y)=>[x,y],sing:[[0,0]]},
+ anti:{n:'Antivortex',f:(x,y)=>[x,-y],sing:[[0,0]]},
+ pair:{n:'Two vortices',f:(x,y)=>{const a=.6,r1=(x-a)**2+y*y+1e-6,r2=(x+a)**2+y*y+1e-6;return [-y/r1-y/r2,(x-a)/r1+(x+a)/r2]},sing:[[.6,0],[-.6,0]]},
+ dip:{n:'Vortex + antivortex',f:(x,y)=>{const a=.6,r1=(x-a)**2+y*y+1e-6,r2=(x+a)**2+y*y+1e-6;return [-y/r1+(x+a)/r2,(x-a)/r1-y/r2]},sing:[[.6,0],[-.6,0]]}};
+let fKey='vortex',loop=[],dens=[],cum=[],walk=0,drawing=false,seenW=new Set(),hoverP=null;
+const cvF=$('#cvField'),gF=cvF.getContext('2d'),SC=250,FW=cvF.width,FH=cvF.height;
+const toS=(x,y)=>[FW/2+x*SC,FH/2-y*SC],toW=(px,py)=>[(px-FW/2)/SC,-(py-FH/2)/SC];
+$('#fieldChips').innerHTML=Object.entries(FIELDS).map(([k,v])=>`<button class="chip" data-f="${k}" aria-pressed="${k===fKey}">${v.n}</button>`).join('');
+$('#fieldChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;fKey=b.dataset.f;$$('#fieldChips .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));prepLoop();award('field-'+fKey,5,'New field')});
+const fang=(x,y)=>{const v=FIELDS[fKey].f(x,y);return Math.atan2(v[1],v[0])};
+function circle(cx,cy,r){const a=[];for(let i=0;i<64;i++){const t=TAU*i/64;a.push([cx+r*Math.cos(t),cy+r*Math.sin(t)])}return a}
+function prepLoop(){dens=[];cum=[];if(loop.length<3)return;const pts=loop.concat([loop[0]]);
+  for(let i=0;i<pts.length-1;i++){const [x0,y0]=pts[i],[x1,y1]=pts[i+1];const n=Math.max(1,Math.ceil(Math.hypot(x1-x0,y1-y0)/0.006));for(let s=0;s<n;s++)dens.push([x0+(x1-x0)*s/n,y0+(y1-y0)*s/n])}
+  dens.push(dens[0]);let acc=0,prev=fang(...dens[0]);cum.push(0);
+  for(let i=1;i<dens.length;i++){const a=fang(...dens[i]);let d=a-prev;while(d>Math.PI)d-=TAU;while(d<-Math.PI)d+=TAU;acc+=d;prev=a;cum.push(acc)}
+  const W=Math.round(acc/TAU);$('#wTotal').textContent=sC(W);walk=0;seenW.add(W===0?'zero':'nz');
+  const m=$('#wMsg');m.className='msg '+(W?'topo':'');m.innerHTML=W?`<b>Winding number ${sC(W)}</b>The arrow came home having turned exactly ${Math.abs(W)===1?'once':Math.abs(W)+' times'}${W<0?', clockwise':''}. Your loop encloses ${W===0?'':'a special point'} where the arrow isn't defined.`:`<b>Winding number 0</b>The arrow wobbled back and forth but undid every bit of turning. This loop doesn't surround any special point (or surrounds ones that cancel).`;
+  checkS1()}
+function checkS1(){if(seenW.has('zero')&&seenW.has('nz')&&windOK)complete('s1','Winding cleared')}
+function drawField(){gF.fillStyle=COL.black;gF.fillRect(0,0,FW,FH);
+  for(let py=22;py<FH;py+=36)for(let px=22;px<FW;px+=36){const [x,y]=toW(px,py);arrow(gF,px,py,fang(x,y),18,rgba(COL.dim,.55),1.2,6)}
+  FIELDS[fKey].sing.forEach(([x,y])=>{const [px,py]=toS(x,y);gF.strokeStyle=COL.warn;gF.lineWidth=1.5;gF.beginPath();gF.arc(px,py,7,0,TAU);gF.stroke()});
+  if(drawing&&loop.length>1){gF.strokeStyle=COL.text;gF.lineWidth=2;gF.beginPath();loop.forEach(([x,y],i)=>{const [px,py]=toS(x,y);i?gF.lineTo(px,py):gF.moveTo(px,py)});gF.stroke()}
+  else if(dens.length){const W=Math.round(cum[cum.length-1]/TAU),col=topo(W);gF.strokeStyle=rgba(col,.9);gF.lineWidth=2.5;gF.beginPath();dens.forEach(([x,y],i)=>{const [px,py]=toS(x,y);i?gF.lineTo(px,py):gF.moveTo(px,py)});gF.stroke();
+    const i=Math.floor(walk*(dens.length-1)),[x,y]=dens[i],[px,py]=toS(x,y);gF.fillStyle=COL.text;gF.beginPath();gF.arc(px,py,6,0,TAU);gF.fill();arrow(gF,px,py,fang(x,y),54,col,3,14)}
+  if(hoverP&&!drawing){const [x,y]=toW(...hoverP);arrow(gF,hoverP[0],hoverP[1],fang(x,y),36,COL.text,2,10)}}
+const cvDl=$('#cvDial'),gD=cvDl.getContext('2d');
+function drawDial(){const W=cvDl.width,c=W/2,R=W*0.38;gD.fillStyle=COL.black;gD.fillRect(0,0,W,W);gD.strokeStyle=COL.line;gD.lineWidth=1;gD.beginPath();gD.arc(c,c,R,0,TAU);gD.stroke();
+  for(let i=0;i<12;i++){const a=TAU*i/12;gD.beginPath();gD.moveTo(c+Math.cos(a)*R*.9,c+Math.sin(a)*R*.9);gD.lineTo(c+Math.cos(a)*R,c+Math.sin(a)*R);gD.stroke()}
+  if(!dens.length)return;const i=Math.floor(walk*(dens.length-1)),turned=cum[i],Wn=Math.round(cum[cum.length-1]/TAU),col=topo(Wn);
+  // spiral trace of accumulated turning
+  gD.strokeStyle=rgba(col,.8);gD.lineWidth=3;gD.beginPath();const a0=fang(...dens[0]);const steps=Math.max(2,Math.ceil(Math.abs(turned)/0.05));for(let s=0;s<=steps;s++){const t=turned*s/steps,rr=R*.55+R*.3*Math.min(1,Math.abs(t)/(TAU*Math.max(1,Math.abs(Wn)||1)));const a=-(a0+t);s?gD.lineTo(c+Math.cos(a)*rr,c+Math.sin(a)*rr):gD.moveTo(c+Math.cos(a)*rr,c+Math.sin(a)*rr)}gD.stroke();
+  const ang=fang(...dens[i]);arrow(gD,c,c,ang,R*1.5,COL.text,3,14);
+  gD.fillStyle=COL.dim;gD.font='500 15px "IBM Plex Mono", monospace';gD.textAlign='center';gD.fillText('arrow under the walker',c,W-14);
+  $('#wSoFar').textContent=(turned/TAU>=0?'+':'−')+Math.abs(turned/TAU).toFixed(2)}
+cvF.addEventListener('pointerdown',e=>{drawing=true;loop=[toW(...cpos(e,cvF))];cvF.setPointerCapture(e.pointerId)});
+cvF.addEventListener('pointermove',e=>{const p=cpos(e,cvF);hoverP=p;if(drawing){const w=toW(...p),l=loop[loop.length-1];if(Math.hypot(w[0]-l[0],w[1]-l[1])>0.02)loop.push(w)}});
+cvF.addEventListener('pointerleave',()=>{hoverP=null});
+cvF.addEventListener('pointerup',()=>{if(!drawing)return;drawing=false;if(loop.length>8){prepLoop();award('drawloop',15,'Drew a loop')}else{loop=circle(0,0,.6);prepLoop()}});
+$('#loopCenter').addEventListener('click',()=>{loop=circle(0,0,.6);prepLoop()});
+$('#loopSide').addEventListener('click',()=>{loop=circle(1.25,.45,.35);prepLoop()});
+let windOK=false;
+$('#windQuiz').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||windOK)return;const j=+b.dataset.j;if(j===1){windOK=true;b.classList.add('right');$$('#windQuiz .opt').forEach(x=>x.disabled=true);$('#windFb').textContent='Right. Coming home tells you nothing; the path tells you a whole number of turns. That number is the first topological invariant in this issue.';award('wq',30,'Correct');checkS1()}else{b.classList.add('wrong');b.disabled=true;$('#windFb').textContent='Not quite. Watch the turn counter on the dial when the walker gets home.'}});
+loop=circle(0,0,.6);prepLoop();drawField();drawDial();
+let fVis=false;visible(cvF,v=>fVis=v);
+(function tick(){if(fVis||!dens.length){if(!drawing&&dens.length)walk=(walk+(reduce?0:0.0025))%1;drawField();drawDial()}requestAnimationFrame(tick)})();
+
+/* ---------- LEVEL 2: holes ---------- */
+const S=(d)=>`<svg viewBox="0 0 84 84" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">${d}</svg>`;
+const OBJS=[
+ {n:'Ball',h:0,svg:S('<circle cx="42" cy="42" r="28"/><path d="M26 34a18 18 0 0 1 14-12" opacity=".5"/>'),ex:'No holes. It is the sphere.'},
+ {n:'Plate',h:0,svg:S('<ellipse cx="42" cy="46" rx="32" ry="13"/><ellipse cx="42" cy="44" rx="18" ry="6" opacity=".5"/>'),ex:'A dent is not a hole. Squash a ball flat and you get a plate.'},
+ {n:'Donut',h:1,svg:S('<ellipse cx="42" cy="44" rx="32" ry="20"/><path d="M30 42q12 10 24 0"/><path d="M33 44q9-6 18 0"/>'),ex:'The original: one hole.'},
+ {n:'Mug',h:1,svg:S('<path d="M20 24h34v34a8 8 0 0 1-8 8H28a8 8 0 0 1-8-8z"/><path d="M54 32h6a8 8 0 0 1 0 16h-6"/><ellipse cx="37" cy="24" rx="17" ry="4" opacity=".5"/>'),ex:'The cup is a dent. The handle is the one hole. A mug is a donut.'},
+ {n:'Straw',h:1,svg:S('<path d="M18 62L58 16"/><path d="M28 70L68 24"/><ellipse cx="63" cy="20" rx="4" ry="7.5" transform="rotate(41 63 20)"/><ellipse cx="23" cy="66" rx="4" ry="7.5" transform="rotate(41 23 66)" opacity=".5"/>'),ex:'One tunnel right through. A stretched donut, despite looking like two openings.'},
+ {n:'Shirt button',h:2,svg:S('<circle cx="42" cy="42" r="28"/><circle cx="33" cy="42" r="4"/><circle cx="51" cy="42" r="4"/>'),ex:'Two holes through the disk: genus 2.'},
+ {n:'Pretzel',h:3,svg:S('<path d="M14 44c0-18 14-26 28-14 14-12 28-4 28 14 0 16-16 24-28 24S14 60 14 44z"/><circle cx="29" cy="40" r="6"/><circle cx="55" cy="40" r="6"/><circle cx="42" cy="55" r="5"/>'),ex:'Three holes. Topologists love pretzels.'}];
+const objAns={};
+$('#objs').innerHTML=OBJS.map((o,i)=>`<div class="obj" data-i="${i}">${o.svg}<div class="nm">${o.n}</div><div class="hb">${[0,1,2,3].map(h=>`<button data-i="${i}" data-h="${h}" aria-label="${h} holes">${h}</button>`).join('')}</div><div class="ex"></div></div>`).join('');
+$('#objs').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const i=+b.dataset.i,h=+b.dataset.h,o=OBJS[i],card=b.closest('.obj');if(objAns[i]===o.h)return;
+  card.querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b));objAns[i]=h;card.classList.toggle('right',h===o.h);card.classList.toggle('wrong',h!==o.h);card.querySelector('.ex').textContent=h===o.h?o.ex:'Not quite. Ignore dents; count tunnels you could thread a string through.';
+  const right=OBJS.filter((o,k)=>objAns[k]===o.h).length;$('#objFb').textContent=`${right} of 7 sorted.`+(right===7?' Every one. You can count topological invariants.':'');if(h===o.h)award('obj'+i,8,o.n);if(right===7)complete('s2','Holes cleared')});
+// BZ torus
+const cvB=$('#cvBZ'),gB=cvB.getContext('2d'),cvT=$('#cvTorus'),gT=cvT.getContext('2d');
+let bz={u:.15,v:.3,trail:[],walking:!reduce,slope:[1,.37],drag:false,wrapped:0};
+function bzStep(du,dv){let u=bz.u+du,v=bz.v+dv;if(u>=1||u<0||v>=1||v<0){bz.wrapped++;if(bz.wrapped===3)award('bzwrap',15,'Walked off the edge')}u=(u%1+1)%1;v=(v%1+1)%1;bz.u=u;bz.v=v;bz.trail.push([u,v]);if(bz.trail.length>1600)bz.trail.shift()}
+function drawBZ(){const W=cvB.width,p=40,s=W-2*p;gB.fillStyle=COL.black;gB.fillRect(0,0,W,W);gB.strokeStyle=COL.line;gB.lineWidth=1;for(let i=0;i<=8;i++){gB.beginPath();gB.moveTo(p+s*i/8,p);gB.lineTo(p+s*i/8,p+s);gB.moveTo(p,p+s*i/8);gB.lineTo(p+s,p+s*i/8);gB.stroke()}
+  gB.lineWidth=3;gB.strokeStyle=COL.pos;gB.beginPath();gB.moveTo(p,p);gB.lineTo(p,p+s);gB.moveTo(p+s,p);gB.lineTo(p+s,p+s);gB.stroke();gB.strokeStyle=COL.neg;gB.beginPath();gB.moveTo(p,p);gB.lineTo(p+s,p);gB.moveTo(p,p+s);gB.lineTo(p+s,p+s);gB.stroke();
+  gB.fillStyle=COL.dim;gB.font='500 14px "IBM Plex Mono", monospace';gB.textAlign='center';gB.fillText('kₓ: 0 → 2π',W/2,W-12);gB.save();gB.translate(16,W/2);gB.rotate(-Math.PI/2);gB.fillText('k_y: 0 → 2π',0,0);gB.restore();
+  gB.fillStyle=COL.pos;gB.fillText('glued',p+s+0,p-14);gB.fillStyle=COL.neg;gB.textAlign='left';gB.fillText('glued',p,p-14);
+  gB.fillStyle=rgba(COL.text,.55);bz.trail.forEach(([u,v])=>{gB.fillRect(p+u*s-1,p+(1-v)*s-1,2,2)});gB.fillStyle=COL.text;gB.beginPath();gB.arc(p+bz.u*s,p+(1-bz.v)*s,8,0,TAU);gB.fill()}
+function torusPt(u,v,W){const R=1,r=.42,a=1.05,U=TAU*u,V=TAU*v;const X=(R+r*Math.cos(V))*Math.cos(U),Y=(R+r*Math.cos(V))*Math.sin(U),Z=r*Math.sin(V);const y2=Y*Math.cos(a)-Z*Math.sin(a),z2=Y*Math.sin(a)+Z*Math.cos(a);const s=W*0.32;return [W/2+X*s,W/2+y2*s,z2]}
+function drawTorus(){const W=cvT.width;gT.fillStyle=COL.black;gT.fillRect(0,0,W,W);gT.lineWidth=1;
+  for(let i=0;i<24;i++){gT.strokeStyle=rgba(COL.neg,.28);gT.beginPath();for(let k=0;k<=48;k++){const [x,y]=torusPt(i/24,k/48,W);k?gT.lineTo(x,y):gT.moveTo(x,y)}gT.stroke()}
+  for(let k=0;k<12;k++){gT.strokeStyle=rgba(COL.pos,.28);gT.beginPath();for(let i=0;i<=64;i++){const [x,y]=torusPt(i/64,k/12,W);i?gT.lineTo(x,y):gT.moveTo(x,y)}gT.stroke()}
+  bz.trail.forEach(([u,v])=>{const [x,y,z]=torusPt(u,v,W);gT.fillStyle=rgba(COL.text,z<0?.85:.25);gT.fillRect(x-1,y-1,2,2)});
+  const [x,y,z]=torusPt(bz.u,bz.v,W);gT.fillStyle=z<0?COL.text:rgba(COL.text,.45);gT.beginPath();gT.arc(x,y,z<0?8:6,0,TAU);gT.fill();
+  gT.fillStyle=COL.dim;gT.font='500 14px "IBM Plex Mono", monospace';gT.textAlign='center';gT.fillText('same walk, on the donut',W/2,W-12)}
+cvB.addEventListener('pointerdown',e=>{bz.drag=true;cvB.setPointerCapture(e.pointerId);bzDrag(e)});
+cvB.addEventListener('pointermove',e=>{if(bz.drag)bzDrag(e)});cvB.addEventListener('pointerup',()=>bz.drag=false);
+function bzDrag(e){const W=cvB.width,p=40,sz=W-2*p,[x,y]=cpos(e,cvB);bz.u=Math.min(.999,Math.max(0,(x-p)/sz));bz.v=Math.min(.999,Math.max(0,1-(y-p)/sz));bz.trail.push([bz.u,bz.v]);if(bz.trail.length>1600)bz.trail.shift()}
+$('#bzWalk').addEventListener('click',e=>{bz.walking=!bz.walking;e.target.textContent=bz.walking?'Pause walk':'Resume walk'});
+$('#bzClear').addEventListener('click',()=>{bz.trail=[]});
+const SLOPES=[[1,.37],[1,0],[0,1],[1,1],[1,2],[2,-1]];let slI=0;$('#bzSlope').addEventListener('click',()=>{slI=(slI+1)%SLOPES.length;bz.slope=SLOPES[slI];bz.trail=[]});
+$('#bzWalk').textContent=bz.walking?'Pause walk':'Resume walk';
+let bVis=false;visible(cvB,v=>bVis=v);
+(function tickB(){if(bVis){if(bz.walking&&!bz.drag)bzStep(bz.slope[0]*.0025,bz.slope[1]*.0025);drawBZ();drawTorus()}requestAnimationFrame(tickB)})();
+drawBZ();drawTorus();
+
+/* ---------- LEVEL 3: band explorer ---------- */
+const cvBd=$('#cvBand'),gBd=cvBd.getContext('2d');
+const BD={m:1,yaw:-.7,pitch:.62,curv:false,gap:true,drag:null,N:30,cache:null,moved:0};
+function bandData(){const N=BD.N,E=new Float64Array((N+1)*(N+1));for(let j=0;j<=N;j++)for(let i=0;i<=N;i++){const d=PHYS.dvec(TAU*i/N,TAU*j/N,BD.m);E[i+(N+1)*j]=Math.hypot(d[0],d[1],d[2])}
+  const ch=PHYS.chern(BD.m,{},N);BD.cache={E,F:ch.F,C:ch.C};
+  // exact gap: min over TRIM and grid
+  const tr=[[0,0],[Math.PI,0],[0,Math.PI],[Math.PI,Math.PI]];let g=Infinity,gw=null;tr.forEach(([a,b])=>{const d=PHYS.dvec(a,b,BD.m),e=2*Math.hypot(...d);if(e<g){g=e;gw=[a,b]}});BD.gapv=g;BD.gapAt=gw}
+function proj(x,y,z){const W=cvBd.width,Hh=cvBd.height;const cy=Math.cos(BD.yaw),sy=Math.sin(BD.yaw);let X=x*cy-y*sy,Y=x*sy+y*cy;const cp=Math.cos(BD.pitch),sp=Math.sin(BD.pitch);const Z=z*cp-Y*sp,D=z*sp+Y*cp;const s=W*0.27;return [W/2+X*s,Hh*0.52-Z*s,D]}
+function drawBand(){if(!BD.cache)bandData();const {E,F}=BD.cache,N=BD.N,W=cvBd.width,Hh=cvBd.height;gBd.fillStyle=COL.black;gBd.fillRect(0,0,W,Hh);
+  const zs=0.32,quads=[];let mx=1e-9;for(let i=0;i<F.length;i++)mx=Math.max(mx,Math.abs(F[i]));
+  const P=rgb(COL.pos),Q=rgb(COL.neg);
+  for(const sgn of [1,-1])for(let j=0;j<N;j++)for(let i=0;i<N;i++){const pts=[[i,j],[i+1,j],[i+1,j+1],[i,j+1]].map(([a,b])=>proj(a/N*2-1,b/N*2-1,sgn*E[a+(N+1)*b]*zs));const depth=(pts[0][2]+pts[2][2])/2;quads.push({pts,depth,sgn,f:F[i+N*j]/mx})}
+  quads.sort((a,b)=>b.depth-a.depth);
+  for(const q of quads){gBd.beginPath();q.pts.forEach(([x,y],k)=>k?gBd.lineTo(x,y):gBd.moveTo(x,y));gBd.closePath();
+    let fill;if(q.sgn<0&&BD.curv){const a=Math.pow(Math.min(1,Math.abs(q.f)),.6),c=q.f>=0?P:Q;fill=`rgba(${c[0]},${c[1]},${c[2]},${0.15+0.8*a})`}else fill=q.sgn>0?rgba(COL.text,.10):rgba(COL.dim,.16);
+    gBd.fillStyle=fill;gBd.fill();gBd.strokeStyle=q.sgn>0?rgba(COL.text,.35):rgba(COL.dim,.35);gBd.lineWidth=.7;gBd.stroke()}
+  if(BD.gap&&BD.gapAt){const [a,b]=BD.gapAt,x=a/Math.PI-1,y=b/Math.PI-1,e=BD.gapv/2*zs;const p1=proj(x,y,e),p2=proj(x,y,-e);gBd.strokeStyle=COL.warn;gBd.lineWidth=2.5;gBd.beginPath();gBd.moveTo(p1[0],p1[1]);gBd.lineTo(p2[0],p2[1]);gBd.stroke();gBd.fillStyle=COL.warn;gBd.font='600 16px "IBM Plex Mono", monospace';gBd.textAlign='left';gBd.fillText('ΔE = '+BD.gapv.toFixed(2),Math.max(p1[0],p2[0])+10,(p1[1]+p2[1])/2+5)}
+  gBd.fillStyle=COL.dim;gBd.font='500 14px "IBM Plex Mono", monospace';gBd.textAlign='left';gBd.fillText('upper band E₊ = +|d|',14,24);gBd.fillText('lower band E₋ = −|d|',14,Hh-14);gBd.textAlign='right';gBd.fillText('floor: Brillouin zone (kₓ, k_y)',W-14,24)}
+function bandUI(){bandData();$('#obM').textContent=BD.m.toFixed(2);$('#bGap').textContent=BD.gapv.toFixed(2);const nm={'0,0':'(0, 0)','3.141592653589793,0':'(π, 0) and (0, π)','0,3.141592653589793':'(0, π)','3.141592653589793,3.141592653589793':'(π, π)'};$('#bWhere').textContent=nm[BD.gapAt.join(',')]||'—';
+  const m=$('#bMsg');if(BD.gapv<0.06){m.className='msg hot';m.innerHTML='<b>Gap closed</b>The bands touch at a single point, a cone called a Dirac point. Remember this spot: it is the only place the integer can change.';award('bandclose',25,'Closed a gap');complete('s3','Bands cleared')}else{m.className='msg';m.innerHTML=`<b>Gap open · ΔE = ${BD.gapv.toFixed(2)}</b>The two bands never touch. Try sliding m toward 2, 0 or −2.`}drawBand()}
+$('#bM').addEventListener('input',e=>{BD.m=+e.target.value;bandUI()});
+$('#bCurv').addEventListener('click',e=>{BD.curv=!BD.curv;e.target.setAttribute('aria-pressed',BD.curv);drawBand();award('bandcurv',10,'Revealed curvature')});
+$('#bGapT').addEventListener('click',e=>{BD.gap=!BD.gap;e.target.setAttribute('aria-pressed',BD.gap);drawBand()});
+cvBd.addEventListener('pointerdown',e=>{BD.drag=cpos(e,cvBd);cvBd.setPointerCapture(e.pointerId);cvBd.style.cursor='grabbing'});
+cvBd.addEventListener('pointermove',e=>{if(!BD.drag)return;const p=cpos(e,cvBd);BD.yaw+=(p[0]-BD.drag[0])*0.008;BD.pitch=Math.max(0.05,Math.min(1.45,BD.pitch+(p[1]-BD.drag[1])*0.006));BD.drag=p;BD.moved++;if(BD.moved>40)award('bandrot',10,'Flew the landscape');requestAnimationFrame(drawBand)});
+cvBd.addEventListener('pointerup',()=>{BD.drag=null;cvBd.style.cursor=''});
+bandUI();
+
+/* ---------- LEVEL 4: curvature painter ---------- */
+const cvC=$('#cvCurv'),gC=cvC.getContext('2d');const CP={m:1.5,cx:Math.PI,cy:Math.PI,r:.9,N:64,data:null,all:false,drag:false};
+function curvData(){CP.data=PHYS.chern(CP.m,{},CP.N);CP.img=heat(CP.data.F,CP.N)}
+function gamma(){const {F,N}=CP.data,dk=TAU/N;let g=0,tot=0;for(let j=0;j<N;j++)for(let i=0;i<N;i++){const f=F[i+N*j];tot+=f;const x=(i+.5)*dk,y=(j+.5)*dk;if(CP.all||Math.hypot(x-CP.cx,y-CP.cy)<=CP.r)g+=f}return [g,tot]}
+function drawCurv(){const W=cvC.width;gC.imageSmoothingEnabled=true;gC.drawImage(CP.img,0,0,W,W);const s=W/TAU;
+  gC.strokeStyle=rgba(COL.text,.12);gC.lineWidth=1;for(let i=1;i<4;i++){gC.beginPath();gC.moveTo(W*i/4,0);gC.lineTo(W*i/4,W);gC.moveTo(0,W*i/4);gC.lineTo(W,W*i/4);gC.stroke()}
+  gC.strokeStyle=COL.text;gC.lineWidth=3;if(CP.all){gC.strokeRect(3,3,W-6,W-6)}else{gC.beginPath();gC.arc(CP.cx*s,W-CP.cy*s,CP.r*s,0,TAU);gC.stroke();gC.setLineDash([4,6]);gC.lineWidth=1;gC.beginPath();gC.moveTo(CP.cx*s-8,W-CP.cy*s);gC.lineTo(CP.cx*s+8,W-CP.cy*s);gC.moveTo(CP.cx*s,W-CP.cy*s-8);gC.lineTo(CP.cx*s,W-CP.cy*s+8);gC.stroke();gC.setLineDash([])}
+  const [g,tot]=gamma();const C=CP.data.C;$('#cGam').textContent=(g/Math.PI).toFixed(2)+'π';$('#cShare').textContent=Math.abs(tot)>1e-6?Math.round(g/tot*100)+'%':'—';
+  const m=$('#cMsg');if(CP.all){m.className='msg topo';m.style.borderColor=topo(C);m.innerHTML=`<b style="color:${topo(C)}">Whole zone · γ = ${(g/Math.PI).toFixed(3)}π = 2π × ${sC(C)}</b>Every hill and valley added together gives a whole multiple of 2π. Change m and try again: it's always a whole number. That number is the Chern number, C = ${sC(C)}.`}else{m.className='msg';m.style.borderColor='';m.innerHTML=`<b>Loop · γ = ${(g/Math.PI).toFixed(2)}π</b>A small loop can collect any amount. Make it bigger, move it around, or enclose the whole zone.`}}
+cvC.addEventListener('pointerdown',e=>{CP.drag=true;CP.all=false;cvC.setPointerCapture(e.pointerId);cmove(e)});
+cvC.addEventListener('pointermove',e=>{if(CP.drag)cmove(e)});cvC.addEventListener('pointerup',()=>{CP.drag=false;award('curvdrag',15,'Painted with a loop')});
+function cmove(e){const W=cvC.width,[x,y]=cpos(e,cvC);CP.cx=x/W*TAU;CP.cy=(1-y/W)*TAU;drawCurv()}
+$('#cR').addEventListener('input',e=>{CP.r=+e.target.value;CP.all=false;$('#ocR').textContent=CP.r.toFixed(2);drawCurv()});
+$('#cM').addEventListener('input',e=>{CP.m=+e.target.value;$('#ocM').textContent=CP.m.toFixed(2);curvData();drawCurv();if(CP.all)allSeen.add(CP.data.C);checkS4()});
+const allSeen=new Set();let curvOK=false;
+$('#cAll').addEventListener('click',()=>{CP.all=true;drawCurv();allSeen.add(CP.data.C);award('curvall',20,'Integrated the whole zone');checkS4()});
+function checkS4(){if(curvOK&&allSeen.size>=1)complete('s4','Curvature cleared')}
+$('#curvQuiz').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||curvOK)return;if(+b.dataset.j===1){curvOK=true;b.classList.add('right');$$('#curvQuiz .opt').forEach(x=>x.disabled=true);$('#curvFb').textContent='Right. Twice the curvature inside, twice the phase around the edge. (The phase itself is only defined up to whole turns of 2π, so it can "wrap", like a clock hand.)';award('cq',30,'Correct');checkS4()}else{b.classList.add('wrong');b.disabled=true;$('#curvFb').textContent='Try it: drag the loop over a hill and watch γ as you grow the radius.'}});
+curvData();drawCurv();
+
+/* ---------- LEVEL 5: sphere wrapper ---------- */
+const cvSp=$('#cvSphere'),gSp=cvSp.getContext('2d'),cvSt=$('#cvStep'),gSt=cvSt.getContext('2d');
+const SP={m:1,d:0,yaw:0,pitch:.35,pts:null,C:1,curve:null,anim:null,drag:null,halfTried:false,seen:new Set()};
+function spData(){const N=56,pts=[];const p={noise:SP.d,twist:SP.d*.6};for(let j=0;j<N;j++)for(let i=0;i<N;i++){const d=PHYS.dvec(TAU*(i+.5)/N,TAU*(j+.5)/N,SP.m,p),n=Math.hypot(...d)||1;pts.push([d[0]/n,d[1]/n,d[2]/n,i/N])}SP.pts=pts;
+  const r=PHYS.chern(SP.m,p,24);SP.C=r.C;SP.gap=r.gap;
+  const bins=new Uint8Array(12*24);pts.forEach(([x,y,z])=>{const b=Math.min(11,Math.floor((z+1)/2*12)),a=Math.min(23,Math.floor((Math.atan2(y,x)+Math.PI)/TAU*24));bins[b*24+a]=1});let c=0;bins.forEach(v=>c+=v);SP.cov=c/bins.length;SP.seen.add(SP.C)}
+function spCurve(){const a=[];const p={noise:SP.d,twist:SP.d*.6};for(let m=-4;m<=4.0001;m+=0.04)a.push([m,PHYS.chern(m,p,16).C]);SP.curve=a}
+function drawSphere(){const W=cvSp.width,c=W/2,R=W*0.4;gSp.fillStyle=COL.black;gSp.fillRect(0,0,W,W);
+  const g=gSp.createRadialGradient(c-R*.3,c-R*.3,R*.1,c,c,R);g.addColorStop(0,rgba(COL.panel2,1));g.addColorStop(1,rgba(COL.black,1));gSp.fillStyle=g;gSp.beginPath();gSp.arc(c,c,R,0,TAU);gSp.fill();gSp.strokeStyle=COL.line;gSp.lineWidth=1;gSp.stroke();
+  const cy=Math.cos(SP.yaw),sy=Math.sin(SP.yaw),cp=Math.cos(SP.pitch),sp=Math.sin(SP.pitch);
+  const P=(x,y,z)=>{const X=x*cy-y*sy,Y=x*sy+y*cy;const Z=z*cp-Y*sp,D=z*sp+Y*cp;return [c+X*R,c-Z*R,D]};
+  for(let k=-2;k<=2;k++){const z=k/3,rr=Math.sqrt(1-z*z);gSp.strokeStyle=rgba(COL.dim,.18);gSp.beginPath();for(let i=0;i<=60;i++){const t=TAU*i/60,[x,y,d]=P(rr*Math.cos(t),rr*Math.sin(t),z);i?gSp.lineTo(x,y):gSp.moveTo(x,y)}gSp.stroke()}
+  const col=topo(SP.C);
+  SP.pts.forEach(([x,y,z])=>{const [px,py,d]=P(x,y,z);if(d<0){gSp.fillStyle=rgba(col,.8);gSp.fillRect(px-1.4,py-1.4,2.8,2.8)}else{gSp.fillStyle=rgba(col,.16);gSp.fillRect(px-1,py-1,2,2)}});
+  gSp.fillStyle=COL.dim;gSp.font='500 14px "IBM Plex Mono", monospace';gSp.textAlign='center';gSp.fillText('each dot: where one momentum k sends the arrow d̂(k)',c,W-14)}
+function drawStep(){const W=cvSt.width,Hh=cvSt.height,pl=44,pr=14,pt=18,pb=34;gSt.fillStyle=COL.black;gSt.fillRect(0,0,W,Hh);const x=m=>pl+(m+4)/8*(W-pl-pr),y=C=>pt+(1.5-C)/3*(Hh-pt-pb);
+  gSt.strokeStyle=COL.line;gSt.lineWidth=1;gSt.fillStyle=COL.dim;gSt.font='500 13px "IBM Plex Mono", monospace';gSt.textAlign='right';[-1,-.5,0,.5,1].forEach(C=>{gSt.beginPath();gSt.moveTo(pl,y(C));gSt.lineTo(W-pr,y(C));gSt.globalAlpha=C%1?0.35:1;gSt.stroke();gSt.globalAlpha=1;gSt.fillText(C%1?(C>0?'½':'−½'):sC(C),pl-8,y(C)+4)});
+  gSt.textAlign='center';[-4,-2,0,2,4].forEach(m=>gSt.fillText(String(m).replace('-','−'),x(m),Hh-12));gSt.fillText('m',W-pr-6,Hh-12);
+  gSt.lineWidth=3;let prev=null;SP.curve.forEach(([m,C])=>{if(prev){gSt.strokeStyle=topo(prev[1]);gSt.beginPath();gSt.moveTo(x(prev[0]),y(prev[1]));gSt.lineTo(x(m),y(prev[1]));gSt.stroke();if(C!==prev[1]){gSt.strokeStyle=rgba(COL.warn,.6);gSt.lineWidth=1;gSt.setLineDash([3,4]);gSt.beginPath();gSt.moveTo(x(m),y(prev[1]));gSt.lineTo(x(m),y(C));gSt.stroke();gSt.setLineDash([]);gSt.lineWidth=3}}prev=[m,C]});
+  gSt.fillStyle=COL.text;gSt.beginPath();gSt.arc(x(SP.m),y(SP.C),7,0,TAU);gSt.fill();gSt.strokeStyle=COL.black;gSt.lineWidth=2;gSt.stroke()}
+function spUI(){spData();$('#osM').textContent=SP.m.toFixed(2);$('#osD').textContent=Math.round(SP.d*100)+'%';$('#sCov').textContent=Math.round(SP.cov*100)+'%';const sc=$('#sC');sc.textContent=sC(SP.C);sc.style.color=topo(SP.C);
+  const m=$('#sMsg');if(!SP.anim){if(SP.C===0){m.className='msg';m.innerHTML=`<b>Not wrapped · C = 0</b>The dots huddle on part of the sphere and leave the rest bare (${Math.round(SP.cov*100)}% covered). You could slide them all off the sphere without tearing anything.`}else{m.className='msg topo';m.style.borderColor=topo(SP.C);m.innerHTML=`<b style="color:${topo(SP.C)}">Wrapped ${SP.C>0?'once':'once, in reverse'} · C = ${sC(SP.C)}</b>Every direction on the sphere is reached. Distort it as much as you like: the coverage stays total.`}}
+  if(SP.seen.has(0)&&(SP.seen.has(1)||SP.seen.has(-1))&&SP.halfTried)complete('s5','Sphere cleared');drawStep()}
+$('#sM').addEventListener('input',e=>{SP.m=+e.target.value;spUI()});
+$('#sD').addEventListener('input',e=>{SP.d=+e.target.value;spCurve();spUI();if(SP.d>.5)award('spd',10,'Distorted the map')});
+$('#sHalf').addEventListener('click',()=>{if(SP.anim)return;const start=performance.now(),m0=SP.m<1.99&&SP.m>0?SP.m:1.2,m1=2.8;SP.anim=true;let jumped=null;const startC=PHYS.chern(m0,{noise:SP.d,twist:SP.d*.6},24).C;
+  (function step(t){const u=Math.min(1,(t-start)/4200),m=m0+(m1-m0)*(u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2);SP.m=m;$('#sM').value=m;spUI();
+    const msg=$('#sMsg');if(SP.C!==startC&&jumped===null)jumped=m;msg.className='msg hot';msg.innerHTML=jumped===null?`<b>Hunting for ½ · m = ${m.toFixed(3)}</b>Sliding smoothly toward the gap-closing point… C = ${sC(SP.C)}`:`<b>No half · jumped at m ≈ ${jumped.toFixed(2)}</b>C went straight from ${sC(startC)} to ${sC(SP.C)} at the instant the gap closed. There is no material in between with C = ½. A sphere can't be wrapped half a time.`;
+    if(u<1&&!reduce)requestAnimationFrame(step);else{SP.anim=false;SP.halfTried=true;award('half',30,'Tried to make ½');spUI();msg.className='msg hot';msg.innerHTML=`<b>No half</b>C jumped straight from ${sC(startC)} to ${sC(SP.C)} at the gap closing. There's no material in between with C = ½.`}})(start)});
+cvSp.addEventListener('pointerdown',e=>{SP.drag=cpos(e,cvSp);cvSp.setPointerCapture(e.pointerId)});
+cvSp.addEventListener('pointermove',e=>{if(!SP.drag)return;const p=cpos(e,cvSp);SP.yaw+=(p[0]-SP.drag[0])*.01;SP.pitch=Math.max(-1.4,Math.min(1.4,SP.pitch+(p[1]-SP.drag[1])*.01));SP.drag=p});
+cvSp.addEventListener('pointerup',()=>SP.drag=null);
+spCurve();spUI();let spVis=false;visible(cvSp,v=>spVis=v);
+(function tickS(){if(spVis||!SP._drawn){if(!SP.drag&&!reduce)SP.yaw+=.004;drawSphere();SP._drawn=true}requestAnimationFrame(tickS)})();
+
+/* ---------- LEVEL 6: gap breaker ---------- */
+const cvCt=$('#cvCut'),gCt=cvCt.getContext('2d'),cvPh=$('#cvPhase'),gPh=cvPh.getContext('2d');
+const GB={m:1,t:1,C:1,trans:0,last:1};
+const phaseC=(m,t)=>(Math.abs(m)>2*t?0:m>0?1:-1);
+const PATH=[[0,0,'Γ'],[Math.PI,0,'X'],[Math.PI,Math.PI,'M'],[0,0,'Γ']];
+function drawCut(){const W=cvCt.width,Hh=cvCt.height,pl=50,pr=16,pt=20,pb=36;gCt.fillStyle=COL.black;gCt.fillRect(0,0,W,Hh);const Em=4.5,y=E=>pt+(Em-E)/(2*Em)*(Hh-pt-pb);
+  const segL=[Math.PI,Math.PI,Math.PI*Math.SQRT2],tot=segL.reduce((a,b)=>a+b),x=s=>pl+s/tot*(W-pl-pr);
+  gCt.strokeStyle=COL.line;gCt.lineWidth=1;gCt.fillStyle=COL.dim;gCt.font='500 13px "IBM Plex Mono", monospace';gCt.textAlign='right';[-4,-2,0,2,4].forEach(E=>{gCt.beginPath();gCt.moveTo(pl,y(E));gCt.lineTo(W-pr,y(E));gCt.stroke();gCt.fillText(String(E).replace('-','−'),pl-8,y(E)+4)});
+  let acc=0;gCt.textAlign='center';PATH.forEach((p,i)=>{gCt.strokeStyle=COL.line;gCt.beginPath();gCt.moveTo(x(acc),pt);gCt.lineTo(x(acc),Hh-pb);gCt.stroke();gCt.fillStyle=COL.text;gCt.fillText(p[2],x(acc),Hh-12);if(i<3)acc+=segL[i]});
+  const up=[],dn=[];acc=0;let gmin=Infinity;for(let s=0;s<3;s++){const [a1,b1]=PATH[s],[a2,b2]=PATH[s+1];for(let q=0;q<=80;q++){const u=q/80,kx=a1+(a2-a1)*u,ky=b1+(b2-b1)*u,d=PHYS.dvec(kx,ky,GB.m,{t:GB.t}),E=Math.hypot(...d);gmin=Math.min(gmin,2*E);up.push([x(acc+segL[s]*u),y(E)]);dn.push([x(acc+segL[s]*u),y(-E)])}acc+=segL[s]}
+  gCt.fillStyle=rgba(topo(GB.C),.10);gCt.beginPath();up.forEach(([a,b],i)=>i?gCt.lineTo(a,b):gCt.moveTo(a,b));for(let i=dn.length-1;i>=0;i--)gCt.lineTo(dn[i][0],dn[i][1]);gCt.fill();
+  [up,dn].forEach(L=>{gCt.strokeStyle=COL.text;gCt.lineWidth=2.5;gCt.beginPath();L.forEach(([a,b],i)=>i?gCt.lineTo(a,b):gCt.moveTo(a,b));gCt.stroke()});
+  gCt.fillStyle=COL.dim;gCt.textAlign='left';gCt.fillText('energy along a path through the Brillouin zone',pl+8,pt+14);return gmin}
+function drawPhase(){const W=cvPh.width,Hh=cvPh.height,pl=50,pr=16,pt=12,pb=34;const x=m=>pl+(m+3)/6*(W-pl-pr),y=t=>pt+(1.5-t)/1.3*(Hh-pt-pb);
+  gPh.fillStyle=COL.black;gPh.fillRect(0,0,W,Hh);for(let px=pl;px<W-pr;px+=3)for(let py=pt;py<Hh-pb;py+=3){const m=(px-pl)/(W-pl-pr)*6-3,t=1.5-(py-pt)/(Hh-pt-pb)*1.3;const C=phaseC(m,t);gPh.fillStyle=rgba(topo(C),C?0.32:0.12);gPh.fillRect(px,py,3,3)}
+  gPh.strokeStyle=COL.warn;gPh.lineWidth=1.5;[[t=>2*t],[t=>-2*t],[t=>0]].forEach(([f])=>{gPh.beginPath();for(let t=.2;t<=1.5;t+=.02){const X=x(f(t)),Y=y(t);t===.2?gPh.moveTo(X,Y):gPh.lineTo(X,Y)}gPh.stroke()});
+  gPh.fillStyle=COL.text;gPh.font='600 14px "IBM Plex Mono", monospace';gPh.textAlign='center';[[-2.6,1.3,'C = 0'],[-1,1.3,'C = −1'],[1,1.3,'C = +1'],[2.6,1.3,'C = 0']].forEach(([m,t,s])=>gPh.fillText(s,x(m),y(t)));
+  gPh.fillStyle=COL.dim;gPh.font='500 13px "IBM Plex Mono", monospace';[-3,-2,-1,0,1,2,3].forEach(m=>gPh.fillText(String(m).replace('-','−'),x(m),Hh-12));gPh.textAlign='right';gPh.fillText('t',pl-10,pt+12);gPh.fillText('m →',W-pr,Hh-12);
+  gPh.fillStyle=COL.text;gPh.beginPath();gPh.arc(x(GB.m),y(GB.t),8,0,TAU);gPh.fill();gPh.strokeStyle=COL.black;gPh.lineWidth=2;gPh.stroke();
+  gPh.fillStyle=COL.warn;gPh.textAlign='left';gPh.fillText('gap closes on red lines',pl+8,Hh-pb-8)}
+function gbUI(){const r=PHYS.chern(GB.m,{t:GB.t},24);GB.C=r.C;const g=drawCut();drawPhase();$('#ogM').textContent=GB.m.toFixed(2);$('#ogT').textContent=GB.t.toFixed(2);const cel=$('#gC');cel.textContent=sC(r.C);cel.style.color=topo(r.C);$('#gGap').textContent=g.toFixed(3);
+  if(r.C!==GB.last){GB.trans++;GB.last=r.C;award('tr'+GB.trans,10,'Phase transition');if(GB.trans>=2)complete('s6','Gap breaker cleared')}$('#gTr').textContent=GB.trans;
+  const m=$('#gMsg');if(g<0.05){m.className='msg hot';m.innerHTML='<b>Gap closed · ΔE ≈ 0</b>You\'re standing on a phase boundary. This is the one place where C is allowed to change.'}else{m.className='msg';m.innerHTML=`<b>Gap open · C locked at ${sC(r.C)}</b>Wiggle m and t as much as you like inside this region. The integer won't budge until ΔE hits zero.`}}
+$('#gM').addEventListener('input',e=>{GB.m=+e.target.value;gbUI()});$('#gT').addEventListener('input',e=>{GB.t=+e.target.value;gbUI()});
+cvPh.addEventListener('pointerdown',e=>{const W=cvPh.width,Hh=cvPh.height,[px,py]=cpos(e,cvPh);GB.m=Math.max(-3,Math.min(3,(px-50)/(W-66)*6-3));GB.t=Math.max(.2,Math.min(1.5,1.5-(py-12)/(Hh-46)*1.3));$('#gM').value=GB.m;$('#gT').value=GB.t;gbUI()});
+gbUI();
+
+/* ---------- LEVEL 7: cut the universe ---------- */
+const cvL=$('#cvLat'),gL=cvL.getContext('2d'),cvR=$('#cvRib'),gR=cvR.getContext('2d');
+const LT={m:1,cut:false,dis:false,C:1,spec:null,phase:0,jit:null};const NY=12,NK=49;
+function ribData(){const out=[];for(let q=0;q<NK;q++){const kx=TAU*q/(NK-1);out.push(PHYS.ribbonSpec(kx,LT.m,NY,!LT.cut))}LT.spec=out;LT.C=PHYS.chern(LT.m,{},24).C}
+function drawRib(){const W=cvR.width,Hh=cvR.height,pl=46,pr=12,pt=14,pb=34,Em=4;const x=q=>pl+q/(NK-1)*(W-pl-pr),y=E=>pt+(Em-E)/(2*Em)*(Hh-pt-pb);gR.fillStyle=COL.black;gR.fillRect(0,0,W,Hh);
+  gR.strokeStyle=COL.line;gR.lineWidth=1;gR.fillStyle=COL.dim;gR.font='500 13px "IBM Plex Mono", monospace';gR.textAlign='right';[-4,-2,0,2,4].forEach(E=>{gR.beginPath();gR.moveTo(pl,y(E));gR.lineTo(W-pr,y(E));gR.stroke();gR.fillText(String(E).replace('-','−'),pl-6,y(E)+4)});
+  gR.textAlign='center';[['0',0],['π',(NK-1)/2],['2π',NK-1]].forEach(([s,q])=>gR.fillText(s,x(q),Hh-12));gR.fillText('kₓ along the strip',W/2,Hh-12+0);
+  const nb=LT.spec[0].length;for(let b=0;b<nb;b++)for(let q=0;q<NK-1;q++){const s0=LT.spec[q][b],s1=LT.spec[q+1][b];const t=(s0.top+s1.top)/2,bo=(s0.bot+s1.bot)/2;let col=rgba(COL.faint,.9),w=1.2;if(LT.cut){if(t>.45&&t>bo){col=COL.pos;w=2.6}else if(bo>.45){col=COL.neg;w=2.6}}gR.strokeStyle=col;gR.lineWidth=w;gR.beginPath();gR.moveTo(x(q),y(s0.E));gR.lineTo(x(q+1),y(s1.E));gR.stroke()}
+  gR.fillStyle=COL.dim;gR.textAlign='left';gR.fillText(LT.cut?'open strip: edges exist':'closed loop: no edges',pl+6,pt+14)}
+function drawLat(){const W=cvL.width,Hh=cvL.height,cols=16,rows=8,ox=40,oy=60,dx=(W-80)/(cols-1),dy=(Hh-120)/(rows-1);gL.fillStyle=COL.black;gL.fillRect(0,0,W,Hh);
+  if(!LT.jit||LT.jit.length!==cols*rows){LT.jit=[];for(let i=0;i<cols*rows;i++)LT.jit.push([(Math.random()-.5),(Math.random()-.5),Math.random()<.12])}
+  const P=(c,r)=>{const j=LT.jit[c+cols*r];const a=LT.dis?.35:0;return [ox+c*dx+j[0]*dx*a,oy+r*dy+j[1]*dy*a]};
+  gL.strokeStyle=rgba(COL.dim,.25);gL.lineWidth=1;for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const [x,y]=P(c,r);if(c<cols-1){const [x2,y2]=P(c+1,r);gL.beginPath();gL.moveTo(x,y);gL.lineTo(x2,y2);gL.stroke()}if(r<rows-1){const [x2,y2]=P(c,r+1);gL.beginPath();gL.moveTo(x,y);gL.lineTo(x2,y2);gL.stroke()}}
+  if(!LT.cut){gL.strokeStyle=rgba(COL.dim,.35);gL.setLineDash([4,5]);for(let c=0;c<cols;c+=3){const [x,y]=P(c,0),[x2,y2]=P(c,rows-1);gL.beginPath();gL.moveTo(x,y);gL.bezierCurveTo(x-30,y-50,x-30,y2+50,x2,y2);gL.stroke()}gL.setLineDash([]);gL.fillStyle=COL.dim;gL.font='500 13px "IBM Plex Mono", monospace';gL.textAlign='center';gL.fillText('top row joined to bottom row: no edge anywhere',W/2,Hh-14)}
+  for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){const [x,y]=P(c,r),edge=LT.cut&&(r===0||r===rows-1),hole=LT.dis&&LT.jit[c+cols*r][2]&&!edge;if(hole)continue;gL.fillStyle=edge&&LT.C?(r===0?COL.pos:COL.neg):rgba(COL.text,.55);gL.beginPath();gL.arc(x,y,edge?4:2.6,0,TAU);gL.fill()}
+  if(LT.cut){gL.fillStyle=COL.dim;gL.font='500 13px "IBM Plex Mono", monospace';gL.textAlign='left';gL.fillText('BOUNDARY',ox,oy-24);gL.fillText('BULK',ox,oy+dy*3.6);gL.fillText('BOUNDARY',ox,oy+dy*(rows-1)+34);
+    if(LT.C){const dir=Math.sign(LT.C);[[0,dir,COL.pos],[rows-1,-dir,COL.neg]].forEach(([r,d,col])=>{for(let k=0;k<3;k++){let u=((LT.phase*d+k/3)%1+1)%1;const cf=u*(cols-1),c0=Math.floor(cf),f=cf-c0;const [x0,y0]=P(c0,r),[x1,y1]=P(Math.min(cols-1,c0+1),r);const x=x0+(x1-x0)*f,y=y0+(y1-y0)*f;const g=gL.createRadialGradient(x,y,0,x,y,18);g.addColorStop(0,rgba(col,.95));g.addColorStop(1,rgba(col,0));gL.fillStyle=g;gL.beginPath();gL.arc(x,y,18,0,TAU);gL.fill()}
+        const [ax,ay]=P(cols-1,r);arrow(gL,W/2,ay+(r===0?-22:22),d>0?0:Math.PI,40,col,2,9)})}}}
+function latUI(){ribData();drawRib();drawLat();$('#olM').textContent=LT.m.toFixed(2);const m=$('#lMsg');
+  if(!LT.cut){m.className='msg';m.innerHTML='<b>No edge yet</b>The lattice wraps around on itself, like the momentum donut. Only bulk bands exist, with the gap empty.'}
+  else if(LT.C){m.className='msg topo';m.style.borderColor=topo(LT.C);m.innerHTML=`<b style="color:${topo(LT.C)}">Edge states appeared · C = ${sC(LT.C)}</b>New states live on the edges and cross the gap. Top edge flows ${LT.C>0?'right':'left'}, bottom edge flows ${LT.C>0?'left':'right'}. ${LT.dis?'Disorder added: the packets squeeze around the defects and keep going. There\'s no state on their edge that goes backwards.':'Now add disorder.'}`;award('cutC',25,'Found edge states');if(LT.dis){award('dis',15,'Survived disorder');complete('s7','Scissors cleared')}}
+  else{m.className='msg';m.style.borderColor='';m.innerHTML='<b>Cut, but C = 0</b>Same scissors, no protected edge states. The gap stays empty. Topology, not the cut, is what creates them.';award('cut0',10,'Tried a trivial cut')}}
+$('#lCut').addEventListener('click',e=>{LT.cut=!LT.cut;e.target.textContent=LT.cut?'Glue it back':'Cut the lattice';latUI()});
+$('#lDis').addEventListener('click',e=>{LT.dis=!LT.dis;if(LT.dis)LT.jit=null;e.target.textContent=LT.dis?'Remove disorder':'Add disorder';latUI()});
+let lmT=null;$('#lM').addEventListener('input',e=>{LT.m=+e.target.value;$('#olM').textContent=LT.m.toFixed(2);clearTimeout(lmT);lmT=setTimeout(latUI,60)});
+latUI();let lVis=false;visible(cvL,v=>lVis=v);
+(function tickL(){if(lVis&&LT.cut&&LT.C&&!reduce){LT.phase+=.0035;drawLat()}requestAnimationFrame(tickL)})();
+
+/* ---------- LEVEL 8: flux pump ---------- */
+const cvCy=$('#cvCyl'),gCy=cvCy.getContext('2d'),cvFl=$('#cvFlow'),gFl=cvFl.getContext('2d');
+const FP={m:1,f:0,C:1,bg:null,q0:0,NX:8,NYp:10,anim:false,done:new Set()};
+function fpBase(){FP.C=PHYS.chern(FP.m,{},24).C;const bg=[];for(let q=0;q<41;q++)bg.push(PHYS.ribbonSpec(TAU*q/40,FP.m,FP.NYp,false));FP.bg=bg;FP.q0=PHYS.topCharge(FP.m,0.002,FP.NX,FP.NYp)}
+function fpQ(){const f=Math.min(.998,Math.max(.002,FP.f));return PHYS.topCharge(FP.m,f,FP.NX,FP.NYp)-FP.q0}
+function drawCyl(Q){const W=cvCy.width,Hh=cvCy.height,cx=W/2,cy=Hh/2,rx=130,ry=40,L=170;gCy.fillStyle=COL.black;gCy.fillRect(0,0,W,Hh);
+  // horizontal cylinder: left rim = bottom edge, right rim = top edge
+  gCy.lineWidth=1.5;
+  const ell=(x,a)=>{gCy.beginPath();gCy.ellipse(x,cy,ry,rx*.75,0,0,TAU);gCy.globalAlpha=a;gCy.stroke();gCy.globalAlpha=1};
+  gCy.strokeStyle=rgba(COL.text,.55);gCy.beginPath();gCy.moveTo(cx-L,cy-rx*.75);gCy.lineTo(cx+L,cy-rx*.75);gCy.moveTo(cx-L,cy+rx*.75);gCy.lineTo(cx+L,cy+rx*.75);gCy.stroke();
+  for(let i=1;i<6;i++){gCy.strokeStyle=rgba(COL.dim,.18);ell(cx-L+i*2*L/6,1)}
+  gCy.strokeStyle=COL.neg;gCy.lineWidth=2.5;ell(cx-L,1);gCy.strokeStyle=COL.pos;ell(cx+L,1);gCy.lineWidth=1.5;
+  // flux arrow through axis
+  const fa=FP.f;gCy.strokeStyle=rgba(COL.text,.25+.6*fa);gCy.lineWidth=2+4*fa;gCy.beginPath();gCy.moveTo(cx-L-80,cy);gCy.lineTo(cx+L+80,cy);gCy.stroke();arrow(gCy,cx+L+70,cy,0,30,rgba(COL.text,.25+.6*fa),2+4*fa,14);
+  gCy.fillStyle=COL.text;gCy.font='600 15px "IBM Plex Mono", monospace';gCy.textAlign='center';gCy.fillText('Φ = '+FP.f.toFixed(2)+' Φ₀',cx,cy-rx*.75-16);
+  gCy.fillStyle=COL.neg;gCy.fillText('bottom edge',cx-L,Hh-16);gCy.fillStyle=COL.pos;gCy.fillText('top edge',cx+L,Hh-16);
+  // pumped charge marker: moves from bottom-edge rim toward top-edge rim proportional to Q
+  if(FP.C){const u=Math.max(-1,Math.min(1,Q));const x=u>=0?cx-L+u*2*L:cx+L+u*2*L;const y=cy+rx*.75*.55;const col=topo(FP.C);const g=gCy.createRadialGradient(x,y,0,x,y,22);g.addColorStop(0,rgba(col,1));g.addColorStop(1,rgba(col,0));gCy.fillStyle=g;gCy.beginPath();gCy.arc(x,y,22,0,TAU);gCy.fill();gCy.fillStyle=COL.black;gCy.font='700 14px "IBM Plex Mono", monospace';gCy.fillText('e',x,y+5)}
+  else{gCy.fillStyle=COL.dim;gCy.font='500 14px "IBM Plex Mono", monospace';gCy.fillText('C = 0: nothing gets carried across',cx,cy+rx*.75+30)}}
+function drawFlow(){const W=cvFl.width,Hh=cvFl.height,pl=44,pr=12,pt=12,pb=30,Em=3.6;const x=k=>pl+k/TAU*(W-pl-pr),y=E=>pt+(Em-E)/(2*Em)*(Hh-pt-pb);gFl.fillStyle=COL.black;gFl.fillRect(0,0,W,Hh);
+  gFl.strokeStyle=rgba(COL.warn,.7);gFl.setLineDash([5,5]);gFl.beginPath();gFl.moveTo(pl,y(0));gFl.lineTo(W-pr,y(0));gFl.stroke();gFl.setLineDash([]);gFl.fillStyle=COL.warn;gFl.font='500 12px "IBM Plex Mono", monospace';gFl.textAlign='right';gFl.fillText('Fermi level: filled below',W-pr,y(0)-6);
+  const nb=FP.bg[0].length;for(let b=0;b<nb;b++){gFl.strokeStyle=rgba(COL.faint,.7);gFl.lineWidth=1;gFl.beginPath();FP.bg.forEach((s,q)=>{const X=x(TAU*q/40),Y=y(s[b].E);q?gFl.lineTo(X,Y):gFl.moveTo(X,Y)});gFl.stroke()}
+  for(let n=0;n<FP.NX;n++){const kx=TAU*(n+FP.f)/FP.NX;PHYS.ribbonSpec(kx,FP.m,FP.NYp,false).forEach(o=>{let col=rgba(COL.text,.5),r=2.5;if(o.top>.45&&o.top>o.bot){col=COL.pos;r=5}else if(o.bot>.45){col=COL.neg;r=5}gFl.fillStyle=col;gFl.beginPath();gFl.arc(x(kx),y(o.E),r,0,TAU);gFl.fill()})}
+  gFl.fillStyle=COL.dim;gFl.textAlign='center';[['0',0],['π',Math.PI],['2π',TAU]].forEach(([s,k])=>gFl.fillText(s,x(k),Hh-10));gFl.textAlign='left';gFl.fillText('dots: the 8 allowed momenta on the cylinder',pl+4,pt+12)}
+function fpUI(){const Q=fpQ();$('#opF').textContent=FP.f.toFixed(2);$('#pQ').textContent=(Q>=0?'+':'−')+Math.abs(Q).toFixed(3)+' e';const pc=$('#pC');pc.textContent=sC(FP.C);pc.style.color=topo(FP.C);drawCyl(Q);drawFlow();
+  if(FP.f>.97){FP.done.add(FP.C);award('pump'+FP.C,20,'Pumped one flux quantum');if(FP.done.size>=2)complete('s8','Pump cleared')}}
+$('#pF').addEventListener('input',e=>{FP.f=+e.target.value;fpUI()});
+$('#pMat').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$$('#pMat .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));FP.m=+b.dataset.m;FP.f=0;$('#pF').value=0;fpBase();fpUI()});
+$('#pPump').addEventListener('click',()=>{if(FP.anim)return;FP.anim=true;const t0=performance.now();(function st(t){const u=Math.min(1,(t-t0)/3500);FP.f=u;$('#pF').value=u;fpUI();if(u<1&&!reduce)requestAnimationFrame(st);else{FP.f=1;$('#pF').value=1;fpUI();FP.anim=false}})(t0)});
+fpBase();fpUI();
+
+/* ---------- LEVEL 9: gauge ---------- */
+const cvG=$('#cvGauge'),gG=cvG.getContext('2d');const GA={a:0,coef:[1,.7,.5,0,0],n:1};
+const chi=(kx,ky)=>GA.a*(GA.coef[0]*Math.sin(kx)+GA.coef[1]*Math.cos(2*ky)+GA.coef[2]*Math.sin(kx+ky)+GA.coef[3]*Math.cos(3*kx-ky)+GA.coef[4]*Math.sin(2*kx+2*ky));
+function gaUI(){const N=18,r=PHYS.chern(1,{},N,chi),W=cvG.width,s=W/N;gG.fillStyle=COL.black;gG.fillRect(0,0,W,W);gG.globalAlpha=.55;gG.imageSmoothingEnabled=true;gG.drawImage(heat(r.F,N),0,0,W,W);gG.globalAlpha=1;
+  const dk=TAU/N;for(let j=0;j<N;j++)for(let i=0;i<N;i++){const Ax=-r.Ax[i+N*j]/dk,Ay=-r.Ay[i+N*j]/dk,mag=Math.hypot(Ax,Ay);if(mag<1e-4)continue;const L=Math.min(s*.95,8+mag*s*.35);arrow(gG,(i+.5)*s,W-(j+.5)*s,Math.atan2(Ay,Ax),L,COL.text,1.6,6)}
+  gG.fillStyle=COL.dim;gG.font='500 13px "IBM Plex Mono", monospace';gG.textAlign='left';gG.fillText('arrows: A(k) · background: curvature Ω(k)',10,W-10);
+  $('#gaC').textContent=sC(r.C);$('#gaC').style.color=topo(r.C);$('#gaRaw').textContent=r.raw.toFixed(6);$('#ogaA').textContent=GA.a.toFixed(1);$('#gaN').textContent=GA.n}
+$('#gaA').addEventListener('input',e=>{GA.a=+e.target.value;gaUI();if(GA.a>2)award('ga1',15,'Changed the gauge')});
+$('#gaRand').addEventListener('click',()=>{GA.coef=GA.coef.map(()=>(Math.random()*2-1)*1.4);if(GA.a<1.5){GA.a=3;$('#gaA').value=3}GA.n++;gaUI();award('ga2',15,'Scrambled the gauge');if(GA.n>=3)complete('s9','Gauge cleared')});
+gaUI();
+
+/* ---------- LEVEL 10: non-Abelian ---------- */
+const cvN=$('#cvFrames'),gN=cvN.getContext('2d');const NA={th:Math.PI/2,u:1,anim:false};
+const Rx=a=>[[1,0,0],[0,Math.cos(a),-Math.sin(a)],[0,Math.sin(a),Math.cos(a)]],Rz=a=>[[Math.cos(a),-Math.sin(a),0],[Math.sin(a),Math.cos(a),0],[0,0,1]];
+const mm=(A,B)=>A.map((r,i)=>B[0].map((_,j)=>r[0]*B[0][j]+r[1]*B[1][j]+r[2]*B[2][j]));
+function frameAt(order,u){// order 'AB' = A first then B
+  const a=Math.min(1,u*2),b=Math.max(0,u*2-1);const first=order==='AB'?Rx(NA.th*a):Rz(NA.th*a),second=order==='AB'?Rz(NA.th*b):Rx(NA.th*b);return mm(second,first)}
+function drawFrame(ox,oy,R,M,label){const v=(x,y,z)=>{const yaw=.6,pit=.45;let X=x*Math.cos(yaw)-y*Math.sin(yaw),Y=x*Math.sin(yaw)+y*Math.cos(yaw);const Z=z*Math.cos(pit)-Y*Math.sin(pit);return [ox+X*R,oy-Z*R]};
+  gN.strokeStyle=COL.line;gN.lineWidth=1;[[1,0,0],[0,1,0],[0,0,1]].forEach(e=>{const [x,y]=v(...e),[x0,y0]=v(0,0,0);gN.setLineDash([3,4]);gN.beginPath();gN.moveTo(x0,y0);gN.lineTo(x,y);gN.stroke();gN.setLineDash([])});
+  const cols=[COL.warn,COL.pos,COL.neg];for(let k=0;k<3;k++){const e=[M[0][k],M[1][k],M[2][k]];const [x,y]=v(...e),[x0,y0]=v(0,0,0);gN.strokeStyle=cols[k];gN.fillStyle=cols[k];gN.lineWidth=4;gN.beginPath();gN.moveTo(x0,y0);gN.lineTo(x,y);gN.stroke();gN.beginPath();gN.arc(x,y,6,0,TAU);gN.fill()}
+  gN.fillStyle=COL.text;gN.font='600 14px "IBM Plex Mono", monospace';gN.textAlign='center';gN.fillText(label,ox,cvN.height-14)}
+function naUI(){const W=cvN.width,Hh=cvN.height;gN.fillStyle=COL.black;gN.fillRect(0,0,W,Hh);const A=frameAt('AB',NA.u),B=frameAt('BA',NA.u);drawFrame(W*.26,Hh*.48,95,A,'A then B');drawFrame(W*.74,Hh*.48,95,B,'B then A');
+  const fA=frameAt('AB',1),fB=frameAt('BA',1);const fmt=M=>M.map(r=>'<tr>'+r.map(v=>`<td>${(Math.abs(v)<5e-4?0:v).toFixed(2).replace('-','−')}</td>`).join('')+'</tr>').join('');$('#mAB').innerHTML=fmt(fA);$('#mBA').innerHTML=fmt(fB);
+  let d=0;for(let i=0;i<3;i++)for(let j=0;j<3;j++)d+=(fA[i][j]-fB[i][j])**2;d=Math.sqrt(d);$('#nDiff').textContent=d.toFixed(3);$('#onTh').textContent=Math.round(NA.th*180/Math.PI)+'°';
+  const m=$('#nMsg');if(d<0.02){m.className='msg';m.innerHTML='<b>Commute (almost)</b>At this size the two orders agree. Tiny loops are nearly Abelian.'}else{m.className='msg topo';m.innerHTML=`<b>Order matters · difference ${d.toFixed(2)}</b>Same two loops, swapped order, different final state: U<sub>A</sub>U<sub>B</sub> ≠ U<sub>B</sub>U<sub>A</sub>.`}}
+$('#nTh').addEventListener('input',e=>{NA.th=+e.target.value*Math.PI/180;NA.u=1;naUI();if(+e.target.value<8)award('nasmall',10,'Shrank the loops')});
+$('#nPlay').addEventListener('click',()=>{if(NA.anim)return;NA.anim=true;const t0=performance.now();(function st(t){const u=Math.min(1,(t-t0)/3000);NA.u=u;naUI();if(u<1&&!reduce)requestAnimationFrame(st);else{NA.u=1;naUI();NA.anim=false;award('naplay',20,'Walked both loops');complete('s10','Non-Abelian cleared')}})(t0)});
+naUI();
+
+/* ---------- LEVEL 11: chain ---------- */
+const CHAIN=[['Quantum state','s1','|u(k)⟩'],['Phase','s1','φ'],['Berry connection','s9','A'],['Berry curvature','s4','Ω'],['Chern number','s5','C',1],['Topological phase','s6',''],['Edge states','s7',''],['Measurable response','s8','σxy = C e²/h']];
+const LINKS=['','','','curl','integrate','','',''];
+$('#chain').innerHTML=CHAIN.map((c,i)=>(i?`<div class="link">${LINKS[i]}</div>`:'')+`<button class="node${c[3]?' key':''}" data-go="${c[1]}"><span>${c[0]}</span><span>${c[2]}</span></button>`).join('');
+const visitedChain=new Set();
+$('#chain').addEventListener('click',e=>{const b=e.target.closest('.node');if(!b)return;visitedChain.add(b.dataset.go);document.getElementById(b.dataset.go).scrollIntoView({behavior:reduce?'auto':'smooth'});award('chain',20,'Followed the chain')});
+visible($('#chain'),v=>{if(v)setTimeout(()=>complete('s11','Math cleared'),1500)});
+
+/* ---------- LEVEL 12: boss ---------- */
+const cvBs=$('#cvBoss'),gBs=cvBs.getContext('2d');
+const BS={m:0,noise:0,C:0,score:100,used:new Set(),id:0,solved:false,view:null,wins:0};
+const POOL=[-2.7,-2.4,-1.6,-1.2,-.7,-.4,.4,.8,1.3,1.7,2.4,2.8];
+function bossNew(){BS.id++;let m;do{m=POOL[Math.floor(Math.random()*POOL.length)]+(Math.random()-.5)*.15}while(Math.abs(m-BS.m)<.05);BS.m=m;BS.noise=.2+Math.random()*.4;BS.C=PHYS.chern(m,{noise:BS.noise},24).C;BS.score=100;BS.used.clear();BS.solved=false;BS.view=null;
+  $('#bossId').textContent='#'+BS.id;$('#bossScore').textContent=100;$$('.probe').forEach(p=>p.setAttribute('aria-pressed','false'));$('#bossRes').hidden=true;$$('.answer .btn').forEach(b=>b.disabled=false);
+  $('#bossRead').className='msg';$('#bossRead').innerHTML='<b>No measurements yet</b>Pick a probe. Hint: on the top edge, states that slope upward to the right mean C = +1 (compare Instrument 07).';drawBossBlank()}
+function drawBossBlank(){const W=cvBs.width,Hh=cvBs.height;gBs.fillStyle=COL.black;gBs.fillRect(0,0,W,Hh);gBs.fillStyle=COL.faint;gBs.font='600 64px "IBM Plex Mono", monospace';gBs.textAlign='center';gBs.fillText('C = ?',W/2,Hh/2+20)}
+const COST={gap:10,curv:15,edge:20,hall:60};
+function probe(p){if(BS.solved)return;if(!BS.used.has(p)){BS.used.add(p);BS.score=Math.max(0,BS.score-COST[p]);$('#bossScore').textContent=BS.score}$$('.probe').forEach(x=>x.setAttribute('aria-pressed',x.dataset.p===p||BS.used.has(x.dataset.p)?'true':'false'));
+  const W=cvBs.width,Hh=cvBs.height,rd=$('#bossRead');gBs.fillStyle=COL.black;gBs.fillRect(0,0,W,Hh);gBs.font='500 13px "IBM Plex Mono", monospace';
+  if(p==='gap'){const r=PHYS.chern(BS.m,{noise:BS.noise},40);gBs.fillStyle=COL.text;gBs.font='700 72px "IBM Plex Mono", monospace';gBs.textAlign='center';gBs.fillText('ΔE ≈ '+r.gap.toFixed(2),W/2,Hh/2+10);gBs.font='500 15px "IBM Plex Mono", monospace';gBs.fillStyle=COL.dim;gBs.fillText('band gap (energy units of the hopping)',W/2,Hh/2+50);
+    rd.innerHTML=`<b>Band gap · open</b>The gap is ${r.gap.toFixed(2)} wide, so it's an insulator and C is well defined. But a gap alone says nothing about which integer.`}
+  if(p==='curv'){const r=PHYS.chern(BS.m,{noise:BS.noise},48);const s=Math.min(W,Hh)-20;gBs.imageSmoothingEnabled=true;gBs.drawImage(heat(r.F,48),(W-s)/2,10,s,s);
+    let pos=0,neg=0;r.F.forEach(f=>f>0?pos+=f:neg+=f);rd.innerHTML=`<b>Berry curvature map</b>Amber hills, cyan valleys. Positive regions hold ${Math.round(pos/(pos-neg)*100)}% of the total curvature magnitude. (Lopsided toward one color hints at a nonzero C, but hills and valleys can cancel.)`}
+  if(p==='edge'){const NKb=37,sp=[];for(let q=0;q<NKb;q++)sp.push(PHYS.ribbonSpec(TAU*q/(NKb-1),BS.m,10,false));const pl=40,pr=10,pt=10,pb=28,Em=4,x=q=>pl+q/(NKb-1)*(W-pl-pr),y=E=>pt+(Em-E)/(2*Em)*(Hh-pt-pb);
+    gBs.strokeStyle=COL.line;gBs.beginPath();gBs.moveTo(pl,y(0));gBs.lineTo(W-pr,y(0));gBs.stroke();
+    for(let b=0;b<sp[0].length;b++)for(let q=0;q<NKb-1;q++){const a=sp[q][b],c=sp[q+1][b],t=(a.top+c.top)/2,bo=(a.bot+c.bot)/2;gBs.strokeStyle=t>.45&&t>bo?COL.pos:bo>.45?COL.neg:rgba(COL.faint,.9);gBs.lineWidth=t>.45||bo>.45?2.4:1;gBs.beginPath();gBs.moveTo(x(q),y(a.E));gBs.lineTo(x(q+1),y(c.E));gBs.stroke()}
+    gBs.fillStyle=COL.dim;gBs.textAlign='center';gBs.fillText('kₓ: 0 → 2π   ·   amber = top edge, cyan = bottom edge',W/2,Hh-8);rd.innerHTML='<b>Edge spectrum</b>Look for amber lines crossing the gap (E = 0). None crossing means no protected edge states. Upward-sloping amber means the top edge flows right.'}
+  if(p==='hall'){const sig=BS.C+(Math.random()-.5)*.004;gBs.fillStyle=COL.text;gBs.font='700 54px "IBM Plex Mono", monospace';gBs.textAlign='center';gBs.fillText('σxy = '+sig.toFixed(3).replace('-','−'),W/2,Hh/2);gBs.font='500 16px "IBM Plex Mono", monospace';gBs.fillStyle=COL.dim;gBs.fillText('in units of e²/h',W/2,Hh/2+36);rd.innerHTML='<b>Hall response</b>The meter reads a Hall conductance in units of e²/h. Expensive, and nearly a giveaway.'}
+  rd.className='msg';award('probe-'+p,5,'Ran a measurement')}
+$$('.probe').forEach(b=>b.addEventListener('click',()=>probe(b.dataset.p)));
+$$('.answer .btn').forEach(b=>b.addEventListener('click',()=>{if(BS.solved)return;const a=+b.dataset.a,res=$('#bossRes');res.hidden=false;
+  if(a===BS.C){BS.solved=true;BS.wins++;$$('.answer .btn').forEach(x=>x.disabled=true);res.className='msg topo';res.style.borderColor=topo(BS.C);
+    const chainTxt=BS.C?`gap open → curvature tilted ${BS.C>0?'positive':'negative'} → one edge state per edge, top edge flowing ${BS.C>0?'right':'left'} → σxy = ${sC(BS.C)} e²/h`:'gap open → hills and valleys cancel → no edge states cross the gap → σxy = 0';
+    res.innerHTML=`<b style="color:${topo(BS.C)}">Correct · C = ${sC(BS.C)} · ${BS.score} points</b>Hidden parameter m = ${BS.m.toFixed(2)} with impurities. The chain: ${chainTxt}.${!BS.used.has('hall')?' You solved it without the Hall meter. That is reasoning like a physicist.':''}`;
+    award('boss'+BS.id,Math.round(BS.score/2)+20,'Solved sample #'+BS.id);complete('s12','Boss level cleared')}
+  else{BS.score=Math.max(0,BS.score-25);$('#bossScore').textContent=BS.score;b.disabled=true;res.className='msg hot';res.innerHTML='<b>Not that phase · −25</b>Run another measurement and follow the chain: gap, curvature, edges.'}}));
+$('#bossNew').addEventListener('click',bossNew);
+bossNew();
+
+/* ---------- last question ---------- */
+$('#lastBtn').addEventListener('click',e=>{e.target.hidden=true;$('#lastAns').hidden=false;award('last',20,'Reached the last question')});
+
+})();
+</script>
+</body>
+</html>

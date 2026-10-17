@@ -1,0 +1,1214 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Patient You Cannot See</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Azeret+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* Layout: a specimen lab. A sticky "you are here" ladder of mathematics on the left; the reading column and its instruments on the right. Dot-grid paper behind. Single dark theme by design.
+   Color is semantic: coral = hidden biology, lavender = the model, bone = measurements, yellow = what you control, haze = uncertainty. */
+:root{
+  --bg:#0A0F0E; --bg2:#0E1513; --panel:#111917; --panel2:#16201D; --line:#24312D; --text:#E8ECE4; --dim:#90A099; --faint:#56645F; --dot:#1A2421;
+  --bio:#FF7E6B; --math:#B6A5FF; --obs:#F3EFE3; --input:#F2D14B; --ok:#86D9AE;
+  --display:"Instrument Serif","Iowan Old Style",Georgia,serif;
+  --body:"Atkinson Hyperlegible","Segoe UI",system-ui,sans-serif;
+  --mono:"Azeret Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+[hidden]{display:none!important}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-size:18.5px;line-height:1.65;padding-inline:16px;background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:26px 26px;background-attachment:fixed}
+a{color:var(--math)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--input);outline-offset:3px}
+math{font-size:1.05em}
+strong{color:#fff;font-weight:700}
+.bio{color:var(--bio)} .mth{color:var(--math)} .obs{color:var(--obs)} .inp{color:var(--input)}
+
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;margin-inline:-16px;padding:10px 16px;background:rgba(10,15,14,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar-in{max-width:1240px;margin:0 auto;display:flex;align-items:center;gap:16px;justify-content:space-between;flex-wrap:wrap}
+.home{font-family:var(--mono);font-size:12px;color:var(--dim);text-decoration:none}
+.home b{color:var(--text);font-weight:600}
+.where{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.06em;text-transform:uppercase;flex:1;text-align:center;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.where b{color:var(--input);font-weight:500}
+.ev{font-family:var(--mono);font-size:11px;color:var(--dim);display:flex;align-items:center;gap:8px;white-space:nowrap}
+.ev b{color:var(--input);font-weight:600}
+.evbar{width:80px;height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+.evbar i{display:block;height:100%;width:0;background:var(--input);transition:width .5s}
+
+/* shell */
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:210px minmax(0,1fr);gap:40px;padding-block:40px 60px}
+@media (max-width:1060px){.shell{grid-template-columns:1fr}.rail{display:none}}
+@media (min-width:1061px){.where{visibility:hidden}}
+.rail{position:sticky;top:76px;align-self:start;font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
+.rail .t{color:var(--faint);margin-bottom:12px}
+.rail ol{list-style:none;margin:0;padding:0;position:relative}
+.rail ol::before{content:"";position:absolute;left:5px;top:6px;bottom:6px;width:1px;background:var(--line)}
+.rail li{position:relative;padding:5px 0 5px 22px;color:var(--faint);transition:color .3s}
+.rail li::before{content:"";position:absolute;left:1px;top:11px;width:9px;height:9px;border-radius:50%;background:var(--bg);border:1px solid var(--faint);transition:all .3s}
+.rail li.past{color:var(--dim)} .rail li.past::before{background:var(--dim);border-color:var(--dim)}
+.rail li.on{color:var(--input)} .rail li.on::before{background:var(--input);border-color:var(--input);box-shadow:0 0 12px var(--input)}
+.rail li.on::after{content:"← you are here";display:block;font-size:10px;color:var(--input);opacity:.75;letter-spacing:.04em}
+.rail .lv{margin-top:22px;display:flex;flex-wrap:wrap;gap:4px}
+.rail .lv a{width:22px;height:22px;display:grid;place-items:center;border:1px solid var(--line);border-radius:4px;color:var(--faint);text-decoration:none;font-size:10px}
+.rail .lv a.done{background:var(--input);color:var(--bg);border-color:var(--input)}
+main{min-width:0}
+.col{max-width:700px}
+
+/* type */
+.label{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(54px,8.4vw,112px);line-height:.9;letter-spacing:-.02em;margin:.12em 0 .2em;text-wrap:balance}
+h1 em{color:var(--bio);font-style:italic}
+h2{font-family:var(--display);font-weight:400;font-size:clamp(36px,5vw,56px);line-height:1;letter-spacing:-.01em;margin:0 0 .4em;text-wrap:balance}
+h2 em{font-style:italic;color:var(--math)}
+h3{font-family:var(--body);font-weight:700;font-size:18px;margin:0 0 .3em}
+.deck{font-family:var(--display);font-style:italic;font-size:clamp(23px,2.6vw,30px);line-height:1.25;color:var(--dim);margin:0 0 1em;max-width:30em}
+p{margin:0 0 1em}
+.disp{overflow-x:auto;overflow-y:hidden;padding:12px 0;text-align:center;font-size:23px}
+.statement{font-family:var(--display);font-size:clamp(34px,5.4vw,64px);line-height:1;letter-spacing:-.01em;margin:1.2em 0;text-wrap:balance}
+.statement em{color:var(--input);font-style:italic}
+.pull{border-left:2px solid var(--math);padding:2px 0 2px 18px;margin:1.3em 0;font-size:20px;line-height:1.45;color:#fff}
+.key{display:flex;flex-wrap:wrap;gap:8px 16px;font-family:var(--mono);font-size:11px;color:var(--dim);margin:14px 0 0}
+.key span{display:flex;align-items:center;gap:6px}
+.key i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.byline{font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;gap:16px;flex-wrap:wrap;margin-top:14px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.specimen{position:relative;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel)}
+.specimen canvas{display:block;width:100%;max-width:100%}
+.specimen .hid{position:absolute;inset:0;transition:filter .5s,opacity .5s;filter:blur(9px) saturate(.6);opacity:.55}
+.specimen.peek .hid{filter:none;opacity:1}
+.specimen .tag{position:absolute;top:12px;left:14px;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.specimen .ctl{position:absolute;right:12px;top:10px;display:flex;gap:8px}
+
+/* instruments */
+.lab{border:1px solid var(--line);background:rgba(17,25,23,.95);border-radius:14px;padding:22px;margin:28px 0}
+.labhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.labhead .label{color:var(--input)}
+.labhead .q{font-family:var(--display);font-style:italic;font-size:20px;color:var(--dim)}
+.g2{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:22px;align-items:start}
+.g2.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+@media (max-width:820px){.g2,.g2.even{grid-template-columns:1fr}}
+canvas{display:block;width:100%;max-width:100%;background:var(--bg);border-radius:8px}
+canvas.drag{touch-action:none;cursor:crosshair}
+canvas.grab{touch-action:none;cursor:grab}
+.ctrl{display:grid;gap:4px;margin-bottom:13px}
+.ctrl label{font-family:var(--mono);font-size:12px;color:var(--dim);display:flex;justify-content:space-between;gap:8px}
+.ctrl output{color:var(--input);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--input)}
+.ro{border-top:1px solid var(--line)}
+.ro div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:12.5px}
+.ro span:first-child{color:var(--dim)}
+.ro span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+.msg{margin-top:12px;padding:11px 13px;border:1px solid var(--line);border-radius:10px;font-size:16px;line-height:1.45;color:var(--dim)}
+.msg b{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--text);margin-bottom:3px;font-weight:600}
+.msg.math{border-color:var(--math)} .msg.math b{color:var(--math)}
+.msg.bio{border-color:var(--bio)} .msg.bio b{color:var(--bio)}
+.msg.inp{border-color:var(--input)} .msg.inp b{color:var(--input)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip,.btn{border:1px solid var(--line);background:var(--panel2);border-radius:999px;padding:6px 13px;font-family:var(--mono);font-size:12px;cursor:pointer;color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--input);color:var(--bg);border-color:var(--input)}
+.btn:hover,.chip:hover{border-color:var(--dim)}
+.btn.go{background:var(--input);color:var(--bg);border-color:var(--input);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.note{font-size:15.5px;color:var(--dim);line-height:1.5}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:8px}
+.legend i{display:inline-block;width:14px;height:3px;margin-right:6px;vertical-align:3px}
+
+/* expandables */
+details.why{margin:12px 0;border-radius:10px}
+details.why summary{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--input);border:1px dashed var(--input);border-radius:999px;padding:5px 12px;list-style:none}
+details.why summary::-webkit-details-marker{display:none}
+details.why[open] summary{border-style:solid}
+details.why .body{margin-top:10px;padding:12px 16px;border-left:2px solid var(--input);font-size:16.5px;color:var(--dim)}
+details.deep{margin:16px 0;border:1px solid var(--line);border-radius:12px;background:var(--bg2)}
+details.deep summary{cursor:pointer;padding:12px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--math);list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.deep summary::after{content:"+ deep dive";color:var(--faint)}
+details.deep[open] summary::after{content:"− close"}
+details.deep .body{padding:0 16px 14px;font-size:16.5px;color:var(--dim)}
+details.deep .body ul{padding-left:20px;margin:.4em 0}
+
+/* sections */
+section.level{padding-top:90px;scroll-margin-top:60px}
+.tag{display:flex;align-items:center;gap:10px;margin-bottom:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.tag .n{color:var(--bg);background:var(--text);padding:2px 7px;border-radius:4px}
+.tag .ok{margin-left:auto;color:var(--input);opacity:0;transition:opacity .3s}
+.level.complete .tag .ok{opacity:1}
+
+/* quiz */
+.q{margin:0 0 20px}
+.q .prompt{font-weight:700;margin-bottom:9px;color:#fff}
+.opts{display:grid;gap:7px}
+.opt{text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;cursor:pointer;font-size:16.5px;line-height:1.4;display:flex;gap:12px;align-items:baseline}
+.opt:hover{border-color:var(--dim)}
+.opt .k{font-family:var(--mono);font-size:11px;color:var(--dim);flex:none}
+.opt.picked{border-color:var(--input);box-shadow:inset 0 0 0 1px var(--input)}
+.opt.right{border-color:var(--ok);box-shadow:inset 0 0 0 1px var(--ok)}
+.opt.wrong{border-color:var(--bio);opacity:.75}
+.opt:disabled{cursor:default}
+.fb{font-size:15.5px;color:var(--dim);margin:8px 0 0}
+
+/* network */
+.net svg{width:100%;max-width:100%;display:block}
+.net .node{cursor:pointer}
+.bars3{display:grid;gap:12px}
+.nb{display:grid;grid-template-columns:34px minmax(0,1fr) 64px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px}
+.nb .tr{position:relative;height:22px;background:var(--bg);border-radius:4px}
+.nb .tr .z{position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--faint)}
+.nb .tr .hz{position:absolute;top:3px;bottom:3px;background:rgba(182,165,255,.25);border-radius:3px}
+.nb .tr .est{position:absolute;top:2px;bottom:2px;width:3px;background:var(--math);border-radius:2px}
+.nb .tr .tru{position:absolute;top:-3px;bottom:-3px;width:2px;background:var(--obs)}
+.meter{height:10px;border-radius:5px;background:var(--bg);overflow:hidden;margin-top:6px}
+.meter i{display:block;height:100%;transition:width .4s}
+
+/* virtual patients */
+.pts{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px}
+@media (max-width:700px){.pts{grid-template-columns:1fr}}
+.pt h3{font-family:var(--display);font-weight:400;font-size:28px;margin:0}
+.pt .pp{font-family:var(--mono);font-size:12px;color:var(--dim);margin-bottom:8px}
+.verdict{font-family:var(--mono);font-size:12px;margin-top:6px}
+.ask{display:grid;gap:8px;margin-top:16px}
+.ask button{display:flex;justify-content:space-between;gap:12px;text-align:left;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:16.5px}
+.ask button span:last-child{font-family:var(--mono);font-size:13px;color:var(--faint)}
+.ask button.shown span:last-child{color:var(--input)}
+.cb{display:grid;gap:12px;margin-top:8px}
+.cbr{display:grid;grid-template-columns:150px minmax(0,1fr) 92px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px}
+@media (max-width:560px){.cbr{grid-template-columns:90px minmax(0,1fr) 70px}}
+.cbr .tr{position:relative;height:20px;background:var(--bg);border-radius:4px}
+.cbr .fill{position:absolute;left:0;top:3px;bottom:3px;background:var(--math);border-radius:3px;transition:width .4s}
+.cbr .wh{position:absolute;top:0;bottom:0;background:rgba(182,165,255,.22);border-left:1px solid var(--math);border-right:1px solid var(--math);transition:all .4s}
+
+/* glass box */
+.boxes{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px}
+@media (max-width:640px){.boxes{grid-template-columns:1fr}}
+.bx{border:1px solid var(--line);border-radius:12px;padding:16px;min-height:220px;background:var(--bg2);display:grid;align-content:start;gap:8px}
+.bx h3{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin:0}
+.bx.black{background:#050707}
+.bx .big{font-family:var(--display);font-size:56px;line-height:1;color:var(--obs)}
+.flow{font-family:var(--mono);font-size:12.5px;display:grid;gap:4px}
+.flow span{display:block;padding:6px 10px;border:1px solid var(--line);border-radius:8px}
+.flow i{font-style:normal;color:var(--faint);text-align:center}
+
+/* multiscale */
+.ms{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:20px}
+@media (max-width:820px){.ms{grid-template-columns:1fr}}
+.ms svg{width:100%;display:block;background:var(--bg);border-radius:10px}
+.ms .card{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--bg2)}
+.ms .card h3{font-family:var(--display);font-weight:400;font-size:32px;margin:0 0 6px}
+.ms dl{margin:0;display:grid;gap:8px}
+.ms dt{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.ms dd{margin:0;font-size:15.5px;color:var(--dim);line-height:1.45}
+
+/* boss */
+.steps{display:grid;gap:18px}
+.stp{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--bg2)}
+.stp .sh{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap;margin-bottom:10px}
+.stp .sh b{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--input)}
+.stp.locked{opacity:.45;pointer-events:none}
+.slots{display:grid;grid-template-columns:repeat(11,minmax(0,1fr));gap:4px}
+.slot{border:1px solid var(--line);background:var(--bg);border-radius:6px;padding:8px 0;font-family:var(--mono);font-size:11px;cursor:pointer;text-align:center}
+.slot.on{background:var(--obs);color:var(--bg);border-color:var(--obs)}
+.slot:disabled{cursor:default}
+.dash{display:grid;gap:10px}
+.dr{display:grid;grid-template-columns:200px minmax(0,1fr) 54px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px}
+@media (max-width:560px){.dr{grid-template-columns:120px minmax(0,1fr) 44px}}
+.dr .tr{height:12px;border-radius:6px;background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 4px,var(--panel2) 4px,var(--panel2) 8px);overflow:hidden}
+.dr .tr i{display:block;height:100%;background:var(--math);transition:width .6s}
+
+/* loop + final */
+.loop svg{width:100%;max-width:520px;display:block;margin:0 auto}
+.final{min-height:80vh;display:grid;place-items:center;text-align:center;margin-top:110px;padding:80px 0;background:#050807;box-shadow:0 0 0 100vmax #050807;clip-path:inset(0 -100vmax)}
+.final .qbox{font-family:var(--display);font-size:clamp(90px,14vw,170px);line-height:1;border:2px solid var(--text);display:inline-block;padding:0 .35em;margin-bottom:.3em}
+.final .lines{font-family:var(--display);font-size:clamp(22px,2.6vw,30px);line-height:1.35;color:var(--dim);margin-bottom:.6em}
+.final .lines b{color:#fff;font-weight:400;font-style:italic}
+.final .opts{max-width:560px;margin:0 auto;text-align:left}
+.final .rev{max-width:620px;margin:22px auto 0;text-align:left}
+.final .rev .statement{font-size:clamp(28px,4vw,44px);margin:.2em 0 .5em}
+
+/* review */
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid var(--line);border-radius:10px;margin-bottom:10px}
+.rv div{padding:12px 14px;font-size:15.5px;line-height:1.45}
+.rv div + div{border-left:1px solid var(--line)}
+.rv .label{display:block;margin-bottom:4px}
+@media (max-width:560px){.rv{grid-template-columns:1fr}.rv div + div{border-left:0;border-top:1px solid var(--line)}}
+.next{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:40px;background:var(--panel)}
+.next .t{font-family:var(--display);font-size:30px;line-height:1.05}
+.next a{text-decoration:none}
+footer{font-family:var(--mono);font-size:11px;color:var(--faint);margin-top:40px}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,160%);background:var(--input);color:var(--bg);font-family:var(--mono);font-size:12px;font-weight:600;padding:9px 15px;border-radius:999px;transition:transform .35s;z-index:40;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="bar-in">
+    <a class="home" href="index.html">← <b>Simplify/It</b></a>
+    <div class="where" id="where">You are here: <b>Algebra</b></div>
+    <div class="ev">Evidence <b id="xpn">0</b><div class="evbar"><i id="xpf"></i></div></div>
+  </div>
+</header>
+
+<div class="shell">
+  <aside class="rail" aria-label="Where you are in the mathematics">
+    <div class="t">The route</div>
+    <ol id="railList"></ol>
+    <div class="lv" id="lvnav"></div>
+  </aside>
+
+<main>
+  <div class="hero">
+    <div class="col">
+      <div class="label">Simplify It · Issue 03 · Mathematics × medicine</div>
+      <h1>The patient you <em>cannot</em> see</h1>
+      <p class="deck">A beginner's journey from one differential equation to the mathematics of hidden biological systems, uncertainty, and personalized medicine.</p>
+    </div>
+    <div class="specimen" id="spec">
+      <canvas class="hid" id="cvHid" width="1200" height="420" aria-hidden="true"></canvas>
+      <canvas id="cvObs" width="1200" height="420" aria-label="Hidden biology producing a few noisy measurements"></canvas>
+      <span class="tag">Inside the body · hidden</span>
+      <div class="ctl"><button class="btn go" id="peek" aria-pressed="false">Peek inside</button></div>
+    </div>
+    <div class="col">
+      <div class="key"><span><i style="background:var(--bio)"></i>hidden biology</span><span><i style="background:var(--math)"></i>the model</span><span><i style="background:var(--obs)"></i>measurements</span><span><i style="background:var(--input)"></i>what you control</span><span><i style="background:rgba(182,165,255,.3)"></i>uncertainty</span></div>
+      <div class="byline"><span>~45 min</span><span>15 levels</span><span>Algebra → personalized models</span></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="level" id="intro" style="padding-top:60px" data-rail="0">
+      <p>I give you five numbers: a heart rate, a blood measurement, a biomarker concentration, an imaging reading, and the same blood measurement six hours later. Then I ask: <strong>what is happening inside this person's body?</strong></p>
+      <p>You can't simply look inside and read off the number of diseased cells, the strength of an immune response, how much drug reached a tissue, or the hidden settings of a feedback loop. Medicine gives you a handful of <span class="obs">measurements</span>. The <span class="bio">biology</span> that produced them stays hidden. Mathematics asks: <em>what hidden system could have produced these measurements?</em></p>
+      <p>The animation above is exactly that situation. Coral curves are a real simulated disease and immune response. You only get the white dots. Press <em>Peek inside</em> to cheat, once. For the rest of this issue, you won't get to.</p>
+      <div class="statement">You cannot measure <em>everything.</em></div>
+    </section>
+
+    <section class="level" id="s0" data-rail="0">
+      <div class="tag"><span class="n">00</span>Gut check · no wrong answers<span class="ok">✓ cleared</span></div>
+      <h2>Before the math, <em>your instinct</em></h2>
+      <p>Lock in an answer for each. They come back at the end.</p>
+      <div class="lab" id="pretest"></div>
+    </section>
+
+    <section class="level" id="s1" data-rail="0">
+      <div class="tag"><span class="n">01</span>Algebra · the black box<span class="ok">✓ cleared</span></div>
+      <h2>Start with something <em>ridiculously</em> simple</h2>
+      <p>A sealed box takes an input and returns an output. You can't see inside. I tell you: input 1 gives output 2. You might guess <span data-tex="y = 2x"></span>. Congratulations, you've built a model.</p>
+      <p>But <span data-tex="y = 2x + x(x-1)"></span> also passes through that point. So does every curve in the family on the left below. Add more observations and see what happens to the family.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 01 · The black box</span><span class="q">How many models fit your data?</span></div>
+    <div class="g2">
+      <canvas id="cvBox" width="820" height="480" aria-label="Candidate models through the observed points"></canvas>
+      <div>
+        <div class="ctrl"><label for="bxC">Your candidate model (c) <output id="obxC">0.00</output></label><input type="range" id="bxC" min="-3" max="3" step="0.01" value="0"></div>
+        <div class="disp" id="bxEq" style="font-size:19px;text-align:left"></div>
+        <div class="ro"><div><span>Observations</span><span id="bxN">1</span></div><div><span>Models that fit them all</span><span id="bxFit">∞</span></div></div>
+        <div class="btnrow"><button class="btn go" id="bxAdd">Observe another input</button><button class="btn" id="bxAssume" aria-pressed="false">Assume it's a straight line</button><button class="btn" id="bxReset">Reset</button></div>
+        <div class="msg" id="bxMsg"><b>One observation</b>Slide c. Every one of these curves passes through the data exactly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>More observations don't shrink the family to one. Any number of points leaves infinitely many curves through them. What collapses the family is an <em>assumption</em>, like "it's a straight line". Data plus assumptions make a model; data alone doesn't.</p>
+    <div class="statement">Data does not automatically <em>determine reality.</em></div>
+
+    <section class="level" id="s2" data-rail="1">
+      <div class="tag"><span class="n">02</span>Differential equations · become the biologist<span class="ok">✓ cleared</span></div>
+      <h2>The body is not a <em>calculator</em></h2>
+      <p>Biology changes. Cells divide, molecules diffuse, hormones rise and fall, drugs enter the body and leave. So instead of <span data-tex="y = f(x)"></span>, biologists write how things <em>change</em>:</p>
+      <div class="disp" data-tex="\frac{dx}{dt} = f(x,\,t,\,\theta)" data-display></div>
+      <p>The rate at which the system changes depends on its current state. <span data-tex="x"></span> is the state, <span data-tex="t"></span> is time, and <span data-tex="\theta"></span> are the parameters that make this system <em>this</em> system. That's a <strong>differential equation</strong>. Start with the smallest one there is: <span data-tex="dx/dt = r\,x"></span>.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 02 · One-line biology</span><span class="q">What does dx/dt = r·x do?</span></div>
+    <div class="g2">
+      <canvas id="cvExp" width="820" height="460" aria-label="Trajectory of x over time"></canvas>
+      <div>
+        <div class="ctrl"><label for="eR">Rate r <output id="oeR">+0.40</output></label><input type="range" id="eR" min="-1" max="1" step="0.01" value="0.4"></div>
+        <div class="ro"><div><span>x after 5 time units</span><span id="eX5">7.39</span></div><div><span id="eTl">Doubling time</span><span id="eTv">1.73</span></div></div>
+        <p class="note" style="margin-top:12px">The faint arrows are the rule itself: at every height, the slope the curve must have there. The curve has no choice but to follow them.</p>
+        <div class="msg" id="eMsg"><b>Growth</b>Cells dividing with nothing to stop them.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>You just discovered exponential growth and decay. The solution is <span data-tex="x(t) = x_0\,e^{rt}"></span>. Positive <span data-tex="r"></span>: an infection doubling. Negative <span data-tex="r"></span>: a drug being cleared from the blood, halving at a fixed rate.</p>
+    <details class="deep"><summary>Where does x₀e^{rt} come from?</summary><div class="body"><p>Separate the variables: <span data-tex="\frac{dx}{x} = r\,dt"></span>. Integrate both sides: <span data-tex="\ln x = rt + C"></span>. Exponentiate: <span data-tex="x = e^{C}e^{rt} = x_0 e^{rt}"></span>. Doubling time is <span data-tex="\ln 2 / r"></span>; half-life is <span data-tex="\ln 2 / |r|"></span>.</p><p>Assumptions hiding here: the rate is constant, nothing else interacts with x, and x is large enough to treat as continuous. Every one of these breaks somewhere in real biology.</p></div></details>
+
+    <section class="level" id="s3" data-rail="2">
+      <div class="tag"><span class="n">03</span>Dynamical systems · the phase portrait<span class="ok">✓ cleared</span></div>
+      <h2>The moment biology becomes <em>interesting</em></h2>
+      <p>Real biology rarely has one variable. Take two: a disease population <span data-tex="T"></span> and an immune population <span data-tex="I"></span>. The disease grows; the immune system kills it; the disease fights back:</p>
+      <div class="disp" data-tex="\frac{dT}{dt} = rT(1-T) - kIT \qquad \frac{dI}{dt} = sI(1-I) - cIT" data-display></div>
+      <p>The term <span data-tex="kIT"></span> means the two interact. The system is <strong>coupled</strong>: change one and you change the other. Now stop looking at curves over time. Put <span data-tex="T"></span> on one axis and <span data-tex="I"></span> on the other. Every point is a possible state of the patient, and the equations draw an arrow at each one: the direction the patient will move next. That's a <strong>phase portrait</strong>.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 03 · Phase portrait</span><span class="q">Where does a patient starting here end up?</span></div>
+    <div class="g2">
+      <div><canvas id="cvPP" class="drag" width="720" height="720" aria-label="Phase portrait; click to start a patient"></canvas><p class="note" style="margin-top:8px">Click anywhere to start a patient there.</p></div>
+      <div>
+        <div class="ctrl"><label for="ppK">Immune killing strength k <output id="oppK">2.50</output></label><input type="range" id="ppK" min="1.4" max="3.6" step="0.02" value="2.5"></div>
+        <canvas id="cvPPt" width="520" height="260" aria-label="Disease and immune levels over time"></canvas>
+        <div class="legend"><span><i style="background:var(--bio)"></i>disease T(t)</span><span><i style="background:var(--obs)"></i>immune I(t)</span><span><i style="background:var(--math);height:0;border-top:2px dashed var(--math)"></i>tipping boundary</span></div>
+        <div class="msg" id="ppMsg"><b>Two fates</b>The dashed line splits the map. Start patients on both sides.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The dots where nothing changes are <strong>equilibria</strong>. Two are stable, like valleys: the disease <em>controlled</em> (top left) or the disease <em>escaped</em> (bottom right). The third, in between, is a saddle: balanced like a marble on a ridge. The dashed line through it is the boundary between the two futures. Two patients can start a hair apart, on opposite sides of it, and end up in completely different places. You can understand every term locally and still be surprised by the whole system.</p>
+
+    <section class="level" id="s4" data-rail="2">
+      <div class="tag"><span class="n">04</span>Dynamical systems · the biological marble<span class="ok">✓ cleared</span></div>
+      <h2>Valleys, ridges and <em>tipping points</em></h2>
+      <p>Strip the idea to one dimension. A stable state is a valley: nudge the system and it rolls back. An unstable state is a hilltop. The shape of the landscape is set by the biology. Turn up the <strong>feedback strength</strong> and watch the landscape reshape itself. Then drag the marble.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 04 · The biological marble</span><span class="q">What happens if the system is pushed far enough?</span></div>
+    <div class="g2">
+      <canvas id="cvMar" class="grab" width="820" height="440" aria-label="Energy landscape with a draggable marble"></canvas>
+      <div>
+        <div class="ctrl"><label for="mA">Feedback strength <output id="omA">1.00</output></label><input type="range" id="mA" min="-1" max="2" step="0.01" value="1"></div>
+        <div class="ro"><div><span>Stable states</span><span id="mN">2</span></div><div><span>Marble is in</span><span id="mIn">State A</span></div></div>
+        <div class="msg" id="mMsg"><b>Two valleys</b>Drag the marble over the ridge into the other valley.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>That jump is the intuition behind a <strong>tipping point</strong>. Below a certain feedback strength there's one stable state; above it, two appear. Dynamical-systems theory calls that a <em>bifurcation</em>, and medicine is full of them: a fever that breaks, an infection that suddenly takes hold, a heart rhythm that flips.</p>
+
+    <section class="level" id="s5" data-rail="3">
+      <div class="tag"><span class="n">05</span>Inverse problems · guess the hidden system<span class="ok">✓ cleared</span></div>
+      <h2>Now make the problem <em>unfair</em></h2>
+      <p>So far we cheated. We knew the equations, the variables and the parameters. Real medicine gives you only the <span class="obs">measurements</span> <span data-tex="y"></span>, while the <span class="bio">true state</span> <span data-tex="x"></span> stays hidden:</p>
+      <div class="disp" data-tex="\frac{dx}{dt} = f(x,\,u,\,\theta) \qquad y = g(x) + \varepsilon" data-display></div>
+      <p>The first equation is the hidden system. The second is what you actually see, plus noise <span data-tex="\varepsilon"></span>. You know <span data-tex="y"></span>. You don't know <span data-tex="x"></span>, or all of <span data-tex="\theta"></span>. You have to reason backward. A <strong>forward problem</strong> goes model → predictions. An <strong>inverse problem</strong> goes observations → possible models. It's like hearing <em>clink… clink… clink</em> from inside a box and trying to work out the shape of the object.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 05 · Guess the hidden system</span><span class="q">Which model produced these measurements?</span></div>
+    <div class="g2">
+      <canvas id="cvGuess" width="820" height="480" aria-label="Measurements and fitted model curves"></canvas>
+      <div>
+        <div class="chips" id="gModels">
+          <button class="chip" data-m="A" aria-pressed="false">A · decay</button>
+          <button class="chip" data-m="B" aria-pressed="false">B · saturation</button>
+          <button class="chip" data-m="C" aria-pressed="false">C · oscillation</button>
+        </div>
+        <div class="disp" id="gEq" style="font-size:19px"></div>
+        <div class="ro"><div><span>Fit error Σ(y − ŷ)²</span><span id="gErr">—</span></div><div><span>Models tried</span><span id="gTried">0 of 3</span></div></div>
+        <div class="btnrow"><button class="btn go" id="gMore" disabled>Wait, then measure again</button></div>
+        <div class="msg" id="gMsg"><b>Five measurements</b>Pick a model. It will be fitted to the white dots as well as it possibly can.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <details class="why"><summary>Wait — why can two models fit the same data?</summary><div class="body">Five points in a short window only pin down how the system behaves <em>in that window</em>. Any model flexible enough to bend through them fits. The models disagree about what happens <em>after</em>, which is exactly what you didn't measure. That's why "it fits" is the start of a scientific argument, not the end.</div></details>
+    <p>What does "fits as well as it possibly can" even mean? If the model predicts <span data-tex="\hat y_1, \hat y_2, \dots"></span> and you measured <span data-tex="y_1, y_2, \dots"></span>, add up the squared misses and find the parameters that make that total smallest:</p>
+    <div class="disp" data-tex="E(\theta) = \sum_i \big(y_i - \hat y_i(\theta)\big)^2 \qquad \theta^{*} = \arg\min_\theta E(\theta)" data-display></div>
+    <p>That's <strong>optimization</strong>, and it turns fitting into geography: every parameter choice is a spot on a map, and the error is the height. Do it by hand first.</p>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 05b · The error landscape</span><span class="q">Can you find the bottom of the valley?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvFit" width="620" height="420" aria-label="Data and your model with residuals"></canvas>
+        <div class="ctrl" style="margin-top:12px"><label for="fA">Plateau A <output id="ofA">50</output></label><input type="range" id="fA" min="20" max="120" step="0.5" value="50"></div>
+        <div class="ctrl"><label for="fK">Rate k <output id="ofK">0.80</output></label><input type="range" id="fK" min="0.05" max="1.5" step="0.005" value="0.8"></div></div>
+      <div><canvas id="cvLand" class="drag" width="560" height="560" aria-label="Error landscape; click to move"></canvas>
+        <div class="ro" style="margin-top:10px"><div><span>Your error E(θ)</span><span id="fE">—</span></div><div><span>Best possible</span><span id="fBest">—</span></div></div>
+        <div class="btnrow"><button class="btn go" id="fAuto">Let the computer descend</button></div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <details class="deep"><summary>What is an inverse problem, really?</summary><div class="body">
+      <p><strong>Beginner:</strong> you see the effect and try to infer the cause. <strong>Picture:</strong> observed data → hidden system. <strong>Math:</strong> <span data-tex="y = g(x,\theta) + \varepsilon"></span>, solve for <span data-tex="x"></span> and <span data-tex="\theta"></span>.</p>
+      <p><strong>Deep dive:</strong> Hadamard called a problem <em>well-posed</em> if a solution exists, is unique, and depends continuously on the data. Inverse problems routinely fail all three. The toolkit for that: regularization (Level 11), Bayesian inverse problems and posterior distributions (Level 07), and the distinction between <em>structural</em> identifiability (could perfect data determine θ?) and <em>practical</em> identifiability (can your real, noisy, finite data?) (Level 06).</p></div></details>
+
+    <section class="level" id="s6" data-rail="3">
+      <div class="tag"><span class="n">06</span>Inverse problems · identifiability<span class="ok">✓ cleared</span></div>
+      <h2>Two explanations, <em>one</em> measurement</h2>
+      <p>Suppose two processes both push the output up: <span data-tex="y = (a+b)\,x"></span>. You measure <span data-tex="x"></span> and <span data-tex="y"></span>. Can you determine <span data-tex="a"></span>? You only ever learn <span data-tex="a+b"></span>. <span data-tex="a=1, b=4"></span> and <span data-tex="a=3.5, b=1.5"></span> fit identically. A parameter is <strong>identifiable</strong> if your observations contain enough information to determine it, within the model's assumptions. Try.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 06 · The identifiability trap</span><span class="q">Can you determine a?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvId" width="620" height="400" aria-label="Data and model"></canvas>
+        <div class="ctrl" style="margin-top:12px"><label for="iA">Parameter a <output id="oiA">2.00</output></label><input type="range" id="iA" min="0" max="5" step="0.01" value="2"></div>
+        <div class="ctrl"><label for="iB">Parameter b <output id="oiB">1.00</output></label><input type="range" id="iB" min="0" max="5" step="0.01" value="1"></div></div>
+      <div><canvas id="cvIdL" width="560" height="560" aria-label="Error landscape over a and b"></canvas>
+        <div class="btnrow"><button class="btn go" id="iFit">Auto-fit from a random start</button><button class="btn" id="iNew" aria-pressed="false">Add a second kind of measurement</button></div>
+        <div class="msg" id="iMsg"><b>A valley, not a pit</b>The bottom of this landscape is a whole line. Auto-fit a few times and compare the answers.</div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="statement">You cannot recover information your measurements <em>never contained.</em></div>
+    <p>This isn't a failure of optimization or of artificial intelligence. It's an information problem. The fix is a different measurement, one that sees <span data-tex="a"></span> on its own, not a cleverer algorithm.</p>
+    <details class="why"><summary>Wait — why can't we just collect more data?</summary><div class="body">More of the <em>same</em> kind of measurement only pins down <span data-tex="a+b"></span> more precisely. The valley gets narrower but stays a line. You need data that depends on <span data-tex="a"></span> and <span data-tex="b"></span> differently. In medicine that might mean a second biomarker, a different time point, or a deliberate perturbation, like a test dose.</div></details>
+
+    <section class="level" id="s7" data-rail="4">
+      <div class="tag"><span class="n">07</span>Bayesian inference · watch Bayes learn<span class="ok">✓ cleared</span></div>
+      <h2>Bayes enters the <em>hospital</em></h2>
+      <p>Real measurements are noisy: <span data-tex="y = g(x) + \varepsilon"></span>. There's no exact curve, only evidence. So the question changes from "what is the answer?" to <strong>"which explanations are plausible, and how uncertain are we?"</strong> That's what Bayes' theorem is for:</p>
+      <div class="disp" data-tex="P(H \mid D) = \frac{P(D \mid H)\,P(H)}{P(D)} \qquad\Longleftrightarrow\qquad \text{updated belief} \;\propto\; \text{evidence} \times \text{previous belief}" data-display></div>
+      <p>Here's a real use. A patient got a drug. You want its <strong>elimination rate</strong> <span data-tex="k"></span> (how fast their body clears it), because that sets their dose. Concentration falls as <span data-tex="C(t) = e^{-kt}"></span>, but each blood test is noisy. Start with a wide belief about <span data-tex="k"></span>, then draw blood.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 07 · Watch Bayes learn</span><span class="q">How does belief sharpen with each blood test?</span></div>
+    <div class="g2 even">
+      <div><canvas id="cvPost" width="620" height="380" aria-label="Belief about the elimination rate"></canvas>
+        <div class="legend"><span><i style="background:var(--faint)"></i>earlier beliefs</span><span><i style="background:var(--math)"></i>current belief about k</span><span><i style="background:var(--bio)"></i>true k (hidden)</span></div></div>
+      <div><canvas id="cvConc" width="620" height="380" aria-label="Drug concentration measurements and predicted band"></canvas>
+        <div class="legend"><span><i style="background:var(--obs)"></i>blood tests</span><span><i style="background:rgba(182,165,255,.4);height:8px"></i>90% predicted range</span></div></div>
+    </div>
+    <div class="g2 even" style="margin-top:14px">
+      <div><div class="ctrl"><label for="bS">Lab noise σ <output id="obS">0.08</output></label><input type="range" id="bS" min="0.02" max="0.25" step="0.01" value="0.08"></div>
+        <div class="btnrow"><button class="btn go" id="bTake">Draw blood</button><button class="btn" id="bReveal">Reveal true k</button><button class="btn" id="bReset">New patient</button></div></div>
+      <div><div class="ro"><div><span>Stage</span><span id="bStage">Before data</span></div><div><span>Best estimate of k</span><span id="bMean">—</span></div><div><span>90% credible interval</span><span id="bCI">—</span></div><div><span>Implied half-life</span><span id="bHL">—</span></div></div></div>
+    </div>
+    <div class="msg" id="bMsg"><b>Before data</b>This wide curve is everything you believe before measuring: k could be almost anything between 0.05 and 1.2 per hour.</div>
+  </div>
+
+  <div class="col">
+    <p>Each test narrows the belief. Turn the noise up and it narrows more slowly, and sometimes a noisy test even shifts it the wrong way for a while. The output isn't a single magic number; it's a <strong>distribution of possibilities</strong>, and the haze around the concentration curve is that uncertainty, carried forward into a prediction.</p>
+    <div class="pull">Mathematical medicine doesn't always eliminate uncertainty. Sometimes its job is to represent uncertainty honestly.</div>
+    <details class="why"><summary>Wait — why do we need probability?</summary><div class="body">Because with noise, many values of k are consistent with what you saw, just not equally. A single "best fit" throws away how much the data actually constrain the answer. Probability keeps that information, and you need it to make a decision like a dose, where being wrong in one direction is worse than in the other.</div></details>
+
+    <section class="level" id="s8" data-rail="5">
+      <div class="tag"><span class="n">08</span>Measurement design · the perfect experiment<span class="ok">✓ cleared</span></div>
+      <h2>The geometry of <em>measurement</em></h2>
+      <p>Shine a light on a 3D object and you get a 2D shadow. The shadow contains information, but not everything, and different objects can cast the same shadow. Measurements work the same way: a full state <span data-tex="x \in \mathbb R^n"></span> is mapped to observations <span data-tex="y = h(x) \in \mathbb R^m"></span> with <span data-tex="m \ll n"></span>. So a new question appears: <em>which</em> shadow should you look at?</p>
+      <p>Below is a hidden system: four compartments that exchange a substance along the lines, like four connected organs. You have <strong>three sensors</strong>. Each one records its compartment six times. Place them, then run the experiment and see how well you can reconstruct all four hidden starting values.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 08 · Design the measurement</span><span class="q">Where should you measure?</span></div>
+    <div class="g2 even">
+      <div class="net"><svg id="netSvg" viewBox="0 0 400 320" aria-label="Four connected compartments; click to place sensors"></svg>
+        <div class="btnrow"><button class="btn go" id="dRun">Run experiment</button><button class="btn" id="dClear">Remove sensors</button></div>
+        <p class="note" style="margin-top:10px">Sensors left: <b class="inp" id="dLeft">3</b>. Click a compartment to add a sensor; you can stack more than one on the same spot.</p></div>
+      <div>
+        <div class="label" style="margin-bottom:10px">Reconstruction · <span class="obs">true</span> vs <span class="mth">estimate</span> ± uncertainty</div>
+        <div class="bars3" id="dBars"></div>
+        <div style="margin-top:16px" class="label">Total uncertainty</div>
+        <div class="meter"><i id="dMeter" style="width:100%;background:var(--math)"></i></div>
+        <div class="msg" id="dMsg"><b>No experiment yet</b>Place three sensors and press Run.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Did you try opposite corners? It feels balanced, and it's a trap. The network is symmetric, so <span data-tex="x_2"></span> and <span data-tex="x_3"></span> affect both corners identically, and their difference casts no shadow at all. The math that measures this is called <strong>Fisher information</strong>; the field is <strong>optimal experimental design</strong>.</p>
+    <div class="pull">Sometimes the most powerful question isn't "what should we infer from the data?" It's "what data should we collect in the first place?"</div>
+    <details class="deep"><summary>How the reconstruction is computed</summary><div class="body"><p>The compartments follow <span data-tex="\dot x = Ax"></span>, so <span data-tex="x(t) = e^{At}x(0)"></span>. A sensor on node <span data-tex="j"></span> at time <span data-tex="t"></span> reads row <span data-tex="j"></span> of <span data-tex="e^{At}"></span> dotted with <span data-tex="x(0)"></span>, plus noise. Stack every reading into <span data-tex="y = Hx(0) + \varepsilon"></span>. With a Gaussian prior, the posterior covariance is <span data-tex="\Sigma = \left(\Sigma_0^{-1} + H^\top H/\sigma^2\right)^{-1}"></span>. The bars show the square roots of its diagonal. Directions <span data-tex="v"></span> with <span data-tex="Hv = 0"></span> are invisible: the data never touch them, and the uncertainty there stays at the prior.</p></div></details>
+
+    <section class="level" id="s9" data-rail="2">
+      <div class="tag"><span class="n">09</span>Nonlinearity · find the tipping point<span class="ok">✓ cleared</span></div>
+      <h2>Now introduce the monster: <em>nonlinearity</em></h2>
+      <p>In <span data-tex="dx/dt = rx(1 - x/K)"></span>, growth looks exponential when <span data-tex="x"></span> is small and stalls as <span data-tex="x"></span> nears <span data-tex="K"></span>. One system, different regimes. That's <strong>nonlinearity</strong>, and it brings multiple equilibria, oscillations, tipping points, and <em>hysteresis</em>: memory.</p>
+      <p>Below, a system <span data-tex="dx/dt = h + x - x^3"></span> feels an outside stress <span data-tex="h"></span>. The lavender curve shows every equilibrium for every stress level: a <strong>bifurcation diagram</strong>. Drag the yellow line slowly from one side to the other and back. Watch the coral dot, the actual system.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 09 · Bifurcation diagram</span><span class="q">Does the system come back the way it left?</span></div>
+    <div class="g2">
+      <canvas id="cvBif" class="drag" width="820" height="480" aria-label="Bifurcation diagram; drag the stress line"></canvas>
+      <div>
+        <div class="ctrl"><label for="hS">Outside stress h <output id="ohS">−0.60</output></label><input type="range" id="hS" min="-0.8" max="0.8" step="0.005" value="-0.6"></div>
+        <div class="ro"><div><span>Equilibria at this stress</span><span id="hN">1</span></div><div><span>System state x</span><span id="hX">—</span></div><div><span>Jumps seen</span><span id="hJ">0</span></div></div>
+        <div class="msg" id="hMsg"><b>Low branch</b>Slide the stress up past the fold.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Up past <span data-tex="h \approx +0.385"></span> the low branch simply ends, and the system has to leap to the high one. Coming back, it doesn't drop at the same place; it holds on until <span data-tex="h \approx -0.385"></span>. Same stress, two possible states, and which one you're in depends on history. Removing the cause doesn't always undo the effect.</p>
+    <div class="pull">You aren't merely changing a number. You're changing the structure of the system's possible futures.</div>
+    <details class="why"><summary>Wait — why can a tiny parameter change create a huge outcome?</summary><div class="body">At a fold, a stable state and an unstable one collide and annihilate (exactly <span data-tex="h = 2/(3\sqrt3) \approx 0.385"></span> here). Just before, the valley holding the system is shallow; just after, it doesn't exist. The change in <span data-tex="h"></span> is tiny; the change in the landscape is total.</div></details>
+
+    <section class="level" id="s10" data-rail="6">
+      <div class="tag"><span class="n">10</span>Control & personalization · two patients<span class="ok">✓ cleared</span></div>
+      <h2>One disease, two <em>mathematical worlds</em></h2>
+      <p>Until now mathematics watched. Control theory asks: <em>what if we change the system?</em> In <span data-tex="dx/dt = f(x, u, \theta)"></span>, <span data-tex="u"></span> is now a dose we choose. Measure, estimate, intervene, measure again. Here are two patients with the same diagnosis and the same first scan: 40% tumor burden. Same equations:</p>
+      <div class="disp" data-tex="\frac{dT}{dt} = rT\left(1-\frac{T}{100}\right) - k\,\frac{D}{D + 0.6}\,T \qquad \frac{dD}{dt} = -0.35\,D + \text{doses}" data-display></div>
+      <p>Only their parameters differ: tumor growth rate <span data-tex="r"></span> and drug sensitivity <span data-tex="k"></span>. Choose a schedule. All three give the same total amount of drug.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 10 · Virtual patients</span><span class="q">Same diagnosis. Same treatment?</span></div>
+    <div class="chips" id="vpS">
+      <button class="chip" data-s="u1" aria-pressed="true">Standard · every 7 days</button>
+      <button class="chip" data-s="u2" aria-pressed="false">Double dose · every 14 days</button>
+      <button class="chip" data-s="u3" aria-pressed="false">Half dose · every 3.5 days</button>
+    </div>
+    <div class="pts">
+      <div class="pt"><h3>Patient A</h3><div class="pp">r = 0.08/day · k = 0.16/day</div><canvas id="cvVA" width="560" height="320" aria-label="Patient A tumor burden"></canvas><div class="verdict" id="vA"></div></div>
+      <div class="pt"><h3>Patient B</h3><div class="pp">r = 0.15/day · k = 0.24/day</div><canvas id="cvVB" width="560" height="320" aria-label="Patient B tumor burden"></canvas><div class="verdict" id="vB"></div></div>
+    </div>
+    <div class="legend"><span><i style="background:var(--bio)"></i>tumor burden under treatment</span><span><i style="background:var(--faint)"></i>untreated</span><span><i style="background:var(--input)"></i>doses</span></div>
+    <div class="ask" id="vpAsk">
+      <button data-a="Yes."><span>Same diagnosis?</span><span>tap to answer</span></button>
+      <button data-a="Not necessarily."><span>Same dynamics?</span><span>tap to answer</span></button>
+      <button data-a="Not necessarily."><span>Same best treatment?</span><span>tap to answer</span></button>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>That's the mathematical intuition behind personalized medicine: the equations may share a structure, but different parameters make different trajectories, and different best interventions. Estimate <span data-tex="\theta_{\text{patient}}"></span> from one person's data and you have a <strong>patient-specific model</strong>: a hypothesis about how this person's system behaves.</p>
+    <h3 style="margin-top:30px">A model is not a crystal ball</h3>
+    <p>Here's Patient B's predicted burden at day 84 under each schedule. Clean bars invite you to say "the computer knows which treatment works". But we never know <span data-tex="r"></span> and <span data-tex="k"></span> exactly. Switch on the uncertainty.</p>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 10b · Crystal ball</span><span class="q">How sure is that ranking?</span></div>
+    <div class="cb" id="cbBars"></div>
+    <div class="btnrow"><button class="btn go" id="cbUnc" aria-pressed="false">Show uncertainty</button></div>
+    <div class="msg" id="cbMsg"><b>Point predictions</b>Three neat numbers. Now turn on the uncertainty in Patient B's parameters (growth ±15%, sensitivity ±25%).</div>
+  </div>
+
+  <div class="col">
+    <p>The model depends on its assumptions, its equations, its parameters, the quality of its measurements, the variables it includes and the ones it ignores, and whether it still holds outside the conditions it was built in. A model is an <strong>instrument for reasoning</strong>, not reality itself.</p>
+
+    <section class="level" id="s11" data-rail="7">
+      <div class="tag"><span class="n">11</span>Ill-posed problems · regularization<span class="ok">✓ cleared</span></div>
+      <h2>Mathematics refusing to <em>overreact</em></h2>
+      <p>Try to estimate 50 parameters for one person from 10 measurements and you've made a monster: more unknowns than information. That's an <strong>ill-posed inverse problem</strong>. A solution may not exist, may not be unique, or may swing wildly when the data change slightly. More mathematical sophistication doesn't automatically create more information. One defense:</p>
+      <div class="disp" data-tex="\min_\theta \Big[\; E(\theta) \;+\; \lambda\,R(\theta) \;\Big]" data-display></div>
+      <p>The first term says <em>fit the data</em>. The second says <em>don't choose ridiculous solutions</em>. <span data-tex="\lambda"></span> sets the balance. Below, ten noisy measurements from one patient. Give the model more freedom and see whether it gets better at predicting <em>new</em> patients.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 11 · Overfitting</span><span class="q">Does hugging every point make better predictions?</span></div>
+    <div class="g2">
+      <canvas id="cvReg" width="820" height="460" aria-label="Noisy data and fitted curve"></canvas>
+      <div>
+        <div class="ctrl"><label for="rD">Model flexibility (parameters) <output id="orD">3</output></label><input type="range" id="rD" min="1" max="10" step="1" value="3"></div>
+        <div class="ctrl"><label for="rL">Penalty λ (log scale) <output id="orL">0</output></label><input type="range" id="rL" min="-8" max="0" step="0.1" value="-8"></div>
+        <div class="ro"><div><span>Error on these measurements</span><span id="rTr">—</span></div><div><span>Error on new measurements</span><span id="rTe">—</span></div></div>
+        <div class="btnrow"><button class="btn" id="rShow" aria-pressed="false">Show new measurements</button></div>
+        <div class="msg" id="rMsg"><b>Simple model</b>Crank the flexibility to the maximum.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The best model isn't the one that hugs every data point. It balances <strong>evidence</strong> against <strong>complexity</strong>: Occam's razor, written as math. And a model can be wrong in two different ways. <em>Wrong parameters</em>: better data fixes it. <em>Wrong structure</em>: the equations themselves are wrong, and no amount of fitting can save it. You can have a tiny fitting error and still a biologically misleading model. That's why validation matters.</p>
+    <details class="why"><summary>Wait — why doesn't a perfect fit mean a correct model?</summary><div class="body">With ten parameters and ten points, a polynomial can pass through every point exactly, including through the noise. The training error hits zero precisely because the model memorized the measurement errors. On a new patient, those memorized errors are wrong, and the predictions swing wildly between the points.</div></details>
+
+    <section class="level" id="s12" data-rail="7">
+      <div class="tag"><span class="n">12</span>Mechanism vs. machine learning<span class="ok">✓ cleared</span></div>
+      <h2>Black box vs. <em>glass box</em></h2>
+      <p>A machine-learning model learns <em>measurements → prediction</em> from huge datasets. A mechanistic model encodes <em>biological mechanism → dynamics → observations</em>. They answer different questions, and modern computational medicine increasingly uses them together.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 12 · Which would you trust?</span><span class="q">Same patient, two kinds of model.</span></div>
+    <div class="boxes">
+      <div class="bx black"><h3>Black box</h3><div class="note">Trained on 10,000 patients and millions of measurements.</div><div class="big" id="bbOut">83%</div><div class="note" id="bbNote">chance this patient responds to Drug X</div></div>
+      <div class="bx"><h3 class="mth">Glass box</h3><div class="flow" id="gbFlow"><span>parameter: drug sensitivity k = 0.24/day</span><i>↓</i><span>mechanism: kill ∝ D/(D+0.6)</span><i>↓</i><span>dynamical state: burden rises 40% → 45% on the standard schedule</span><i>↓</i><span>predicted outcome: poor response; try denser dosing</span></div></div>
+    </div>
+    <div class="btnrow"><button class="btn" id="gbShift" aria-pressed="false">The hospital switches to a new drug</button></div>
+    <div class="q" style="margin-top:16px" id="gbQ"><p class="prompt">Which would you trust more?</p><div class="opts">
+      <button class="opt" data-j="0"><span class="k">A</span>The black box: it learned from far more patients.</button>
+      <button class="opt" data-j="1"><span class="k">B</span>The glass box: I can see why it predicts what it does.</button>
+      <button class="opt" data-j="2"><span class="k">C</span>Neither, until it's been validated for this situation.</button></div><p class="fb" id="gbFb"></p></div>
+  </div>
+
+  <div class="col">
+    <details class="why"><summary>Wait — why can't AI simply learn everything?</summary><div class="body">A learned model is only as good as the situations in its training data. Change the drug, the population, or the hospital's measuring equipment, and it can fail silently, still printing a confident number. A mechanistic model can reason about new situations, but only if its mechanism is right. Neither escapes the need to check predictions against reality.</div></details>
+
+    <section class="level" id="s13" data-rail="7">
+      <div class="tag"><span class="n">13</span>Multiscale · the impossible diagram<span class="ok">✓ cleared</span></div>
+      <h2>Descend through a <em>human being</em></h2>
+      <p>A body can be modeled at many scales: molecules, cells, tissues, organs, physiology, the whole patient. The scales talk to each other in both directions. That's a <strong>multiscale system</strong>, and connecting models across its levels, with honest uncertainty at each one, is one of the frontiers of systems biology. Zoom down through the levels and open any node.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="label">Instrument 13 · The impossible diagram</span><span class="q">What's measurable, and what's hidden, at each scale?</span></div>
+    <div class="ctrl"><label for="zm">Zoom <output id="ozm">Patient</output></label><input type="range" id="zm" min="0" max="4" step="1" value="0"></div>
+    <div class="ms"><svg id="msSvg" viewBox="0 0 520 470" aria-label="Network of biological scales"></svg>
+      <div class="card" id="msCard"></div></div>
+  </div>
+
+  <div class="col">
+    <p>This is where the buzzword arrives: a <strong>digital twin</strong>, a computational model linked to one real person and updated as new data come in. Patient-specific 3D anatomy models already help surgeons plan operations; research is exploring "virtual patients" for testing treatment strategies. But a digital twin is not a perfect copy of a human. It's a model, and models have boundaries. The real question is how much useful information about one person can be encoded in a model, and how reliably that model can support a decision.</p>
+    <div class="statement">A probability is not meaningful <em>in isolation.</em></div>
+    <p>If the model says <span data-tex="P(\text{outcome} \mid \text{data}) = 0.82"></span>, that's not an 82% chance reality behaves exactly as predicted. It's a probability according to <em>this</em> model, given <em>this</em> evidence, under <em>these</em> assumptions. Time to see that for yourself.</p>
+
+    <section class="level" id="s14" data-rail="8">
+      <div class="tag"><span class="n">14</span>Boss level · you are the mathematician<span class="ok">✓ cleared</span></div>
+      <h2>You are the <em>mathematician</em></h2>
+      <p>A fictional patient has a growing tumor. Treatment starts on day 30. You have <strong>5 measurements</strong>, a choice of <strong>3 models</strong>, <strong>2 drugs</strong>, and one question at the end: how confident are you? There's no single score. You get a dashboard.</p>
+    </section>
+  </div>
+
+  <div class="lab" id="boss">
+    <div class="labhead"><span class="label">Instrument 14 · Patient #<span id="pId">1</span></span><span class="q">Days 0–30 untreated · predict day 90</span></div>
+    <canvas id="cvBoss" width="1000" height="440" aria-label="Measurements, model fit and treatment projections"></canvas>
+    <div class="steps" style="margin-top:16px">
+      <div class="stp" id="st1"><div class="sh"><b>1 · Which days do you scan?</b><span class="note">Budget: <b class="inp" id="pLeft">5</b> scans left</span></div><div class="slots" id="pSlots"></div></div>
+      <div class="stp locked" id="st2"><div class="sh"><b>2 · Which model?</b><span class="note" id="pFitNote">Each is fitted to your scans.</span></div>
+        <div class="chips" id="pModels"><button class="chip" data-m="exp" aria-pressed="false">Exponential</button><button class="chip" data-m="log" aria-pressed="false">Logistic</button><button class="chip" data-m="gom" aria-pressed="false">Gompertz</button></div><div class="note" id="pModelEq"></div></div>
+      <div class="stp locked" id="st3"><div class="sh"><b>3 · Which drug?</b><span class="note">Simulated from day 30 to 90 with your model</span></div>
+        <div class="chips" id="pDrugs"><button class="chip" data-d="A" aria-pressed="false">Drug A · slows growth</button><button class="chip" data-d="B" aria-pressed="false">Drug B · kills cells</button></div><div class="note" id="pDrugNote"></div></div>
+      <div class="stp locked" id="st4"><div class="sh"><b>4 · How confident are you that your drug is the better one?</b><span class="note"><output id="opConf" class="inp">60%</output></span></div>
+        <input type="range" id="pConf" min="50" max="100" step="1" value="60" aria-label="Confidence">
+        <div class="btnrow"><button class="btn go" id="pSubmit">Reveal what really happened</button></div></div>
+      <div class="stp" id="st5" hidden><div class="sh"><b>Your dashboard</b><span class="note" id="pVerdict"></span></div><div class="dash" id="pDash"></div><div class="msg math" id="pLesson"></div><div class="btnrow"><button class="btn" id="pNew">New patient</button></div></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="level" id="loop" data-rail="8" style="padding-top:70px">
+      <h2>The <em>final</em> paradox</h2>
+      <p>Can mathematics tell us what's happening inside a patient? Sometimes. But the more interesting discovery: <strong>mathematics doesn't make the invisible visible by magic.</strong> It gives you a structured way of reasoning about it. You observe, model, infer, simulate, test, collect better data, revise, and repeat.</p>
+      <div class="lab loop"><svg id="loopSvg" viewBox="0 0 520 380" aria-label="The modeling loop"></svg></div>
+      <p>Differential equations describe change. Dynamical systems describe behavior. Optimization estimates parameters. Probability describes uncertainty. Bayesian inference updates beliefs. Identifiability says what the data can actually reveal. Control theory asks how interventions alter trajectories. Multiscale modeling connects levels of biology. Machine learning finds patterns. Mechanistic modeling encodes hypotheses about causes. Personalized modeling asks whether all of it can be brought together for one person.</p>
+      <div class="disp" data-tex="\text{model} + \text{hidden state} + \text{parameters} + \text{noise} \;\longrightarrow\; \text{observations}" data-display></div>
+      <p>That direction is easy. The reverse is the whole field:</p>
+      <div class="disp" data-tex="\boxed{\;\text{observations} \;\longrightarrow\; \text{hidden biology}\;}" data-display></div>
+      <p>A hundred years from now a doctor might ask a patient's model "what happens if we perturb this system?" and watch thousands of simulated futures. The fundamental question will remain: <strong>how do we know the model is describing the person, rather than our assumptions about the person?</strong> That's a medical question, a mathematical one, a philosophical one, and finally a question about the limits of knowledge.</p>
+    </section>
+  </div>
+
+  <div class="final" id="final">
+    <div>
+      <div class="qbox">?</div>
+      <div class="lines">You measured the patient. You built the equations.<br>You estimated the parameters. You simulated the future.<br><b>What, exactly, have you learned?</b></div>
+      <div class="opts" id="finOpts">
+        <button class="opt" data-j="0"><span class="k">A</span>The truth</button>
+        <button class="opt" data-j="1"><span class="k">B</span>A prediction</button>
+        <button class="opt" data-j="2"><span class="k">C</span>A constrained mathematical hypothesis about the truth</button>
+      </div>
+      <div class="rev" id="finRev" hidden>
+        <div class="statement">C is the intellectually honest answer.</div>
+        <p class="note" style="font-size:18px">The power of mathematical medicine isn't that equations eliminate uncertainty. It's that equations give us a language for reasoning about uncertainty, mechanisms, and possible futures.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <section class="level" id="debrief" data-rail="8" style="padding-top:80px">
+      <div class="tag"><span class="n">∞</span>Debrief</div>
+      <h2>How did your <em>gut</em> do?</h2>
+      <div id="review"></div>
+      <div class="pull" style="margin-top:30px">Medicine is fundamentally an inference problem: the variables we care about are often hidden, the measurements we get are incomplete, and mathematics is the machinery we use to reason backward from observable consequences to invisible mechanisms.</div>
+      <p class="note">Further reading: Kirk, Thorne &amp; Stumpf, "Model selection in systems and synthetic biology", <em>Curr. Opin. Biotechnol.</em> (2013); Raue et al., "Structural and practical identifiability analysis", <em>Bioinformatics</em> (2009); Stuart, "Inverse problems: a Bayesian perspective", <em>Acta Numerica</em> (2010); Laubenbacher et al., "Building digital twins of the human immune system", <em>npj Digital Medicine</em> (2022). All models on this page are illustrative teaching models, not clinical tools.</p>
+    </section>
+    <div class="next">
+      <div><div class="label">Up next · Issue 04</div><div class="t">Why does time slow down when you move?</div></div>
+      <a class="btn" href="index.html">All issues →</a>
+    </div>
+    <footer>Simplify It · Issue 03 · built as a sample of the format</footer>
+  </div>
+</main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* Simplify It · Issue 03 math core */
+const MED=(function(){
+// seeded RNG
+function rng(seed){let s=seed>>>0||1;return ()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
+function gauss(r){let u=0,v=0;while(!u)u=r();while(!v)v=r();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v)}
+// RK4 for systems
+function rk4(f,y,t,dt){const k1=f(t,y),y2=y.map((v,i)=>v+dt/2*k1[i]),k2=f(t+dt/2,y2),y3=y.map((v,i)=>v+dt/2*k2[i]),k3=f(t+dt/2,y3),y4=y.map((v,i)=>v+dt*k3[i]),k4=f(t+dt,y4);return y.map((v,i)=>v+dt/6*(k1[i]+2*k2[i]+2*k3[i]+k4[i]))}
+// Tumor (T) – immune (I) model, normalized. dT = rT(1-T) - kIT ; dI = sI(1-I) - cIT
+const TI={r:1,k:2.5,s:0.8,c:1.5};
+function tiF(p){return (t,[T,I])=>[p.r*T*(1-T)-p.k*I*T, p.s*I*(1-I)-p.c*I*T]}
+function tiEquilibria(p){// interior: I=r(1-T)/k ; s(1-I)=cT
+  const a=p.r/p.k;const T=(p.s*(1-a))/(p.c-p.s*a);const I=a*(1-T);const out=[{T:0,I:0,type:'unstable'},{T:0,I:1,type:p.r-p.k<0?'stable':'saddle',name:'controlled'},{T:1,I:0,type:p.s-p.c<0?'stable':'saddle',name:'escape'}];if(T>0&&T<1&&I>0)out.push({T,I,type:'saddle',name:'tipping'});return out}
+// Gradient landscape for the "biological marble": V(x)= x^4/4 - a x^2/2 - h x
+function V(x,a,h){return x*x*x*x/4-a*x*x/2-(h||0)*x}
+function dV(x,a,h){return x*x*x-a*x-(h||0)}
+// equilibria of x' = h + a x - x^3 (real roots of x^3 - a x - h = 0)
+function cubicRoots(a,h){// x^3 + p x + q = 0 with p=-a, q=-h
+  const p=-a,q=-h,D=(q*q)/4+(p*p*p)/27;const out=[];
+  if(D>1e-12){const u=Math.cbrt(-q/2+Math.sqrt(D)),v=Math.cbrt(-q/2-Math.sqrt(D));out.push(u+v)}
+  else{const r=Math.sqrt(-p/3),phi=Math.acos(Math.max(-1,Math.min(1,(3*q)/(2*p*r))));for(let k=0;k<3;k++)out.push(2*r*Math.cos((phi-2*Math.PI*k)/3))}
+  return out.sort((x,y)=>x-y).map(x=>({x,stable:(a-3*x*x)<0}))}
+// PK/PD virtual patient: dT = rT(1-T/100) - kmax*E(D)*T, E=D/(D+EC50); doses as boluses
+const SCHED={u1:{name:'Standard: 1 dose every 7 days',every:7,dose:1},u2:{name:'Double dose every 14 days',every:14,dose:2},u3:{name:'Half dose every 3.5 days',every:3.5,dose:0.5}};
+function patient(p,sched,days,dt){dt=dt||0.05;const S=SCHED[sched]||{every:1e9,dose:0};let T=p.T0||40,D=0,t=0,next=0;const out=[[0,T,D]];const e=p.e||0.35,EC=p.EC50||0.6;
+  while(t<days-1e-9){if(t>=next-1e-9){D+=S.dose;next+=S.every}
+    const f=(tt,[T,D])=>[p.r*T*(1-T/100)-p.k*(D/(D+EC))*T,-e*D];[T,D]=rk4(f,[T,D],t,dt);t+=dt;if(Math.abs(t-Math.round(t))<dt/2)out.push([Math.round(t),T,D])}
+  return out}
+// Bayes on a grid for elimination rate k: y_i = exp(-k t_i) + noise
+function bayesGrid(n,kmin,kmax){const g=[];for(let i=0;i<n;i++)g.push(kmin+(kmax-kmin)*i/(n-1));return g}
+// Observability / Bayesian design on a square network x1-x2, x1-x3, x2-x4, x3-x4
+function netA(){const L=[[2,-1,-1,0],[-1,2,0,-1],[-1,0,2,-1],[0,-1,-1,2]];return L.map((r,i)=>r.map((v,j)=>-v*0.6-(i===j?0.15:0)))}
+function matExp(A,t){// series with scaling-squaring
+  const n=A.length;let s=0,nrm=Math.max(...A.map(r=>r.reduce((a,b)=>a+Math.abs(b),0)))*t;while(nrm>0.5){nrm/=2;s++}const sc=t/Math.pow(2,s);let E=I(n),term=I(n);for(let k=1;k<18;k++){term=mm(term,A).map(r=>r.map(v=>v*sc/k));E=E.map((r,i)=>r.map((v,j)=>v+term[i][j]))}for(let k=0;k<s;k++)E=mm(E,E);return E}
+function I(n){return [...Array(n)].map((_,i)=>[...Array(n)].map((_,j)=>i===j?1:0))}
+function mm(A,B){return A.map(r=>B[0].map((_,j)=>r.reduce((s,v,k)=>s+v*B[k][j],0)))}
+function inv(M){const n=M.length,a=M.map((r,i)=>[...r,...I(n)[i]]);for(let c=0;c<n;c++){let p=c;for(let r=c+1;r<n;r++)if(Math.abs(a[r][c])>Math.abs(a[p][c]))p=r;[a[c],a[p]]=[a[p],a[c]];const d=a[c][c];if(Math.abs(d)<1e-14)return null;for(let j=0;j<2*n;j++)a[c][j]/=d;for(let r=0;r<n;r++)if(r!==c){const f=a[r][c];for(let j=0;j<2*n;j++)a[r][j]-=f*a[c][j]}}return a.map(r=>r.slice(n))}
+// sensors: array of node indices (repeats allowed). Each sensor samples at times ts with noise sigma. Prior std s0.
+function designCov(sensors,ts,sigma,s0){const A=netA(),n=4;let F=I(n).map(r=>r.map(v=>v/(s0*s0)));const Phis=ts.map(t=>matExp(A,t));
+  sensors.forEach(node=>Phis.forEach(P=>{const h=P[node];for(let i=0;i<n;i++)for(let j=0;j<n;j++)F[i][j]+=h[i]*h[j]/(sigma*sigma)}));return inv(F)}
+// Least-squares ridge polynomial fit (x in [0,1])
+function polyFit(xs,ys,deg,lam){const n=deg+1,M=[...Array(n)].map(()=>new Array(n).fill(0)),b=new Array(n).fill(0);xs.forEach((x,i)=>{const ph=[...Array(n)].map((_,k)=>Math.pow(2*x-1,k));for(let a=0;a<n;a++){b[a]+=ph[a]*ys[i];for(let c=0;c<n;c++)M[a][c]+=ph[a]*ph[c]}});for(let a=1;a<n;a++)M[a][a]+=lam;M[0][0]+=1e-9;const Mi=inv(M);if(!Mi)return null;return Mi.map(r=>r.reduce((s,v,k)=>s+v*b[k],0))}
+function polyEval(c,x){let s=0;for(let k=0;k<c.length;k++)s+=c[k]*Math.pow(2*x-1,k);return s}
+// Growth models for the final game (days)
+const GROW={
+ exp:{name:'Exponential',f:(t,[T0,r])=>T0*Math.exp(r*t),np:2,eq:'dT/dt = rT'},
+ log:{name:'Logistic',f:(t,[T0,r,K])=>K/(1+(K/T0-1)*Math.exp(-r*t)),np:3,eq:'dT/dt = rT(1 − T/K)'},
+ gom:{name:'Gompertz',f:(t,[T0,r,K])=>K*Math.exp(Math.log(T0/K)*Math.exp(-r*t)),np:3,eq:'dT/dt = rT ln(K/T)'}};
+// Nelder-Mead in log-parameter space
+function nm(fun,x0,iters){const n=x0.length;let S=[x0.slice()];for(let i=0;i<n;i++){const x=x0.slice();x[i]+=0.25;S.push(x)}let F=S.map(fun);
+  for(let it=0;it<(iters||400);it++){const o=[...S.keys()].sort((a,b)=>F[a]-F[b]);S=o.map(i=>S[i]);F=o.map(i=>F[i]);const c=new Array(n).fill(0);for(let i=0;i<n;i++)for(let j=0;j<n;j++)c[j]+=S[i][j]/n;
+    const ref=c.map((v,j)=>v+(v-S[n][j])),fr=fun(ref);if(fr<F[0]){const ex=c.map((v,j)=>v+2*(v-S[n][j])),fe=fun(ex);if(fe<fr){S[n]=ex;F[n]=fe}else{S[n]=ref;F[n]=fr}}
+    else if(fr<F[n-1]){S[n]=ref;F[n]=fr}else{const co=c.map((v,j)=>v+0.5*(S[n][j]-v)),fc=fun(co);if(fc<F[n]){S[n]=co;F[n]=fc}else{for(let i=1;i<=n;i++){S[i]=S[i].map((v,j)=>S[0][j]+0.5*(v-S[0][j]));F[i]=fun(S[i])}}}}
+  const o=[...S.keys()].sort((a,b)=>F[a]-F[b]);return {x:S[o[0]],f:F[o[0]]}}
+// fit model to data [[t,y]] using log-residuals; returns params, sse, cov (log-space)
+function fitGrow(key,data){const M=GROW[key];const y0=data[0][1];const x0=[Math.log(y0),Math.log(0.08),Math.log(Math.max(...data.map(d=>d[1]))*2)].slice(0,M.np);
+  const fun=x=>{const p=x.map(Math.exp);if(M.np===3&&p[2]<=p[0]*1.001)return 1e6;let s=0;for(const [t,y] of data){const m=M.f(t,p);if(!(m>0))return 1e6;const d=Math.log(y)-Math.log(m);s+=d*d}return s+1e-4*x.reduce((a,v,i)=>a+(i===2?Math.pow(Math.max(0,v-Math.log(500)),2):0),0)};
+  let best=nm(fun,x0,600);best=nm(fun,best.x,400);
+  // numerical Hessian
+  const n=M.np,h=1e-3,H=[...Array(n)].map(()=>new Array(n).fill(0));for(let i=0;i<n;i++)for(let j=0;j<n;j++){const e=(a,b)=>{const x=best.x.slice();x[i]+=a;x[j]+=b;return fun(x)};H[i][j]=(e(h,h)-e(h,-h)-e(-h,h)+e(-h,-h))/(4*h*h)}
+  const dof=Math.max(1,data.length-n),s2=Math.max(best.f/dof,0.004);const Hi=inv(H);const cov=Hi?Hi.map(r=>r.map(v=>2*s2*v)):null;
+  return {key,x:best.x,p:best.x.map(Math.exp),sse:best.f,cov,s2}}
+function chol(A){const n=A.length,L=[...Array(n)].map(()=>new Array(n).fill(0));for(let i=0;i<n;i++)for(let j=0;j<=i;j++){let s=A[i][j];for(let k=0;k<j;k++)s-=L[i][k]*L[j][k];if(i===j){if(s<=0)return null;L[i][i]=Math.sqrt(s)}else L[i][j]=s/L[j][j]}return L}
+// treatments for final game: A cytostatic (halves growth rate), B cytotoxic (kill 0.045/day)
+const TREAT={none:{name:'No treatment'},A:{name:'Drug A · slows growth (cytostatic)'},B:{name:'Drug B · kills cells (cytotoxic)'}};
+function project(key,p,treat,t0,t1,dt){dt=dt||0.25;const M=GROW[key];let T=M.f(t0,p);const out=[[t0,T]];const r=p[1],K=p[2];
+  const rate=(T)=>{let g;const rr=treat==='A'?r*0.5:r;if(key==='exp')g=rr*T;else if(key==='log')g=rr*T*(1-T/K);else g=rr*T*Math.log(K/T);return g-(treat==='B'?0.045*T:0)};
+  for(let t=t0;t<t1-1e-9;t+=dt){const k1=rate(T),k2=rate(T+dt/2*k1),k3=rate(T+dt/2*k2),k4=rate(T+dt*k3);T=Math.max(1e-6,T+dt/6*(k1+2*k2+2*k3+k4));out.push([t+dt,T])}return out}
+return {rng,gauss,rk4,TI,tiF,tiEquilibria,V,dV,cubicRoots,SCHED,patient,bayesGrid,netA,designCov,matExp,polyFit,polyEval,GROW,fitGrow,chol,TREAT,project,inv};
+})();
+
+</script>
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const C={};['bg','bg2','panel','panel2','line','text','dim','faint','bio','math','obs','input','ok'].forEach(k=>C[k]=css('--'+k));
+function rgb(h){h=h.replace('#','');const n=parseInt(h,16);return [n>>16&255,n>>8&255,n&255]}
+function rgba(h,a){const c=rgb(h);return `rgba(${c[0]},${c[1]},${c[2]},${a})`}
+function tex(s,d){try{return katex.renderToString(s,{output:'mathml',displayMode:!!d,throwOnError:false})}catch(e){return s}}
+const renderTex=root=>(root||document).querySelectorAll('[data-tex]').forEach(el=>{el.innerHTML=tex(el.dataset.tex,el.hasAttribute('data-display'))});renderTex();
+function cpos(e,cv){const r=cv.getBoundingClientRect();return [(e.clientX-r.left)*cv.width/r.width,(e.clientY-r.top)*cv.height/r.height]}
+function visible(el,cb){if(!('IntersectionObserver' in window)){cb(true);return}new IntersectionObserver(es=>es.forEach(e=>cb(e.isIntersecting)),{rootMargin:'100px'}).observe(el)}
+const MONO='"Azeret Mono", monospace';
+// plotting frame
+function frame(cv,o){const W=cv.width,H=cv.height,l=o.l??54,r=o.r??16,t=o.t??16,b=o.b??38;const X=v=>l+(v-o.x0)/(o.x1-o.x0)*(W-l-r),Y=v=>t+(o.y1-v)/(o.y1-o.y0)*(H-t-b);
+  return {W,H,l,r,t,b,X,Y,ix:px=>o.x0+(px-l)/(W-l-r)*(o.x1-o.x0),iy:py=>o.y1-(py-t)/(H-t-b)*(o.y1-o.y0),o}}
+function axes(g,F,xt,yt,xl,yl,fx,fy){g.fillStyle=C.bg;g.fillRect(0,0,F.W,F.H);g.strokeStyle=C.line;g.lineWidth=1;g.font='500 13px '+MONO;g.fillStyle=C.dim;
+  g.textAlign='right';yt.forEach(v=>{g.beginPath();g.moveTo(F.l,F.Y(v));g.lineTo(F.W-F.r,F.Y(v));g.stroke();g.fillText(fy?fy(v):v,F.l-8,F.Y(v)+4)});
+  g.textAlign='center';xt.forEach(v=>{g.beginPath();g.moveTo(F.X(v),F.t);g.lineTo(F.X(v),F.H-F.b);g.globalAlpha=.5;g.stroke();g.globalAlpha=1;g.fillText(fx?fx(v):v,F.X(v),F.H-F.b+20)});
+  if(xl){g.textAlign='right';g.fillText(xl,F.W-F.r,F.H-6)}if(yl){g.textAlign='left';g.fillText(yl,F.l+6,F.t+14)}}
+function line(g,F,pts,col,w,dash){g.strokeStyle=col;g.lineWidth=w||2.5;g.setLineDash(dash||[]);g.beginPath();let on=false;pts.forEach(([x,y])=>{if(!isFinite(y)){on=false;return}const px=F.X(x),py=F.Y(y);if(on)g.lineTo(px,py);else{g.moveTo(px,py);on=true}});g.stroke();g.setLineDash([])}
+function dots(g,F,pts,col,r){g.fillStyle=col;pts.forEach(([x,y])=>{g.beginPath();g.arc(F.X(x),F.Y(y),r||5,0,7);g.fill()})}
+function clip(g,F){g.save();g.beginPath();g.rect(F.l,F.t,F.W-F.l-F.r,F.H-F.t-F.b);g.clip()}
+const f2=v=>(v<0?'−':'')+Math.abs(v).toFixed(2),sgn=v=>(v>=0?'+':'−')+Math.abs(v).toFixed(2);
+
+/* ---------- progress ---------- */
+const LEVELS=['s0','s1','s2','s3','s4','s5','s6','s7','s8','s9','s10','s11','s12','s13','s14'];
+const STORE='simplifyit:patient',MAXXP=1500;let xp=0;const got=new Set(),cleared=new Set();
+$('#lvnav').innerHTML=LEVELS.map((s,i)=>`<a href="#${s}" data-s="${s}" title="Level ${i}">${i}</a>`).join('');
+function save(){try{localStorage.setItem(STORE,JSON.stringify({xp,cleared:[...cleared],total:LEVELS.length}))}catch(e){}}
+function paintXP(){$('#xpn').textContent=xp;$('#xpf').style.width=Math.min(100,xp/MAXXP*100)+'%'}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+function award(id,pts,m){if(got.has(id))return;got.add(id);xp+=pts;paintXP();toast('+'+pts+' evidence · '+m);save()}
+function markDone(s){cleared.add(s);const sec=document.getElementById(s);if(sec)sec.classList.add('complete');const a=$(`#lvnav a[data-s="${s}"]`);if(a)a.classList.add('done')}
+function complete(s,m){if(cleared.has(s))return;markDone(s);award('lvl-'+s,60,m||'Level cleared');save()}
+try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){xp=d.xp||0;(d.cleared||[]).forEach(s=>{markDone(s);got.add('lvl-'+s)});paintXP()}}catch(e){}
+
+/* ---------- rail ---------- */
+const RAIL=['Algebra','Differential equations','Dynamical systems','Inverse problems','Bayesian inference','Measurement design','Control theory','Personalized models','Limits of knowledge'];
+$('#railList').innerHTML=RAIL.map((r,i)=>`<li data-i="${i}">${r}</li>`).join('');
+function setRail(i){$$('#railList li').forEach(li=>{const k=+li.dataset.i;li.classList.toggle('on',k===i);li.classList.toggle('past',k<i)});$('#where').innerHTML='You are here: <b>'+RAIL[i]+'</b>'}
+setRail(0);
+if('IntersectionObserver' in window){const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)setRail(+e.target.dataset.rail)})},{rootMargin:'-30% 0px -60% 0px'});$$('[data-rail]').forEach(s=>io.observe(s))}
+
+/* ---------- HERO ---------- */
+const cvH=$('#cvHid'),gH=cvH.getContext('2d'),cvO=$('#cvObs'),gO=cvO.getContext('2d');
+const HT=(function(){const f=MED.tiF(MED.TI);let y=[0.39,0.235];const out=[];for(let i=0;i<=3000;i++){out.push([i*0.01,y[0],y[1]]);y=MED.rk4(f,y,0,0.01)}return out})();
+const hr=MED.rng(7);const HOBS=[];for(let t=1.2;t<30;t+=2.6)HOBS.push([t,null]);
+let hT=14;
+function heroDraw(){const W=cvH.width,H=cvH.height,l=40,r=40,t=50,b=56;const X=tt=>l+tt/30*(W-l-r),Y=v=>t+(1-v)*(H-t-b);
+  gH.clearRect(0,0,W,H);gO.clearRect(0,0,W,H);
+  // hidden curves (blurred layer)
+  const upto=Math.min(HT.length-1,Math.floor(hT/0.01));
+  [[1,C.bio,[]],[2,C.bio,[10,8]]].forEach(([k,col,dash])=>{gH.strokeStyle=col;gH.lineWidth=5;gH.setLineDash(dash);gH.beginPath();for(let i=0;i<=upto;i+=4){const p=HT[i];i?gH.lineTo(X(p[0]),Y(p[k])):gH.moveTo(X(p[0]),Y(p[k]))}gH.stroke()});gH.setLineDash([]);
+  gH.fillStyle=C.bio;gH.font='500 20px '+MONO;gH.fillText('disease',X(HT[upto][0])+10,Y(HT[upto][1])+6);gH.fillText('immune',X(HT[upto][0])+10,Y(HT[upto][2])+6);
+  // baseline + observations (crisp)
+  gO.strokeStyle=C.line;gO.lineWidth=1;gO.beginPath();gO.moveTo(l,H-b);gO.lineTo(W-r,H-b);gO.stroke();
+  gO.fillStyle=C.dim;gO.font='500 15px '+MONO;gO.textAlign='left';gO.fillText('time →',W-r-60,H-b+26);gO.fillText('measurements: disease marker + lab noise',l,H-b+26);
+  HOBS.forEach(o=>{if(o[0]<=hT){if(o[1]===null){const i=Math.min(HT.length-1,Math.round(o[0]/0.01));o[1]=Math.max(0.02,Math.min(1,HT[i][1]+0.07*MED.gauss(hr)))}const x=X(o[0]),y=Y(o[1]);gO.fillStyle=C.obs;gO.beginPath();gO.arc(x,y,9,0,7);gO.fill();gO.strokeStyle=rgba(C.obs,.25);gO.beginPath();gO.moveTo(x,y+12);gO.lineTo(x,H-b);gO.stroke()}});
+  const n=HOBS.filter(o=>o[0]<=hT).length;gO.fillStyle=C.obs;gO.font='600 18px '+MONO;gO.textAlign='right';gO.fillText(n+' number'+(n===1?'':'s'),W-r,36)}
+let hVis=true;visible(cvO,v=>hVis=v);
+(function hloop(){if(hVis){hT+=reduce?0:0.025;if(hT>31){hT=0;HOBS.forEach(o=>o[1]=null)}heroDraw()}requestAnimationFrame(hloop)})();
+if(reduce){hT=30;heroDraw()}
+$('#peek').addEventListener('click',e=>{const s=$('#spec'),on=!s.classList.contains('peek');s.classList.toggle('peek',on);e.target.setAttribute('aria-pressed',on);e.target.textContent=on?'Hide the biology':'Peek inside';if(on)award('peek',10,'Peeked inside')});
+
+/* ---------- LEVEL 0 ---------- */
+const PRE=[
+ {q:'A sealed box turns input 1 into output 2. How many different formulas could the box be using?',o:['Exactly one: y = 2x','A handful','Infinitely many'],best:2,why:'Infinitely many curves pass through any finite set of points. Only assumptions narrow the family (Instrument 01).'},
+ {q:'Two patients have the same diagnosis and the same first scan. Will the same treatment work equally well for both?',o:['Yes, same disease, same treatment','Not necessarily','Never'],best:1,why:'Same equations, different parameters: Patient A shrank on the standard schedule while Patient B grew (Instrument 10).'},
+ {q:'A model fits a patient\'s past measurements perfectly. Is it correct?',o:['Yes, a perfect fit proves it','Not necessarily','Only if it uses AI'],best:1,why:'A flexible model can fit the noise exactly and still predict new data terribly. And a wrong structure can fit the past fine (Instruments 05 and 11).'},
+ {q:'If you keep collecting more of the same measurement, will you eventually pin down every hidden variable?',o:['Yes, with enough data','Only if the measurement actually contains information about it','No, never'],best:1,why:'In y = (a+b)x, infinite data still only gives you a + b. You need a different kind of measurement (Instrument 06).'}];
+const pre={};
+$('#pretest').innerHTML=PRE.map((p,i)=>`<div class="q"><p class="prompt">${i+1}. ${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="k">${'ABC'[j]}</span>${o}</button>`).join('')}</div></div>`).join('')+'<p class="fb" id="preFb">0 of 4 locked in.</p>';
+$('#pretest').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const q=+b.dataset.q;$$(`#pretest .opt[data-q="${q}"]`).forEach(x=>x.classList.toggle('picked',x===b));pre[q]=+b.dataset.j;const n=Object.keys(pre).length;$('#preFb').textContent=n<4?`${n} of 4 locked in.`:'All four locked in. Graded in the debrief.';if(n===4)complete('s0','Gut check done');renderReview()});
+function renderReview(){$('#review').innerHTML=PRE.map((p,i)=>{const a=pre[i];const you=a===undefined?'<em>Not answered. Scroll up to Level 0.</em>':p.o[a]+(a===p.best?' <span style="color:var(--ok)">✓</span>':'');return `<div class="rv"><div><span class="label">You guessed · Q${i+1}</span>${you}</div><div><span class="label">What the math says</span>${p.why}</div></div>`}).join('')}
+renderReview();
+
+/* ---------- LEVEL 1: black box ---------- */
+const cvBx=$('#cvBox'),gBx=cvBx.getContext('2d');const BX={pts:[1],c:0,assume:false,added:0};const BXPOOL=[2.4,0.4,3.3,1.7,2.9];
+const bxF=(x,c)=>{let p=1;BX.pts.forEach(xi=>p*=(x-xi));return 2*x+c*p};
+function bxDraw(){const F=frame(cvBx,{x0:0,x1:4,y0:-4,y1:12});axes(gBx,F,[0,1,2,3,4],[-4,0,4,8,12],'input x','output y');clip(gBx,F);
+  const line1=c=>{const a=[];for(let x=0;x<=4.0001;x+=0.02)a.push([x,bxF(x,c)]);return a};
+  if(!(BX.assume&&BX.pts.length>=2))for(let c=-2;c<=2.001;c+=0.4)line(gBx,F,line1(c),rgba(C.math,.28),1.5);
+  line(gBx,F,line1(BX.assume&&BX.pts.length>=2?0:BX.c),BX.assume&&BX.pts.length>=2?C.math:C.input,3.5);
+  gBx.restore();dots(gBx,F,BX.pts.map(x=>[x,2*x]),C.obs,8);
+  $('#bxEq').innerHTML=tex(BX.assume&&BX.pts.length>=2?'y = 2x':'y = 2x '+(BX.c<0?'-':'+')+' '+Math.abs(BX.c).toFixed(2)+'\\,'+BX.pts.map(x=>'(x-'+x+')').join(''));
+  $('#bxN').textContent=BX.pts.length;$('#bxFit').textContent=BX.assume&&BX.pts.length>=2?'1':'∞';$('#obxC').textContent=f2(BX.c);
+  const m=$('#bxMsg');if(BX.assume&&BX.pts.length>=2){m.className='msg math';m.innerHTML='<b>One model left</b>Two points plus the assumption "straight line" leave exactly one answer. The assumption did the work, not the data alone.';complete('s1','Black box cleared')}
+  else if(BX.assume){m.className='msg inp';m.innerHTML='<b>Assumed, but not enough data</b>A straight line through one point can still have any slope. Observe one more input.'}
+  else if(BX.pts.length>1){m.className='msg';m.innerHTML=`<b>${BX.pts.length} observations · still infinite</b>Every curve here passes through all ${BX.pts.length} points. More data hasn't shrunk the family to one. Try adding an assumption.`}
+  else{m.className='msg';m.innerHTML='<b>One observation</b>Slide c. Every one of these curves passes through the data exactly.'}}
+$('#bxC').addEventListener('input',e=>{BX.c=+e.target.value;bxDraw()});
+$('#bxAdd').addEventListener('click',()=>{if(BX.added<BXPOOL.length){BX.pts.push(BXPOOL[BX.added++]);award('bxadd',10,'Observed more')}bxDraw()});
+$('#bxAssume').addEventListener('click',e=>{BX.assume=!BX.assume;e.target.setAttribute('aria-pressed',BX.assume);e.target.textContent=BX.assume?'Drop the assumption':'Assume it\'s a straight line';bxDraw()});
+$('#bxReset').addEventListener('click',()=>{BX.pts=[1];BX.added=0;BX.c=0;$('#bxC').value=0;bxDraw()});
+bxDraw();
+
+/* ---------- LEVEL 2: exponential ---------- */
+const cvE=$('#cvExp'),gE=cvE.getContext('2d');let eR=0.4;const eSeen=new Set();
+function eDraw(){const F=frame(cvE,{x0:0,x1:5,y0:0,y1:8});axes(gE,F,[0,1,2,3,4,5],[0,2,4,6,8],'time t','x');clip(gE,F);
+  for(let tx=0.25;tx<5;tx+=0.5)for(let yx=0.5;yx<8;yx+=0.8){const s=eR*yx,ang=Math.atan2(s*(F.H-F.t-F.b)/8,(F.W-F.l-F.r)/5);const px=F.X(tx),py=F.Y(yx),L=12;gE.strokeStyle=rgba(C.math,.35);gE.lineWidth=1.3;gE.beginPath();gE.moveTo(px-L*Math.cos(ang),py+L*Math.sin(ang));gE.lineTo(px+L*Math.cos(ang),py-L*Math.sin(ang));gE.stroke()}
+  const a=[];for(let t=0;t<=5.0001;t+=0.02)a.push([t,Math.exp(eR*t)]);line(gE,F,a,C.bio,3.5);gE.restore();dots(gE,F,[[0,1]],C.input,7);
+  $('#oeR').textContent=sgn(eR);const x5=Math.exp(5*eR);$('#eX5').textContent=x5>=100?x5.toFixed(0):x5.toFixed(2);
+  if(Math.abs(eR)<0.005){$('#eTl').textContent='Doubling time';$('#eTv').textContent='never'}else{$('#eTl').textContent=eR>0?'Doubling time':'Half-life';$('#eTv').textContent=(Math.LN2/Math.abs(eR)).toFixed(2)}
+  const m=$('#eMsg');if(eR>0.005){eSeen.add('g');m.className='msg bio';m.innerHTML='<b>Exponential growth</b>The bigger x gets, the faster it grows: dividing cells with nothing to stop them.'}else if(eR<-0.005){eSeen.add('d');m.className='msg math';m.innerHTML='<b>Exponential decay</b>A drug being cleared: it loses the same fraction every unit of time.'}else{m.className='msg';m.innerHTML='<b>Balance</b>r = 0: nothing changes.'}
+  if(eSeen.size===2)complete('s2','Differential equations cleared')}
+$('#eR').addEventListener('input',e=>{eR=+e.target.value;eDraw()});eDraw();
+
+/* ---------- LEVEL 3: phase portrait ---------- */
+const cvP=$('#cvPP'),gP=cvP.getContext('2d'),cvPt=$('#cvPPt'),gPt=cvPt.getContext('2d');const PP={p:{...MED.TI},trajs:[],fates:new Set()};
+function ppSaddle(){return MED.tiEquilibria(PP.p).find(e=>e.name==='tipping')}
+function ppSep(){const s=ppSaddle();if(!s)return [];const f=MED.tiF(PP.p);const h=1e-5,J=[[0,0],[0,0]];[0,1].forEach(j=>{const a=[s.T,s.I],b=[s.T,s.I];a[j]+=h;b[j]-=h;const fa=f(0,a),fb=f(0,b);J[0][j]=(fa[0]-fb[0])/(2*h);J[1][j]=(fa[1]-fb[1])/(2*h)});
+  const tr=J[0][0]+J[1][1],det=J[0][0]*J[1][1]-J[0][1]*J[1][0],lam=tr/2-Math.sqrt(tr*tr/4-det);let v=[J[0][1],lam-J[0][0]];if(Math.abs(v[0])+Math.abs(v[1])<1e-9)v=[lam-J[1][1],J[1][0]];const n=Math.hypot(...v);v=[v[0]/n,v[1]/n];
+  const back=(t,y)=>f(t,y).map(z=>-z);const out=[];[1,-1].forEach(sg=>{let y=[s.T+sg*1e-3*v[0],s.I+sg*1e-3*v[1]];const seg=[];for(let i=0;i<4000;i++){y=MED.rk4(back,y,0,0.01);if(y[0]<-0.02||y[1]<-0.02||y[0]>1.1||y[1]>1.1)break;seg.push(y.slice())}out.push(seg)});return out}
+function ppDraw(){const F=frame(cvP,{x0:0,x1:1.05,y0:0,y1:1.05,l:56,b:46});axes(gP,F,[0,.25,.5,.75,1],[0,.25,.5,.75,1],'disease T →','immune I ↑');const f=MED.tiF(PP.p);clip(gP,F);
+  for(let a=0.04;a<1.05;a+=0.07)for(let b=0.04;b<1.05;b+=0.07){const d=f(0,[a,b]),m=Math.hypot(...d);if(m<1e-6)continue;const ux=d[0]/m,uy=d[1]/m,L=11,px=F.X(a),py=F.Y(b);gP.strokeStyle=rgba(C.math,.28+.4*Math.min(1,m*4));gP.lineWidth=1.2;gP.beginPath();gP.moveTo(px-ux*L,py+uy*L);gP.lineTo(px+ux*L,py-uy*L);gP.stroke();gP.beginPath();gP.arc(px+ux*L,py-uy*L,1.6,0,7);gP.fillStyle=gP.strokeStyle;gP.fill()}
+  ppSep().forEach(seg=>{gP.strokeStyle=C.math;gP.lineWidth=2.5;gP.setLineDash([8,6]);gP.beginPath();seg.forEach(([a,b],i)=>i?gP.lineTo(F.X(a),F.Y(b)):gP.moveTo(F.X(a),F.Y(b)));gP.stroke();gP.setLineDash([])});
+  PP.trajs.forEach((tr,k)=>{gP.strokeStyle=rgba(C.bio,k===PP.trajs.length-1?1:.45);gP.lineWidth=k===PP.trajs.length-1?3:2;gP.beginPath();tr.pts.forEach(([t,a,b],i)=>i?gP.lineTo(F.X(a),F.Y(b)):gP.moveTo(F.X(a),F.Y(b)));gP.stroke();const s=tr.pts[0];gP.fillStyle=C.input;gP.beginPath();gP.arc(F.X(s[1]),F.Y(s[2]),5,0,7);gP.fill()});
+  gP.restore();
+  MED.tiEquilibria(PP.p).forEach(e=>{const px=F.X(e.T),py=F.Y(e.I);if(e.type==='stable'){gP.fillStyle=C.text;gP.beginPath();gP.arc(px,py,9,0,7);gP.fill()}else{gP.strokeStyle=C.text;gP.lineWidth=2;gP.beginPath();gP.arc(px,py,8,0,7);gP.stroke()}
+    if(e.name){gP.fillStyle=C.text;gP.font='600 14px '+MONO;gP.textAlign=e.T>0.8?'right':'left';gP.fillText(e.name,px+(e.T>0.8?-14:14),py+(e.I>0.9?20:-12))}})}
+function ppTime(tr){const F=frame(cvPt,{x0:0,x1:30,y0:0,y1:1,l:40,b:30,t:12});axes(gPt,F,[0,10,20,30],[0,.5,1],'time','');if(!tr)return;line(gPt,F,tr.pts.map(p=>[p[0],p[1]]),C.bio,2.5);line(gPt,F,tr.pts.map(p=>[p[0],p[2]]),C.obs,2,[6,5])}
+function ppLaunch(a,b){const f=MED.tiF(PP.p);let y=[a,b];const pts=[];for(let i=0;i<=3000;i++){if(i%5===0)pts.push([i*0.01,y[0],y[1]]);y=MED.rk4(f,y,0,0.01)}const fate=y[0]<0.05?'controlled':y[0]>0.9?'escape':'undecided';PP.trajs.push({pts,fate});if(PP.trajs.length>8)PP.trajs.shift();PP.fates.add(fate);
+  ppDraw();ppTime(PP.trajs[PP.trajs.length-1]);const m=$('#ppMsg');if(fate==='controlled'){m.className='msg math';m.innerHTML='<b>Controlled</b>The immune system wins: disease → 0, immunity settles at its normal level.'}else if(fate==='escape'){m.className='msg bio';m.innerHTML='<b>Escape</b>The disease overwhelms the immune response and takes over.'}else{m.className='msg';m.innerHTML='<b>Balanced on the ridge</b>You started almost exactly on the boundary; it\'s taking forever to choose.'}
+  if(PP.fates.has('controlled')&&PP.fates.has('escape'))complete('s3','Phase portrait cleared')}
+cvP.addEventListener('pointerdown',e=>{const F=frame(cvP,{x0:0,x1:1.05,y0:0,y1:1.05,l:56,b:46}),[px,py]=cpos(e,cvP);const a=F.ix(px),b=F.iy(py);if(a<0||b<0||a>1.05||b>1.05)return;ppLaunch(Math.max(0.005,a),Math.max(0.005,b));award('pp',10,'Launched a patient')});
+$('#ppK').addEventListener('input',e=>{PP.p.k=+e.target.value;$('#oppK').textContent=PP.p.k.toFixed(2);PP.trajs=[];ppDraw();ppTime(null)});
+ppDraw();ppLaunch(0.3,0.5);PP.fates.clear();
+
+/* ---------- LEVEL 4: marble ---------- */
+const cvM=$('#cvMar'),gM=cvM.getContext('2d');const MB={a:1,x:-1,v:0,drag:false,settledIn:null,visits:new Set(),trans:0};
+function mBasin(){if(MB.a<=0)return 'only';return MB.x<0?'A':'B'}
+function mDraw(){const F=frame(cvM,{x0:-2.2,x1:2.2,y0:-1.4,y1:2.6,l:20,r:20,b:20,t:20});gM.fillStyle=C.bg;gM.fillRect(0,0,F.W,F.H);const pts=[];for(let x=-2.2;x<=2.2;x+=0.01)pts.push([x,MED.V(x,MB.a)]);
+  gM.fillStyle=rgba(C.math,.08);gM.beginPath();gM.moveTo(F.X(-2.2),F.H);pts.forEach(([x,y])=>gM.lineTo(F.X(x),F.Y(y)));gM.lineTo(F.X(2.2),F.H);gM.fill();line(gM,F,pts,C.math,3);
+  if(MB.a>0){const s=Math.sqrt(MB.a);gM.fillStyle=C.dim;gM.font='600 16px '+MONO;gM.textAlign='center';gM.fillText('State A',F.X(-s),F.Y(MED.V(s,MB.a))+34);gM.fillText('State B',F.X(s),F.Y(MED.V(s,MB.a))+34)}
+  const y=MED.V(MB.x,MB.a),px=F.X(MB.x),py=F.Y(y)-16;const g=gM.createRadialGradient(px-5,py-5,2,px,py,16);g.addColorStop(0,'#fff');g.addColorStop(1,C.bio);gM.fillStyle=g;gM.beginPath();gM.arc(px,py,16,0,7);gM.fill();if(MB.drag){gM.strokeStyle=C.input;gM.lineWidth=2;gM.stroke()}
+  $('#omA').textContent=MB.a.toFixed(2);const n=MB.a>0?2:1;$('#mN').textContent=n;$('#mIn').textContent=MB.a>0?(MB.x<0?'State A':'State B'):'the only valley'}
+function mStep(){if(MB.drag)return;const acc=-MED.dV(MB.x,MB.a)*2.2-1.7*MB.v;MB.v+=acc*0.016;MB.x+=MB.v*0.016;MB.x=Math.max(-2.15,Math.min(2.15,MB.x));
+  if(Math.abs(MB.v)<0.06&&Math.abs(MED.dV(MB.x,MB.a))<0.12&&MB.a>0.2){const b=mBasin();if(MB.settledIn&&b!==MB.settledIn){MB.trans++;award('tip',25,'Tipped the system');complete('s4','Marble cleared');const m=$('#mMsg');m.className='msg bio';m.innerHTML=`<b>Tipped into State ${b}</b>Pushed past the ridge, the system fell into a completely different stable state. That's a tipping point.`}MB.settledIn=b}}
+cvM.addEventListener('pointerdown',e=>{MB.drag=true;cvM.setPointerCapture(e.pointerId);mMove(e)});cvM.addEventListener('pointermove',e=>{if(MB.drag)mMove(e)});cvM.addEventListener('pointerup',()=>{MB.drag=false;MB.v=0});
+function mMove(e){const F=frame(cvM,{x0:-2.2,x1:2.2,y0:-1.4,y1:2.6,l:20,r:20,b:20,t:20});MB.x=Math.max(-2.15,Math.min(2.15,F.ix(cpos(e,cvM)[0])))}
+$('#mA').addEventListener('input',e=>{MB.a=+e.target.value;const m=$('#mMsg');if(MB.a<=0){m.className='msg';m.innerHTML='<b>One valley</b>Weak feedback: one stable state. Wherever you drop the marble, it comes back.';MB.settledIn=null}else{m.className='msg';m.innerHTML='<b>Two valleys</b>Strong feedback: two stable states. Drag the marble over the ridge.'}});
+let mVis=false;visible(cvM,v=>mVis=v);(function ml(){if(mVis||!MB._d){mStep();mDraw();MB._d=1}requestAnimationFrame(ml)})();
+
+/* ---------- LEVEL 5: guess the hidden system ---------- */
+const G5={truth:t=>80*(1-Math.exp(-0.35*t)),data:[],more:[],model:null,tried:new Set(),revealed:false,fits:{}};
+(function(){const r=MED.rng(42);[0.5,1,1.5,2,2.5].forEach(t=>G5.data.push([t,G5.truth(t)+2*MED.gauss(r)]));[4,5.5,7,8.5,10].forEach(t=>G5.more.push([t,G5.truth(t)+2*MED.gauss(r)]))})();
+const MODELS5={A:{eq:'x(t) = A\\,e^{-kt}',f:(t,p)=>p[0]*Math.exp(-p[1]*t),x0:[60,0.2]},B:{eq:'x(t) = A\\,(1-e^{-kt})',f:(t,p)=>p[0]*(1-Math.exp(-p[1]*t)),x0:[60,0.5]},C:{eq:'x(t) = A\\sin(\\omega t) + B',f:(t,p)=>p[0]*Math.sin(p[1]*t)+p[2],x0:[40,0.4,0]}};
+function fit5(key,data){const M=MODELS5[key];const fun=x=>{let s=0;for(const [t,y] of data){const d=y-M.f(t,x);s+=d*d}return s};let best=null;const starts=key==='C'?[[40,0.3,0],[60,0.5,0],[50,0.2,10],[80,0.4,-10]]:[M.x0,[M.x0[0]*1.5,M.x0[1]*2]];
+  starts.forEach(s=>{let r=nmPlain(fun,s);r=nmPlain(fun,r.x);if(!best||r.f<best.f)best=r});return best}
+function nmPlain(fun,x0){const n=x0.length;let S=[x0.slice()];for(let i=0;i<n;i++){const x=x0.slice();x[i]=x[i]*1.2+(x[i]===0?5:0);S.push(x)}let F=S.map(fun);for(let it=0;it<500;it++){const o=[...S.keys()].sort((a,b)=>F[a]-F[b]);S=o.map(i=>S[i]);F=o.map(i=>F[i]);const c=new Array(n).fill(0);for(let i=0;i<n;i++)for(let j=0;j<n;j++)c[j]+=S[i][j]/n;const ref=c.map((v,j)=>2*v-S[n][j]),fr=fun(ref);if(fr<F[0]){const ex=c.map((v,j)=>3*v-2*S[n][j]),fe=fun(ex);if(fe<fr){S[n]=ex;F[n]=fe}else{S[n]=ref;F[n]=fr}}else if(fr<F[n-1]){S[n]=ref;F[n]=fr}else{const co=c.map((v,j)=>.5*(v+S[n][j])),fc=fun(co);if(fc<F[n]){S[n]=co;F[n]=fc}else for(let i=1;i<=n;i++){S[i]=S[i].map((v,j)=>.5*(v+S[0][j]));F[i]=fun(S[i])}}}const o=[...S.keys()].sort((a,b)=>F[a]-F[b]);return {x:S[o[0]],f:F[o[0]]}}
+const cvG=$('#cvGuess'),gG=cvG.getContext('2d');
+function gDraw(){const F=frame(cvG,{x0:0,x1:10.5,y0:-20,y1:110});axes(gG,F,[0,2,4,6,8,10],[0,25,50,75,100],'time (hours)','biomarker');clip(gG,F);
+  gG.fillStyle=rgba(C.obs,.04);gG.fillRect(F.X(0),F.t,F.X(2.75)-F.X(0),F.H-F.t-F.b);
+  const all=G5.revealed?G5.data.concat(G5.more):G5.data;
+  ['A','B','C'].forEach(k=>{if(!G5.fits[k])return;const p=G5.fits[k].x,M=MODELS5[k];const a=[],b=[];for(let t=0;t<=10.5;t+=0.05){(t<=2.75?a:b).push([t,M.f(t,p)])}b.unshift(a[a.length-1]);const on=k===G5.model;line(gG,F,a,rgba(C.math,on?1:.3),on?3.2:1.6);line(gG,F,b,rgba(C.math,on?1:.3),on?3.2:1.6,[8,6])});
+  if(G5.revealed){const a=[];for(let t=0;t<=10.5;t+=0.05)a.push([t,G5.truth(t)]);line(gG,F,a,C.bio,2.5)}
+  gG.restore();dots(gG,F,all,C.obs,6);gG.fillStyle=C.dim;gG.font='500 13px '+MONO;gG.textAlign='left';gG.fillText('measured window',F.X(0.15),F.t+16);gG.fillText(G5.revealed?'later measurements':'the future (unmeasured)',F.X(3.1),F.t+16)}
+function gSel(k){G5.model=k;$$('#gModels .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===k));const data=G5.revealed?G5.data.concat(G5.more):G5.data;G5.fits[k]=fit5(k,data);G5.tried.add(k);
+  $('#gEq').innerHTML=tex(MODELS5[k].eq,true);$('#gErr').textContent=G5.fits[k].f.toFixed(1);$('#gTried').textContent=G5.tried.size+' of 3';$('#gMore').disabled=G5.tried.size<2||G5.revealed;
+  const m=$('#gMsg');if(!G5.revealed){const good=['B','C'].filter(x=>G5.fits[x]&&G5.fits[x].f<40);m.className='msg';m.innerHTML=k==='A'?'<b>Bad fit</b>A decay can\'t climb. The error is huge. Rule it out.':`<b>Fits well · error ${G5.fits[k].f.toFixed(1)}</b>${good.length>1?'B and C both fit the five dots almost equally well, yet they predict completely different futures (dashed).':'Try another model too.'}`;if(G5.tried.size>=2)m.innerHTML+=' Now wait, and measure again.'}
+  else{const e=G5.fits[k].f;m.className=k==='B'?'msg math':'msg bio';m.innerHTML=k==='B'?`<b>Still fits · error ${e.toFixed(1)}</b>Model B survives the new data. That doesn't prove it's true; it just hasn't been ruled out yet.`:`<b>Broken by new data · error ${e.toFixed(0)}</b>The oscillation predicted a fall that never came.`}
+  gDraw();award('g'+k,8,'Tried model '+k)}
+$('#gModels').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)gSel(b.dataset.m)});
+$('#gMore').addEventListener('click',()=>{G5.revealed=true;$('#gMore').disabled=true;Object.keys(G5.fits).forEach(k=>G5.fits[k]=fit5(k,G5.data.concat(G5.more)));gSel(G5.model||'B');const m=$('#gMsg');m.className='msg math';m.innerHTML='<b>Several models fit the visible data surprisingly well</b>The later measurements (and the coral truth) finally separate them. Click B and C again to compare their errors now.';complete('s5','Hidden system cleared')});
+gDraw();
+// 5b landscape
+const cvF=$('#cvFit'),gF=cvF.getContext('2d'),cvL=$('#cvLand'),gL=cvL.getContext('2d');const FB={A:50,k:0.8,path:[]};
+const E5=(A,k)=>{let s=0;for(const [t,y] of G5.data){const d=y-A*(1-Math.exp(-k*t));s+=d*d}return s};
+const LAND=(function(){const N=120,img=[];let mn=1e9,mx=0,best=[0,0];for(let j=0;j<N;j++)for(let i=0;i<N;i++){const A=20+100*i/(N-1),k=0.05+1.45*j/(N-1),e=E5(A,k);img.push(e);if(e<mn){mn=e;best=[A,k]}mx=Math.max(mx,e)}return {N,img,mn,mx,best}})();
+const landImg=(function(){const N=LAND.N,oc=document.createElement('canvas');oc.width=N;oc.height=N;const g=oc.getContext('2d'),im=g.createImageData(N,N);const lo=Math.log(LAND.mn+1),hi=Math.log(LAND.mx+1);const M=rgb(C.math),B=rgb(C.bg);for(let j=0;j<N;j++)for(let i=0;i<N;i++){const v=(Math.log(LAND.img[i+N*j]+1)-lo)/(hi-lo),a=Math.pow(1-v,2.2),o=4*(i+N*(N-1-j));im.data[o]=B[0]+(M[0]-B[0])*a;im.data[o+1]=B[1]+(M[1]-B[1])*a;im.data[o+2]=B[2]+(M[2]-B[2])*a;im.data[o+3]=255}g.putImageData(im,0,0);return oc})();
+function fbDraw(){const F=frame(cvF,{x0:0,x1:3,y0:0,y1:100,l:44});axes(gF,F,[0,1,2,3],[0,50,100],'hours','');clip(gF,F);const a=[];for(let t=0;t<=3;t+=0.02)a.push([t,FB.A*(1-Math.exp(-FB.k*t))]);
+  G5.data.forEach(([t,y])=>{const yh=FB.A*(1-Math.exp(-FB.k*t));gF.strokeStyle=rgba(C.input,.7);gF.lineWidth=2;gF.beginPath();gF.moveTo(F.X(t),F.Y(y));gF.lineTo(F.X(t),F.Y(yh));gF.stroke()});line(gF,F,a,C.math,3);gF.restore();dots(gF,F,G5.data,C.obs,6);
+  const W=cvL.width,pad=40;gL.fillStyle=C.bg;gL.fillRect(0,0,W,W);gL.imageSmoothingEnabled=true;gL.drawImage(landImg,pad,10,W-pad-10,W-pad-10);const LX=A=>pad+(A-20)/100*(W-pad-10),LY=k=>10+(1-(k-0.05)/1.45)*(W-pad-10);
+  gL.fillStyle=C.dim;gL.font='500 13px '+MONO;gL.textAlign='center';gL.fillText('plateau A →',W/2,W-8);gL.save();gL.translate(14,W/2);gL.rotate(-Math.PI/2);gL.fillText('rate k →',0,0);gL.restore();
+  if(FB.path.length>1){gL.strokeStyle=C.input;gL.lineWidth=2;gL.beginPath();FB.path.forEach(([A,k],i)=>i?gL.lineTo(LX(A),LY(k)):gL.moveTo(LX(A),LY(k)));gL.stroke()}
+  gL.strokeStyle=C.text;gL.lineWidth=1.5;gL.beginPath();gL.arc(LX(LAND.best[0]),LY(LAND.best[1]),6,0,7);gL.stroke();
+  gL.fillStyle=C.input;gL.beginPath();gL.arc(LX(FB.A),LY(FB.k),8,0,7);gL.fill();
+  const e=E5(FB.A,FB.k);$('#fE').textContent=e.toFixed(1);$('#fBest').textContent=LAND.mn.toFixed(1);$('#ofA').textContent=FB.A.toFixed(1);$('#ofK').textContent=FB.k.toFixed(3);if(e<LAND.mn*1.6+3)award('handfit',20,'Fitted by hand')}
+$('#fA').addEventListener('input',e=>{FB.A=+e.target.value;FB.path=[];fbDraw()});$('#fK').addEventListener('input',e=>{FB.k=+e.target.value;FB.path=[];fbDraw()});
+cvL.addEventListener('pointerdown',e=>{const W=cvL.width,pad=40,[px,py]=cpos(e,cvL);FB.A=Math.max(20,Math.min(120,20+(px-pad)/(W-pad-10)*100));FB.k=Math.max(.05,Math.min(1.5,0.05+(1-(py-10)/(W-pad-10))*1.45));$('#fA').value=FB.A;$('#fK').value=FB.k;FB.path=[];fbDraw()});
+$('#fAuto').addEventListener('click',()=>{let A=FB.A,k=FB.k;FB.path=[[A,k]];let lr=0.6,steps=0;const sA=100,sk=1.45;(function st(){for(let r=0;r<6;r++){const h=1e-4,gA=(E5(A+h*sA,k)-E5(A-h*sA,k))/(2*h),gk=(E5(A,k+h*sk)-E5(A,k-h*sk))/(2*h);const nrm=Math.hypot(gA,gk)||1;const step=Math.min(0.02,lr*nrm/5000);A-=sA*step*gA/nrm;k-=sk*step*gk/nrm;A=Math.max(20,Math.min(120,A));k=Math.max(.05,Math.min(1.5,k));FB.path.push([A,k])}FB.A=A;FB.k=k;$('#fA').value=A;$('#fK').value=k;fbDraw();steps++;if(steps<120&&E5(A,k)>LAND.mn*1.02+0.5&&!reduce)requestAnimationFrame(st);else{award('auto',15,'Descended the landscape')}})()});
+fbDraw();
+
+/* ---------- LEVEL 6: identifiability ---------- */
+const cvI=$('#cvId'),gI=cvI.getContext('2d'),cvIL=$('#cvIdL'),gIL=cvIL.getContext('2d');const ID={a:2,b:1,second:false,fits:[]};
+const IDD=(function(){const r=MED.rng(5);return {x:[0.5,1,1.5,2,2.5,3].map(x=>[x,5*x+0.4*MED.gauss(r)]),z:[0.5,1,1.5,2,2.5,3].map(x=>[x,1.5*x*x+0.4*MED.gauss(r)])}})();
+const EI=(a,b)=>{let s=0;IDD.x.forEach(([x,y])=>{const d=y-(a+b)*x;s+=d*d});if(ID.second)IDD.z.forEach(([x,z])=>{const d=z-a*x*x;s+=d*d});return s};
+function idLand(){const N=100,oc=document.createElement('canvas');oc.width=N;oc.height=N;const g=oc.getContext('2d'),im=g.createImageData(N,N);let mn=1e9,mx=0;const v=[];for(let j=0;j<N;j++)for(let i=0;i<N;i++){const e=EI(5*i/(N-1),5*j/(N-1));v.push(e);mn=Math.min(mn,e);mx=Math.max(mx,e)}const M=rgb(C.math),B=rgb(C.bg);for(let j=0;j<N;j++)for(let i=0;i<N;i++){const t=(Math.log(v[i+N*j]+1)-Math.log(mn+1))/(Math.log(mx+1)-Math.log(mn+1)),a=Math.pow(1-t,2.6),o=4*(i+N*(N-1-j));im.data[o]=B[0]+(M[0]-B[0])*a;im.data[o+1]=B[1]+(M[1]-B[1])*a;im.data[o+2]=B[2]+(M[2]-B[2])*a;im.data[o+3]=255}g.putImageData(im,0,0);return oc}
+let idImg=idLand();
+function idDraw(){const F=frame(cvI,{x0:0,x1:3.2,y0:0,y1:18,l:44});axes(gI,F,[0,1,2,3],[0,6,12,18],'x','');clip(gI,F);line(gI,F,[[0,0],[3.2,(ID.a+ID.b)*3.2]],C.math,3);if(ID.second){const a=[];for(let x=0;x<=3.2;x+=0.05)a.push([x,ID.a*x*x]);line(gI,F,a,C.math,2,[6,5])}gI.restore();dots(gI,F,IDD.x,C.obs,6);if(ID.second)dots(gI,F,IDD.z,rgba(C.obs,.55),5);
+  gI.fillStyle=C.dim;gI.font='500 13px '+MONO;gI.textAlign='left';gI.fillText('output y = (a+b)x'+(ID.second?'   and   z = a·x² (dashed)':''),F.l+6,F.t+14);
+  const W=cvIL.width,pad=40;gIL.fillStyle=C.bg;gIL.fillRect(0,0,W,W);gIL.drawImage(idImg,pad,10,W-pad-10,W-pad-10);const LX=a=>pad+a/5*(W-pad-10),LY=b=>10+(1-b/5)*(W-pad-10);
+  gIL.fillStyle=C.dim;gIL.font='500 13px '+MONO;gIL.textAlign='center';gIL.fillText('a →',W/2,W-8);gIL.save();gIL.translate(14,W/2);gIL.rotate(-Math.PI/2);gIL.fillText('b →',0,0);gIL.restore();
+  ID.fits.forEach(([a,b])=>{gIL.strokeStyle=C.text;gIL.lineWidth=1.5;gIL.beginPath();gIL.arc(LX(a),LY(b),6,0,7);gIL.stroke()});gIL.fillStyle=C.input;gIL.beginPath();gIL.arc(LX(ID.a),LY(ID.b),8,0,7);gIL.fill();
+  $('#oiA').textContent=ID.a.toFixed(2);$('#oiB').textContent=ID.b.toFixed(2)}
+$('#iA').addEventListener('input',e=>{ID.a=+e.target.value;idDraw()});$('#iB').addEventListener('input',e=>{ID.b=+e.target.value;idDraw()});
+$('#iFit').addEventListener('click',()=>{const r=Math.random;const s=[r()*5,r()*5];const res=nmPlain(x=>{if(x[0]<0||x[1]<0||x[0]>5||x[1]>5)return 1e6;return EI(x[0],x[1])},s);ID.a=res.x[0];ID.b=res.x[1];ID.fits.push(res.x);if(ID.fits.length>6)ID.fits.shift();$('#iA').value=ID.a;$('#iB').value=ID.b;idDraw();
+  const m=$('#iMsg');if(!ID.second){m.className='msg bio';m.innerHTML=`<b>Answer #${ID.fits.length}: a = ${ID.a.toFixed(2)}, b = ${ID.b.toFixed(2)}</b>Same error every time (${res.f.toFixed(2)}), different a every time. The data only know a + b = ${(ID.a+ID.b).toFixed(2)}.`;if(ID.fits.length>=3)award('idtrap',20,'Fell into the valley')}else{m.className='msg math';m.innerHTML=`<b>Identifiable · a = ${ID.a.toFixed(2)}, b = ${ID.b.toFixed(2)}</b>Every restart now lands on the same point. The new measurement z depends on a alone, and that broke the tie.`;complete('s6','Identifiability cleared')}});
+$('#iNew').addEventListener('click',e=>{ID.second=!ID.second;e.target.setAttribute('aria-pressed',ID.second);e.target.textContent=ID.second?'Remove the second measurement':'Add a second kind of measurement';ID.fits=[];idImg=idLand();idDraw();const m=$('#iMsg');m.className='msg';m.innerHTML=ID.second?'<b>The valley closed into a pit</b>Now auto-fit again from random starts.':'<b>A valley, not a pit</b>The bottom of this landscape is a whole line. Auto-fit a few times and compare the answers.'});
+idDraw();
+
+/* ---------- LEVEL 7: Bayes ---------- */
+const cvPo=$('#cvPost'),gPo=cvPo.getContext('2d'),cvCo=$('#cvConc'),gCo=cvCo.getContext('2d');
+const KG=MED.bayesGrid(400,0.02,1.4);const BTIMES=[1,2,3,4.5,6,8];
+const BY={k:0,sigma:0.08,obs:[],post:null,hist:[],reveal:false,r:MED.rng(99)};
+function prior(){const p=KG.map(k=>{const z=(Math.log(k)-Math.log(0.35))/0.75;return Math.exp(-z*z/2)/k});return norm(p)}
+function norm(p){const dk=KG[1]-KG[0];const s=p.reduce((a,b)=>a+b,0)*dk;return p.map(v=>v/s)}
+function stats(p){const dk=KG[1]-KG[0];let m=0,c=0,lo=null,hi=null;p.forEach((v,i)=>m+=KG[i]*v*dk);p.forEach((v,i)=>{c+=v*dk;if(lo===null&&c>=0.05)lo=KG[i];if(hi===null&&c>=0.95)hi=KG[i]});return {m,lo,hi}}
+function byNew(){BY.k=0.15+Math.random()*0.6;BY.obs=[];BY.post=prior();BY.hist=[];BY.reveal=false;byUI()}
+function byTake(){if(BY.obs.length>=BTIMES.length)return;const t=BTIMES[BY.obs.length],y=Math.exp(-BY.k*t)+BY.sigma*MED.gauss(BY.r);BY.obs.push([t,y]);BY.hist.push(BY.post);
+  BY.post=norm(BY.post.map((p,i)=>{const d=y-Math.exp(-KG[i]*t);return p*Math.exp(-d*d/(2*BY.sigma*BY.sigma))}));if(BY.hist.length>5)BY.hist.shift();byUI();award('blood'+BY.obs.length,6,'Drew blood');if(BY.obs.length>=4)complete('s7','Bayes cleared')}
+function byUI(){const F=frame(cvPo,{x0:0,x1:1.4,y0:0,y1:1.05,l:20,b:38});axes(gPo,F,[0,.2,.4,.6,.8,1,1.2,1.4],[],'elimination rate k (per hour)','',v=>v.toFixed(1));const pk=Math.max(...BY.post);
+  BY.hist.forEach((h,i)=>{const m=Math.max(...h);line(gPo,F,KG.map((k,j)=>[k,h[j]/pk*.95]),rgba(C.dim,.25+.1*i),1.3)});
+  gPo.fillStyle=rgba(C.math,.22);gPo.beginPath();gPo.moveTo(F.X(KG[0]),F.Y(0));KG.forEach((k,j)=>gPo.lineTo(F.X(k),F.Y(BY.post[j]/pk*.95)));gPo.lineTo(F.X(KG[KG.length-1]),F.Y(0));gPo.fill();line(gPo,F,KG.map((k,j)=>[k,BY.post[j]/pk*.95]),C.math,2.8);
+  if(BY.reveal){gPo.strokeStyle=C.bio;gPo.lineWidth=2.5;gPo.beginPath();gPo.moveTo(F.X(BY.k),F.t);gPo.lineTo(F.X(BY.k),F.H-F.b);gPo.stroke()}
+  const s=stats(BY.post);
+  // concentration panel
+  const G=frame(cvCo,{x0:0,x1:8.5,y0:-0.15,y1:1.15,l:44});axes(gCo,G,[0,2,4,6,8],[0,.5,1],'hours since dose','C(t)');clip(gCo,G);
+  const dk=KG[1]-KG[0];const cdf=[];let c=0;BY.post.forEach(v=>{c+=v*dk;cdf.push(c)});const q=pp=>KG[Math.max(0,cdf.findIndex(v=>v>=pp))];const kl=q(0.05),kh=q(0.95);
+  gCo.fillStyle=rgba(C.math,.22);gCo.beginPath();for(let t=0;t<=8.5;t+=0.1)gCo.lineTo(G.X(t),G.Y(Math.exp(-kl*t)));for(let t=8.5;t>=0;t-=0.1)gCo.lineTo(G.X(t),G.Y(Math.exp(-kh*t)));gCo.fill();
+  const mc=[];for(let t=0;t<=8.5;t+=0.05)mc.push([t,Math.exp(-s.m*t)]);line(gCo,G,mc,C.math,2.5);
+  if(BY.reveal){const tc=[];for(let t=0;t<=8.5;t+=0.05)tc.push([t,Math.exp(-BY.k*t)]);line(gCo,G,tc,C.bio,2.2)}
+  gCo.restore();dots(gCo,G,BY.obs,C.obs,6);
+  $('#obS').textContent=BY.sigma.toFixed(2);const n=BY.obs.length;$('#bStage').textContent=n?'After blood test '+n:'Before data';$('#bMean').textContent=s.m.toFixed(3)+' /h';$('#bCI').textContent=s.lo.toFixed(2)+' – '+s.hi.toFixed(2);$('#bHL').textContent=(Math.LN2/s.m).toFixed(1)+' h';
+  $('#bTake').disabled=n>=BTIMES.length;const m=$('#bMsg');
+  if(BY.reveal){const inside=BY.k>=s.lo&&BY.k<=s.hi;m.className=inside?'msg math':'msg bio';m.innerHTML=`<b>True k = ${BY.k.toFixed(3)} · ${inside?'inside':'outside'} your 90% interval</b>${inside?'The belief honestly contained the truth.':'It happens about 1 time in 10, more often with few or noisy tests. Honest uncertainty can still miss.'}`}
+  else if(n===0){m.className='msg';m.innerHTML='<b>Before data</b>This wide curve is everything you believe before measuring: k could be almost anything between 0.05 and 1.2 per hour.'}
+  else{const w=s.hi-s.lo;m.className='msg math';m.innerHTML=`<b>After test ${n} · interval width ${w.toFixed(2)}</b>${n===1?'One noisy number already rules out a lot of values.':n<4?'Each test narrows the curve. Faint lines show earlier beliefs.':'Diminishing returns: each new test narrows it a little less.'}`}}
+$('#bTake').addEventListener('click',byTake);$('#bReveal').addEventListener('click',()=>{BY.reveal=true;byUI();award('breveal',10,'Revealed the truth')});$('#bReset').addEventListener('click',byNew);
+$('#bS').addEventListener('input',e=>{BY.sigma=+e.target.value;$('#obS').textContent=BY.sigma.toFixed(2)});
+byNew();
+
+/* ---------- LEVEL 8: measurement design ---------- */
+const NODES=[[110,80],[290,80],[110,240],[290,240]];const EDGES=[[0,1],[0,2],[1,3],[2,3]];const DS={sensors:[],ran:false,tried:[],truth:null};
+function netDraw(){const counts=[0,0,0,0];DS.sensors.forEach(s=>counts[s]++);let h='';EDGES.forEach(([a,b])=>{h+=`<line x1="${NODES[a][0]}" y1="${NODES[a][1]}" x2="${NODES[b][0]}" y2="${NODES[b][1]}" stroke="${C.bio}" stroke-opacity=".5" stroke-width="3"/>`});
+  NODES.forEach(([x,y],i)=>{h+=`<g class="node" data-i="${i}" tabindex="0" role="button" aria-label="Compartment x${i+1}"><circle cx="${x}" cy="${y}" r="38" fill="${C.panel2}" stroke="${counts[i]?C.input:C.bio}" stroke-width="${counts[i]?3:2}"/><text x="${x}" y="${y+7}" text-anchor="middle" font-family="Instrument Serif, serif" font-size="28" fill="${C.text}">x${['₁','₂','₃','₄'][i]}</text>`;
+    for(let k=0;k<counts[i];k++)h+=`<circle cx="${x-18+k*18}" cy="${y-50}" r="7" fill="${C.input}"/>`;h+='</g>'});
+  $('#netSvg').innerHTML=h;$('#dLeft').textContent=3-DS.sensors.length}
+$('#netSvg').addEventListener('click',e=>{const g=e.target.closest('.node');if(!g||DS.sensors.length>=3)return;DS.sensors.push(+g.dataset.i);netDraw()});
+$('#netSvg').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.node');if(!g||DS.sensors.length>=3)return;e.preventDefault();DS.sensors.push(+g.dataset.i);netDraw()});
+$('#dClear').addEventListener('click',()=>{DS.sensors=[];netDraw()});
+function dBars(mu,sd,truth){$('#dBars').innerHTML=[0,1,2,3].map(i=>{const X=v=>50+Math.max(-48,Math.min(48,v/2.6*50));const lo=X(mu?mu[i]-sd[i]:-1),hi=X(mu?mu[i]+sd[i]:1);return `<div class="nb"><span>x${i+1}</span><div class="tr"><span class="z"></span><span class="hz" style="left:${lo}%;width:${hi-lo}%"></span>${mu?`<span class="est" style="left:calc(${X(mu[i])}% - 1px)"></span><span class="tru" style="left:calc(${X(truth[i])}% - 1px)"></span>`:''}</div><span>±${(sd?sd[i]:1).toFixed(2)}</span></div>`}).join('')}
+dBars(null,null,null);
+$('#dRun').addEventListener('click',()=>{if(DS.sensors.length<3){const m=$('#dMsg');m.className='msg inp';m.innerHTML='<b>Place all three sensors first</b>Click compartments on the left.';return}
+  const r=MED.rng(Date.now()%100000+1);const truth=[0,1,2,3].map(()=>MED.gauss(r)*1.1);const ts=[0.5,1,1.5,2,2.5,3],sig=0.1,A=MED.netA();const Phis=ts.map(t=>MED.matExp(A,t));
+  const Hrows=[],ys=[];DS.sensors.forEach(nd=>Phis.forEach(P=>{const h=P[nd];Hrows.push(h);ys.push(h.reduce((s,v,j)=>s+v*truth[j],0)+sig*MED.gauss(r))}));
+  const Cov=MED.designCov(DS.sensors,ts,sig,1);const b=[0,1,2,3].map(i=>Hrows.reduce((s,h,k)=>s+h[i]*ys[k],0)/(sig*sig));const mu=Cov.map(row=>row.reduce((s,v,j)=>s+v*b[j],0));const sd=Cov.map((row,i)=>Math.sqrt(row[i]));
+  dBars(mu,sd,truth);const tot=sd.reduce((a,b)=>a+b,0);$('#dMeter').style.width=Math.min(100,tot/4*100)+'%';const diff=Math.sqrt(Cov[1][1]+Cov[2][2]-2*Cov[1][2]);
+  const key=DS.sensors.slice().sort().join('');DS.tried.push(tot);const m=$('#dMsg');
+  if(diff>1.2){m.className='msg bio';m.innerHTML=`<b>Total uncertainty ${tot.toFixed(2)} · a blind spot</b>The difference x₂ − x₃ is almost as uncertain as before you measured (±${diff.toFixed(2)}). Your sensors sit symmetrically, so x₂ and x₃ look identical to them.`}
+  else if(tot<1.3){m.className='msg math';m.innerHTML=`<b>Total uncertainty ${tot.toFixed(2)} · excellent design</b>Every compartment is pinned down. Breaking the symmetry is what made the difference.`;complete('s8','Measurement design cleared')}
+  else{m.className='msg inp';m.innerHTML=`<b>Total uncertainty ${tot.toFixed(2)} · okay</b>Better than nothing, but some compartments are still fuzzy. Can you get under 1.3?`}
+  award('design'+key,10,'Ran an experiment');DS.sensors=[];netDraw()});
+netDraw();
+
+/* ---------- LEVEL 9: bifurcation ---------- */
+const cvBf=$('#cvBif'),gBf=cvBf.getContext('2d');const BF={h:-0.6,x:-1.15,jumps:0,dir:new Set(),drag:false};
+function bfFrame(){return frame(cvBf,{x0:-0.8,x1:0.8,y0:-1.6,y1:1.6,l:50})}
+function bfDraw(){const F=bfFrame();axes(gBf,F,[-0.8,-0.4,0,0.4,0.8],[-1.5,-1,-.5,0,.5,1,1.5],'outside stress h →','state x',v=>(v<0?'−':'')+Math.abs(v),v=>(v<0?'−':'')+Math.abs(v));
+  // branches: parametrize by x: h = x^3 - x
+  const st=[],un=[];for(let x=-1.6;x<=1.6;x+=0.005){const h=x*x*x-x;const p=[h,x];if(1-3*x*x<0)st.push(p);else un.push(p)}
+  const segs=a=>{const out=[];let cur=[];a.forEach((p,i)=>{if(i&&Math.abs(p[1]-a[i-1][1])>0.02){out.push(cur);cur=[]}cur.push(p)});out.push(cur);return out};
+  clip(gBf,F);segs(st).forEach(s=>line(gBf,F,s,C.math,3.5));segs(un).forEach(s=>line(gBf,F,s,C.math,2,[7,6]));
+  [[2/(3*Math.sqrt(3)),-1/Math.sqrt(3)],[-2/(3*Math.sqrt(3)),1/Math.sqrt(3)]].forEach(([h,x])=>{gBf.fillStyle=C.text;gBf.beginPath();gBf.arc(F.X(h),F.Y(x),5,0,7);gBf.fill()});
+  gBf.strokeStyle=C.input;gBf.lineWidth=2.5;gBf.beginPath();gBf.moveTo(F.X(BF.h),F.t);gBf.lineTo(F.X(BF.h),F.H-F.b);gBf.stroke();gBf.fillStyle=C.input;gBf.beginPath();gBf.arc(F.X(BF.h),F.t+10,8,0,7);gBf.fill();
+  gBf.restore();const g=gBf.createRadialGradient(F.X(BF.h),F.Y(BF.x),0,F.X(BF.h),F.Y(BF.x),20);g.addColorStop(0,rgba(C.bio,1));g.addColorStop(1,rgba(C.bio,0));gBf.fillStyle=g;gBf.beginPath();gBf.arc(F.X(BF.h),F.Y(BF.x),20,0,7);gBf.fill();gBf.fillStyle=C.bio;gBf.beginPath();gBf.arc(F.X(BF.h),F.Y(BF.x),7,0,7);gBf.fill();
+  gBf.fillStyle=C.dim;gBf.font='500 13px '+MONO;gBf.textAlign='left';gBf.fillText('solid: stable   dashed: unstable',F.l+8,F.H-F.b-10)}
+function bfRelax(){for(let i=0;i<400;i++){BF.x+=0.02*(BF.h+BF.x-BF.x*BF.x*BF.x)}}
+function bfSet(h){const before=BF.x>0;BF.h=Math.max(-0.8,Math.min(0.8,h));bfRelax();const after=BF.x>0;const roots=MED.cubicRoots(1,BF.h);
+  if(before!==after){BF.jumps++;BF.dir.add(after?'up':'down');award('jump'+BF.jumps,10,'Tipping point');const m=$('#hMsg');m.className='msg bio';m.innerHTML=after?'<b>Tipped up</b>The low branch ended at h ≈ +0.385. With nowhere to stay, the system leapt to the high branch. Now slide back.':'<b>Tipped down</b>It held on to the high branch far past where it jumped up, until h ≈ −0.385. That lag is hysteresis: the system remembers.'}
+  else if(!BF.jumps){const m=$('#hMsg');m.className='msg';m.innerHTML=BF.x<0?'<b>Low branch</b>Slide the stress up past the fold.':'<b>High branch</b>Slide the stress down.'}
+  if(BF.dir.size===2)complete('s9','Tipping point cleared');
+  $('#hS').value=BF.h;$('#ohS').textContent=f2(BF.h);$('#hN').textContent=roots.length;$('#hX').textContent=f2(BF.x);$('#hJ').textContent=BF.jumps;bfDraw()}
+$('#hS').addEventListener('input',e=>bfSet(+e.target.value));
+cvBf.addEventListener('pointerdown',e=>{BF.drag=true;cvBf.setPointerCapture(e.pointerId);bfSet(bfFrame().ix(cpos(e,cvBf)[0]))});cvBf.addEventListener('pointermove',e=>{if(BF.drag)bfSet(bfFrame().ix(cpos(e,cvBf)[0]))});cvBf.addEventListener('pointerup',()=>BF.drag=false);
+bfSet(-0.6);
+
+/* ---------- LEVEL 10: virtual patients ---------- */
+const PA={r:0.08,k:0.16},PB={r:0.15,k:0.24};let vpS='u1';const vpSeen=new Set(['u1']);
+function vpChart(cv,p,el){const g=cv.getContext('2d');const F=frame(cv,{x0:0,x1:84,y0:0,y1:100,l:44,b:34});axes(g,F,[0,28,56,84],[0,25,50,75,100],'days','% burden');
+  const un=MED.patient(p,'none',84),tr=MED.patient(p,vpS,84);clip(g,F);line(g,F,un.map(q=>[q[0],q[1]]),C.faint,2,[6,5]);line(g,F,tr.map(q=>[q[0],q[1]]),C.bio,3.2);g.restore();
+  const S=MED.SCHED[vpS];g.fillStyle=C.input;for(let d=0;d<84;d+=S.every){g.fillRect(F.X(d)-1.5,F.H-F.b-10*S.dose,3,10*S.dose)}
+  const end=tr[tr.length-1][1];el.innerHTML=`Day 84: <b style="color:${end<40?'var(--ok)':'var(--bio)'}">${end.toFixed(0)}%</b> · ${end<40?'shrinking':'growing'}`;return end}
+function vpUI(){vpChart($('#cvVA'),PA,$('#vA'));vpChart($('#cvVB'),PB,$('#vB'));if(vpSeen.size===3&&$$('#vpAsk .shown').length===3)complete('s10','Virtual patients cleared')}
+$('#vpS').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;vpS=b.dataset.s;vpSeen.add(vpS);$$('#vpS .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));vpUI();award('vp'+vpS,8,'Tried a schedule')});
+$('#vpAsk').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;b.classList.add('shown');b.lastElementChild.textContent=b.dataset.a;vpUI()});
+vpUI();
+// crystal ball
+const CB={unc:false,res:null};
+function cbCompute(){const r=MED.rng(2024),out={};['u1','u2','u3'].forEach(s=>{const v=[];for(let i=0;i<120;i++){const p={r:PB.r*Math.exp(0.15*MED.gauss(r)),k:PB.k*Math.exp(0.25*MED.gauss(r))};const tr=MED.patient(p,s,84,0.1);v.push(tr[tr.length-1][1])}v.sort((a,b)=>a-b);const pt=MED.patient(PB,s,84);out[s]={pt:pt[pt.length-1][1],lo:v[6],hi:v[113]}});return out}
+function cbUI(){if(!CB.res)CB.res=cbCompute();$('#cbBars').innerHTML=['u1','u2','u3'].map(s=>{const o=CB.res[s],X=v=>Math.min(100,v);return `<div class="cbr"><span>${{u1:'Standard',u2:'Double / 14 d',u3:'Half / 3.5 d'}[s]}</span><div class="tr"><span class="fill" style="width:${X(o.pt)}%"></span>${CB.unc?`<span class="wh" style="left:${X(o.lo)}%;width:${X(o.hi)-X(o.lo)}%"></span>`:''}</div><span>${CB.unc?o.lo.toFixed(0)+'–'+o.hi.toFixed(0)+'%':o.pt.toFixed(0)+'%'}</span></div>`}).join('');
+  const m=$('#cbMsg');if(CB.unc){const ov=CB.res.u3.hi>CB.res.u1.lo;m.className='msg math';m.innerHTML=`<b>90% ranges overlap${ov?'':' only a little'}</b>Half-dose-every-3.5-days still looks best on average, but its range overlaps the standard schedule's. The model supports a preference, not a certainty. That's the honest reading.`}else{m.className='msg';m.innerHTML='<b>Point predictions</b>Three neat numbers. Now turn on the uncertainty in Patient B\'s parameters (growth ±15%, sensitivity ±25%).'}}
+$('#cbUnc').addEventListener('click',e=>{CB.unc=!CB.unc;e.target.setAttribute('aria-pressed',CB.unc);e.target.textContent=CB.unc?'Hide uncertainty':'Show uncertainty';cbUI();if(CB.unc)award('cb',15,'Saw the uncertainty')});
+cbUI();
+
+/* ---------- LEVEL 11: regularization ---------- */
+const cvR=$('#cvReg'),gR=cvR.getContext('2d');const RG={d:3,lam:1e-8,show:false};
+const RGD=(function(){const r=MED.rng(17),h=x=>0.6*Math.sin(2.6*x+0.3)+0.5*x;const tr=[...Array(10)].map((_,i)=>{const x=0.03+0.94*i/9+0.02*MED.gauss(r);return [x,h(x)+0.13*MED.gauss(r)]});const te=[...Array(14)].map(()=>{const x=0.02+0.96*r();return [x,h(x)+0.13*MED.gauss(r)]});return {tr,te,h}})();
+function rgUI(){const c=MED.polyFit(RGD.tr.map(p=>p[0]),RGD.tr.map(p=>p[1]),RG.d-1,RG.lam);const F=frame(cvR,{x0:0,x1:1,y0:-1,y1:1.8,l:44});axes(gR,F,[0,.25,.5,.75,1],[-1,0,1],'time','marker');clip(gR,F);
+  const a=[];for(let x=0;x<=1.0001;x+=0.004)a.push([x,c?MED.polyEval(c,x):NaN]);line(gR,F,a,C.math,3);gR.restore();dots(gR,F,RGD.tr,C.obs,6);if(RG.show)RGD.te.forEach(([x,y])=>{gR.strokeStyle=C.bio;gR.lineWidth=2;gR.beginPath();gR.arc(F.X(x),F.Y(y),6,0,7);gR.stroke()});
+  const mse=pts=>Math.sqrt(pts.reduce((s,[x,y])=>s+Math.pow(y-MED.polyEval(c,x),2),0)/pts.length);const tr=mse(RGD.tr),te=mse(RGD.te);
+  $('#orD').textContent=RG.d;$('#orL').textContent=RG.lam<1e-7?'off':RG.lam.toExponential(0);$('#rTr').textContent=tr.toFixed(3);$('#rTe').textContent=RG.show?te.toFixed(3):'hidden';
+  const m=$('#rMsg');if(RG.d>=9&&RG.lam<1e-6){m.className='msg bio';m.innerHTML=`<b>Overfitting · ${RG.d} parameters</b>Training error ${tr.toFixed(3)}: it nearly threads every dot, noise included. ${RG.show?'Look how badly it does on the new measurements.':'Now show the new measurements.'} Then raise the penalty λ.`;RG.saw=true}
+  else if(RG.d>=7&&RG.lam>=1e-4&&te<0.2){m.className='msg math';m.innerHTML=`<b>Regularized · new-data error ${te.toFixed(3)}</b>Same flexible model, but the penalty stops it chasing noise. It predicts new measurements well.`;if(RG.saw&&RG.show)complete('s11','Regularization cleared')}
+  else if(RG.d<=2){m.className='msg';m.innerHTML='<b>Too simple</b>A straight line misses the real bend. That\'s underfitting.'}
+  else{m.className='msg';m.innerHTML=`<b>${RG.d} parameters</b>Training error ${tr.toFixed(3)}${RG.show?', new-data error '+te.toFixed(3):''}. Crank the flexibility to the maximum.`}}
+$('#rD').addEventListener('input',e=>{RG.d=+e.target.value;rgUI()});$('#rL').addEventListener('input',e=>{const v=+e.target.value;RG.lam=v<=-7.95?1e-8:Math.pow(10,v);rgUI()});
+$('#rShow').addEventListener('click',e=>{RG.show=!RG.show;e.target.setAttribute('aria-pressed',RG.show);e.target.textContent=RG.show?'Hide new measurements':'Show new measurements';rgUI()});
+rgUI();
+
+/* ---------- LEVEL 12: glass box ---------- */
+let gbShift=false,gbAns=false;
+$('#gbShift').addEventListener('click',e=>{gbShift=!gbShift;e.target.setAttribute('aria-pressed',gbShift);e.target.textContent=gbShift?'Back to the old drug':'The hospital switches to a new drug';
+  $('#bbNote').textContent=gbShift?'chance this patient responds to Drug Y (it has never seen Drug Y)':'chance this patient responds to Drug X';
+  $('#gbFlow').innerHTML=gbShift?'<span>parameter: sensitivity to Drug Y, k = <b class="bio">unknown</b></span><i>↓</i><span>mechanism: does Drug Y saturate the same way? <b class="bio">assumed</b></span><i>↓</i><span>dynamical state: depends on k</span><i>↓</i><span>predicted outcome: a range, until measured</span>':'<span>parameter: drug sensitivity k = 0.24/day</span><i>↓</i><span>mechanism: kill ∝ D/(D+0.6)</span><i>↓</i><span>dynamical state: burden rises 40% → 45% on the standard schedule</span><i>↓</i><span>predicted outcome: poor response; try denser dosing</span>';award('gbshift',10,'Changed the conditions')});
+$('#gbQ').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||gbAns)return;gbAns=true;$$('#gbQ .opt').forEach(x=>{x.disabled=true;if(x.dataset.j==='2')x.classList.add('right')});if(b.dataset.j!=='2')b.classList.add('picked');
+  $('#gbFb').innerHTML='<b style="color:#fff">Neither is automatically trustworthy.</b> A model can be interpretable and wrong. A model can be accurate on historical data and fail under new conditions, like the black box confidently printing 83% for a drug it has never seen. The real challenge is validation.';complete('s12','Glass box cleared')});
+
+/* ---------- LEVEL 13: multiscale ---------- */
+const MS=[
+ {id:'mol',lv:4,x:260,y:40,n:'Molecules',mod:'Drug binding, receptor signalling, gene expression.',meas:'Blood biomarkers, a biopsy\'s gene panel.',hid:'Concentrations inside individual cells; pathway activity.',eq:'Mass-action kinetics: d[C]/dt = k₁[A][B] − k₂[C]',unc:'Rate constants rarely measured in the actual patient.'},
+ {id:'c1',lv:3,x:120,y:120,n:'Immune cells',mod:'Recognising and killing diseased cells.',meas:'Blood cell counts, flow cytometry.',hid:'What the cells are doing inside tissue.',eq:'dI/dt = sI(1 − I) − cIT',unc:'Blood counts may not reflect what happens in the tumor.'},
+ {id:'c2',lv:3,x:260,y:120,n:'Diseased cells',mod:'Division, death, drug response, resistance.',meas:'Biopsy (one place, one time).',hid:'Most cells, most of the time; resistant subpopulations.',eq:'dT/dt = rT(1 − T) − kIT',unc:'A biopsy samples millimetres of a heterogeneous tumor.'},
+ {id:'c3',lv:3,x:400,y:120,n:'Stromal cells',mod:'Support structure, blood-vessel growth.',meas:'Rarely measured directly.',hid:'Almost everything.',eq:'Often left out of models entirely.',unc:'An ignored variable can still drive the outcome.'},
+ {id:'tis',lv:2,x:260,y:200,n:'Tissue',mod:'Spatial spread, oxygen and drug diffusion.',meas:'Imaging: MRI, CT, PET.',hid:'Cell-level detail below the scanner\'s resolution.',eq:'∂u/∂t = D∇²u + f(u): a reaction–diffusion PDE',unc:'Image resolution and segmentation error.'},
+ {id:'org',lv:1,x:260,y:280,n:'Organs',mod:'Organ function and drug clearance.',meas:'Organ-function blood tests, imaging.',hid:'Local damage before function declines.',eq:'Compartment models: dC/dt = −(CL/V)·C',unc:'Population-average parameters applied to one person.'},
+ {id:'bl',lv:1,x:130,y:350,n:'Blood',mod:'Drug transport and immune trafficking.',meas:'Easiest thing to sample.',hid:'What leaves the blood and where it goes.',eq:'dD/dt = −0.35·D + doses',unc:'A snapshot at one time of day.'},
+ {id:'br',lv:1,x:260,y:350,n:'Brain',mod:'Signalling, symptoms, the blood–brain barrier.',meas:'Symptoms, scans.',hid:'Almost all of it.',eq:'Usually a black box in whole-body models.',unc:'Symptoms are indirect and subjective.'},
+ {id:'ht',lv:1,x:390,y:350,n:'Heart',mod:'Circulation, toxicity of drugs.',meas:'ECG, heart rate, echo.',hid:'Cellular electrophysiology.',eq:'Oscillators and electrophysiology models.',unc:'Small changes can tip rhythm (a bifurcation).'},
+ {id:'pt',lv:0,x:260,y:430,n:'Patient',mod:'Outcome: does the person get better?',meas:'Symptoms, survival, quality of life.',hid:'How all the levels above combine.',eq:'Everything above, coupled.',unc:'The sum of every uncertainty below, plus what no model includes.'}];
+const MSE=[['mol','c1'],['mol','c2'],['mol','c3'],['c1','c2'],['c2','c3'],['c1','tis'],['c2','tis'],['c3','tis'],['tis','org'],['org','bl'],['org','br'],['org','ht'],['bl','pt'],['br','pt'],['ht','pt']];
+const LVN=['Patient','Organs','Tissue','Cells','Molecules'];let msZ=0,msSel='pt';const msOpen=new Set();
+function msDraw(){const by=Object.fromEntries(MS.map(n=>[n.id,n]));let h='';MSE.forEach(([a,b])=>{const A=by[a],B=by[b];const on=Math.abs(A.lv-msZ)<=0.5||Math.abs(B.lv-msZ)<=0.5;h+=`<line x1="${A.x}" y1="${A.y}" x2="${B.x}" y2="${B.y}" stroke="${C.bio}" stroke-opacity="${on?.6:.15}" stroke-width="2"/>`});
+  MS.forEach(n=>{const on=n.lv===msZ,sel=n.id===msSel;const r=on?32:22;h+=`<g class="msn" data-id="${n.id}" style="cursor:pointer" tabindex="0" role="button" aria-label="${n.n}"><circle cx="${n.x}" cy="${n.y}" r="${r}" fill="${sel?C.input:C.panel2}" fill-opacity="${on||sel?1:.5}" stroke="${on?C.bio:C.faint}" stroke-width="${on?2.5:1}"/><text x="${n.x}" y="${n.y+(on?50:38)}" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="${on?13:11}" fill="${on?C.text:C.faint}">${n.n}</text></g>`});
+  $('#msSvg').innerHTML=h;$('#ozm').textContent=LVN[msZ];const n=by[msSel];
+  $('#msCard').innerHTML=`<div class="label" style="margin-bottom:4px">${LVN[n.lv]} level</div><h3>${n.n}</h3><dl><dt class="mth">What is modeled</dt><dd>${n.mod}</dd><dt class="obs">What can be measured</dt><dd>${n.meas}</dd><dt class="bio">What is hidden</dt><dd>${n.hid}</dd><dt class="mth">An equation that could represent it</dt><dd>${n.eq}</dd><dt style="color:var(--dim)">What uncertainty remains</dt><dd>${n.unc}</dd></dl>`}
+$('#zm').addEventListener('input',e=>{msZ=+e.target.value;const first=MS.find(n=>n.lv===msZ);msSel=first.id;msOpen.add(msSel);msDraw();if(msOpen.size>=4)complete('s13','Multiscale cleared')});
+const msPick=id=>{msSel=id;msZ=MS.find(n=>n.id===id).lv;$('#zm').value=msZ;msOpen.add(id);msDraw();award('ms'+id,4,'Opened a scale');if(msOpen.size>=4)complete('s13','Multiscale cleared')};
+$('#msSvg').addEventListener('click',e=>{const g=e.target.closest('.msn');if(g)msPick(g.dataset.id)});
+$('#msSvg').addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;const g=e.target.closest('.msn');if(g){e.preventDefault();msPick(g.dataset.id)}});
+msDraw();
+
+/* ---------- LEVEL 14: boss ---------- */
+const cvBs=$('#cvBoss'),gBs=cvBs.getContext('2d');const SLOTS=[0,3,6,9,12,15,18,21,24,27,30];
+const BO={id:0};
+function boNew(){BO.id++;const r=MED.rng(1000+BO.id*7919+Math.floor(Math.random()*1e6));BO.r=r;BO.truth=[15+10*r(),0.045+0.03*r(),100+70*r()];BO.days=[];BO.data=[];BO.model=null;BO.fit=null;BO.drug=null;BO.done=false;
+  $('#pId').textContent=BO.id;$('#pSlots').innerHTML=SLOTS.map(d=>`<button class="slot" data-d="${d}">d${d}</button>`).join('');['st2','st3','st4'].forEach(s=>$('#'+s).classList.add('locked'));$('#st5').hidden=true;$$('#pModels .chip,#pDrugs .chip').forEach(c=>c.setAttribute('aria-pressed','false'));$('#pModelEq').textContent='';$('#pDrugNote').textContent='';$('#pFitNote').textContent='Each is fitted to your scans.';boUI()}
+function truthAt(t,treat){if(t<=30||!treat)return MED.GROW.gom.f(t,BO.truth);const p=MED.project('gom',BO.truth,treat,30,t,0.25);return p[p.length-1][1]}
+function boBand(key,fit,treat){const L=fit.cov?MED.chol(fit.cov):null;const r=MED.rng(77);const ends=[],curves=[];for(let s=0;s<60;s++){let x=fit.x.slice();if(L){const z=x.map(()=>MED.gauss(r));x=x.map((v,i)=>v+L[i].reduce((a,l,j)=>a+l*z[j],0))}const p=x.map(Math.exp);if(key!=='exp'&&p[2]<=p[0])continue;const pr=MED.project(key,p,treat,30,90,0.5);if(!pr.every(q=>isFinite(q[1])))continue;curves.push(pr);ends.push(pr[pr.length-1][1])}
+  ends.sort((a,b)=>a-b);const tl=curves[0]?curves[0].map((q,i)=>{const v=curves.map(c=>c[i][1]).sort((a,b)=>a-b);return [q[0],v[Math.floor(v.length*0.05)],v[Math.floor(v.length*0.5)],v[Math.floor(v.length*0.95)-1]]}):[];return {tl,lo:ends[Math.floor(ends.length*0.05)],md:ends[Math.floor(ends.length*0.5)],hi:ends[Math.floor(ends.length*0.95)-1]}}
+function boUI(){const ymax=Math.max(220,...BO.data.map(d=>d[1]*1.3));const F=frame(cvBs,{x0:0,x1:90,y0:0,y1:ymax,l:56,b:38});axes(gBs,F,[0,15,30,45,60,75,90],[0,Math.round(ymax/4),Math.round(ymax/2),Math.round(3*ymax/4)],'day','tumor volume (mL)');
+  gBs.fillStyle=rgba(C.input,.06);gBs.fillRect(F.X(30),F.t,F.X(90)-F.X(30),F.H-F.t-F.b);gBs.fillStyle=C.dim;gBs.font='500 13px '+MONO;gBs.textAlign='left';gBs.fillText('treatment from day 30',F.X(31),F.t+16);clip(gBs,F);
+  if(BO.fit){const M=MED.GROW[BO.model];const a=[];for(let t=0;t<=30;t+=0.5)a.push([t,M.f(t,BO.fit.p)]);line(gBs,F,a,C.math,3);
+    (BO.drug?[BO.drug]:['none']).forEach(tr=>{const b=boBand(BO.model,BO.fit,tr==='none'?'none':tr);BO.band=b;if(b.tl.length){gBs.fillStyle=rgba(C.math,.18);gBs.beginPath();b.tl.forEach(q=>gBs.lineTo(F.X(q[0]),F.Y(Math.min(ymax*2,q[1]))));for(let i=b.tl.length-1;i>=0;i--)gBs.lineTo(F.X(b.tl[i][0]),F.Y(Math.min(ymax*2,b.tl[i][3])));gBs.fill();line(gBs,F,b.tl.map(q=>[q[0],q[2]]),C.math,2.5,[8,6])}});
+    if(BO.drug){const other=BO.drug==='A'?'B':'A';const pr=MED.project(BO.model,BO.fit.p,other,30,90,0.5);line(gBs,F,pr,rgba(C.math,.4),1.5,[3,5])}}
+  if(BO.done){['A','B'].forEach(tr=>{const a=[];for(let t=0;t<=90;t+=1)a.push([t,truthAt(t,tr)]);line(gBs,F,a,tr===BO.drug?C.bio:rgba(C.bio,.45),tr===BO.drug?3:2,tr===BO.drug?[]:[4,4])})}
+  gBs.restore();dots(gBs,F,BO.data,C.obs,7);if(!BO.data.length){gBs.fillStyle=C.dim;gBs.font='500 16px '+MONO;gBs.textAlign='center';gBs.fillText('Pick up to 5 scan days below to see the tumor',F.X(15),F.Y(ymax/2))}$('#pLeft').textContent=5-BO.days.length}
+$('#pSlots').addEventListener('click',e=>{const b=e.target.closest('.slot');if(!b||BO.done||b.classList.contains('on')||BO.days.length>=5)return;const d=+b.dataset.d;b.classList.add('on');BO.days.push(d);BO.data.push([d,MED.GROW.gom.f(d,BO.truth)*Math.exp(0.07*MED.gauss(BO.r))]);BO.data.sort((a,b)=>a[0]-b[0]);
+  if(BO.days.length>=3)$('#st2').classList.remove('locked');if(BO.days.length>=5)$$('#pSlots .slot').forEach(s=>s.disabled=true);if(BO.model)boFit(BO.model);boUI()});
+function boFit(k){BO.model=k;BO.fit=MED.fitGrow(k,BO.data);$$('#pModels .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.m===k));const others=['exp','log','gom'].map(m=>MED.fitGrow(m,BO.data));
+  $('#pModelEq').innerHTML=`<span class="mth">${MED.GROW[k].eq}</span> · fit error (log scale) ${BO.fit.sse.toFixed(4)} · `+others.map(o=>MED.GROW[o.key].name+' '+o.sse.toFixed(4)).join(', ');$('#st3').classList.remove('locked')}
+$('#pModels').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b||BO.done||BO.days.length<3)return;boFit(b.dataset.m);if(BO.drug)boDrug(BO.drug);boUI();award('pm'+b.dataset.m,5,'Fitted a model')});
+function boDrug(d){BO.drug=d;$$('#pDrugs .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.d===d));const a=boBand(BO.model,BO.fit,'A'),b=boBand(BO.model,BO.fit,'B');BO.pred={A:a,B:b};
+  $('#pDrugNote').innerHTML=`Your model predicts day-90 volume: Drug A <b class="mth">${a.md.toFixed(0)} mL</b> (90%: ${a.lo.toFixed(0)}–${a.hi.toFixed(0)}), Drug B <b class="mth">${b.md.toFixed(0)} mL</b> (90%: ${b.lo.toFixed(0)}–${b.hi.toFixed(0)}).`;$('#st4').classList.remove('locked')}
+$('#pDrugs').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b||BO.done||!BO.fit)return;boDrug(b.dataset.d);boUI()});
+$('#pConf').addEventListener('input',e=>$('#opConf').textContent=e.target.value+'%');
+$('#pSubmit').addEventListener('click',()=>{if(!BO.drug||BO.done)return;BO.done=true;boUI();
+  const tA=truthAt(90,'A'),tB=truthAt(90,'B'),best=tA<tB?'A':'B',right=BO.drug===best,conf=+$('#pConf').value/100;const pred=BO.pred[BO.drug],tr=BO.drug==='A'?tA:tB;
+  const fitS=Math.max(0,Math.min(1,1-Math.sqrt(BO.fit.sse/BO.data.length)/0.25));
+  const relsd=BO.fit.cov?Math.sqrt(BO.fit.cov.map((r,i)=>r[i]).slice(1).reduce((a,b)=>a+Math.max(0,b),0)):3;const parS=Math.max(0,Math.min(1,1/(1+3*relsd)));
+  const predS=Math.max(0,Math.min(1,1-Math.log(Math.max(1.0001,pred.hi/pred.lo))/1.6));
+  const span=(Math.max(...BO.days)-Math.min(...BO.days))/30;const dataS=Math.max(0,Math.min(1,span*0.75+0.25*(BO.days.length/5)));
+  const err=Math.abs(Math.log(pred.md/tr));const valS=Math.max(0,Math.min(1,1-err/0.7));const calS=right?conf:1-conf;
+  const rows=[['Model fit',fitS,'how closely the curve passes your scans'],['Parameter certainty',parS,'how tightly the scans pin down growth and ceiling'],['Predictive certainty',predS,'how narrow the day-90 band was'],['Data quality',dataS,'how well your scans covered days 0–30'],['Model validation',valS,'prediction vs what really happened'],['Calibration',calS,'your confidence vs whether you were right']];
+  $('#pDash').innerHTML=rows.map(([n,v,d])=>`<div class="dr" title="${d}"><span>${n}</span><div class="tr"><i style="width:${Math.round(v*100)}%"></i></div><span>${Math.round(v*100)}%</span></div>`).join('');
+  $('#pVerdict').innerHTML=`Truth at day 90: A ${tA.toFixed(0)} mL · B ${tB.toFixed(0)} mL · best was <b class="${right?'mth':'bio'}">Drug ${best}</b>`;
+  let lesson;if(BO.model==='exp')lesson='You chose exponential growth. It may have fitted your scans beautifully, but it assumes the tumor never slows down, so it overrates the drug that slows growth. A great fit with the wrong structure.';
+  else if(span<0.5)lesson='Your scans were bunched together, so the ceiling K was barely constrained. Look at how wide the haze was. Spreading scans across days 0–30 is what makes the ceiling identifiable.';
+  else if(!right)lesson='Reasonable choices, and still the wrong drug. That\'s what uncertainty means. The dashboard shows where the doubt came from.';
+  else lesson='Spread-out scans, a saturating model, and a prediction that held up. Notice it still wasn\'t certain, and the dashboard says exactly why.';
+  $('#pLesson').innerHTML='<b>The best answer isn\'t the prettiest prediction</b>'+lesson+' It\'s the one whose assumptions, uncertainty and evidence you understand.';$('#st5').hidden=false;
+  award('boss'+BO.id,40,'Treated patient #'+BO.id);complete('s14','Boss level cleared')});
+$('#pNew').addEventListener('click',boNew);
+boNew();
+
+/* ---------- loop ---------- */
+(function(){const L=['Observe','Model','Infer','Simulate','Test','New data'];const cx=260,cy=190,R=135;let h='';const pts=L.map((_,i)=>{const a=-Math.PI/2+i/L.length*Math.PI*2;return [cx+R*Math.cos(a),cy+R*Math.sin(a)]});
+  h+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="${C.line}" stroke-width="2"/>`;
+  h+=`<circle r="7" fill="${C.input}"><animateMotion dur="9s" repeatCount="indefinite" path="M ${cx} ${cy-R} A ${R} ${R} 0 1 1 ${cx-0.01} ${cy-R} Z"/></circle>`;
+  pts.forEach(([x,y],i)=>{const col=[C.obs,C.math,C.math,C.math,C.bio,C.obs][i];h+=`<rect x="${x-58}" y="${y-18}" width="116" height="36" rx="18" fill="${C.panel2}" stroke="${col}" stroke-width="1.5"/><text x="${x}" y="${y+5}" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="13" fill="${C.text}">${L[i].toUpperCase()}</text>`});
+  h+=`<text x="${cx}" y="${cy-6}" text-anchor="middle" font-family="Instrument Serif, serif" font-size="30" fill="${C.text}">and repeat</text><text x="${cx}" y="${cy+20}" text-anchor="middle" font-family="Azeret Mono, monospace" font-size="11" fill="${C.dim}">that loop is the real story</text>`;
+  $('#loopSvg').innerHTML=h;if(reduce)$('#loopSvg animateMotion')?.remove()})();
+
+/* ---------- final ---------- */
+let finDone=false;$('#finOpts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||finDone)return;finDone=true;$$('#finOpts .opt').forEach(x=>{x.disabled=true;if(x.dataset.j==='2')x.classList.add('right')});if(b.dataset.j!=='2')b.classList.add('picked');$('#finRev').hidden=false;award('final',25,'Answered the last question')});
+})();
+</script>
+</body>
+</html>

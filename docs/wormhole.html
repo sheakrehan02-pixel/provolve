@@ -1,0 +1,673 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Can You Build a Wormhole?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=JetBrains+Mono:wght@400;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* Layout: a reading column (blog) that breaks out into wider "lab" panels (game levels), with a sticky HUD tracking progress like a game. */
+:root{
+  --paper:#ECEEF3; --panel:#F8F9FC; --ink:#12172A; --muted:#565E76; --line:#CBD0DC;
+  --red:#C2412A; --violet:#5643C4; --good:#2B7A57; --soft-red:#F4DDD6; --soft-violet:#E3DFFA; --soft-good:#D8EEE3;
+  --display:"Unbounded", "Arial Black", system-ui, sans-serif;
+  --body:"Newsreader", Georgia, "Times New Roman", serif;
+  --mono:"JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#0B0F1E; --panel:#131A2D; --ink:#E5E8F2; --muted:#959CB3; --line:#273049;
+  --red:#F0765A; --violet:#A193FF; --good:#5FC598; --soft-red:#3A1E1C; --soft-violet:#251F4A; --soft-good:#16352A; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#0B0F1E; --panel:#131A2D; --ink:#E5E8F2; --muted:#959CB3; --line:#273049;
+  --red:#F0765A; --violet:#A193FF; --good:#5FC598; --soft-red:#3A1E1C; --soft-violet:#251F4A; --soft-good:#16352A; color-scheme:dark }
+
+[hidden]{display:none!important}
+html,body{margin:0}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.6;padding-inline:16px}
+math{font-size:1.08em}
+a{color:var(--violet)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-inline:-16px;padding:10px 16px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hud-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--red)}
+a.brand{color:var(--ink);text-decoration:none}
+a.brand:hover span{color:var(--violet)}
+.brand small{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--muted);margin-right:4px}
+.dots{display:flex;gap:6px;flex:1;min-width:0;flex-wrap:wrap}
+.dot{font-family:var(--mono);font-size:11px;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.dot.done{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.xp{font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.xpbar{width:90px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.xpbar i{display:block;height:100%;width:0;background:var(--red);transition:width .5s}
+
+/* Article */
+.wrap{max-width:1000px;margin:0 auto;padding-block:40px 80px}
+.col{max-width:680px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(38px,7.5vw,76px);line-height:.98;letter-spacing:-.035em;margin:.25em 0 .3em;text-wrap:balance}
+h1 em{font-style:normal;color:var(--violet)}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.6vw,32px);line-height:1.1;letter-spacing:-.02em;margin:0 0 .5em;text-wrap:balance}
+h3{font-family:var(--display);font-weight:500;font-size:17px;margin:0 0 .4em;letter-spacing:-.01em}
+.dek{font-size:23px;line-height:1.45;color:var(--muted);margin:0 0 1.2em}
+p{margin:0 0 1em}
+.byline{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+
+.route{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:28px 0 8px}
+.route div{background:var(--panel);padding:14px}
+.route b{display:block;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.08em}
+.route span{font-family:var(--display);font-size:14px;font-weight:500}
+.route small{display:block;font-size:15px;color:var(--muted);line-height:1.35;margin-top:4px}
+@media (max-width:640px){.route{grid-template-columns:1fr 1fr}}
+
+section.level{padding-top:72px;scroll-margin-top:60px}
+.lvl{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.lvl .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:4px}
+.lvl .mode{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lvl .check{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--good);opacity:0;transition:opacity .3s}
+.level.complete .lvl .check{opacity:1}
+
+/* Panels */
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:26px 0}
+.lab.wide{margin-inline:0}
+.labhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.labhead .kicker{color:var(--red)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+canvas{display:block;width:100%;max-width:100%;border-radius:10px;background:var(--paper)}
+.ctrl{display:grid;gap:6px;margin-bottom:16px}
+.ctrl label{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.ctrl label output{color:var(--ink);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--violet)}
+.readout{display:grid;gap:0;border-top:1px solid var(--line)}
+.readout div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.readout div span:first-child{color:var(--muted)}
+.readout div span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.status{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:16px;line-height:1.45;background:var(--paper)}
+.status.bad{background:var(--soft-red)} .status.good{background:var(--soft-good)} .status.exotic{background:var(--soft-violet)}
+.status b{font-family:var(--display);font-weight:500;font-size:14px;display:block;margin-bottom:2px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;font-family:var(--mono);font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.big{font-family:var(--display);font-weight:700;font-size:clamp(26px,4vw,36px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:16px}
+
+/* Quiz choices */
+.q{margin:0 0 22px}
+.q p.prompt{font-weight:500;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;font-size:17px;line-height:1.4;display:flex;gap:12px;align-items:baseline}
+.opt:hover{border-color:var(--muted)}
+.opt .k{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none}
+.opt.picked{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt.right{border-color:var(--good);background:var(--soft-good);box-shadow:inset 0 0 0 1px var(--good)}
+.opt.wrong{border-color:var(--red);background:var(--soft-red)}
+.opt:disabled{cursor:default}
+.fb{font-size:16px;margin-top:8px;color:var(--muted)}
+
+/* Equation */
+.eq{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;font-size:28px;padding:18px 0}
+.term{background:none;border:1px dashed var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.term[aria-pressed="true"]{border-style:solid;border-color:var(--violet);background:var(--soft-violet)}
+.op{color:var(--muted);padding:0 2px}
+.termnote{min-height:3.2em;font-size:17px;text-align:center;color:var(--muted);max-width:520px;margin:0 auto}
+.termnote b{color:var(--ink);font-weight:500}
+
+/* Mission */
+.mission{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px}
+@media (max-width:760px){.mission{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:12px;padding:20px;border:1px solid var(--line)}
+.card .step{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.1em;text-transform:uppercase}
+.card h3{font-size:20px;margin:6px 0 10px}
+.card .opts{margin-top:14px}
+.outcome{border-left:3px solid var(--red);padding-left:12px;margin:10px 0}
+.outcome.win{border-color:var(--violet)}
+.shelf{display:grid;gap:8px}
+.lesson{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;border:1px dashed var(--line);font-size:15px;line-height:1.35;color:var(--muted)}
+.lesson i{font-style:normal;font-family:var(--mono);font-size:12px;flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
+.lesson.on{border-style:solid;border-color:var(--violet);color:var(--ink);background:var(--soft-violet)}
+.lesson.on i{background:var(--violet);color:var(--panel);border-color:var(--violet)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:13px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+
+/* Bars */
+.bars{display:grid;gap:10px;margin-top:6px}
+.bar{display:grid;grid-template-columns:96px minmax(0,1fr) 70px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px}
+.bar .track{position:relative;height:14px;background:var(--paper);border-radius:3px}
+.bar .track::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.bar .fill{position:absolute;top:0;bottom:0;border-radius:2px;transition:all .25s}
+.bar span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Proof */
+.proof{counter-reset:none}
+.pstep{border-top:1px solid var(--line);padding:18px 0}
+.pstep .num{font-family:var(--mono);font-size:12px;color:var(--red)}
+.pstep[hidden]{display:none!important}
+.disp{overflow-x:auto;padding:10px 0;text-align:center;font-size:21px}
+.predict{background:var(--soft-violet);border-radius:12px;padding:16px 18px;margin:14px 0}
+
+/* Problem */
+.part{border-top:1px solid var(--line);padding:20px 0}
+.part .ph{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.part .ph b{font-family:var(--mono);font-size:12px;color:var(--red)}
+.hint{font-size:16px;background:var(--paper);border-radius:8px;padding:10px 14px;margin-top:10px}
+.linkbtn{background:none;border:0;padding:0;color:var(--violet);font-family:var(--mono);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:8px}
+.finale{border-radius:14px;padding:22px;background:var(--ink);color:var(--paper);margin-top:18px}
+.finale h3{color:var(--paper);font-size:20px}
+.finale p{color:color-mix(in srgb,var(--paper) 80%,var(--ink))}
+
+/* Review */
+.review{display:grid;gap:10px}
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rv div{background:var(--panel);padding:12px 14px;font-size:16px;line-height:1.4}
+.rv .lab2{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:560px){.rv{grid-template-columns:1fr}}
+.obst{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.obst div{border:1px solid var(--line);border-radius:10px;padding:14px;font-size:16px;line-height:1.45;background:var(--panel)}
+.obst b{font-family:var(--mono);font-size:11px;color:var(--red);display:block;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media (max-width:560px){.obst{grid-template-columns:1fr}}
+.next{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:40px}
+.next .big{font-size:22px}
+footer{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:40px;text-align:center}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px;padding:10px 16px;border-radius:999px;transition:transform .35s;z-index:30;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:640px){.dots{display:none}.hud-in{justify-content:space-between}}
+</style>
+</head>
+<body>
+
+<header class="hud">
+  <div class="hud-in">
+    <a class="brand" href="index.html"><small>←</small>Simplify<span>/</span>It</a>
+    <nav class="dots" aria-label="Levels">
+      <a class="dot" href="#s0" data-s="s0">Gut check</a>
+      <a class="dot" href="#s1" data-s="s1">Escape</a>
+      <a class="dot" href="#s2" data-s="s2">Geometry</a>
+      <a class="dot" href="#s3" data-s="s3">Mission</a>
+      <a class="dot" href="#s4" data-s="s4">Lab</a>
+      <a class="dot" href="#s5" data-s="s5">Proof</a>
+      <a class="dot" href="#s6" data-s="s6">Solve</a>
+    </nav>
+    <div class="xp"><span id="xpnum">0 XP</span><div class="xpbar"><i id="xpfill"></i></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="col">
+    <div class="kicker">Issue 01 · Theoretical physics · Week of Oct 13, 2026</div>
+    <h1>Can you build a <em>wormhole?</em></h1>
+    <p class="dek">You start knowing nothing. You finish having derived, by hand, the equation that tells physicists why a traversable wormhole needs matter that nobody has ever bottled.</p>
+    <div class="byline"><span>Sample issue</span><span>~25 min</span><span>Math: algebra and one derivative</span></div>
+
+    <div class="route">
+      <div><b>1 · GUESS</b><span>Gut check</span><small>Commit to answers before you know anything.</small></div>
+      <div><b>2 · PLAY</b><span>Build intuition</span><small>Squeeze planets, bend space, run a mission.</small></div>
+      <div><b>3 · DERIVE</b><span>See the proof</span><small>Four steps, one inequality.</small></div>
+      <div><b>4 · SOLVE</b><span>Do it yourself</span><small>A real wormhole problem, then compare with your guesses.</small></div>
+    </div>
+
+    <p>One honest thing before we start: <strong>physicists have not proved that wormholes are impossible.</strong> Einstein's equations allow certain wormhole shapes on paper. What the math shows is that keeping one open, so a person could actually walk through, would demand a kind of energy that ordinary matter doesn't have. Whether nature has any of it is still an open question. By the end, you'll see exactly where that demand comes from.</p>
+
+    <!-- LEVEL 0 -->
+    <section class="level" id="s0">
+      <div class="lvl"><span class="tag">Level 0</span><span class="mode">Gut check · no wrong answers</span><span class="check">✓ cleared</span></div>
+      <h2>Before you read anything, guess.</h2>
+      <p>Your guesses are locked in and we'll come back to them at the end. Researchers who study learning keep finding the same thing: predicting first, even wrongly, makes the real answer stick.</p>
+      <div class="lab" id="pretest"></div>
+    </section>
+
+    <!-- LEVEL 1 -->
+    <section class="level" id="s1">
+      <div class="lvl"><span class="tag">Level 1</span><span class="mode">Play · escape speed</span><span class="check">✓ cleared</span></div>
+      <h2>Throw a ball hard enough and it never comes back.</h2>
+      <p>Throw a ball up and gravity slows it, stops it, and pulls it back down. Throw it faster and it goes higher. On Earth, at about 11.2 km/s, it never returns. That speed is called <em>escape velocity</em>.</p>
+      <p>Escape velocity depends on how much mass there is and how close you are to its center. Keep the mass the same, squeeze it smaller, and the escape speed climbs. Squeeze far enough and escape needs more than the speed of light. Since nothing goes faster than light, nothing gets out. That's a black hole.</p>
+    </section>
+    </div>
+
+    <div class="lab wide">
+      <div class="labhead"><span class="kicker">Lab 1 · Squeeze the Earth</span><span class="note">Same mass, smaller size. Watch the light.</span></div>
+      <div class="grid2">
+        <canvas id="cvEsc" width="640" height="360" aria-label="Planet being compressed, with light rays escaping or trapped"></canvas>
+        <div>
+          <div class="ctrl">
+            <label for="squeeze">Squeeze <output id="sqOut">0%</output></label>
+            <input type="range" id="squeeze" min="0" max="100" step="0.5" value="0">
+          </div>
+          <div class="readout">
+            <div><span>Radius</span><span id="rdR">6,371 km</span></div>
+            <div><span>Escape speed</span><span id="rdV">11.2 km/s</span></div>
+            <div><span>Fraction of light speed</span><span id="rdC">0.004%</span></div>
+            <div><span>Horizon radius r<sub>s</sub></span><span>8.87 mm</span></div>
+          </div>
+          <div class="status" id="escStatus"><b>Light escapes easily</b>Squeeze the slider to compress Earth's full mass into a smaller ball.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>The radius where escape speed hits light speed is the <strong>Schwarzschild radius</strong>. For a non-rotating, uncharged mass:</p>
+      <div class="disp" data-tex="r_s = \dfrac{2GM}{c^2}" data-display></div>
+      <p><span data-tex="G"></span> is Newton's gravitational constant, <span data-tex="M"></span> is the mass, <span data-tex="c"></span> is the speed of light. Double the mass and the horizon doubles. Pick something and find out how small you'd have to crush it:</p>
+      <div class="lab">
+        <div class="chips" id="massChips">
+          <button class="chip" data-m="70" aria-pressed="false">You (70 kg)</button>
+          <button class="chip" data-m="5.972e24" aria-pressed="true">Earth</button>
+          <button class="chip" data-m="1.989e30" aria-pressed="false">The Sun</button>
+          <button class="chip" data-m="8.55e36" aria-pressed="false">Sagittarius A*</button>
+        </div>
+        <div class="big" id="rsOut">8.87 mm</div>
+        <p class="note" id="rsNote">About the size of a marble. That's how small all of Earth would have to be.</p>
+      </div>
+      <p>The horizon isn't a surface you'd bump into. It's a boundary of no return: signals from inside can't reach anyone outside. Keep that word <em>horizon</em> in mind. A wormhole you can travel through must not have one.</p>
+    </div>
+
+    <!-- LEVEL 2 -->
+    <div class="col">
+    <section class="level" id="s2">
+      <div class="lvl"><span class="tag">Level 2</span><span class="mode">Play · gravity is geometry</span><span class="check">✓ cleared</span></div>
+      <h2>Gravity isn't a pull. It's a shape.</h2>
+      <p>Newton described gravity as a force between objects. Einstein replaced that with something stranger: space and time form a single four-dimensional fabric, <em>spacetime</em>, and mass and energy bend it. Objects then follow the straightest possible paths through that bent fabric, and those paths look like orbits and falls.</p>
+      <p>The physicist John Wheeler compressed it into two halves: matter tells spacetime how to curve, and spacetime tells matter how to move.</p>
+    </section>
+    </div>
+
+    <div class="lab wide">
+      <div class="labhead"><span class="kicker">Lab 2 · Bend the fabric</span><span class="note">A 2D slice of space, drawn as a sheet.</span></div>
+      <div class="grid2">
+        <canvas id="cvSheet" width="640" height="360" aria-label="Grid of space curved by a mass, with a marble rolling on it"></canvas>
+        <div>
+          <div class="ctrl">
+            <label for="mass">Mass at the center <output id="massOut">60%</output></label>
+            <input type="range" id="mass" min="0" max="100" value="60">
+          </div>
+          <p class="note">At zero mass the sheet is flat and the marble rolls straight. Add mass and the marble curves into an orbit. Nothing is pulling it; it's following the shape.</p>
+          <div class="status exotic"><b>Caveat</b>The rubber-sheet picture is a cartoon. Real curvature includes time, and it's the bending of time that does most of the work for slow objects like planets.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>Einstein's field equation is the precise version of Wheeler's sentence. Tap each piece:</p>
+      <div class="lab">
+        <div class="eq" id="eq">
+          <button class="term" data-t="G" data-tex="G_{\mu\nu}" aria-pressed="false"></button>
+          <span class="op">+</span>
+          <button class="term" data-t="L" data-tex="\Lambda g_{\mu\nu}" aria-pressed="false"></button>
+          <span class="op">=</span>
+          <button class="term" data-t="K" data-tex="\dfrac{8\pi G}{c^4}" aria-pressed="false"></button>
+          <button class="term" data-t="T" data-tex="T_{\mu\nu}" aria-pressed="false"></button>
+        </div>
+        <p class="termnote" id="termNote">Left side: the <b>shape</b> of spacetime. Right side: the <b>stuff</b> in it. Tap a term.</p>
+      </div>
+      <p>Here's the move that powers the rest of this issue. Normally you'd put stuff in and ask what shape comes out. But you can run the equation backwards: <strong>draw the shape you want, then calculate what stuff it requires.</strong> That's exactly how physicists test wormholes.</p>
+
+    <!-- LEVEL 3 -->
+    <section class="level" id="s3">
+      <div class="lvl"><span class="tag">Level 3</span><span class="mode">Play · choose your path</span><span class="check">✓ cleared</span></div>
+      <h2>Mission: connect Earth to Proxima b.</h2>
+      <p>Proxima b is 4.24 light-years away. You're the chief engineer, and the board wants a shortcut. Every choice you make is one a physicist has actually considered. Collect lessons by failing in interesting ways; three lessons clears the level.</p>
+    </section>
+    </div>
+
+    <div class="lab wide">
+      <div class="mission">
+        <div class="card" id="missionCard"></div>
+        <div>
+          <div class="kicker" style="margin-bottom:10px">Lessons unlocked <span id="lessonCount">0/5</span></div>
+          <div class="shelf" id="shelf"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LEVEL 4 -->
+    <div class="col">
+    <section class="level" id="s4">
+      <div class="lvl"><span class="tag">Level 4</span><span class="mode">Play · wormhole sculptor</span><span class="check">✓ cleared</span></div>
+      <h2>Sculpt a throat and see what it costs.</h2>
+      <p>In 1988, Michael Morris and Kip Thorne asked a sharp question: if a person really could pass through a wormhole, what would its geometry have to look like? Their answer uses a metric, a formula that says how to measure distances and times:</p>
+      <div class="disp" data-tex="ds^2 = -e^{2\Phi(r)}dt^2 + \dfrac{dr^2}{1 - b(r)/r} + r^2 d\Omega^2" data-display></div>
+      <p>Two dials control everything. The <strong>redshift function</strong> <span data-tex="\Phi(r)"></span> sets how time flows; it must stay finite so there's no horizon. The <strong>shape function</strong> <span data-tex="b(r)"></span> sets how space bends. The narrowest point, the throat, sits at <span data-tex="r_0"></span> where <span data-tex="b(r_0)=r_0"></span>.</p>
+      <p>For the tunnel to open outward on both sides, it must satisfy the <strong>flare-out condition</strong>, <span data-tex="b'(r_0) < 1"></span>. Try breaking it.</p>
+    </section>
+    </div>
+
+    <div class="lab wide">
+      <div class="labhead"><span class="kicker">Lab 4 · Embedding diagram</span><span class="note">Units: G = c = 1. Throat drawn to true shape.</span></div>
+      <div class="grid2">
+        <canvas id="cvWorm" width="640" height="440" aria-label="Embedding diagram of a wormhole throat"></canvas>
+        <div>
+          <div class="ctrl">
+            <label for="slope">Throat slope b′(r₀) <output id="slopeOut">−1.00</output></label>
+            <input type="range" id="slope" min="-2" max="1.3" step="0.05" value="-1">
+          </div>
+          <div class="ctrl">
+            <label for="throat">Throat radius r₀ <output id="throatOut">1.20</output></label>
+            <input type="range" id="throat" min="0.6" max="2.5" step="0.05" value="1.2">
+          </div>
+          <div class="bars" id="bars">
+            <div class="bar"><span>ρ energy</span><div class="track"><div class="fill" id="bRho"></div></div><span id="vRho"></span></div>
+            <div class="bar"><span>p<sub>r</sub> pressure</span><div class="track"><div class="fill" id="bP"></div></div><span id="vP"></span></div>
+            <div class="bar"><span>ρ + p<sub>r</sub></span><div class="track"><div class="fill" id="bS"></div></div><span id="vS"></span></div>
+          </div>
+          <div class="status" id="wormStatus"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+      <p>Did you notice? <strong>As long as the throat flares, the bottom bar never goes positive.</strong> And shrinking the throat makes it worse: the cost grows like <span data-tex="1/r_0^2"></span>. Small wormholes are the most expensive. Level 5 proves why.</p>
+
+    <!-- LEVEL 5 -->
+    <section class="level" id="s5">
+      <div class="lvl"><span class="tag">Level 5</span><span class="mode">Derive · four steps</span><span class="check">✓ cleared</span></div>
+      <h2>The proof, one step at a time.</h2>
+      <p>Physicists check whether matter is "reasonable" with tests called energy conditions. The one that matters here is the <strong>null energy condition</strong> (NEC). In plain terms: measured along the path of a light ray, energy density plus pressure can't be negative. Every ordinary material we know obeys it. For our matter, it reads:</p>
+      <div class="disp" data-tex="\rho + p_r \ge 0" data-display></div>
+      <p>Now we feed the wormhole metric into Einstein's equation and see what it demands.</p>
+
+      <div class="proof">
+        <div class="pstep" id="p1">
+          <div class="num">STEP 1 · ENERGY DENSITY</div>
+          <p>One component of Einstein's equation gives the energy density in terms of the shape function. At the throat:</p>
+          <div class="disp" data-tex="\rho(r) = \dfrac{b'(r)}{8\pi r^2} \quad\Rightarrow\quad \rho_0 = \dfrac{b'(r_0)}{8\pi r_0^2}" data-display></div>
+          <button class="btn" data-next="p2">Next step</button>
+        </div>
+        <div class="pstep" id="p2" hidden>
+          <div class="num">STEP 2 · RADIAL PRESSURE</div>
+          <p>Another component gives the pressure along the tunnel:</p>
+          <div class="disp" data-tex="p_r(r) = \dfrac{1}{8\pi}\left[-\dfrac{b(r)}{r^3} + \dfrac{2}{r}\left(1 - \dfrac{b(r)}{r}\right)\Phi'(r)\right]" data-display></div>
+          <p>At the throat <span data-tex="b(r_0)=r_0"></span>, so the bracket <span data-tex="1 - b/r"></span> is zero and the second term disappears:</p>
+          <div class="disp" data-tex="p_r(r_0) = -\dfrac{1}{8\pi r_0^2}" data-display></div>
+          <p>Negative pressure means <em>tension</em>: the throat is pulled like a stretched rope. Strange, but not yet fatal.</p>
+          <button class="btn" data-next="pPredict">Next step</button>
+        </div>
+        <div class="pstep" id="pPredict" hidden>
+          <div class="predict">
+            <div class="num">PREDICT FIRST</div>
+            <p style="margin:.3em 0 .8em">Add the two together. Given flare-out, <span data-tex="b'(r_0) < 1"></span>, what sign will <span data-tex="\rho_0 + p_r(r_0)"></span> have?</p>
+            <div class="opts" id="predictOpts">
+              <button class="opt" data-v="pos"><span class="k">A</span>Positive. Normal matter can do it.</button>
+              <button class="opt" data-v="zero"><span class="k">B</span>Exactly zero.</button>
+              <button class="opt" data-v="neg"><span class="k">C</span>Negative. Something exotic is needed.</button>
+            </div>
+            <p class="fb" id="predictFb"></p>
+          </div>
+        </div>
+        <div class="pstep" id="p3" hidden>
+          <div class="num">STEP 3 · ADD THEM</div>
+          <div class="disp" data-tex="\rho_0 + p_r(r_0) = \dfrac{b'(r_0) - 1}{8\pi r_0^2}" data-display></div>
+          <p>The bottom is always positive. The top, <span data-tex="b'(r_0)-1"></span>, is negative whenever the throat flares. So:</p>
+          <div class="disp" data-tex="\boxed{\rho_0 + p_r(r_0) < 0}" data-display></div>
+          <button class="btn" data-next="p4">Final step</button>
+        </div>
+        <div class="pstep" id="p4" hidden>
+          <div class="num">STEP 4 · THE CONTRADICTION</div>
+          <p>The NEC says <span data-tex="\rho + p_r \ge 0"></span>. The wormhole demands <span data-tex="\rho + p_r < 0"></span>. Both can't be true.</p>
+          <div class="status bad"><b>The no-go result</b>A static, traversable wormhole in classical general relativity requires matter that violates the null energy condition at its throat. Ordinary matter can't hold it open.</div>
+          <p style="margin-top:1em">Read that carefully. We didn't assume exotic matter; the geometry forced it on us. And we proved a <em>conditional</em> result. Quantum fields can produce small, brief pockets of negative energy (the Casimir effect is a measured example), and modified theories of gravity change the rules. None of that has yet produced a usable, human-sized wormhole, but it keeps the question open.</p>
+        </div>
+      </div>
+
+    </section>
+    <!-- LEVEL 6 -->
+    <section class="level" id="s6">
+      <div class="lvl"><span class="tag">Level 6</span><span class="mode">Solve · boss level</span><span class="check">✓ cleared</span></div>
+      <h2>Your turn: test a real wormhole.</h2>
+      <p>This one has a name in the literature, the Ellis wormhole. Its shape function and redshift function are:</p>
+      <div class="disp" data-tex="b(r) = \dfrac{r_0^2}{r}, \qquad \Phi(r) = 0" data-display></div>
+      <p>Time flows normally everywhere and the space goes flat far from the throat. It looks perfect. Use the equations from Level 5 to find out what it costs.</p>
+      <div class="lab" id="problem"></div>
+    </section>
+
+    <!-- REVIEW -->
+    <section class="level" id="review">
+      <div class="lvl"><span class="tag">Debrief</span><span class="mode">Your intuition vs. the physics</span></div>
+      <h2>How did your gut do?</h2>
+      <div class="review" id="reviewList"></div>
+      <h3 style="margin-top:34px">Even with exotic matter, four walls remain</h3>
+      <div class="obst">
+        <div><b>A · Energy</b>We don't know how to make NEC-violating matter in the amount and shape a wormhole needs.</div>
+        <div><b>B · Quantum limits</b>Quantum inequalities cap how much negative energy can pile up, and for how long.</div>
+        <div><b>C · Stability</b>A solution that exists might collapse at the slightest nudge. That takes a separate perturbation analysis.</div>
+        <div><b>D · Causality</b>Some wormhole setups allow loops in time. Topological censorship theorems limit what's possible under stated assumptions.</div>
+      </div>
+      <p>That's the whole method of theoretical physics in miniature: propose a shape, run Einstein's equation backwards, then check whether the required stuff could exist.</p>
+    </section>
+
+    <div class="next">
+      <div><div class="kicker">Next · Issue 02</div><div class="big">The integer that won't go away</div></div>
+      <a class="btn" href="chern.html" style="text-decoration:none">Play Issue 02 →</a>
+    </div>
+    <footer>Simplify It · Issue 01 · <a href="index.html">All issues</a></footer>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function tex(s,d){try{return katex.renderToString(s,{output:'mathml',displayMode:!!d,throwOnError:false})}catch(e){return s}}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(el=>{el.innerHTML=tex(el.dataset.tex,el.hasAttribute('data-display'))})}
+renderTex();
+
+/* ---------- XP + progress ---------- */
+const MAXXP=600; let xp=0; const got=new Set();
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+const STORE='simplifyit:wormhole',LEVELS=['s0','s1','s2','s3','s4','s5','s6'];const cleared=new Set();
+function save(){try{localStorage.setItem(STORE,JSON.stringify({xp,cleared:[...cleared],total:LEVELS.length}))}catch(e){}}
+function paintXP(){$('#xpnum').textContent=xp+' XP';$('#xpfill').style.width=Math.min(100,xp/MAXXP*100)+'%'}
+function award(id,pts,msg){if(got.has(id))return;got.add(id);xp+=pts;paintXP();toast('+'+pts+' XP · '+msg);save()}
+function markDone(s){cleared.add(s);document.getElementById(s).classList.add('complete');$('.dot[data-s="'+s+'"]').classList.add('done')}
+function complete(s,msg){if(cleared.has(s))return;markDone(s);award('done-'+s,50,msg);save()}
+try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){xp=d.xp||0;(d.cleared||[]).forEach(s=>{markDone(s);got.add('done-'+s)});paintXP()}}catch(e){}
+
+/* ---------- Level 0: pretest ---------- */
+const PRE=[
+ {q:'On a tiny, super-dense planet, you throw a ball straight up as hard as humanly possible. What happens?',
+  o:['It falls back, like on Earth','It escapes into space','Depends on how dense; even light might not escape'],
+  physics:'Escape depends on mass and size together. Dense enough, and not even light escapes. That boundary is the event horizon.', best:2},
+ {q:'What is gravity, really?',
+  o:['A pulling force between objects','The bending of space and time','No idea'],
+  physics:'General relativity treats gravity as curved spacetime. Objects follow the straightest paths through that curvature.', best:1},
+ {q:'To hold a tunnel through spacetime open, you would need…',
+  o:['A really strong material','A huge amount of ordinary mass','Something with "negative" energy','Nothing works; it\'s impossible'],
+  physics:'The flare-out geometry forces ρ + pᵣ < 0, so the matter must violate the null energy condition. "Impossible" goes too far: nobody has proved that.', best:2}
+];
+const preAns={};
+$('#pretest').innerHTML=PRE.map((p,i)=>`<div class="q"><p class="prompt">${i+1}. ${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="k">${'ABCD'[j]}</span>${o}</button>`).join('')}</div></div>`).join('')+'<p class="fb" id="preFb">Pick one answer per question.</p>';
+$('#pretest').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const q=+b.dataset.q;
+  $$(`#pretest .opt[data-q="${q}"]`).forEach(x=>x.classList.toggle('picked',x===b));preAns[q]=+b.dataset.j;
+  const n=Object.keys(preAns).length;$('#preFb').textContent=n<3?`${n}/3 locked in.`:'All three locked in. We\'ll grade them in the debrief.';
+  if(n===3)complete('s0','Gut check done');renderReview();});
+
+/* ---------- Level 1: escape ---------- */
+const Re=6.371e6, rsE=8.870e-3, lmin=-3, lmax=Math.log10(Re);
+const cvE=$('#cvEsc'), cxE=cvE.getContext('2d'); let sq=0, photons=[];
+function fmtLen(m){if(m>=1000)return (m/1000).toLocaleString(undefined,{maximumFractionDigits:m>1e5?0:1})+' km';if(m>=1)return m.toFixed(1)+' m';if(m>=0.01)return (m*100).toFixed(1)+' cm';return (m*1000).toFixed(2)+' mm'}
+function escState(){const R=Math.pow(10,lmax-(sq/100)*(lmax-lmin));const vc=Math.sqrt(rsE/R);return{R,vc}}
+function pxR(R){return 14+(Math.log10(R)-lmin)/(lmax-lmin)*130}
+function updEsc(){const{R,vc}=escState();$('#sqOut').textContent=sq.toFixed(0)+'%';$('#rdR').textContent=fmtLen(R);
+  const v=vc*299792.458;$('#rdV').textContent=vc>=1?'> light speed':v.toLocaleString(undefined,{maximumFractionDigits:v<100?1:0})+' km/s';
+  $('#rdC').textContent=vc>=1?'≥ 100%':(vc*100<0.1?(vc*100).toFixed(4):(vc*100).toFixed(1))+'%';
+  const st=$('#escStatus');
+  if(vc>=1){st.className='status bad';st.innerHTML='<b>Event horizon formed</b>Earth is now smaller than its Schwarzschild radius. Light emitted inside turns back. You made a black hole.';award('bh',40,'Made a black hole');complete('s1','Escape cleared')}
+  else if(vc>0.3){st.className='status exotic';st.innerHTML='<b>Light is struggling</b>Escape speed is a sizable fraction of light speed. Clocks on the surface run noticeably slow.'}
+  else{st.className='status';st.innerHTML='<b>Light escapes easily</b>Keep squeezing. The mass hasn\'t changed, only the size.'}}
+function drawEsc(){const W=cvE.width,H=cvE.height,cx=W/2,cy=H/2;const{R,vc}=escState();const ink=tok('--ink'),red=tok('--red'),vio=tok('--violet'),mut=tok('--muted');
+  cxE.clearRect(0,0,W,H);const pr=pxR(R),hr=pxR(rsE),bh=vc>=1;
+  // photons
+  if(photons.length<36&&Math.random()<0.5)photons.push({a:Math.random()*Math.PI*2,d:0,v:1});
+  cxE.fillStyle=bh?red:vio;
+  photons.forEach(p=>{const start=bh?0:pr;const slow=bh?Math.max(0.15,1-p.d/(hr)):Math.max(0.25,1-vc*0.9);
+    if(bh){p.d+=p.v*1.4*slow; if(p.d>hr*0.97){p.v=-1}} else p.d+=2.4*slow*(reduce?0:1)+0.0;
+    if(bh&&p.d<0)p.dead=true; if(p.d+start>W)p.dead=true;
+    const r=start+p.d;cxE.globalAlpha=bh?0.9:Math.max(0,1-r/(W*0.55));cxE.beginPath();cxE.arc(cx+Math.cos(p.a)*r,cy+Math.sin(p.a)*r,2.2,0,7);cxE.fill();});
+  photons=photons.filter(p=>!p.dead);cxE.globalAlpha=1;
+  // horizon ring
+  cxE.setLineDash([4,4]);cxE.strokeStyle=red;cxE.lineWidth=1.5;cxE.beginPath();cxE.arc(cx,cy,hr,0,7);cxE.stroke();cxE.setLineDash([]);
+  // planet
+  cxE.fillStyle=bh?ink:mut;cxE.globalAlpha=bh?1:0.55;cxE.beginPath();cxE.arc(cx,cy,Math.max(3,pr),0,7);cxE.fill();cxE.globalAlpha=1;
+  cxE.font='12px "JetBrains Mono", monospace';cxE.fillStyle=red;cxE.textAlign='left';cxE.fillText('horizon r_s (log scale)',cx+hr+8,cy-hr-4);
+  cxE.fillStyle=mut;cxE.fillText(bh?'black hole':'Earth: '+fmtLen(R),14,H-14);}
+$('#squeeze').addEventListener('input',e=>{sq=+e.target.value;updEsc()});updEsc();
+
+const RS_NOTES={'70':['ten billion times smaller than a proton. You will not be becoming a black hole.'],
+ '5.972e24':['About the size of a marble. That\'s how small all of Earth would have to be.'],
+ '1.989e30':['A ball you could walk across in about 40 minutes, holding the entire Sun.'],
+ '8.55e36':['The black hole at our galaxy\'s center. Its horizon is about a twelfth of the Earth–Sun distance.']};
+function rsFmt(m){if(m<1e-6)return m.toExponential(2).replace('e','×10^')+' m';return fmtLen(m)}
+$('#massChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;$$('#massChips .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));
+  const M=+b.dataset.m, rs=2*6.674e-11*M/(2.998e8**2);const out=$('#rsOut');
+  if(rs<1e-6){const ex=Math.floor(Math.log10(rs)),mant=(rs/10**ex).toFixed(2);out.innerHTML=`${mant} × 10<sup>${ex}</sup> m`}else out.textContent=fmtLen(rs);
+  $('#rsNote').textContent=(M===70?'About ':'')+RS_NOTES[b.dataset.m][0];award('rs-'+b.dataset.m,10,'Horizon calculated');});
+
+/* ---------- Level 2: sheet ---------- */
+const cvS=$('#cvSheet'),cxS=cvS.getContext('2d');let M=0.6,t=0,straightX=-1.1;
+function depth(x,y){return -M*0.55/Math.sqrt(x*x+y*y+0.05)}
+function proj(x,y,z){const W=cvS.width,H=cvS.height;return[W/2+x*W*0.42, H*0.42+y*H*0.3 - z*H*0.12]}
+function drawSheet(){const W=cvS.width,H=cvS.height;cxS.clearRect(0,0,W,H);const line=tok('--muted'),vio=tok('--violet'),ink=tok('--ink');
+  cxS.strokeStyle=line;cxS.lineWidth=1;cxS.globalAlpha=0.55;const N=22;
+  for(let i=0;i<=N;i++){const a=-1+2*i/N;[0,1].forEach(dir=>{cxS.beginPath();for(let j=0;j<=60;j++){const b=-1+2*j/60;const x=dir?a:b,y=dir?b:a;const z=Math.max(depth(x,y),-2.6);const[px,py]=proj(x,y,z);j?cxS.lineTo(px,py):cxS.moveTo(px,py)}cxS.stroke()})}
+  cxS.globalAlpha=1;
+  if(M>0.02){const[px,py]=proj(0,0,Math.max(depth(0,0),-2.6));cxS.fillStyle=ink;cxS.beginPath();cxS.arc(px,py,6+M*10,0,7);cxS.fill()}
+  // marble
+  let mx,my;if(M>0.05){const rr=0.55;mx=Math.cos(t)*rr;my=Math.sin(t)*rr;t+=reduce?0:0.012+0.03*Math.sqrt(M)}else{straightX+=reduce?0:0.006;if(straightX>1.1)straightX=-1.1;mx=straightX;my=0.55}
+  const[qx,qy]=proj(mx,my,Math.max(depth(mx,my),-2.6));cxS.fillStyle=vio;cxS.beginPath();cxS.arc(qx,qy,7,0,7);cxS.fill();}
+$('#mass').addEventListener('input',e=>{M=e.target.value/100;$('#massOut').textContent=e.target.value+'%';award('sheet',20,'Bent spacetime');});
+
+const TERMS={G:'<b>Einstein tensor</b>: how spacetime is curved at each point. This is the "shape" side.',
+ L:'<b>Cosmological constant × metric</b>: the energy of empty space itself. It drives the universe\'s accelerating expansion. We\'ll set it to zero.',
+ K:'<b>The conversion rate</b> between stuff and shape. G is tiny and c⁴ is huge, which is why it takes a planet to bend space noticeably.',
+ T:'<b>Stress-energy tensor</b>: energy density, momentum, pressure and stresses. Pressure counts as a source of gravity, and that will matter a lot.'};
+const seen=new Set();
+$('#eq').addEventListener('click',e=>{const b=e.target.closest('.term');if(!b)return;$$('#eq .term').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#termNote').innerHTML=TERMS[b.dataset.t];seen.add(b.dataset.t);if(seen.size===4)complete('s2','Geometry cleared');});
+
+/* ---------- Level 3: mission ---------- */
+const LESSONS=[
+ ['math','Math isn\'t travel. A solution existing doesn\'t mean you can pass through it.'],
+ ['nec','Ordinary matter obeys the null energy condition. A throat needs matter that breaks it.'],
+ ['hor','Too much mass makes a horizon, and a horizon is a one-way door.'],
+ ['qft','Quantum physics allows negative energy, but only small amounts, briefly.'],
+ ['stab','Even a valid solution must survive nudges and avoid time loops.']];
+const unlocked=new Set();
+const NODES={
+ start:{step:'Decision 1 of 3',h:'How do you make the shortcut?',p:'The board gives you an unlimited budget and the best physicists alive.',
+  o:[['Dive into a black hole and use the bridge inside','er'],['Build a tunnel throat from scratch','build']]},
+ er:{end:true,lesson:'math',h:'The bridge slams shut',p:'Extend an idealized, eternal black hole mathematically and you do find a bridge connecting two universes, the Einstein–Rosen bridge. It\'s real math. But it pinches off faster than light can cross it, and real black holes formed from collapsing stars don\'t have it. Your probe never reaches the other side.'},
+ build:{step:'Decision 2 of 3',h:'What do you line the throat with?',p:'The tunnel wants to collapse. Something has to hold it open.',
+  o:[['The strongest material ever engineered','steel'],['Pile on enormous mass to anchor it','mass'],['Matter with negative energy','exotic']]},
+ steel:{end:true,lesson:'nec',h:'Crushed',p:'Strength isn\'t the problem; the sign is. Every ordinary material has positive energy and obeys the null energy condition, and positive energy curves spacetime inward. The throat needs curvature that pushes outward, the opposite of what normal stuff provides.'},
+ mass:{end:true,lesson:'hor',h:'You built a black hole',p:'More mass means more inward curvature. Past a threshold you\'re inside your own Schwarzschild radius and a horizon forms. A traversable wormhole must have no horizon, so the crew is trapped.'},
+ exotic:{step:'Decision 3 of 3',h:'Where do you get negative energy?',p:'The equations are finally happy. Now physics has to supply the stuff.',
+  o:[['Harvest it from the Casimir effect','casimir'],['Assume a supply exists and test the design','assume']]},
+ casimir:{end:true,lesson:'qft',win:true,h:'You reached the frontier',p:'Two metal plates very close together really do produce a measurable region of negative energy. But quantum inequalities limit how much you can concentrate and for how long, and the amount is microscopic. Nobody knows how to scale it to a throat a ship could fly through.'},
+ assume:{end:true,lesson:'stab',win:true,h:'The design passes. Mostly.',p:'This is Morris and Thorne\'s 1988 move, and on paper it works. Then come the next questions: does the throat survive a small disturbance, or does it collapse? Could moving one mouth let you arrive before you left? Each is its own research problem.'}};
+let node='start';
+function renderShelf(){$('#shelf').innerHTML=LESSONS.map(([k,t],i)=>`<div class="lesson${unlocked.has(k)?' on':''}"><i>${unlocked.has(k)?'✓':i+1}</i><span>${unlocked.has(k)?t:'Locked'}</span></div>`).join('');$('#lessonCount').textContent=unlocked.size+'/5'}
+function renderNode(){const n=NODES[node],c=$('#missionCard');
+  if(n.end){if(!unlocked.has(n.lesson)){unlocked.add(n.lesson);award('l-'+n.lesson,30,'Lesson unlocked')}renderShelf();if(unlocked.size>=3)complete('s3','Mission cleared');
+    c.innerHTML=`<div class="step">${n.win?'Partial success':'Mission failed'}</div><h3>${n.h}</h3><div class="outcome${n.win?' win':''}"><p style="margin:0">${n.p}</p></div><div class="btnrow"><button class="btn" data-go="start">Try another path</button>${unlocked.size<5?`<span class="note" style="align-self:center">${5-unlocked.size} lesson${5-unlocked.size>1?'s':''} still hidden</span>`:'<span class="note" style="align-self:center">All five lessons found</span>'}</div>`;}
+  else c.innerHTML=`<div class="step">${n.step}</div><h3>${n.h}</h3><p class="note">${n.p}</p><div class="opts">${n.o.map((o,i)=>`<button class="opt" data-go="${o[1]}"><span class="k">${'ABC'[i]}</span>${o[0]}</button>`).join('')}</div>`;}
+$('#missionCard').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;node=b.dataset.go;renderNode()});
+renderShelf();renderNode();
+
+/* ---------- Level 4: wormhole lab ---------- */
+const cvW=$('#cvWorm'),cxW=cvW.getContext('2d');let A=-1,R0=1.2,triedBad=false,triedGood=true;
+function profile(a,r0,rmax){const pts=[[r0,0]];const umax=Math.sqrt(rmax-r0),N=300;let z=0,pu=0,pf=2/Math.sqrt((1-a)/r0);
+  for(let i=1;i<=N;i++){const u=umax*i/N,r=r0+u*u,f=2*u/Math.sqrt(Math.pow(r/r0,1-a)-1);z+=(f+pf)/2*(u-pu);pu=u;pf=f;if(i%5===0)pts.push([r,z])}return pts}
+function drawWorm(){const W=cvW.width,H=cvW.height,cx=W/2,cy=H/2,rmax=7,s=(W*0.46)/rmax,tilt=0.24;
+  const mut=tok('--muted'),vio=tok('--violet'),red=tok('--red'),ink=tok('--ink');cxW.clearRect(0,0,W,H);cxW.lineWidth=1;
+  const ell=(r,y,col,al,lw)=>{cxW.globalAlpha=al;cxW.strokeStyle=col;cxW.lineWidth=lw||1;cxW.beginPath();cxW.ellipse(cx,y,r*s,r*s*tilt,0,0,Math.PI*2);cxW.stroke()};
+  if(A>=1){for(let k=0;k<=16;k++){const y=k/16*H;ell(R0,y,red,0.55)}
+    cxW.globalAlpha=1;cxW.strokeStyle=red;cxW.beginPath();cxW.moveTo(cx-R0*s,0);cxW.lineTo(cx-R0*s,H);cxW.moveTo(cx+R0*s,0);cxW.lineTo(cx+R0*s,H);cxW.stroke();
+    cxW.fillStyle=red;cxW.font='13px "JetBrains Mono", monospace';cxW.textAlign='center';cxW.fillText('no flare-out: the tube never opens',cx,H-14);cxW.globalAlpha=1;return}
+  const pts=profile(A,R0,rmax);const ringIdx=[];const step=Math.max(1,Math.floor(pts.length/16));for(let i=0;i<pts.length;i+=step)ringIdx.push(i);
+  [1,-1].forEach(sg=>{
+    ringIdx.forEach(i=>{const[r,z]=pts[i];const y=cy-sg*z*s;if(y<-40||y>H+40)return;ell(r,y,mut,0.5)});
+    for(let k=0;k<16;k++){const th=k/16*Math.PI*2;cxW.globalAlpha=0.35;cxW.strokeStyle=mut;cxW.beginPath();
+      pts.forEach(([r,z],j)=>{const x=cx+Math.cos(th)*r*s,y=cy-sg*z*s+Math.sin(th)*r*s*tilt;j?cxW.lineTo(x,y):cxW.moveTo(x,y)});cxW.stroke()}
+    // silhouette
+    cxW.globalAlpha=0.9;cxW.strokeStyle=ink;cxW.lineWidth=1.6;[-1,1].forEach(side=>{cxW.beginPath();pts.forEach(([r,z],j)=>{const x=cx+side*r*s,y=cy-sg*z*s;j?cxW.lineTo(x,y):cxW.moveTo(x,y)});cxW.stroke()});
+  });
+  ell(R0,cy,vio,1,2.5);cxW.globalAlpha=1;cxW.fillStyle=vio;cxW.font='13px "JetBrains Mono", monospace';cxW.textAlign='left';cxW.fillText('throat  r₀ = '+R0.toFixed(2),cx+R0*s+10,cy+4);
+  cxW.fillStyle=mut;cxW.fillText('upper universe',12,22);cxW.fillText('lower universe',12,H-12);cxW.globalAlpha=1;}
+const SCALE=0.35;
+function setBar(el,v){const w=Math.min(50,Math.abs(v)/SCALE*50);el.style.width=w+'%';el.style.left=v>=0?'50%':(50-w)+'%';el.style.background=v>=0?tok('--good'):tok('--red')}
+function updWorm(){$('#slopeOut').textContent=(A<0?'−':'')+Math.abs(A).toFixed(2);$('#throatOut').textContent=R0.toFixed(2);
+  const den=8*Math.PI*R0*R0,rho=A/den,p=-1/den,sum=(A-1)/den;
+  setBar($('#bRho'),rho);setBar($('#bP'),p);setBar($('#bS'),sum);
+  $('#vRho').textContent=rho.toFixed(3);$('#vP').textContent=p.toFixed(3);$('#vS').textContent=sum.toFixed(3);
+  const st=$('#wormStatus');
+  if(A>=1){st.className='status bad';st.innerHTML='<b>Flare-out fails</b>With b′(r₀) ≥ 1 the tunnel never opens out, and ρ + pᵣ can reach zero or above. Ordinary matter would be fine, but you no longer have a wormhole.';triedBad=true}
+  else{st.className='status exotic';st.innerHTML=`<b>Traversable throat · NEC violated</b>The throat flares, so ρ + pᵣ = ${sum.toFixed(3)} &lt; 0. This wormhole needs exotic matter.`;triedGood=true}
+  if(triedBad&&triedGood)complete('s4','Lab cleared');drawWorm()}
+$('#slope').addEventListener('input',e=>{A=+e.target.value;updWorm()});$('#throat').addEventListener('input',e=>{R0=+e.target.value;updWorm()});
+updWorm();
+
+/* ---------- Level 5: proof ---------- */
+document.querySelector('.proof').addEventListener('click',e=>{const b=e.target.closest('[data-next]');if(!b)return;const nx=document.getElementById(b.dataset.next);nx.hidden=false;b.hidden=true;
+  if(b.dataset.next==='p4')complete('s5','Proof complete');nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+let predicted=null;
+$('#predictOpts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||predicted)return;predicted=b.dataset.v;
+  $$('#predictOpts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='neg')x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+  $('#predictFb').textContent=predicted==='neg'?'Right. Let\'s confirm it.':'Reasonable guess. Watch what the algebra does.';
+  if(predicted==='neg')award('pred',30,'Correct prediction');const p3=$('#p3');p3.hidden=false;p3.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+
+/* ---------- Level 6: problem ---------- */
+const PARTS=[
+ {t:'Differentiate the shape function',q:'Find b′(r), evaluate it at the throat, and check flare-out.',
+  o:[`b'(r)=\\dfrac{r_0^2}{r^2},\\; b'(r_0)=1 \\text{ (fails)}`,`b'(r)=-\\dfrac{r_0^2}{r^2},\\; b'(r_0)=-1 \\text{ (holds)}`,`b'(r)=-\\dfrac{r_0}{r^2},\\; b'(r_0)=-\\dfrac{1}{r_0}`],a:1,
+  hint:'Write b(r) = r₀² · r⁻¹. Use the power rule: d/dr of rⁿ is n·rⁿ⁻¹. r₀ is a constant.',
+  sol:'b′(r) = −r₀²/r². At r = r₀ that is −1, and −1 &lt; 1, so the throat flares.'},
+ {t:'Calculate the energy density',q:'Substitute into ρ = b′/(8πr²). What is ρ(r₀)?',
+  o:['\\rho(r)=-\\dfrac{r_0^2}{8\\pi r^4},\\;\\rho(r_0)=-\\dfrac{1}{8\\pi r_0^2}','\\rho(r)=\\dfrac{r_0^2}{8\\pi r^4},\\;\\rho(r_0)=\\dfrac{1}{8\\pi r_0^2}','\\rho(r)=-\\dfrac{r_0^2}{8\\pi r^2},\\;\\rho(r_0)=-\\dfrac{1}{8\\pi}'],a:0,
+  hint:'Divide −r₀²/r² by 8πr². The r powers add: r² · r² = r⁴.',
+  sol:'ρ(r) = −r₀²/(8πr⁴), so ρ(r₀) = −1/(8πr₀²). The energy density is negative everywhere, not just at the throat.'},
+ {t:'Calculate the radial pressure',q:'Since Φ = 0, Φ′ = 0. What is pᵣ(r₀)?',
+  o:['p_r(r_0)=0','p_r(r_0)=+\\dfrac{1}{8\\pi r_0^2}','p_r(r_0)=-\\dfrac{1}{8\\pi r_0^2}'],a:2,
+  hint:'With Φ′ = 0 only the first term survives: pᵣ = −b/(8πr³). Plug in b = r₀²/r.',
+  sol:'pᵣ(r) = −(r₀²/r)/(8πr³) = −r₀²/(8πr⁴). At the throat: −1/(8πr₀²), a tension.'},
+ {t:'Test the null energy condition',q:'What is ρ(r₀) + pᵣ(r₀), and what does it mean?',
+  o:['-\\dfrac{1}{4\\pi r_0^2} < 0\\text{: NEC violated, exotic matter needed}','0\\text{: NEC just barely satisfied}','+\\dfrac{1}{4\\pi r_0^2} > 0\\text{: ordinary matter works}'],a:0,
+  hint:'Add two copies of −1/(8πr₀²). Then compare with the NEC, ρ + pᵣ ≥ 0.',
+  sol:'ρ + pᵣ = −2/(8πr₀²) = −1/(4πr₀²) &lt; 0. The NEC fails, exactly as the general proof predicted.'}];
+const solved=new Set();
+$('#problem').innerHTML=PARTS.map((p,i)=>`<div class="part" data-p="${i}"><div class="ph"><b>PART ${i+1}</b><h3>${p.t}</h3></div><p class="note" style="margin:0 0 10px">${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-p="${i}" data-j="${j}"><span class="k">${'ABC'[j]}</span><span>${tex(o)}</span></button>`).join('')}</div><p class="fb" id="fb${i}"></p><button class="linkbtn" data-hint="${i}">Show hint</button><div class="hint" id="hint${i}" hidden>${p.hint}</div></div>`).join('')+
+ `<div class="finale" id="finale" hidden><h3>Boss level cleared.</h3><p>You just showed that a wormhole with perfectly well-behaved time and a smooth, flaring throat still needs negative energy density and ρ + pᵣ &lt; 0. The problem was never writing down the geometry. The geometry demands stuff that ordinary matter can't be.</p><p style="margin:0">Bonus: here ρ = pᵣ at every radius, so the exotic matter isn't confined to the throat. It fills the whole wormhole, thinning out like 1/r⁴.</p></div>`;
+$('#problem').addEventListener('click',e=>{const h=e.target.closest('[data-hint]');if(h){const el=$('#hint'+h.dataset.hint);el.hidden=!el.hidden;h.textContent=el.hidden?'Show hint':'Hide hint';return}
+  const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.p,j=+b.dataset.j,p=PARTS[i];if(solved.has(i))return;
+  if(j===p.a){solved.add(i);$$(`#problem .opt[data-p="${i}"]`).forEach(x=>{x.disabled=true;if(+x.dataset.j===j)x.classList.add('right')});$('#fb'+i).innerHTML='Correct. '+p.sol;award('part'+i,40,'Part '+(i+1)+' solved')}
+  else{b.classList.add('wrong');b.disabled=true;$('#fb'+i).textContent='Not that one. Try the hint.'}
+  if(solved.size===4){$('#finale').hidden=false;complete('s6','Boss level cleared')}});
+
+/* ---------- Review ---------- */
+function renderReview(){$('#reviewList').innerHTML=PRE.map((p,i)=>{const a=preAns[i];const you=a===undefined?'<em>Not answered. Scroll up to Level 0.</em>':(p.o[a]+(a===p.best?' ✓':''));
+  return `<div class="rv"><div><span class="lab2">You guessed · Q${i+1}</span>${you}</div><div><span class="lab2">The physics</span>${p.physics}</div></div>`}).join('')}
+renderReview();
+
+/* ---------- animation loop + theme ---------- */
+function frame(){drawEsc();drawSheet();if(!reduce)requestAnimationFrame(frame)}
+frame();if(reduce){setInterval(()=>{drawEsc();drawSheet()},500)}
+const redraw=()=>{drawWorm();updWorm()};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+</body>
+</html>
