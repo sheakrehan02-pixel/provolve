@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chicago Pile-1</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* The Chicago Pile story as a 1997 web page: a browser window, Times New Roman, tables with borders, grey bevelled controls. */
+:root{--desk:#008080;--face:#C0C0C0;--hi:#FFFFFF;--lo:#808080;--dk:#000000;--page:#FFFFFF;--ink:#000000;--navy:#000080;--link:#0000EE;--visited:#551A8B;--red:#CC0000;--yellow:#FFFFE1;--muted:#404040;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--desk);color:var(--ink);font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.45;padding:14px 10px 40px}
+a{color:var(--link)} a:visited{color:var(--visited)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1px dotted #000;outline-offset:2px}
+.win{max-width:820px;margin:0 auto;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);box-shadow:inset -1px -1px 0 var(--lo),inset 1px 1px 0 #DFDFDF;padding:3px}
+.titlebar{display:flex;align-items:center;gap:6px;background:linear-gradient(90deg,#000080,#1084D0);color:#fff;font:bold 13px Arial,Helvetica,sans-serif;padding:3px 4px}
+.titlebar .tb{margin-left:auto;display:flex;gap:2px}
+.titlebar .tb i{display:inline-block;width:16px;height:14px;background:var(--face);border:1px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);font:bold 10px/12px Arial;color:#000;text-align:center;font-style:normal}
+.menubar{display:flex;gap:14px;font:13px Arial,Helvetica,sans-serif;padding:3px 6px}
+.menubar a{color:#000;text-decoration:none}
+.menubar a::first-letter{text-decoration:underline}
+.addr{display:flex;align-items:center;gap:6px;font:12px Arial,sans-serif;padding:2px 6px 5px}
+.addr span.box{flex:1;background:#fff;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:1px 4px;font-family:Arial,sans-serif;white-space:nowrap;overflow:hidden}
+.doc{background:var(--page);border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:14px 18px 22px}
+.btn95,.btn,.chip,.cta,.vote{display:inline-block;font:13px Arial,Helvetica,sans-serif;color:#000;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);box-shadow:inset -1px -1px 0 var(--lo);padding:4px 12px;cursor:pointer;text-decoration:none;border-radius:0}
+.btn:active,.chip:active,.cta:active,.vote:active,.chip[aria-pressed="true"],.vote[aria-pressed="true"]{border-color:var(--dk) var(--hi) var(--hi) var(--dk);box-shadow:inset 1px 1px 0 var(--lo);background:#D4D0C8}
+.btn:disabled{color:var(--lo);text-shadow:1px 1px 0 #fff;cursor:default}
+hr{border:0;border-top:1px solid var(--lo);border-bottom:1px solid var(--hi);margin:18px 0}
+.marq{overflow:hidden;white-space:nowrap;background:#000;color:#00FF00;font:13px "Courier New",Courier,monospace;padding:3px 0;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.marq span{display:inline-block;padding-left:100%;animation:marq 26s linear infinite}
+@keyframes marq{to{transform:translateX(-100%)}}
+.blink{animation:blink 1s steps(1) infinite;color:var(--red);font-weight:bold}
+@keyframes blink{50%{visibility:hidden}}
+.counter{display:inline-block;background:#000;color:#FF3030;font:bold 14px "Courier New",monospace;letter-spacing:3px;padding:1px 6px;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.statusbar{display:flex;gap:4px;font:12px Arial,sans-serif;padding:3px 2px 0}
+.statusbar span{border:1px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:1px 6px}
+.statusbar span:first-child{flex:1}
+@media (prefers-reduced-motion: reduce){.marq span,.blink{animation:none}.marq span{padding-left:0}}
+
+.hud{position:sticky;top:0;z-index:20;margin:-14px -18px 12px;padding:4px 6px;background:var(--face);border-bottom:2px solid var(--lo)}
+.hud-in{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.brand{font:bold 13px Arial,sans-serif;white-space:nowrap}
+a.brand{color:var(--link)}
+.brand small{display:none}
+.dots{display:flex;gap:3px;flex:1;min-width:0;flex-wrap:wrap}
+.dot{font:12px Arial,sans-serif;color:#000;text-decoration:none;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);padding:1px 6px}
+.dot.done{border-color:var(--dk) var(--hi) var(--hi) var(--dk);background:#D4D0C8}
+.dot.done::after{content:" ✓";color:green}
+.xp{font:12px Arial,sans-serif;display:flex;align-items:center;gap:6px;white-space:nowrap}
+.xpbar{width:110px;height:16px;background:#fff;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:1px;overflow:hidden}
+.xpbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--navy) 0 8px,transparent 8px 10px)}
+.wrap{max-width:none;padding:0}
+.col{max-width:none}
+.kicker{font:12px Arial,sans-serif;color:var(--muted)}
+.dateline{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font:13px "Courier New",monospace;border-top:1px solid #000;border-bottom:1px solid #000;padding:2px 0}
+.dateline b{color:var(--red)}
+h1{font:bold 36px/1.1 "Times New Roman",Times,serif;color:var(--navy);margin:12px 0 8px;text-align:center}
+h1 em{font-style:normal;color:var(--red)}
+h2{font:bold 24px/1.2 "Times New Roman",Times,serif;color:var(--navy);margin:0 0 8px}
+h3{font:bold 17px "Times New Roman",serif;margin:0 0 6px}
+.dek{font-style:italic;text-align:center;margin:0 0 10px}
+p{margin:0 0 12px}
+.byline{font:12px Arial,sans-serif;text-align:center;color:var(--muted);display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.route{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #000;margin:12px 0}
+@media (max-width:600px){.route{grid-template-columns:1fr 1fr}}
+.route div{border:1px solid #000;padding:6px;text-align:center}
+.route b{display:block;font:bold 24px "Times New Roman",serif;color:var(--red)}
+.route small{font-size:13px}
+section.level{padding-top:16px;margin-top:20px;border-top:2px groove #fff;scroll-margin-top:50px}
+.lvl{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.lvl .tag{font:bold 12px Arial,sans-serif;background:var(--navy);color:#fff;padding:1px 6px}
+.lvl .mode{font:12px Arial,sans-serif;color:var(--muted)}
+.lvl .check{margin-left:auto;font:bold 12px Arial,sans-serif;color:green;visibility:hidden}
+.level.complete .lvl .check{visibility:visible}
+.lab{background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);padding:10px;margin:14px 0}
+.labhead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:8px;font:12px Arial,sans-serif}
+.labhead .kicker{font-weight:bold;color:var(--navy)}
+.labhead .note{font-size:12px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;align-items:start}
+@media (max-width:700px){.grid2{grid-template-columns:1fr}}
+canvas{display:block;width:100%;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);background:#fff;touch-action:none}
+canvas.dark{background:#0E0D0B}
+.ctrl{display:grid;gap:2px;margin-bottom:10px}
+.ctrl label{font:12px Arial,sans-serif;display:flex;justify-content:space-between;gap:8px}
+.ctrl label output{font-weight:bold}
+input[type=range]{width:100%;accent-color:var(--navy)}
+.readout{display:table;width:100%;border-collapse:collapse;background:#fff}
+.readout div{display:table-row}
+.readout div span{display:table-cell;border:1px solid var(--lo);padding:2px 6px;font:13px "Courier New",monospace}
+.readout div span:last-child{text-align:right;font-weight:bold}
+.status{margin-top:10px;padding:6px 8px;background:var(--yellow);border:1px solid #000;font-size:15px}
+.status.bad{background:#FFD6D6} .status.good{background:#D6FFD6} .status.exotic{background:#FFFFE1}
+.status b{display:block;font:bold 13px Arial,sans-serif}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 10px}
+.note{font-size:14px;color:var(--muted)}
+.q{margin:0 0 12px}
+.q p.prompt{font-weight:bold;margin-bottom:6px}
+.opts{display:grid;gap:4px}
+.opt{text-align:left;font:15px "Times New Roman",serif;color:#000;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);padding:4px 8px;cursor:pointer;display:flex;gap:8px;align-items:baseline;border-radius:0}
+.opt .k{font:bold 12px Arial,sans-serif}
+.opt.picked{border-color:var(--dk) var(--hi) var(--hi) var(--dk);background:#D4D0C8;font-weight:bold}
+.opt.right{background:#D6FFD6;border-color:var(--dk) var(--hi) var(--hi) var(--dk)}
+.opt.right::after{content:" ✓ Correct";color:green;font:bold 12px Arial}
+.opt.wrong{background:#FFD6D6;text-decoration:line-through}
+.opt:disabled{cursor:default;color:#000}
+.fb{font-size:15px;margin-top:6px}
+.btnrow{display:flex;gap:4px;flex-wrap:wrap;margin-top:8px}
+.btn.zip{font-weight:bold;color:var(--red);letter-spacing:2px}
+.btn.ghost{background:var(--face)}
+.logbook{margin-top:10px;background:#fff;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:6px 8px;font:13px "Courier New",monospace;max-height:180px;overflow-y:auto}
+.logbook p{margin:0}
+.logbook time{color:var(--red);margin-right:6px}
+.pstep{border-top:1px dotted #000;padding:10px 0}
+.pstep .num{font:bold 12px Arial,sans-serif;color:var(--red)}
+.disp{overflow-x:auto;padding:6px 0;text-align:center;font-size:20px}
+.predict{background:var(--yellow);border:1px solid #000;padding:8px 10px;margin:8px 0}
+.part{border-top:1px dotted #000;padding:10px 0}
+.part .ph{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.part .ph b{font:bold 12px Arial,sans-serif;color:var(--red)}
+.hint{font-size:15px;background:var(--yellow);border:1px solid #000;padding:6px 8px;margin-top:6px}
+.linkbtn{background:none;border:0;padding:0;color:var(--link);text-decoration:underline;cursor:pointer;font:13px Arial,sans-serif;margin-top:4px}
+.finale{background:var(--navy);color:#fff;padding:10px 12px;margin-top:10px;border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi)}
+.finale h3{color:#FFFF00}
+.finale p{color:#fff}
+.review{display:grid;gap:6px}
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);border:1px solid #000}
+.rv div{border:1px solid #000;padding:6px 8px;font-size:15px}
+.rv .lab2{display:block;font:bold 12px Arial,sans-serif;color:var(--navy)}
+@media (max-width:560px){.rv{grid-template-columns:1fr}}
+.obst{display:grid;grid-template-columns:1fr 1fr;border:1px solid #000;margin:10px 0}
+.obst div{border:1px solid #000;padding:6px 8px;font-size:15px}
+.obst b{display:block;font:bold 12px Arial,sans-serif;color:var(--red)}
+@media (max-width:560px){.obst{grid-template-columns:1fr}}
+.next{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);background:var(--face);padding:8px 10px;margin-top:20px}
+.next .big{font:bold 19px "Times New Roman",serif}
+footer{text-align:center;font:12px Arial,sans-serif;color:var(--muted);margin-top:16px}
+.toast{position:fixed;left:50%;bottom:20px;transform:translate(-50%,200%);background:var(--face);color:#000;font:13px Arial,sans-serif;padding:0;border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);transition:transform .2s;z-index:30;white-space:nowrap;min-width:220px}
+.toast::before{content:"Achievement";display:block;background:linear-gradient(90deg,#000080,#1084D0);color:#fff;font-weight:bold;padding:2px 6px}
+.toast{padding-bottom:6px}
+.toast.show{transform:translate(-50%,0)}
+@media (max-width:640px){.dots{display:none}}
+</style>
+</head>
+<body>
+
+<div class="win">
+  <div class="titlebar">Chicago Pile-1 - What Happened - Netscape Navigator<span class="tb"><i>_</i><i>□</i><i>×</i></span></div>
+  <div class="menubar"><a href="what-happened.html">File</a><a href="#s0">Edit</a><a href="#s3">View</a><a href="#s5">Go</a><a href="what-happened.html">Bookmarks</a><a href="#s4">Help</a></div>
+  <div class="addr">Location: <span class="box">http://www.provolve.net/chicago-pile.html</span></div>
+  <div class="doc">
+<header class="hud">
+  <div class="hud-in">
+    <a class="brand" href="what-happened.html"><small>←</small>What Happened<span>.</span></a>
+    <nav class="dots" aria-label="Chapters">
+      <a class="dot" href="#s0" data-s="s0">Predict</a>
+      <a class="dot" href="#s1" data-s="s1">One neutron</a>
+      <a class="dot" href="#s2" data-s="s2">The pile</a>
+      <a class="dot" href="#s3" data-s="s3">The rod</a>
+      <a class="dot" href="#s4" data-s="s4">The math</a>
+      <a class="dot" href="#s5" data-s="s5">3:25 p.m.</a>
+    </nav>
+    <div class="xp"><span id="xpnum">0 XP</span><div class="xpbar"><i id="xpfill"></i></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="col">
+    <div class="marq" style="margin-bottom:8px"><span>*** EXTRA! EXTRA! *** Chicago, Dec. 2, 1942: Scientists under Stagg Field attempt the first controlled chain reaction *** 49 people in the room *** Peak power: half a watt *** Pull the rod yourself in Chapter 3! ***</span></div>
+    <div class="dateline"><span><b>Chicago, Ill.</b></span><span>Wednesday, December 2, 1942</span><span>9:45 a.m.</span></div>
+    <h1>The day Fermi switched on <em>the first reactor</em></h1>
+    <p class="dek">It's below freezing outside. Under the west stands of the University of Chicago's football stadium, 49 people are crowded into an old squash court around a pile of black bricks. You're one of them.</p>
+    <div class="byline"><span>~30 min</span><span>6 chapters</span><span>Math: powers and one logarithm</span></div>
+
+    <div class="route">
+      <div><b>57</b><small>layers of graphite bricks</small></div>
+      <div><b>~45,000</b><small>bricks, some holding uranium</small></div>
+      <div><b>49</b><small>people in the room</small></div>
+      <div><b>0.5 W</b><small>peak power, less than a nightlight</small></div>
+    </div>
+
+    <p>The thing in front of you is called Chicago Pile-1, and "pile" is exactly right. It's a squashed ball of graphite bricks about 7.5 metres wide, with lumps of uranium tucked inside. Wooden rods coated in cadmium slide through it. Cadmium soaks up neutrons like a sponge, so with the rods in, the pile sleeps.</p>
+    <p>Up on a platform, three young physicists hold buckets of cadmium solution, ready to drown the pile if something goes wrong. One man stands by with an axe, next to a rope that holds up an emergency rod. Everyone else is watching the neutron counters. The man in charge, Enrico Fermi, has a slide rule in his hand.</p>
+
+    <!-- 0 -->
+    <section class="level" id="s0">
+      <div class="lvl"><span class="tag">Chapter 0</span><span class="mode">Predict · no wrong answers</span><span class="check">✓ cleared</span></div>
+      <h2>Before anything happens, make your calls.</h2>
+      <p>Your predictions lock now. At the end of the day you'll see them next to what really happened.</p>
+      <div class="lab" id="pretest"></div>
+    </section>
+
+    <!-- 1 -->
+    <section class="level" id="s1">
+      <div class="lvl"><span class="tag">Chapter 1</span><span class="mode">Play · one neutron, then k</span><span class="check">✓ cleared</span></div>
+      <h2>Everything depends on one number.</h2>
+      <p>A neutron hits a uranium nucleus and the nucleus splits, throwing out two or three new neutrons. Some escape the pile. Some are eaten by cadmium or by impurities in the graphite. The rest split more uranium.</p>
+      <p>On average, how many new neutrons does each neutron lead to? Fermi called that number <span data-tex="k"></span>. Grow a family of neutrons and watch what <span data-tex="k"></span> does.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Instrument 1 · The family tree</span><span class="note">Each dot is a neutron. Each row is one generation.</span></div>
+    <div class="grid2">
+      <canvas id="cvTree" width="640" height="380" aria-label="A family tree of neutrons, one row per generation"></canvas>
+      <div>
+        <div class="ctrl">
+          <label for="kT">k, average children per neutron <output id="kTo">1.20</output></label>
+          <input type="range" id="kT" min="0.6" max="1.6" step="0.05" value="1.2">
+        </div>
+        <div class="btnrow" style="margin-top:0;margin-bottom:14px"><button class="btn" id="nextGen">Next generation</button><button class="btn ghost" id="resetTree">Start over</button></div>
+        <div class="readout">
+          <div><span>Generation</span><span id="gen">0</span></div>
+          <div><span>Neutrons now</span><span id="pop">1</span></div>
+          <div><span>Expected, kⁿ</span><span id="pred">1</span></div>
+        </div>
+        <div class="status" id="treeStatus"><b>Grow the family</b>Try k = 0.9, then k = 1.1. Run each for several generations.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Below 1, every family dies out. Above 1, it grows without limit. Exactly 1 holds steady, and that line is called <strong>critical</strong>. After <span data-tex="n"></span> generations:</p>
+    <div class="disp" data-tex="N = N_0 \, k^{\,n}" data-display></div>
+    <div class="lab">
+      <div class="q"><p class="prompt">Fermi's pile reached about k = 1.0006. Start with 1,000 neutrons. About how many are there after 1,000 generations?</p>
+        <div class="opts" id="q1">
+          <button class="opt" data-j="0"><span class="k">A</span>About 1,000.6, because k is so close to 1</button>
+          <button class="opt" data-j="1"><span class="k">B</span>About 1,822</button>
+          <button class="opt" data-j="2"><span class="k">C</span>About 1 million</button>
+        </div>
+        <p class="fb" id="q1fb"></p>
+        <button class="linkbtn" id="q1h">Show hint</button><div class="hint" id="q1hint" hidden>Work out 1.0006 to the power 1,000 on a calculator, then multiply by 1,000.</div>
+      </div>
+    </div>
+
+    <!-- 2 -->
+    <section class="level" id="s2">
+      <div class="lvl"><span class="tag">Chapter 2</span><span class="mode">Play · build the pile</span><span class="check">✓ cleared</span></div>
+      <h2>Why it had to be so big.</h2>
+      <p>This is a toy pile. Yellow dots are uranium lumps sitting in graphite. Tap inside it to fire neutrons in. A neutron that reaches the edge escapes. One that touches a yellow cadmium rod is eaten.</p>
+      <p>Make the pile bigger and a neutron has to travel further to escape, so it gets more chances to hit uranium first. That's why Fermi's team kept adding layers until the counters told them to stop.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Instrument 2 · The toy pile</span><span class="note">Tap inside the pile to fire neutrons.</span></div>
+    <div class="grid2">
+      <canvas id="cvPile" class="dark" width="640" height="420" aria-label="A toy chain-reaction simulation"></canvas>
+      <div>
+        <div class="ctrl"><label for="layers">Layers of graphite <output id="layerso">40</output></label><input type="range" id="layers" min="20" max="57" step="1" value="40"></div>
+        <div class="ctrl"><label for="rods">Rods pushed in <output id="rodso">40%</output></label><input type="range" id="rods" min="0" max="100" step="1" value="40"></div>
+        <div class="chips"><button class="chip" id="burst">Fire 30 neutrons</button><button class="chip" id="source" aria-pressed="false">Steady source</button></div>
+        <div class="readout">
+          <div><span>Neutrons flying</span><span id="nCount">0</span></div>
+          <div><span>Measured k</span><span id="kMeas">—</span></div>
+          <div><span>Splits so far</span><span id="splits">0</span></div>
+        </div>
+        <div class="status" id="pileStatus"><b>Balance it on the edge</b>Keep the measured k between 0.97 and 1.03 for a few seconds.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The toy is simplified, but the idea is exactly right. Size controls how many neutrons escape, and the rods control how many get eaten. Together they set <span data-tex="k"></span>.</p>
+
+    <!-- 3 -->
+    <section class="level" id="s3">
+      <div class="lvl"><span class="tag">Chapter 3</span><span class="mode">Play · the last rod</span><span class="check">✓ cleared</span></div>
+      <h2>Pull it out six inches at a time.</h2>
+      <p>After lunch, every rod is out except one. Fermi has it pulled out step by step. After each step the counters climb and then level off, and he checks the level against his slide rule. A pile below critical always levels off. A pile above critical never does.</p>
+      <p>Now you're in charge. Time here runs 20 times faster than real life.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Instrument 3 · The chart recorder</span><span class="note">Neutron count on a log scale. The red line trips the safety rod.</span></div>
+    <div class="grid2">
+      <div>
+        <canvas id="cvRec" width="640" height="360" aria-label="Chart recorder trace of the neutron count"></canvas>
+        <div class="btnrow">
+          <button class="btn" id="pull">Pull out 6 in</button>
+          <button class="btn ghost" id="push">Push in 6 in</button>
+          <button class="btn zip" id="zip">ZIP</button>
+          <button class="btn ghost" id="restart">Restart</button>
+          <button class="btn ghost" id="snd" aria-pressed="false">Counter sound</button>
+        </div>
+      </div>
+      <div>
+        <div class="readout">
+          <div><span>Clock</span><span id="clock">2:00 p.m.</span></div>
+          <div><span>Rod pulled out</span><span id="rodPos">0 in</span></div>
+          <div><span>k</span><span id="kRod">—</span></div>
+          <div><span>Doubling time</span><span id="dbl">—</span></div>
+          <div><span>Count</span><span id="cnt">—</span></div>
+        </div>
+        <div class="status" id="rodStatus"><b>Your job</b>Get the pile critical with a doubling time longer than one minute, and keep it running for 4½ minutes without tripping the safety rod.</div>
+        <div class="logbook" id="log" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <!-- 4 -->
+    <section class="level" id="s4">
+      <div class="lvl"><span class="tag">Chapter 4</span><span class="mode">Calculate · four steps</span><span class="check">✓ cleared</span></div>
+      <h2>Fermi's slide rule, one step at a time.</h2>
+      <p>You've seen that the count grows. Fermi needed to know how fast, in minutes, because the people in the room had to be able to react. Here's how he got there.</p>
+      <div class="proof">
+        <div class="pstep" id="p1">
+          <div class="num">STEP 1 · GENERATIONS</div>
+          <p>Each generation multiplies the count by <span data-tex="k"></span>. After <span data-tex="n"></span> generations:</p>
+          <div class="disp" data-tex="N = N_0\,k^{\,n}" data-display></div>
+          <button class="btn" data-next="p2">Next step</button>
+        </div>
+        <div class="pstep" id="p2" hidden>
+          <div class="num">STEP 2 · FROM GENERATIONS TO SECONDS</div>
+          <p>One generation lasts a time <span data-tex="\ell"></span>, so after <span data-tex="t"></span> seconds there have been <span data-tex="n = t/\ell"></span> generations. When <span data-tex="k"></span> is very close to 1, the power has a clean approximation:</p>
+          <div class="disp" data-tex="N = N_0\,k^{\,t/\ell} \;\approx\; N_0\, e^{(k-1)\,t/\ell}" data-display></div>
+          <button class="btn" data-next="pPredict">Next step</button>
+        </div>
+        <div class="pstep" id="pPredict" hidden>
+          <div class="predict">
+            <div class="num">PREDICT FIRST</div>
+            <p style="margin:.3em 0 .8em">Suppose you push the rod in a little, so <span data-tex="k - 1"></span> is cut in half. What happens to the time it takes the count to double?</p>
+            <div class="opts" id="predictOpts">
+              <button class="opt" data-v="half"><span class="k">A</span>It halves. The pile doubles faster.</button>
+              <button class="opt" data-v="same"><span class="k">B</span>It stays the same.</button>
+              <button class="opt" data-v="double"><span class="k">C</span>It doubles. The pile rises more slowly.</button>
+            </div>
+            <p class="fb" id="predictFb"></p>
+          </div>
+        </div>
+        <div class="pstep" id="p3" hidden>
+          <div class="num">STEP 3 · THE DOUBLING TIME</div>
+          <p>Set <span data-tex="N = 2N_0"></span> and solve for <span data-tex="t"></span>. Take the natural log of both sides:</p>
+          <div class="disp" data-tex="2 = e^{(k-1)T/\ell} \;\Rightarrow\; \boxed{T = \dfrac{\ell\,\ln 2}{k-1}}" data-display></div>
+          <p><span data-tex="k-1"></span> sits on the bottom, so halving it doubles <span data-tex="T"></span>. That's exactly how the rod gave Fermi control: tiny changes in <span data-tex="k"></span>, big changes in how fast things moved.</p>
+          <button class="btn" data-next="p4">Final step</button>
+        </div>
+        <div class="pstep" id="p4" hidden>
+          <div class="num">STEP 4 · WHY ℓ IS 0.1 SECONDS</div>
+          <p>Most neutrons from a split fly out almost instantly, within about a ten-thousandth of a second. But about 0.65% come out seconds later, released by the broken fragments as they decay. Those late neutrons stretch the average generation to about <span data-tex="\ell \approx 0.1"></span> s.</p>
+          <div class="status good"><b>Why the room was safe</b>Without the late neutrons, the same pile would double in about a tenth of a second instead of two minutes. The slow, steady rise everyone watched that afternoon was only possible because of them.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 -->
+    <section class="level" id="s5">
+      <div class="lvl"><span class="tag">Chapter 5</span><span class="mode">Solve · 3:25 p.m.</span><span class="check">✓ cleared</span></div>
+      <h2>Your turn: the calculation that decided the day.</h2>
+      <p>Around 3:25 p.m., Fermi closes his slide rule and announces that the reaction is self-sustaining. The pens on the chart recorder keep climbing. You have the same numbers he did: <span data-tex="k \approx 1.0006"></span> and <span data-tex="\ell \approx 0.1"></span> s.</p>
+      <div class="lab" id="problem"></div>
+    </section>
+
+    <!-- REVIEW -->
+    <section class="level" id="review">
+      <div class="lvl"><span class="tag">Debrief</span><span class="mode">Your predictions vs. the record</span></div>
+      <h2>How did your predictions do?</h2>
+      <div class="review" id="reviewList"></div>
+      <h3 style="margin-top:34px">What happened next</h3>
+      <div class="obst">
+        <div><b>A · The Chianti</b>Eugene Wigner had brought a bottle of Chianti. It was passed around in paper cups, and the group signed the straw wrapper.</div>
+        <div><b>B · The phone call</b>Arthur Compton phoned James Conant with a code made up on the spot: the Italian navigator had landed in the new world.</div>
+        <div><b>C · The pile moved</b>In 1943 the pile was taken apart and rebuilt outside the city as Chicago Pile-2, with radiation shielding this time.</div>
+        <div><b>D · Today</b>Descendants of that pile of bricks now make about a tenth of the world's electricity.</div>
+      </div>
+      <p>You used the same three tools they did: exponential growth, a logarithm to undo it, and one tiny number, <span data-tex="k-1"></span>, that decides everything.</p>
+    </section>
+
+    <div class="next">
+      <div><div class="kicker">Understand it · Simplify It, Issue 04</div><div class="big">Where does the energy come from?</div></div>
+      <a class="btn" href="energy.html" style="text-decoration:none">Play Issue 04 →</a>
+    </div>
+    <footer>What Happened · Chicago Pile-1 · <a href="what-happened.html">All stories</a> · Chapter 2's pile is a simplified toy; chapters 1, 3, 4 and 5 use the real equations and numbers.</footer>
+  </div>
+</main>
+  </div>
+  <div class="statusbar"><span>Document: Done</span><span id="sbxp">0 XP</span></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function tex(s,d){try{return katex.renderToString(s,{output:'mathml',displayMode:!!d,throwOnError:false})}catch(e){return s}}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(el=>{el.innerHTML=tex(el.dataset.tex,el.hasAttribute('data-display'))})}
+renderTex();
+const fmt=(x,d=0)=>x.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+
+/* ---------- XP + progress ---------- */
+const MAXXP=560; let xp=0; const got=new Set();
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+const STORE='whathappened:chicago',LEVELS=['s0','s1','s2','s3','s4','s5'];const cleared=new Set();
+function save(){try{localStorage.setItem(STORE,JSON.stringify({xp,cleared:[...cleared],total:LEVELS.length,got:[...got]}))}catch(e){}}
+function paintXP(){$('#xpnum').textContent=xp+' XP';const sb=document.getElementById('sbxp');if(sb)sb.textContent=xp+' XP';$('#xpfill').style.width=Math.min(100,xp/MAXXP*100)+'%'}
+function award(id,pts,msg){if(got.has(id))return;got.add(id);xp+=pts;paintXP();toast('+'+pts+' XP · '+msg);save()}
+function markDone(s){cleared.add(s);document.getElementById(s).classList.add('complete');$('.dot[data-s="'+s+'"]').classList.add('done')}
+function complete(s,msg){if(cleared.has(s))return;markDone(s);award('done-'+s,50,msg);save()}
+try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){xp=d.xp||0;(d.got||[]).forEach(g=>got.add(g));(d.cleared||[]).forEach(s=>{markDone(s);got.add('done-'+s)});paintXP()}}catch(e){}
+
+/* ---------- 0: predictions ---------- */
+const PRE=[
+ {q:'When the pile finally goes critical, what will the counters do?',o:['Jump to a huge number instantly','Climb faster and faster, never leveling off','Nothing you could see'],
+  physics:'They climbed steadily faster and never leveled off. With k only a hair above 1, the rise was slow enough to watch.',best:1},
+ {q:'Why did the pile have to be so big?',o:['More uranium burns hotter','So fewer neutrons escape before splitting more uranium','To block the radiation'],
+  physics:'Size is about escape. A bigger pile gives each neutron more chances to hit uranium before it leaks out the edge.',best:1},
+ {q:'How much power did the world\'s first reactor make that day?',o:['Enough to light Chicago','About a light bulb, 100 watts','About half a watt, less than a nightlight'],
+  physics:'About half a watt. The point wasn\'t power. It was proving a chain reaction could be started, controlled and stopped.',best:2}];
+const preAns={};
+$('#pretest').innerHTML=PRE.map((p,i)=>`<div class="q"><p class="prompt">${i+1}. ${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="k">${'ABC'[j]}</span>${o}</button>`).join('')}</div></div>`).join('')+'<p class="fb" id="preFb">Pick one answer per question.</p>';
+$('#pretest').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const q=+b.dataset.q;
+  $$(`#pretest .opt[data-q="${q}"]`).forEach(x=>x.classList.toggle('picked',x===b));preAns[q]=+b.dataset.j;
+  const n=Object.keys(preAns).length;$('#preFb').textContent=n<3?`${n}/3 locked in.`:'All three locked in. We\'ll check them in the debrief.';
+  if(n===3)complete('s0','Predictions locked');renderReview()});
+
+/* ---------- 1: family tree ---------- */
+let gens=[[{p:-1}]];const triedK=new Set();
+function sample(k){const base=Math.floor(k),frac=k-base;let n=base+(Math.random()<frac?1:0);if(Math.random()<0.25)n+=Math.random()<0.5?-1:1;return Math.max(0,n)}
+const cvT=$('#cvTree'),gT=cvT.getContext('2d');
+function drawTree(){const W=cvT.width,H=cvT.height,ink=tok('--ink'),mut=tok('--muted'),red=tok('--red'),line=tok('--line');gT.clearRect(0,0,W,H);
+  const rows=Math.max(gens.length,8),rh=(H-30)/rows;
+  gens.forEach((row,gi)=>{const y=18+gi*rh,shown=row.slice(0,320);shown.forEach((d,i)=>{d.px=14+(W-28)*((i+0.5)/shown.length);d.py=y});
+    if(gi>0){gT.strokeStyle=line;gT.lineWidth=1;shown.forEach(d=>{const pa=gens[gi-1][d.p];if(pa&&pa.px!==undefined){gT.beginPath();gT.moveTo(pa.px,pa.py);gT.lineTo(d.px,d.py);gT.stroke()}})}
+    gT.fillStyle=gi===gens.length-1?red:mut;shown.forEach(d=>{gT.beginPath();gT.arc(d.px,d.py,shown.length>140?1.8:3.4,0,7);gT.fill()});
+    gT.font='13px "Special Elite", monospace';gT.fillStyle=ink;
+    if(row.length>320)gT.fillText('+'+(row.length-320)+' more',W-110,y-5);if(row.length===0)gT.fillText('The family died out.',16,y+4)});
+  const k=+$('#kT').value,n=gens.length-1;$('#gen').textContent=n;$('#pop').textContent=fmt(gens[n].length);$('#pred').textContent=fmt(Math.pow(k,n),Math.pow(k,n)<10?2:0)}
+$('#kT').addEventListener('input',()=>{$('#kTo').textContent=(+$('#kT').value).toFixed(2);drawTree()});
+$('#nextGen').addEventListener('click',()=>{const k=+$('#kT').value,last=gens[gens.length-1];if(!last.length||gens.length>=12){gens=[[{p:-1}]];drawTree();return}
+  const nx=[];last.forEach((d,i)=>{const c=sample(k);for(let j=0;j<c;j++)nx.push({p:i})});if(nx.length>4000)nx.length=4000;gens.push(nx);
+  if(gens.length>=6){triedK.add(k<1?'below':k>1?'above':'at');const st=$('#treeStatus');
+    if(k<1){st.className='status bad';st.innerHTML='<b>Dying out</b>Below 1, every family shrinks. This is a pile with too many rods in.'}else if(k>1){st.className='status exotic';st.innerHTML='<b>Growing</b>Above 1, the family grows every generation and never stops on its own.'}else{st.className='status good';st.innerHTML='<b>Steady</b>At exactly 1, on average each neutron replaces itself. That\'s critical.'}
+    if(triedK.has('below')&&triedK.has('above'))award('tree',20,'Saw both sides of critical')}
+  drawTree()});
+$('#resetTree').addEventListener('click',()=>{gens=[[{p:-1}]];drawTree()});
+let q1done=false;
+$('#q1').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||q1done)return;
+  if(b.dataset.j==='1'){q1done=true;$$('#q1 .opt').forEach(x=>{x.disabled=true});b.classList.add('right');$('#q1fb').textContent='Right: 1,000 × 1.0006¹⁰⁰⁰ ≈ 1,822. A tiny k still compounds.';award('q1',30,'k understood');complete('s1','One neutron, then k')}
+  else{b.classList.add('wrong');b.disabled=true;$('#q1fb').textContent=b.dataset.j==='0'?'That would be true if it added 0.0006 once. It multiplies, 1,000 times.':'Too big. Check 1.0006 to the power 1,000.'}});
+$('#q1h').addEventListener('click',()=>{const h=$('#q1hint');h.hidden=!h.hidden;$('#q1h').textContent=h.hidden?'Show hint':'Hide hint'});
+
+/* ---------- 2: toy pile ---------- */
+const PF=0.3,ABS=0.003,SP=20,SPEED=2.2;let ns=[],fl=[],splits=0,hist=[],stableT=0,lastSpawn=0,srcOn=false;
+const cvP=$('#cvPile'),gP=cvP.getContext('2d');
+function geom(){const W=cvP.width,H=cvP.height,md=Math.min(W,H),size=(+$('#layers').value-20)/37;return {cx:W/2,cy:H/2,R:md*0.12+size*md*0.34}}
+function fire(x,y,n){for(let i=0;i<n;i++){const a=Math.random()*6.28;ns.push({x,y,vx:Math.cos(a)*SPEED,vy:Math.sin(a)*SPEED,in:false})}}
+cvP.addEventListener('pointerdown',e=>{const r=cvP.getBoundingClientRect();fire((e.clientX-r.left)*cvP.width/r.width,(e.clientY-r.top)*cvP.height/r.height,6)});
+$('#burst').addEventListener('click',()=>{const g=geom();fire(g.cx+(Math.random()-.5)*g.R*.6,g.cy+(Math.random()-.5)*g.R*.6,30)});
+$('#source').addEventListener('click',()=>{srcOn=!srcOn;$('#source').setAttribute('aria-pressed',srcOn)});
+$('#layers').addEventListener('input',()=>{$('#layerso').textContent=$('#layers').value});$('#rods').addEventListener('input',()=>{$('#rodso').textContent=$('#rods').value+'%'});
+function stepPile(t){const W=cvP.width,H=cvP.height,g=geom(),rods=+$('#rods').value/100;const rodX=[g.cx-g.R*.5,g.cx+g.R*.5,g.cx-g.R*.12],rodB=g.cy-g.R+rods*2*g.R;
+  if(srcOn&&t-lastSpawn>250){lastSpawn=t;fire(g.cx,g.cy,1)}
+  let born=0,ended=0;const nn=[];
+  for(const n of ns){n.x+=n.vx;n.y+=n.vy;if((n.x-g.cx)**2+(n.y-g.cy)**2>g.R*g.R){ended++;continue}
+    if(n.y<rodB&&rodX.some(rx=>Math.abs(n.x-rx)<4)){ended++;continue}if(Math.random()<ABS){ended++;continue}
+    const i=Math.round((n.x-g.cx)/SP),j=Math.round((n.y-g.cy)/SP),lx=g.cx+i*SP,ly=g.cy+j*SP,d2=(n.x-lx)**2+(n.y-ly)**2;
+    if(d2<16&&!n.in){n.in=true;if(Math.random()<PF){ended++;const k=Math.random()<0.4?3:2;born+=k;splits++;fl.push({x:lx,y:ly,a:1});for(let q=0;q<k;q++){const a=Math.random()*6.28;nn.push({x:lx,y:ly,vx:Math.cos(a)*SPEED,vy:Math.sin(a)*SPEED,in:true})}continue}}
+    else if(d2>=16)n.in=false;nn.push(n)}
+  ns=nn;let msg='';if(ns.length>900){ns=[];msg='Runaway. The safety rod dropped.';hist=[]}
+  hist.push([born,ended]);if(hist.length>150)hist.shift();const B=hist.reduce((s,x)=>s+x[0],0),E=hist.reduce((s,x)=>s+x[1],0),k=E>15?B/E:null;
+  gP.fillStyle='#0E0D0B';gP.fillRect(0,0,W,H);gP.fillStyle='#25231F';gP.beginPath();gP.arc(g.cx,g.cy,g.R,0,7);gP.fill();
+  gP.strokeStyle='rgba(0,0,0,.5)';gP.lineWidth=1;for(let y=g.cy-g.R;y<g.cy+g.R;y+=10){const hw=Math.sqrt(Math.max(0,g.R*g.R-(y-g.cy)**2));gP.beginPath();gP.moveTo(g.cx-hw,y);gP.lineTo(g.cx+hw,y);gP.stroke()}
+  gP.fillStyle='#D9C25A';const nI=Math.ceil(g.R/SP);for(let i=-nI;i<=nI;i++)for(let j=-nI;j<=nI;j++){const x=g.cx+i*SP,y=g.cy+j*SP;if((x-g.cx)**2+(y-g.cy)**2<(g.R-4)**2){gP.beginPath();gP.arc(x,y,3.4,0,7);gP.fill()}}
+  rodX.forEach(rx=>{gP.fillStyle='#F2D23C';gP.fillRect(rx-4,g.cy-g.R-30,8,rodB-(g.cy-g.R-30))});
+  fl=fl.filter(f=>(f.a-=0.06)>0);fl.forEach(f=>{const r=10+(1-f.a)*14;const gr=gP.createRadialGradient(f.x,f.y,0,f.x,f.y,r);gr.addColorStop(0,'rgba(255,200,120,'+f.a+')');gr.addColorStop(1,'rgba(255,120,60,0)');gP.fillStyle=gr;gP.beginPath();gP.arc(f.x,f.y,r,0,7);gP.fill()});
+  gP.fillStyle='#CDE8FF';ns.forEach(n=>gP.fillRect(n.x-1.5,n.y-1.5,3,3));
+  gP.fillStyle='#A49B88';gP.font='14px "Special Elite", monospace';gP.fillText(msg||(ns.length?'':'tap inside the pile'),14,H-14);
+  $('#nCount').textContent=ns.length;$('#splits').textContent=fmt(splits);$('#kMeas').textContent=k===null?'—':k.toFixed(2);
+  if(k!==null&&k>=0.97&&k<=1.03&&ns.length>15){stableT+=1/60;if(stableT>3&&!cleared.has('s2')){const st=$('#pileStatus');st.className='status good';st.innerHTML='<b>Critical</b>You held the pile right on the line, where each neutron replaces itself.';complete('s2','Balanced on the edge')}}else stableT=Math.max(0,stableT-1/30)}
+
+/* ---------- 3: rod game ---------- */
+const ELL=0.1,SRC=10,STEP=6,MAXIN=102,ACC=20,LIMIT=1e6;
+const kOf=x=>0.9935+(0.0090/MAXIN)*x;let R;
+function reset3(){R={x:0,N:SRC*ELL/(1-kOf(0)),t:0,trace:[],critT:null,done:false,tripped:false,stepT:0};$('#log').innerHTML='';log('Back from lunch. Every rod is out except the last one. Counters steady.');paint3()}
+function clock(t){const m=14*60+Math.floor(t/60),hh=Math.floor(m/60),mm=m%60;return ((hh-1)%12+1)+':'+String(mm).padStart(2,'0')+' p.m.'}
+function log(msg){const p=document.createElement('p');p.innerHTML='<time>'+clock(R.t)+'</time>'+msg;$('#log').appendChild(p);$('#log').scrollTop=1e6}
+function paint3(){const k=kOf(R.x);$('#rodPos').textContent=R.x+' in';$('#kRod').textContent=k.toFixed(4);
+  $('#dbl').textContent=k<=1?'never':(()=>{const d=Math.LN2*ELL/(k-1);return d<60?d.toFixed(0)+' s':(d/60).toFixed(1)+' min'})();
+  $('#cnt').textContent=R.N>=1e5?R.N.toExponential(1):fmt(R.N);$('#clock').textContent=clock(R.t);$('#pull').disabled=R.done||R.x>=MAXIN;$('#push').disabled=R.done||R.x<=0}
+$('#pull').addEventListener('click',()=>{R.x=Math.min(MAXIN,R.x+STEP);const k=kOf(R.x);R.stepT=R.t;log('Rod out to '+R.x+' inches.'+(k>1?' The trace isn’t bending over.':' Count rising.'));
+  const st=$('#rodStatus');if(k>1&&R.critT===null){R.critT=R.t;const d=Math.LN2*ELL/(k-1);if(d<60){log('Too steep: doubling every '+d.toFixed(0)+' seconds.');st.className='status bad';st.innerHTML='<b>Too fast</b>It’s critical, but doubling in under a minute. Push the rod back in a step.'}else{log('Fermi checks his slide rule. The pile is critical.');st.className='status exotic';st.innerHTML='<b>Critical</b>Self-sustaining, doubling every '+(d/60).toFixed(1)+' minutes. Keep it running.'}}
+  if(k<=1){R.critT=null;st.className='status';st.innerHTML='<b>Below critical</b>The count will climb and then level off. Keep going.'}paint3()});
+$('#push').addEventListener('click',()=>{R.x=Math.max(0,R.x-STEP);if(kOf(R.x)<=1)R.critT=null;else R.critT=R.t;log('Rod back in to '+R.x+' inches.');paint3()});
+$('#zip').addEventListener('click',()=>{if(R.done)return;R.x=0;R.critT=null;log('ZIP rod in. The counters fall.');paint3()});
+$('#restart').addEventListener('click',reset3);
+let sndOn=false,AC=null,clickAcc=0;
+$('#snd').addEventListener('click',()=>{sndOn=!sndOn;$('#snd').setAttribute('aria-pressed',sndOn);$('#snd').textContent=sndOn?'Sound on':'Counter sound';if(sndOn&&!AC){try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){}}if(AC)sndOn?AC.resume():AC.suspend()});
+function tick(){if(!AC||!sndOn)return;try{const o=AC.createOscillator(),g=AC.createGain();o.type='square';o.frequency.value=1800+Math.random()*600;g.gain.setValueAtTime(0.05,AC.currentTime);g.gain.exponentialRampToValueAtTime(0.0001,AC.currentTime+0.02);o.connect(g).connect(AC.destination);o.start();o.stop(AC.currentTime+0.025)}catch(e){}}
+const cvR=$('#cvRec'),gR=cvR.getContext('2d');
+function step3(dt){
+  if(!R.done){const sdt=dt*ACC,k=kOf(R.x);for(let i=0;i<20;i++)R.N+=((k-1)/ELL*R.N+SRC)*(sdt/20);R.t+=sdt;R.trace.push([R.t,R.N]);if(R.trace.length>2400)R.trace.shift();
+    if(k<=1&&R.stepT>=0&&R.t-R.stepT>40){log('Leveling off at about '+fmt(R.N)+' counts.');R.stepT=-1}
+    if(R.N>LIMIT){R.x=0;R.critT=null;R.N=LIMIT*0.9;log('Too fast! The safety rod drops on its own.');const st=$('#rodStatus');st.className='status bad';st.innerHTML='<b>Safety rod tripped</b>The count hit the limit. Use smaller steps near the top.'}
+    if(R.critT!==null&&k>1){const d=Math.LN2*ELL/(k-1);if(d>60&&R.t-R.critT>=270){R.done=true;log('Four and a half minutes critical. Fermi orders the rods back in.');const st=$('#rodStatus');st.className='status good';st.innerHTML='<b>You ran the first reactor</b>Critical for 4½ minutes, slow enough to control. That’s what happened at 3:25 p.m.';complete('s3','You ran the first reactor')}}
+    clickAcc+=Math.min(30,Math.log10(R.N+1)*2.5)*dt;while(clickAcc>1){clickAcc--;tick()}paint3()}
+  const W=cvR.width,H=cvR.height;gR.fillStyle='#F2EAD6';gR.fillRect(0,0,W,H);gR.strokeStyle='rgba(43,36,26,.15)';gR.lineWidth=1;
+  const span=600,t1=Math.max(span,R.t),t0=t1-span,X=t=>44+(t-t0)/span*(W-54),Y=v=>H-16-(Math.log10(Math.max(v,1))-1)/(6.2-1)*(H-32);
+  gR.font='12px "Special Elite", monospace';for(let e=1;e<=6;e++){gR.beginPath();gR.moveTo(44,Y(10**e));gR.lineTo(W,Y(10**e));gR.stroke();gR.fillStyle='#6B5E48';gR.fillText('10^'+e,4,Y(10**e)+4)}
+  for(let t=Math.ceil(t0/60)*60;t<=t1;t+=60){gR.beginPath();gR.moveTo(X(t),0);gR.lineTo(X(t),H);gR.stroke()}
+  gR.strokeStyle='#8A2E12';gR.lineWidth=2;gR.beginPath();let first=true;for(const [t,v] of R.trace){if(t<t0)continue;first?gR.moveTo(X(t),Y(v)):gR.lineTo(X(t),Y(v));first=false}gR.stroke();
+  gR.strokeStyle='rgba(163,37,26,.65)';gR.setLineDash([5,5]);gR.beginPath();gR.moveTo(44,Y(LIMIT));gR.lineTo(W,Y(LIMIT));gR.stroke();gR.setLineDash([]);gR.fillStyle='#A3251A';gR.fillText('safety trip',W-92,Y(LIMIT)-5)}
+
+/* ---------- 4: proof ---------- */
+document.querySelector('.proof').addEventListener('click',e=>{const b=e.target.closest('[data-next]');if(!b)return;const nx=document.getElementById(b.dataset.next);nx.hidden=false;b.hidden=true;
+  if(b.dataset.next==='p4')complete('s4','Slide rule mastered');nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+let predicted=null;
+$('#predictOpts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||predicted)return;predicted=b.dataset.v;
+  $$('#predictOpts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='double')x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+  $('#predictFb').textContent=predicted==='double'?'Right. Let’s prove it.':'Reasonable guess. Watch where k − 1 ends up.';
+  if(predicted==='double')award('pred',30,'Correct prediction');const p3=$('#p3');p3.hidden=false;p3.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+
+/* ---------- 5: problem ---------- */
+const PARTS=[
+ {t:'The doubling time',q:'With k = 1.0006 and ℓ = 0.1 s, how long does the count take to double?',
+  o:['T \\approx 116\\ \\text{s, just under two minutes}','T \\approx 1.2\\ \\text{s}','T \\approx 69\\ \\text{min}'],a:0,
+  hint:'T = ℓ · ln 2 ÷ (k − 1). ln 2 ≈ 0.693.',sol:'0.1 × 0.693 ÷ 0.0006 ≈ 116 s. People in the room saw the readings double roughly every two minutes.'},
+ {t:'How much it grew',q:'The pile ran critical for about 4½ minutes (270 s). Roughly how many times bigger did the count get?',
+  o:['\\text{About } 5\\times','\\text{About } 270\\times','\\text{About } 1{,}000{,}000\\times'],a:0,
+  hint:'270 ÷ 116 ≈ 2.3 doublings. Work out 2 to the power 2.3.',sol:'2^(270/116) = 2^2.3 ≈ 5. Slow, steady and under control.'},
+ {t:'Splits per second',q:'Peak power was about half a watt, and each split releases about 200 MeV (3.2 × 10⁻¹¹ J). How many splits per second is that?',
+  o:['\\approx 1.6 \\times 10^{10}\\ \\text{splits per second}','\\approx 1.6 \\times 10^{4}\\ \\text{splits per second}','\\approx 160\\ \\text{splits per second}'],a:0,
+  hint:'Watts are joules per second. Divide 0.5 by 3.2 × 10⁻¹¹.',sol:'0.5 ÷ 3.2×10⁻¹¹ ≈ 1.6×10¹⁰: about 16 billion uranium atoms split every second, and it still made less power than a nightlight.'},
+ {t:'Without the late neutrons',q:'If every neutron came out instantly, ℓ would be about 0.0001 s. Same k. What is the doubling time now?',
+  o:['T \\approx 0.12\\ \\text{s}','T \\approx 116\\ \\text{s}','T \\approx 11.6\\ \\text{s}'],a:0,
+  hint:'ℓ is a thousand times smaller, so T is a thousand times smaller.',sol:'0.0001 × 0.693 ÷ 0.0006 ≈ 0.12 s. The count would double eight times a second. No one could have controlled it.'}];
+const solved=new Set();
+$('#problem').innerHTML=PARTS.map((p,i)=>`<div class="part" data-p="${i}"><div class="ph"><b>PART ${i+1}</b><h3>${p.t}</h3></div><p class="note" style="margin:0 0 10px">${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-p="${i}" data-j="${j}"><span class="k">${'ABC'[j]}</span><span>${tex(o)}</span></button>`).join('')}</div><p class="fb" id="fb${i}"></p><button class="linkbtn" data-hint="${i}">Show hint</button><div class="hint" id="hint${i}" hidden>${p.hint}</div></div>`).join('')+
+ `<div class="finale" id="finale" hidden><h3>The rods go back in.</h3><p>You just did the calculation that made it safe to stand in that room: a doubling time of about two minutes, slow enough for people to watch and react.</p><p style="margin:0">After about four and a half minutes at half a watt, Fermi ordered the rods back in. Nobody in the room was hurt, and the chain reaction had done exactly what Fermi's slide rule said it would.</p></div>`;
+$('#problem').addEventListener('click',e=>{const h=e.target.closest('[data-hint]');if(h){const el=$('#hint'+h.dataset.hint);el.hidden=!el.hidden;h.textContent=el.hidden?'Show hint':'Hide hint';return}
+  const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.p,j=+b.dataset.j,p=PARTS[i];if(solved.has(i))return;
+  if(j===p.a){solved.add(i);$$(`#problem .opt[data-p="${i}"]`).forEach(x=>{x.disabled=true;if(+x.dataset.j===j)x.classList.add('right')});$('#fb'+i).innerHTML='Correct. '+p.sol;award('part'+i,40,'Part '+(i+1)+' solved')}
+  else{b.classList.add('wrong');b.disabled=true;$('#fb'+i).textContent='Not that one. Try the hint.'}
+  if(solved.size===4){$('#finale').hidden=false;complete('s5','Boss level cleared')}});
+
+/* ---------- review ---------- */
+function renderReview(){$('#reviewList').innerHTML=PRE.map((p,i)=>{const a=preAns[i];const you=a===undefined?'<em>Not answered. Scroll up to Chapter 0.</em>':(p.o[a]+(a===p.best?' ✓':''));
+  return `<div class="rv"><div><span class="lab2">You predicted · Q${i+1}</span>${you}</div><div><span class="lab2">What happened</span>${p.physics}</div></div>`}).join('')}
+renderReview();
+
+/* ---------- loop + theme ---------- */
+reset3();drawTree();
+const vis=el=>{const r=el.getBoundingClientRect();return r.bottom>-60&&r.top<innerHeight+60};
+let last=performance.now();
+function frame(t){const dt=Math.min(0.05,(t-last)/1000);last=t;if(vis(cvP))stepPile(t);step3(dt);requestAnimationFrame(frame)}
+requestAnimationFrame(frame);stepPile(0);
+const redraw=()=>drawTree();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+</body>
+</html>

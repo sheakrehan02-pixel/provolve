@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A Problem a Day</title>
+<meta name="description" content="A Problem a Day: one real-world math problem every day. Six guesses, and every miss tells you which way to go.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: the Provolve house style from Simplify It (masthead, strip, section heads), with a puzzle board on the left and the answer, stats and archive on the right. */
+:root{
+  --bg:#FFFFFF; --paper:#F3F4F1; --ink:#121317; --muted:#5E616B; --rule:#DDDFE3;
+  --cobalt:#2A3CEB; --hl:#E6FB3C; --on-hl:#121317;
+  --g:#2E9E5B; --y:#E0B21C; --o:#EC7A2C; --x:#8E929C; --zone:rgba(46,158,91,.14);
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#0F1013;--paper:#17191E;--ink:#F1F1EE;--muted:#9A9DA8;--rule:#2A2D35;--cobalt:#8794FF;--hl:#D9F23A;--g:#43B873;--y:#E7C03A;--o:#F08A43;--x:#5D616B;--zone:rgba(67,184,115,.18);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1013;--paper:#17191E;--ink:#F1F1EE;--muted:#9A9DA8;--rule:#2A2D35;--cobalt:#8794FF;--hl:#D9F23A;--g:#43B873;--y:#E7C03A;--o:#F08A43;--x:#5D616B;--zone:rgba(67,184,115,.18);color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;padding-inline:16px;padding-bottom:env(safe-area-inset-bottom,0px)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+.page{max-width:1160px;margin:0 auto}
+.mast{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:18px;border-bottom:2px solid var(--ink)}
+.logo{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.03em;text-decoration:none;font-variation-settings:"wdth" 85}
+.logo span{color:var(--cobalt)}
+.mast nav{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
+.mast nav a{text-decoration:none;color:var(--muted)}
+.mast nav a:hover{color:var(--ink)}
+.prog{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.prog b{color:var(--ink);font-weight:500}
+.strip{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);padding-block:8px;border-bottom:1px solid var(--rule)}
+.board{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:48px;align-items:start;padding-block:40px 20px}
+@media (max-width:900px){.board{grid-template-columns:1fr;gap:36px;padding-block:28px 10px}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap}
+.eyebrow .tag+.tag::before{content:"· "}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,5.6vw,72px);line-height:.94;letter-spacing:-.045em;margin:.2em 0 .3em;text-wrap:balance;font-variation-settings:"wdth" 82,"opsz" 96}
+.num{font-family:var(--mono);font-size:14px;background:var(--hl);color:var(--on-hl);border-radius:999px;padding:4px 10px;vertical-align:middle;margin-left:6px;letter-spacing:0}
+.q{font-size:21px;line-height:1.5;margin:0 0 14px;max-width:34em}
+.unitline{font-family:var(--mono);font-size:13px;color:var(--muted);margin:0 0 18px}
+.unit{color:var(--ink);background:var(--paper);border-radius:6px;padding:2px 8px}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 56px 104px;gap:8px}
+.tile{height:56px;border:1.5px solid var(--rule);border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-weight:500;font-size:19px;font-variant-numeric:tabular-nums;overflow:hidden;white-space:nowrap;padding:0 10px;background:var(--bg)}
+.tile.cur{border-color:var(--ink);border-width:2px}
+.tile.flip{animation:flip .45s ease both}
+@keyframes flip{50%{transform:rotateX(90deg)}}
+.shake{animation:shake .3s}
+@keyframes shake{25%,75%{transform:translateX(-5px)}50%{transform:translateX(5px)}}
+.t-g{background:var(--g);border-color:var(--g);color:#fff}.t-y{background:var(--y);border-color:var(--y);color:#121317}.t-o{background:var(--o);border-color:var(--o);color:#fff}.t-x{background:var(--x);border-color:var(--x);color:#fff}
+.tile .lbl{font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+.arrow{font-size:22px}
+.zone{margin-top:18px;background:var(--paper);border-radius:18px;padding:14px 16px}
+.zone canvas{width:100%;height:64px;display:block}
+.zone small{display:block;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:4px}
+.hint{margin-top:14px;font-size:16px;background:var(--paper);border-left:3px solid var(--y);border-radius:8px;padding:10px 14px}
+.pad{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-top:18px}
+.key{font-family:var(--mono);font-weight:500;font-size:18px;height:52px;border:1px solid var(--rule);border-radius:12px;background:var(--bg);cursor:pointer;color:var(--ink)}
+.key:hover{border-color:var(--ink)}
+.key:active{transform:translateY(1px)}
+.key.alt{background:var(--paper)}
+.key.wide{grid-column:1/-1;background:var(--ink);color:var(--bg);border-color:var(--ink);border-radius:999px;font-size:15px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:14px}
+.legend i{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px}
+.side{display:grid;gap:20px}
+.panel{background:var(--paper);border-radius:22px;padding:20px;display:grid;gap:12px}
+.panel h3{font-family:var(--display);font-weight:800;font-size:24px;letter-spacing:-.03em;margin:0;line-height:1.05}
+.panel .k{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.formula{font-family:var(--mono);font-size:14px;background:var(--bg);border-radius:10px;padding:10px 12px;overflow-x:auto}
+.story{margin:0;font-size:17px;color:var(--muted)}
+.link{display:block;text-decoration:none;border-top:1px solid var(--rule);padding-top:10px}
+.link span{display:block;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.link b{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.02em;color:var(--cobalt)}
+.share{font-family:var(--mono);font-size:14px;white-space:pre;background:var(--bg);border-radius:10px;padding:10px 12px;overflow-x:auto;line-height:1.35}
+.cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:14px;text-decoration:none;padding:10px 16px;border-radius:999px;border:1.5px solid var(--ink);background:var(--ink);color:var(--bg);cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.stats b{display:block;font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.03em;line-height:1}
+.stats span{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.dist{display:grid;gap:5px}
+.dist div{display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px;align-items:center;font-family:var(--mono);font-size:12px}
+.dist i{display:block;height:18px;border-radius:4px;background:var(--x);color:#fff;font-style:normal;font-size:11px;padding:0 6px;text-align:right;line-height:18px;min-width:20px}
+.dist i.me{background:var(--g)}
+.past{display:flex;flex-wrap:wrap;gap:6px}
+.past button{font-family:var(--mono);font-size:12px;padding:5px 10px;border:1px solid var(--rule);border-radius:999px;background:var(--bg);cursor:pointer}
+.past button.on{border-color:var(--ink)}
+.past button.w{background:var(--g);border-color:var(--g);color:#fff}
+.past button.l{background:var(--x);border-color:var(--x);color:#fff}
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:14px;margin-top:50px;margin-bottom:22px}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,40px);letter-spacing:-.035em;margin:0;line-height:1;font-variation-settings:"wdth" 85}
+.sh p{margin:0;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.method{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:18px;overflow:hidden}
+@media (max-width:760px){.method{grid-template-columns:1fr}}
+.step{padding:22px;border-right:1px solid var(--rule);display:grid;gap:8px;align-content:start}
+.step:last-child{border-right:0}
+@media (max-width:760px){.step{border-right:0;border-bottom:1px solid var(--rule)}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--cobalt)}
+.step h3{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.035em;margin:0;line-height:1}
+.step p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);margin-top:70px;padding-block:18px 40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+footer .logo{font-size:20px;color:var(--ink)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:50;width:100%;height:100%}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+  <header class="mast">
+    <a class="logo" href="index.html">A Problem<span>/</span>a Day</a>
+    <nav aria-label="Provolve"><a href="simplify.html">Simplify It</a><a href="what-if.html">What if</a><a href="what-happened.html">What Happened</a></nav>
+    <div class="prog">Streak: <b id="progN">0</b> days</div>
+  </header>
+  <div class="strip"><span>One real-world problem a day. Six guesses.</span><span id="nextIn">Next problem in —</span></div>
+
+  <section class="board">
+    <div>
+      <div class="eyebrow"><span class="tag" id="pTopic">—</span><span class="tag" id="pMode">Today</span></div>
+      <h1><span id="pTitle">—</span><span class="num" id="pNum">#1</span></h1>
+      <p class="q" id="pText">—</p>
+      <p class="unitline">Answer in <span class="unit" id="pUnit">—</span>. Type a number, or use the keypad.</p>
+      <div class="rows" id="rows" aria-live="polite"></div>
+      <div class="zone"><canvas id="zone" aria-label="Number line showing where the answer can still be"></canvas><small id="zoneTxt">Your guesses narrow down where the answer must be.</small></div>
+      <div class="hint" id="hint" hidden></div>
+      <div class="pad" id="pad" aria-label="Keypad"></div>
+      <div class="legend"><span><i style="background:var(--g)"></i>Within 1%</span><span><i style="background:var(--y)"></i>Within 5%</span><span><i style="background:var(--o)"></i>Within 25%</span><span><i style="background:var(--x)"></i>Further</span></div>
+    </div>
+    <aside class="side">
+      <div class="panel" id="sol" hidden>
+        <span class="k">The answer</span>
+        <h3 id="resTitle">Solved</h3>
+        <div class="formula" id="pSol"></div>
+        <p class="story" id="pStory"></p>
+        <a class="link" id="pLink" href="#"><span>Go deeper</span><b id="pLinkText">—</b></a>
+        <div class="share" id="share"></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><button class="cta" id="copy">Copy result</button><span id="copyFb" class="k"></span></div>
+      </div>
+      <div class="panel">
+        <span class="k">Your stats</span>
+        <div class="stats"><div><b id="sPlayed">0</b><span>Played</span></div><div><b id="sWin">0</b><span>Win %</span></div><div><b id="sStreak">0</b><span>Streak</span></div><div><b id="sMax">0</b><span>Best</span></div></div>
+        <div class="dist" id="dist"></div>
+      </div>
+      <div class="panel">
+        <span class="k">Past problems · practice games don't count toward your streak</span>
+        <div class="past" id="past"></div>
+      </div>
+    </aside>
+  </section>
+
+  <section>
+    <div class="sh"><h2>How it plays</h2><p>Same rules every day.</p></div>
+    <div class="method">
+      <div class="step"><span class="n">1 · Guess</span><h3>Any number</h3><p>Work it out, or estimate. Big numbers work too: type 3e10 for 3 × 10¹⁰.</p></div>
+      <div class="step"><span class="n">2 · Read the tiles</span><h3>Colour and arrow</h3><p>The colour says how close you are. The arrow says go higher or lower. The number line shows what's left.</p></div>
+      <div class="step"><span class="n">3 · Learn the story</span><h3>Where it's from</h3><p>Every problem comes from a real moment, and links to the Provolve page that goes deeper.</p></div>
+    </div>
+  </section>
+
+  <footer><a class="logo" href="index.html">Provolve</a><span>A Problem a Day · stats are stored in this browser only</span></footer>
+</div>
+<canvas class="confetti" id="confetti" aria-hidden="true"></canvas>
+<script>
+(function(){
+"use strict";
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const $=id=>document.getElementById(id);
+const store={get(k,d){try{const v=localStorage.getItem(k);return v===null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmt=(x,d)=>x.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:0});
+
+const P=[
+ {topic:'Exponents · logarithms',title:'Fermi’s slow fuse',text:'Chicago Pile-1 reached k = 1.0006: each generation of neutrons was 1.0006 times the one before. How many generations until there are 1,000 times as many neutrons?',unit:'generations',ans:Math.log(1000)/Math.log(1.0006),hint:'Solve 1.0006ⁿ = 1000. Take the log of both sides: n = log(1000) ÷ log(1.0006).',sol:'n = ln 1000 ÷ ln 1.0006 = 6.908 ÷ 0.0005998 ≈ 11,516',story:'At about 0.1 s per generation, that’s roughly 19 minutes. That’s why Fermi had time to watch the counters climb.',link:'chicago-pile.html',lt:'The day Fermi switched on the first reactor'},
+ {topic:'Geometry · proportion',title:'A stick and a shadow',text:'At noon in Syene the Sun is straight overhead. In Alexandria, 800 km north, a vertical stick’s shadow shows the Sun is 7.2° away from overhead. What is Earth’s circumference?',unit:'km',ans:800*360/7.2,hint:'7.2° is what fraction of a full 360° circle? The 800 km is that same fraction of the whole Earth.',sol:'7.2° is 1/50 of 360°, so the circumference = 50 × 800 km = 40,000 km',story:'Eratosthenes did this around 240 BC and came remarkably close to the real 40,075 km.',link:'what-happened.html',lt:'Measuring the Earth · coming to What Happened'},
+ {topic:'Speed · units',title:'The fastest 100 metres',text:'In 2009 Usain Bolt ran 100 m in 9.58 seconds. What was his average speed in kilometres per hour?',unit:'km/h',ans:100/9.58*3.6,hint:'Find metres per second first. Then multiply by 3.6, because 1 m/s = 3.6 km/h.',sol:'100 ÷ 9.58 = 10.44 m/s, then × 3.6 = 37.58 km/h',story:'His top speed in that race was even higher, because he started from a standstill.',link:'what-happened.html',lt:'More real moments in What Happened'},
+ {topic:'Light · distance',title:'Calling the Moon',text:'Apollo 11 astronauts left mirrors on the Moon, about 384,400 km away. Light travels 299,792 km every second. How long does a laser pulse take to go there and back?',unit:'seconds',ans:2*384400/299792,hint:'It’s a round trip, so the light travels the distance twice.',sol:'2 × 384,400 ÷ 299,792 ≈ 2.56 s',story:'Observatories still bounce lasers off those mirrors to measure the Moon’s distance to within millimetres.',link:'what-happened.html',lt:'More real moments in What Happened'},
+ {topic:'Density · buoyancy',title:'The tip of the iceberg',text:'Ice has a density of 917 kg/m³ and seawater 1,025 kg/m³. What percentage of a floating iceberg is underwater?',unit:'%',ans:917/1025*100,hint:'A floating object pushes aside exactly its own weight of water.',sol:'917 ÷ 1025 = 0.895, so about 89.5% is underwater',story:'That hidden 90% is why icebergs are far bigger than they look.',link:'what-happened.html',lt:'More real moments in What Happened'},
+ {topic:'Energy · E = mc²',title:'One watt of fission',text:'Each uranium fission releases about 200 MeV, and 1 MeV = 1.602 × 10⁻¹³ J. How many fissions per second make 1 watt? (Type 3e10 for 3 × 10¹⁰.)',unit:'fissions/s',ans:1/(200*1.602e-13),hint:'1 watt = 1 joule per second. Find how many joules one fission gives, then divide 1 by that.',sol:'200 × 1.602×10⁻¹³ = 3.2×10⁻¹¹ J, so 1 ÷ 3.2×10⁻¹¹ ≈ 3.1×10¹⁰ fissions/s',story:'Fermi’s pile ran at about half a watt: roughly 15 billion fissions every second.',link:'energy.html',lt:'Simplify It 04 · Where does the energy come from?'},
+ {topic:'Free fall',title:'The first kilometre',text:'In 2012 Felix Baumgartner jumped from almost 39 km up, where the air is so thin it barely slows you down. Ignoring air, how long does the first 1,000 m of falling take? Use g = 9.8 m/s².',unit:'seconds',ans:Math.sqrt(2*1000/9.8),hint:'Distance fallen = ½ × g × t². Solve for t.',sol:'t = √(2 × 1000 ÷ 9.8) ≈ 14.3 s',story:'He went on to break the speed of sound in free fall before thicker air slowed him down.',link:'what-happened.html',lt:'More real moments in What Happened'},
+ {topic:'Sound · speed',title:'Counting the thunder',text:'You see lightning, then hear the thunder 6 seconds later. Sound travels 343 metres per second. How far away was the strike?',unit:'km',ans:343*6/1000,hint:'Light arrives almost instantly, so the 6 seconds is all sound. Distance = speed × time.',sol:'343 × 6 = 2,058 m ≈ 2.06 km',story:'Rule of thumb: count the seconds and divide by 3 for kilometres.',link:'what-if.html',lt:'Imagine more in What if'},
+ {topic:'Area · circles',title:'The pizza question',text:'Which is more pizza: one 16-inch pizza or two 10-inch pizzas? Give how many square inches MORE the single 16-inch pizza has.',unit:'sq in',ans:Math.PI*64-2*Math.PI*25,hint:'Area = π × r². A 16-inch pizza has radius 8; a 10-inch has radius 5.',sol:'π×8² − 2×π×5² = 201.1 − 157.1 ≈ 44.0 square inches',story:'Doubling the width of a circle gives four times the area. Big pizzas are usually the better deal.',link:'simplify.html',lt:'Go deeper in Simplify It'},
+ {topic:'Exponential decay',title:'Thin air on Everest',text:'Mount Everest is 8,849 m tall. Suppose air pressure halves for every 5,500 m you climb. What percentage of sea-level pressure is left at the summit?',unit:'%',ans:100*Math.pow(0.5,8849/5500),hint:'You climb 8849 ÷ 5500 "halvings". Work out 0.5 to that power.',sol:'0.5^(8849 ÷ 5500) = 0.5^1.609 ≈ 0.328, so about 32.8%',story:'With about a third of the air, most climbers need bottled oxygen near the top.',link:'what-happened.html',lt:'More real moments in What Happened'},
+ {topic:'Circular motion',title:'How fast is Earth moving?',text:'Earth travels about 940 million km around the Sun every year. What is its average speed in kilometres per second?',unit:'km/s',ans:940e6/(365.25*86400),hint:'A year has 365.25 × 24 × 60 × 60 seconds.',sol:'940,000,000 ÷ 31,557,600 s ≈ 29.8 km/s',story:'You’re moving about 100 times faster than a bullet right now, and you can’t feel a thing.',link:'what-if.html',lt:'What if the Sun suddenly vanished?'},
+ {topic:'Light · time',title:'Old sunlight',text:'The Sun is about 149.6 million km away, and light travels 299,792 km/s. How many minutes old is the sunlight you see?',unit:'minutes',ans:149.6e6/299792/60,hint:'Divide distance by speed to get seconds, then divide by 60.',sol:'149,600,000 ÷ 299,792 ≈ 499 s ≈ 8.32 minutes',story:'If the Sun vanished, you wouldn’t know for 8 minutes and 20 seconds.',link:'what-if.html',lt:'What if the Sun suddenly vanished?'},
+ {topic:'Compound growth',title:'The patient investor',text:'You put $100 in an account that grows 7% every year and never touch it. How many dollars are there after 30 years?',unit:'dollars',ans:100*Math.pow(1.07,30),hint:'Each year multiplies by 1.07. Thirty years means 1.07 to the power 30.',sol:'100 × 1.07³⁰ ≈ $761',story:'It’s the same maths as Fermi’s pile: a small number above 1, compounded many times.',link:'chicago-pile.html',lt:'The same math in Fermi’s pile'},
+ {topic:'Projectiles',title:'The free kick',text:'A ball is kicked at 30 m/s straight toward a goal 25 m away. Ignoring air and curve, how many seconds until it reaches the goal line?',unit:'seconds',ans:25/30,hint:'Time = distance ÷ speed.',sol:'25 ÷ 30 ≈ 0.83 s',story:'A goalkeeper has less than a second, and a human reaction alone takes about a quarter of that.',link:'what-happened.html',lt:'The free kick that bent · coming to What Happened'}];
+
+const EPOCH=Date.UTC(2026,9,18)/864e5;
+const now=new Date();const today=Math.floor(Date.UTC(now.getFullYear(),now.getMonth(),now.getDate())/864e5);
+const todayNum=Math.max(1,today-EPOCH+1);
+const probFor=n=>P[((n-1)%P.length+P.length)%P.length];
+let num=todayNum,prob=probFor(num),practice=false;
+const keyFor=n=>'pv-pad-'+n;
+let state;let input='';
+const stats=store.get('pv-pad-stats',{played:0,wins:0,streak:0,max:0,last:null,dist:[0,0,0,0,0,0]});
+
+function tier(v){const e=Math.abs(v-prob.ans)/Math.abs(prob.ans);return e<=0.01?'g':e<=0.05?'y':e<=0.25?'o':'x'}
+const LBL={g:'Got it',y:'Very close',o:'Close',x:'Far'};
+const EM={g:'🟩',y:'🟨',o:'🟧',x:'⬜'};
+const show=v=>Math.abs(v)>=1e7||Math.abs(v)<0.001&&v!==0?v.toExponential(2):fmt(v,Math.abs(v)<100?2:0);
+function parse(s){s=s.replace(/,/g,'').trim();if(!s)return NaN;const v=Number(s);return isFinite(v)?v:NaN}
+
+function load(n){num=n;prob=probFor(n);practice=n!==todayNum;state=store.get(keyFor(n),{g:[],done:false,won:false});input='';
+  $('pNum').textContent='#'+n;$('pTopic').textContent=prob.topic;$('pTitle').textContent=prob.title;$('pText').textContent=prob.text;$('pUnit').textContent=prob.unit;
+  $('pMode').textContent=practice?'Practice':'Today';document.getElementById('progN').textContent=stats.streak;render();renderPast()}
+
+function render(anim){
+  const rows=$('rows');rows.innerHTML='';
+  for(let i=0;i<6;i++){const g=state.g[i];const r=document.createElement('div');r.className='row';
+    if(g!==undefined){const t=tier(g);const a=t==='g'?'✓':g<prob.ans?'↑':'↓';const fl=anim&&i===state.g.length-1?' flip':'';
+      r.innerHTML='<div class="tile t-'+t+fl+'">'+show(g)+'</div><div class="tile arrow t-'+t+fl+'" style="animation-delay:.1s" aria-label="'+(t==='g'?'correct':g<prob.ans?'go higher':'go lower')+'">'+a+'</div><div class="tile t-'+t+fl+'" style="animation-delay:.2s"><span class="lbl">'+LBL[t]+'</span></div>'}
+    else if(i===state.g.length&&!state.done){r.innerHTML='<div class="tile cur" id="curTile">'+(input||'&nbsp;')+'</div><div class="tile"></div><div class="tile"></div>'}
+    else r.innerHTML='<div class="tile"></div><div class="tile"></div><div class="tile"></div>';
+    rows.appendChild(r)}
+  $('hint').hidden=!(state.g.length>=3&&!state.won);$('hint').textContent='Hint: '+prob.hint;
+  $('pad').hidden=state.done;
+  const sol=$('sol');sol.hidden=!state.done;
+  if(state.done){$('resTitle').textContent=state.won?'Solved in '+state.g.length+'/6!':'Out of guesses';$('pSol').textContent=prob.sol;$('pStory').textContent=prob.story;$('pLink').href=prob.link;$('pLinkText').textContent=prob.lt;
+    $('share').textContent='Provolve · A Problem a Day #'+num+(practice?' (practice)':'')+'  '+(state.won?state.g.length:'X')+'/6\n'+state.g.map(g=>{const t=tier(g);return EM[t]+(t==='g'?'':g<prob.ans?'⬆️':'⬇️')}).join('\n')+'\nprovolve.net/problem.html'}
+  drawZone();paintStats();
+}
+function drawZone(){
+  const cv=$('zone');const r=cv.getBoundingClientRect();if(!r.width)return;const d=Math.min(2,window.devicePixelRatio||1);cv.width=Math.round(r.width*d);cv.height=Math.round(r.height*d);
+  const c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);const w=r.width,h=r.height;c.clearRect(0,0,w,h);
+  const gs=state.g.filter(v=>v>0);if(!gs.length){c.fillStyle=tok('--ink');c.font='15px "Source Serif 4", Georgia, serif';c.fillText('Make a guess to start the number line.',4,h/2+4);return}
+  let lo=-Infinity,hi=Infinity;state.g.forEach(g=>{if(tier(g)==='g'){lo=hi=g}else if(g<prob.ans)lo=Math.max(lo,g);else hi=Math.min(hi,g)});
+  const all=gs.slice();const minV=Math.min(...all),maxV=Math.max(...all);let a=Math.log10(minV)-0.6,b=Math.log10(maxV)+0.6;if(b-a<1.2){const m=(a+b)/2;a=m-0.6;b=m+0.6}
+  const X=v=>8+(Math.log10(v)-a)/(b-a)*(w-16);const y=h*0.55;
+  c.strokeStyle=tok('--ink');c.lineWidth=3;c.lineCap='round';c.beginPath();c.moveTo(8,y);c.lineTo(w-8,y);c.stroke();
+  const zl=lo===-Infinity?8:X(lo),zr=hi===Infinity?w-8:X(hi);c.fillStyle=tok('--zone');c.fillRect(zl,y-14,Math.max(4,zr-zl),28);c.strokeStyle=tok('--g');c.lineWidth=2;c.strokeRect(zl,y-14,Math.max(4,zr-zl),28);
+  const col={g:tok('--g'),y:tok('--y'),o:tok('--o'),x:tok('--x')};
+  state.g.forEach((g,i)=>{if(g<=0)return;const x=X(g),t=tier(g);c.fillStyle=col[t];c.strokeStyle=tok('--ink');c.lineWidth=2.5;c.beginPath();c.arc(x,y,8,0,7);c.fill();c.stroke();
+    c.fillStyle=tok('--ink');c.font='500 12px "DM Mono", monospace';c.textAlign='center';c.fillText(String(i+1),x,y-16);c.textAlign='start'});
+  $('zoneTxt').textContent=lo===hi?'Pinned it.':'The answer is somewhere in the green zone'+(lo>-Infinity&&hi<Infinity?': between '+show(lo)+' and '+show(hi)+'.':'.');
+}
+function submit(){
+  if(state.done)return;const v=parse(input);const tile=$('curTile');
+  if(isNaN(v)||v<=0){if(tile){tile.classList.remove('shake');void tile.offsetWidth;tile.classList.add('shake')}return}
+  state.g.push(v);input='';
+  if(tier(v)==='g'){state.done=true;state.won=true;if(!practice)record(true,state.g.length);confetti()}
+  else if(state.g.length>=6){state.done=true;state.won=false;if(!practice)record(false)}
+  store.set(keyFor(num),state);render(true);renderPast();
+}
+function record(win,n){stats.played++;if(win){stats.wins++;stats.dist[n-1]++;stats.streak=(stats.last===todayNum-1?stats.streak:0)+1;stats.max=Math.max(stats.max,stats.streak)}else stats.streak=0;stats.last=todayNum;store.set('pv-pad-stats',stats)}
+function paintStats(){$('sPlayed').textContent=stats.played;$('sWin').textContent=stats.played?Math.round(stats.wins/stats.played*100):0;$('sStreak').textContent=stats.streak;$('sMax').textContent=stats.max;
+  const m=Math.max(1,...stats.dist);$('dist').innerHTML=stats.dist.map((v,i)=>'<div><span>'+(i+1)+'</span><i class="'+(state&&state.won&&!practice&&state.g.length===i+1?'me':'')+'" style="width:'+Math.max(8,v/m*100)+'%">'+v+'</i></div>').join('')}
+
+/* keypad */
+const KEYS=['1','2','3','4','5','6','7','8','9','0','.','e','−','⌫','Guess'];
+$('pad').innerHTML=KEYS.map(k=>'<button class="key'+(k==='Guess'?' wide':['.','e','−','⌫'].includes(k)?' alt':'')+'" data-k="'+k+'" aria-label="'+({'⌫':'Delete','e':'Times ten to the power','−':'Minus'}[k]||k)+'">'+k+'</button>').join('');
+// layout: make Guess span 2 → 16 cells over 5 columns; fine
+function press(k){if(state.done)return;if(k==='Guess'){submit();return}if(k==='⌫'){input=input.slice(0,-1)}else if(k==='−'){input+='-'}else if(input.length<16){input+=k}
+  const t=$('curTile');if(t)t.textContent=input||' '}
+$('pad').addEventListener('click',e=>{const b=e.target.closest('.key');if(b)press(b.dataset.k)});
+document.addEventListener('keydown',e=>{if(e.metaKey||e.ctrlKey||e.altKey)return;if(/^[0-9.e]$/.test(e.key))press(e.key);else if(e.key==='-')press('−');else if(e.key==='Backspace'){press('⌫');e.preventDefault()}else if(e.key==='Enter')press('Guess')});
+
+/* past */
+function renderPast(){const box=$('past');box.innerHTML='';for(let n=todayNum;n>=Math.max(1,todayNum-13);n--){const s=store.get(keyFor(n),null);const b=document.createElement('button');b.textContent='#'+n;
+  if(s&&s.done)b.className=s.won?'w':'l';if(n===num)b.classList.add('on');b.addEventListener('click',()=>load(n));box.appendChild(b)}
+  if(todayNum===1){const p=document.createElement('span');p.style.fontWeight='700';p.style.fontSize='.85rem';p.textContent='Today is the first problem. Come back tomorrow for #2.';box.appendChild(p)}}
+
+/* copy */
+$('copy').addEventListener('click',()=>{const t=$('share').textContent;const ok=()=>{$('copyFb').textContent='Copied!'};const sel=()=>{const r=document.createRange();r.selectNodeContents($('share'));const s=getSelection();s.removeAllRanges();s.addRange(r);$('copyFb').textContent='Selected. Press copy.'};
+  try{navigator.clipboard.writeText(t).then(ok,sel)}catch(e){sel()}});
+
+/* countdown */
+function tick(){const n=new Date();const m=new Date(n.getFullYear(),n.getMonth(),n.getDate()+1);const s=Math.floor((m-n)/1000);$('nextIn').textContent='Next problem in '+Math.floor(s/3600)+'h '+String(Math.floor(s%3600/60)).padStart(2,'0')+'m'}
+setInterval(tick,30000);tick();
+
+/* confetti */
+function confetti(){if(reduce)return;const cv=$('confetti');const d=Math.min(2,window.devicePixelRatio||1);cv.width=innerWidth*d;cv.height=innerHeight*d;const c=cv.getContext('2d');c.setTransform(d,0,0,d,0,0);
+  const cols=['#2FA84F','#F2C230','#F07F2E','#E2453A','#2C7BC4','#FFFFFF'];const ps=[];for(let i=0;i<140;i++)ps.push({x:innerWidth/2,y:innerHeight*0.4,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,r:Math.random()*6.28,s:4+Math.random()*6,c:cols[i%cols.length]});
+  let f=0;(function run(){c.clearRect(0,0,innerWidth,innerHeight);ps.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=0.35;p.vx*=0.99;p.r+=0.2;c.save();c.translate(p.x,p.y);c.rotate(p.r);c.fillStyle=p.c;c.fillRect(-p.s/2,-p.s/4,p.s,p.s/2);c.restore()});if(++f<150)requestAnimationFrame(run);else c.clearRect(0,0,innerWidth,innerHeight)})()}
+
+window.addEventListener('resize',drawZone);matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>drawZone());new MutationObserver(()=>drawZone()).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+load(todayNum);
+})();
+</script>
+</body>
+</html>
+

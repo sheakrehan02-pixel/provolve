@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Where Does the Energy Come From?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<style>
+/* Layout: same as every issue. A reading column that breaks out into wider lab panels, with a sticky HUD tracking progress. Issue 04's world: a weighing room, warm grey with brass and two particle colours. */
+:root{
+  --paper:#EEECE7; --panel:#F9F8F5; --ink:#1B1915; --muted:#615C52; --line:#D2CEC4;
+  --red:#C8462B; --violet:#9A5B00; --good:#2B7A57; --blue:#2F62C9; --soft-red:#F5DDD5; --soft-violet:#F3E6CC; --soft-good:#D8EEE3;
+  --display:"Fraunces", Georgia, "Times New Roman", serif;
+  --body:"Literata", Georgia, "Times New Roman", serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#14120E; --panel:#1E1B16; --ink:#EDE8DF; --muted:#A39C8E; --line:#34302A;
+  --red:#F07A5C; --violet:#E2A63B; --good:#5FC598; --blue:#7FA6FF; --soft-red:#3A1E18; --soft-violet:#3A2C12; --soft-good:#16352A; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --paper:#14120E; --panel:#1E1B16; --ink:#EDE8DF; --muted:#A39C8E; --line:#34302A;
+  --red:#F07A5C; --violet:#E2A63B; --good:#5FC598; --blue:#7FA6FF; --soft-red:#3A1E18; --soft-violet:#3A2C12; --soft-good:#16352A; color-scheme:dark }
+
+[hidden]{display:none!important}
+html,body{margin:0}
+:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:19px;line-height:1.6;padding-inline:16px}
+math{font-size:1.08em}
+a{color:var(--violet)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+
+/* HUD */
+.hud{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;margin-inline:-16px;padding:10px 16px;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.hud-in{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:800;font-size:16px;letter-spacing:-.01em;white-space:nowrap}
+.brand span{color:var(--red)}
+a.brand{color:var(--ink);text-decoration:none}
+a.brand:hover span{color:var(--violet)}
+.brand small{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--muted);margin-right:4px}
+.dots{display:flex;gap:6px;flex:1;min-width:0;flex-wrap:wrap}
+.dot{font-family:var(--mono);font-size:11px;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 9px;white-space:nowrap}
+.dot.done{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.xp{font-family:var(--mono);font-size:12px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+.xpbar{width:90px;height:6px;border-radius:3px;background:var(--line);overflow:hidden}
+.xpbar i{display:block;height:100%;width:0;background:var(--violet);transition:width .5s}
+
+/* Article */
+.wrap{max-width:1000px;margin:0 auto;padding-block:40px 80px}
+.col{max-width:680px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(40px,7.5vw,78px);line-height:.98;letter-spacing:-.03em;margin:.25em 0 .3em;text-wrap:balance;font-variation-settings:"opsz" 144}
+h1 em{font-style:italic;color:var(--violet)}
+h2{font-family:var(--display);font-weight:800;font-size:clamp(26px,3.8vw,34px);line-height:1.08;letter-spacing:-.02em;margin:0 0 .5em;text-wrap:balance}
+h3{font-family:var(--display);font-weight:600;font-size:18px;margin:0 0 .4em;letter-spacing:-.01em}
+.dek{font-size:23px;line-height:1.45;color:var(--muted);margin:0 0 1.2em}
+p{margin:0 0 1em}
+.byline{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;gap:14px;flex-wrap:wrap;border-top:1px solid var(--line);padding-top:12px}
+.p-red{color:var(--red);font-weight:500} .p-blue{color:var(--blue);font-weight:500}
+
+.route{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:28px 0 8px}
+.route div{background:var(--panel);padding:14px}
+.route b{display:block;font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.08em}
+.route span{font-family:var(--display);font-size:15px;font-weight:600}
+.route small{display:block;font-size:15px;color:var(--muted);line-height:1.35;margin-top:4px}
+@media (max-width:640px){.route{grid-template-columns:1fr 1fr}}
+
+section.level{padding-top:72px;scroll-margin-top:60px}
+.lvl{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.lvl .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:3px 8px;border-radius:4px}
+.lvl .mode{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.lvl .check{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--good);opacity:0;transition:opacity .3s}
+.level.complete .lvl .check{opacity:1}
+
+/* Panels */
+.lab{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px;margin:26px 0}
+.labhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.labhead .kicker{color:var(--red)}
+.grid2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+canvas{display:block;width:100%;max-width:100%;border-radius:10px;background:var(--paper);touch-action:none}
+.ctrl{display:grid;gap:6px;margin-bottom:16px}
+.ctrl label{font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.ctrl label output{color:var(--ink);font-weight:600}
+input[type=range]{width:100%;accent-color:var(--violet)}
+.readout{display:grid;gap:0;border-top:1px solid var(--line)}
+.readout div{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px}
+.readout div span:first-child{color:var(--muted)}
+.readout div span:last-child{font-variant-numeric:tabular-nums;text-align:right}
+.status{margin-top:14px;padding:12px 14px;border-radius:8px;font-size:16px;line-height:1.45;background:var(--paper)}
+.status.bad{background:var(--soft-red)} .status.good{background:var(--soft-good)} .status.exotic{background:var(--soft-violet)}
+.status b{font-family:var(--display);font-weight:600;font-size:15px;display:block;margin-bottom:2px}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.chip{border:1px solid var(--line);background:var(--paper);border-radius:999px;padding:6px 14px;font-family:var(--mono);font-size:13px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.big{font-family:var(--display);font-weight:800;font-size:clamp(26px,4vw,36px);letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.note{color:var(--muted);font-size:16px}
+
+/* Quiz choices */
+.q{margin:0 0 22px}
+.q p.prompt{font-weight:500;margin-bottom:10px}
+.opts{display:grid;gap:8px}
+.opt{text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;font-size:17px;line-height:1.4;display:flex;gap:12px;align-items:baseline}
+.opt:hover{border-color:var(--muted)}
+.opt .k{font-family:var(--mono);font-size:12px;color:var(--muted);flex:none}
+.opt.picked{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.opt.right{border-color:var(--good);background:var(--soft-good);box-shadow:inset 0 0 0 1px var(--good)}
+.opt.wrong{border-color:var(--red);background:var(--soft-red)}
+.opt:disabled{cursor:default}
+.fb{font-size:16px;margin-top:8px;color:var(--muted)}
+
+/* Equation */
+.eq{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:6px;font-size:24px;padding:18px 0}
+.term{background:none;border:1px dashed var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.term[aria-pressed="true"]{border-style:solid;border-color:var(--violet);background:var(--soft-violet)}
+.op{color:var(--muted);padding:0 2px}
+.termnote{min-height:3.2em;font-size:17px;text-align:center;color:var(--muted);max-width:540px;margin:0 auto}
+.termnote b{color:var(--ink);font-weight:500}
+
+/* Mission */
+.mission{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px}
+@media (max-width:760px){.mission{grid-template-columns:1fr}}
+.card{background:var(--paper);border-radius:12px;padding:20px;border:1px solid var(--line)}
+.card .step{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:.1em;text-transform:uppercase}
+.card h3{font-size:21px;margin:6px 0 10px}
+.card .opts{margin-top:14px}
+.outcome{border-left:3px solid var(--red);padding-left:12px;margin:10px 0}
+.outcome.win{border-color:var(--violet)}
+.shelf{display:grid;gap:8px}
+.lesson{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:10px;border:1px dashed var(--line);font-size:15px;line-height:1.35;color:var(--muted)}
+.lesson i{font-style:normal;font-family:var(--mono);font-size:12px;flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
+.lesson.on{border-style:solid;border-color:var(--violet);color:var(--ink);background:var(--soft-violet)}
+.lesson.on i{background:var(--violet);color:var(--panel);border-color:var(--violet)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+.btn{background:var(--ink);color:var(--paper);border:0;border-radius:8px;padding:10px 16px;font-family:var(--mono);font-size:13px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+
+/* Bars */
+.bars{display:grid;gap:10px;margin-top:6px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 64px;gap:10px;align-items:center;font-family:var(--mono);font-size:12px}
+.bar .track{position:relative;height:14px;background:var(--paper);border-radius:3px}
+.bar .track::after{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--muted)}
+.bar .fill{position:absolute;top:0;bottom:0;border-radius:2px;transition:all .25s}
+.bar span:last-child{text-align:right;font-variant-numeric:tabular-nums}
+
+/* Proof */
+.pstep{border-top:1px solid var(--line);padding:18px 0}
+.pstep .num{font-family:var(--mono);font-size:12px;color:var(--red)}
+.disp{overflow-x:auto;padding:10px 0;text-align:center;font-size:21px}
+.predict{background:var(--soft-violet);border-radius:12px;padding:16px 18px;margin:14px 0}
+
+/* Problem */
+.part{border-top:1px solid var(--line);padding:20px 0}
+.part .ph{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.part .ph b{font-family:var(--mono);font-size:12px;color:var(--red)}
+.hint{font-size:16px;background:var(--paper);border-radius:8px;padding:10px 14px;margin-top:10px}
+.linkbtn{background:none;border:0;padding:0;color:var(--violet);font-family:var(--mono);font-size:12px;cursor:pointer;text-decoration:underline;margin-top:8px}
+.finale{border-radius:14px;padding:22px;background:var(--ink);color:var(--paper);margin-top:18px}
+.finale h3{color:var(--paper);font-size:20px}
+.finale p{color:color-mix(in srgb,var(--paper) 80%,var(--ink))}
+.masses{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:6px 0 14px}
+.masses div{background:var(--paper);padding:10px 12px;font-family:var(--mono);font-size:13px}
+.masses b{display:block;font-family:var(--display);font-size:17px;font-weight:600}
+@media (max-width:560px){.masses{grid-template-columns:1fr 1fr}}
+
+/* Review */
+.review{display:grid;gap:10px}
+.rv{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.rv div{background:var(--panel);padding:12px 14px;font-size:16px;line-height:1.4}
+.rv .lab2{font-family:var(--mono);font-size:11px;color:var(--muted);display:block;margin-bottom:4px;letter-spacing:.06em;text-transform:uppercase}
+@media (max-width:560px){.rv{grid-template-columns:1fr}}
+.obst{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0}
+.obst div{border:1px solid var(--line);border-radius:10px;padding:14px;font-size:16px;line-height:1.45;background:var(--panel)}
+.obst b{font-family:var(--mono);font-size:11px;color:var(--red);display:block;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px}
+@media (max-width:560px){.obst{grid-template-columns:1fr}}
+.next{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin-top:40px}
+.next .big{font-size:22px}
+footer{font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:40px;text-align:center}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140%);background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:13px;padding:10px 16px;border-radius:999px;transition:transform .35s;z-index:30;white-space:nowrap}
+.toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+@media (max-width:640px){.dots{display:none}.hud-in{justify-content:space-between}}
+</style>
+</head>
+<body>
+
+<header class="hud">
+  <div class="hud-in">
+    <a class="brand" href="simplify.html"><small>←</small>Simplify<span>/</span>It</a>
+    <nav class="dots" aria-label="Levels">
+      <a class="dot" href="#s0" data-s="s0">Gut check</a>
+      <a class="dot" href="#s1" data-s="s1">Weigh</a>
+      <a class="dot" href="#s2" data-s="s2">Glue</a>
+      <a class="dot" href="#s3" data-s="s3">Mission</a>
+      <a class="dot" href="#s4" data-s="s4">Valley</a>
+      <a class="dot" href="#s5" data-s="s5">Proof</a>
+      <a class="dot" href="#s6" data-s="s6">Solve</a>
+    </nav>
+    <div class="xp"><span id="xpnum">0 XP</span><div class="xpbar"><i id="xpfill"></i></div></div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="col">
+    <div class="kicker">Issue 04 · Nuclear physics · Week of Oct 20, 2026</div>
+    <h1>Where does the <em>energy</em> come from?</h1>
+    <p class="dek">Put an atom on a scale and it weighs less than the parts it's made of. You start knowing nothing. You finish having calculated, by hand, the energy that powers the Sun.</p>
+    <div class="byline"><span>~35 min</span><span>7 levels</span><span>Math: multiplying, subtracting, and E = mc²</span></div>
+
+    <div class="route">
+      <div><b>1 · GUESS</b><span>Gut check</span><small>Commit to answers before you know anything.</small></div>
+      <div><b>2 · PLAY</b><span>Build intuition</span><small>Weigh atoms, build nuclei, roll down the valley.</small></div>
+      <div><b>3 · DERIVE</b><span>See the proof</span><small>Four steps from E = mc² to binding energy.</small></div>
+      <div><b>4 · SOLVE</b><span>Do it yourself</span><small>Calculate the energy of a fusion reaction.</small></div>
+    </div>
+
+    <p>Here's the claim this issue will prove: <strong>nuclear energy isn't burning anything.</strong> When the particles in an atom's core rearrange into a tighter shape, a tiny amount of their mass disappears, and that mass comes out as energy. Coal, gasoline and wood all work by rearranging electrons. Nuclear reactions rearrange the core itself, and that's why they're millions of times stronger.</p>
+
+    <!-- LEVEL 0 -->
+    <section class="level" id="s0">
+      <div class="lvl"><span class="tag">Level 0</span><span class="mode">Gut check · no wrong answers</span><span class="check">✓ cleared</span></div>
+      <h2>Before you read anything, guess.</h2>
+      <p>Your guesses are locked in and we'll come back to them at the end. Guessing first, even wrongly, makes the real answer stick.</p>
+      <div class="lab" id="pretest"></div>
+    </section>
+
+    <!-- LEVEL 1 -->
+    <section class="level" id="s1">
+      <div class="lvl"><span class="tag">Level 1</span><span class="mode">Play · the missing mass</span><span class="check">✓ cleared</span></div>
+      <h2>Weigh an atom against its own parts.</h2>
+      <p>Every atom has a tiny core, the nucleus, built from two kinds of particles: <span class="p-red">protons</span> and <span class="p-blue">neutrons</span>. A proton weighs 1.007276 atomic mass units (u). A neutron weighs 1.008665 u. So a nucleus should just weigh the sum of its parts.</p>
+      <p>It doesn't. Put the loose parts on one side of a scale and the finished nucleus on the other, and the nucleus is lighter. Every time.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Lab 1 · The weighing room</span><span class="note">Real measured masses. The tilt is exaggerated so you can see it.</span></div>
+    <div class="grid2">
+      <canvas id="cvScale" width="640" height="380" aria-label="Balance scale comparing loose protons and neutrons with the finished nucleus"></canvas>
+      <div>
+        <div class="chips" id="nucChips">
+          <button class="chip" data-n="H2" aria-pressed="false">Hydrogen-2</button>
+          <button class="chip" data-n="He4" aria-pressed="true">Helium-4</button>
+          <button class="chip" data-n="C12" aria-pressed="false">Carbon-12</button>
+          <button class="chip" data-n="Fe56" aria-pressed="false">Iron-56</button>
+          <button class="chip" data-n="U235" aria-pressed="false">Uranium-235</button>
+        </div>
+        <div class="readout">
+          <div><span>Protons + neutrons</span><span id="r1n">2 + 2</span></div>
+          <div><span>Loose parts weigh</span><span id="r1a">4.031883 u</span></div>
+          <div><span>Finished nucleus weighs</span><span id="r1b">4.001506 u</span></div>
+          <div><span>Missing mass</span><span id="r1c">0.030377 u</span></div>
+          <div><span>Missing, as a share</span><span id="r1p">0.75%</span></div>
+        </div>
+        <div class="status exotic" id="scaleStatus"><b>The nucleus is lighter</b>Pick other atoms. Weigh three to clear the level.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>The missing mass has a name: the <strong>mass defect</strong>. It didn't vanish. When the parts snapped together, they let go of energy, and energy carries mass with it. Run it backwards and you'd have to put that energy back in to pull the nucleus apart. That energy is called the <strong>binding energy</strong>.</p>
+    <div class="disp" data-tex="\Delta m = Z\,m_p + N\,m_n - M_{\text{nucleus}}" data-display></div>
+    <p><span data-tex="Z"></span> is the number of protons, <span data-tex="N"></span> the number of neutrons. For helium the missing mass is under 1%. That sounds like nothing. Level 5 will show why it's enormous.</p>
+
+    <!-- LEVEL 2 -->
+    <section class="level" id="s2">
+      <div class="lvl"><span class="tag">Level 2</span><span class="mode">Play · glue versus push</span><span class="check">✓ cleared</span></div>
+      <h2>Why some atoms hold on tighter than others.</h2>
+      <p>Inside a nucleus there's a tug of war. A very strong glue, the <em>strong nuclear force</em>, holds each particle to the ones right next to it, and only those. Meanwhile every proton is positively charged, so every proton pushes every other proton away, all the way across the nucleus.</p>
+      <p>Small nuclei are mostly surface, so many particles have few neighbours to hold. Big nuclei have lots of protons all pushing on each other. Somewhere in the middle, the glue wins by the most. Build nuclei and find where.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Lab 2 · Build a nucleus</span><span class="note">Live from the liquid-drop formula, which treats a nucleus like a drop of water.</span></div>
+    <div class="grid2">
+      <canvas id="cvNuc" width="640" height="380" aria-label="Your nucleus and a graph of glue per particle"></canvas>
+      <div>
+        <div class="ctrl">
+          <label for="A2">Number of particles A <output id="A2o">56</output></label>
+          <input type="range" id="A2" min="8" max="260" step="1" value="56">
+        </div>
+        <div class="chips" id="pushChips"><button class="chip" data-p="on" aria-pressed="true">Electric push on</button><button class="chip" data-p="off" aria-pressed="false">Turn it off</button></div>
+        <div class="bars">
+          <div class="bar"><span>Sticky glue</span><div class="track"><div class="fill" id="b0"></div></div><span id="v0"></span></div>
+          <div class="bar"><span>Edge penalty</span><div class="track"><div class="fill" id="b1"></div></div><span id="v1"></span></div>
+          <div class="bar"><span>Electric push</span><div class="track"><div class="fill" id="b2"></div></div><span id="v2"></span></div>
+          <div class="bar"><span>Balance tax</span><div class="track"><div class="fill" id="b3"></div></div><span id="v3"></span></div>
+        </div>
+        <div class="readout" style="margin-top:12px">
+          <div><span>Protons / neutrons</span><span id="r2z">26 / 30</span></div>
+          <div><span>Glue per particle</span><span id="r2b">8.7 MeV</span></div>
+        </div>
+        <div class="status" id="nucStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>That tug of war is one equation. Each piece is a term you just watched as a bar. Tap each one:</p>
+    <div class="lab">
+      <div class="eq" id="eq">
+        <span data-tex="E_B ="></span>
+        <button class="term" data-t="V" data-tex="a_V A" aria-pressed="false"></button>
+        <span class="op">−</span>
+        <button class="term" data-t="S" data-tex="a_S A^{2/3}" aria-pressed="false"></button>
+        <span class="op">−</span>
+        <button class="term" data-t="C" data-tex="a_C \dfrac{Z^2}{A^{1/3}}" aria-pressed="false"></button>
+        <span class="op">−</span>
+        <button class="term" data-t="A" data-tex="a_A \dfrac{(N-Z)^2}{A}" aria-pressed="false"></button>
+      </div>
+      <p class="termnote" id="termNote">The first term <b>holds</b> the nucleus together. The other three <b>cost</b> energy. Tap a term.</p>
+    </div>
+    <p>The <span data-tex="a"></span>'s are just numbers measured from real atoms: about 15.8, 17.8, 0.71 and 23.7 MeV. With four numbers, this formula gets the binding energy of hundreds of nuclei right to within about 1%.</p>
+
+    <!-- LEVEL 3 -->
+    <section class="level" id="s3">
+      <div class="lvl"><span class="tag">Level 3</span><span class="mode">Play · choose your path</span><span class="check">✓ cleared</span></div>
+      <h2>Mission: power a city of a million people.</h2>
+      <p>A city that size uses about 4 billion kilowatt-hours of electricity a year. You're the chief engineer, and every option on the table is one engineers have actually considered. Collect lessons by trying different paths; three lessons clears the level.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="mission">
+      <div class="card" id="missionCard"></div>
+      <div>
+        <div class="kicker" style="margin-bottom:10px">Lessons unlocked <span id="lessonCount">0/5</span></div>
+        <div class="shelf" id="shelf"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <!-- LEVEL 4 -->
+    <section class="level" id="s4">
+      <div class="lvl"><span class="tag">Level 4</span><span class="mode">Play · the valley of iron</span><span class="check">✓ cleared</span></div>
+      <h2>Everything wants to roll down to iron.</h2>
+      <p>Take the glue-per-particle number from Level 2 and plot it for every atom, upside down. You get a valley. The lower an atom sits, the more tightly it's held, and iron is at the bottom.</p>
+      <p>Any reaction that moves atoms downhill releases energy. Heavy atoms roll down by <strong>splitting</strong>, which is called fission. Light atoms roll down by <strong>joining</strong>, which is called fusion. Try both.</p>
+    </section>
+  </div>
+
+  <div class="lab">
+    <div class="labhead"><span class="kicker">Lab 4 · Roll it downhill</span><span class="note">Light atoms use measured values. Heavy ones use the Level 2 formula.</span></div>
+    <div class="grid2">
+      <canvas id="cvValley" width="640" height="400" aria-label="The valley of binding energy with iron at the bottom"></canvas>
+      <div>
+        <div class="chips" id="modeChips"><button class="chip" data-m="split" aria-pressed="true">Split uranium</button><button class="chip" data-m="fuse" aria-pressed="false">Fuse light atoms</button></div>
+        <div class="ctrl" id="splitCtrl">
+          <label for="sp">Size of the bigger piece <output id="spo">140</output></label>
+          <input type="range" id="sp" min="117" max="165" step="1" value="140">
+        </div>
+        <div class="chips" id="fuseChips" hidden>
+          <button class="chip" data-f="dt" aria-pressed="false">H-2 + H-3</button>
+          <button class="chip" data-f="aaa" aria-pressed="false">3 × He-4</button>
+          <button class="chip" data-f="cc" aria-pressed="false">C-12 + C-12</button>
+          <button class="chip" data-f="fefe" aria-pressed="false">Fe-56 + Fe-56</button>
+        </div>
+        <div class="readout">
+          <div><span>Reaction</span><span id="r4a">—</span></div>
+          <div><span>Energy released</span><span id="r4b">—</span></div>
+        </div>
+        <div class="status" id="valleyStatus"><b>Find the energy</b>Find a split of uranium that releases more than 165 MeV, then try fusing two irons.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col">
+    <p>Notice the asymmetry. Splitting one uranium atom releases about 170 to 200 MeV. Fusing hydrogen releases only 17.6 MeV, but it uses far fewer particles, so per kilogram fusion wins by about four times. And iron gives you nothing either way. That's why stars that make iron in their cores are about to die.</p>
+
+    <!-- LEVEL 5 -->
+    <section class="level" id="s5">
+      <div class="lvl"><span class="tag">Level 5</span><span class="mode">Derive · four steps</span><span class="check">✓ cleared</span></div>
+      <h2>The proof, one step at a time.</h2>
+      <p>You've seen that mass goes missing, and that the tighter a nucleus is held, the more mass it lost. Now the exact link between missing mass and energy.</p>
+
+      <div class="proof">
+        <div class="pstep" id="p1">
+          <div class="num">STEP 1 · MASS IS ENERGY</div>
+          <p>Einstein's result from 1905: mass and energy are the same thing measured in different units. The conversion factor is the speed of light, squared.</p>
+          <div class="disp" data-tex="E = m c^2" data-display></div>
+          <button class="btn" data-next="p2">Next step</button>
+        </div>
+        <div class="pstep" id="p2" hidden>
+          <div class="num">STEP 2 · c² IS ENORMOUS</div>
+          <p>Light travels <span data-tex="3 \times 10^8"></span> metres per second. Squared, that's <span data-tex="9 \times 10^{16}"></span>. So a tiny mass is a huge amount of energy. Slide it:</p>
+          <div class="lab" style="margin:14px 0">
+            <div class="ctrl">
+              <label for="clip">Mass converted <output id="clipo">1 g</output></label>
+              <input type="range" id="clip" min="-6" max="0" step="0.01" value="-3">
+            </div>
+            <div class="readout">
+              <div><span>Energy released</span><span id="r5a">9.0 × 10¹³ J</span></div>
+              <div><span>US homes powered for a year</span><span id="r5b">2,381</span></div>
+            </div>
+          </div>
+          <button class="btn" data-next="pPredict">Next step</button>
+        </div>
+        <div class="pstep" id="pPredict" hidden>
+          <div class="predict">
+            <div class="num">PREDICT FIRST</div>
+            <p style="margin:.3em 0 .8em">Protons and neutrons snap together and the nucleus comes out lighter. Using <span data-tex="E=mc^2"></span>, what must have happened to energy?</p>
+            <div class="opts" id="predictOpts">
+              <button class="opt" data-v="in"><span class="k">A</span>The nucleus absorbed energy.</button>
+              <button class="opt" data-v="out"><span class="k">B</span>The nucleus gave energy away, and it took mass with it.</button>
+              <button class="opt" data-v="none"><span class="k">C</span>Nothing. Mass just isn't conserved.</button>
+            </div>
+            <p class="fb" id="predictFb"></p>
+          </div>
+        </div>
+        <div class="pstep" id="p3" hidden>
+          <div class="num">STEP 3 · BINDING ENERGY</div>
+          <p>Energy left, so the nucleus is lighter by exactly that energy divided by <span data-tex="c^2"></span>. Flip it around and you have the binding energy:</p>
+          <div class="disp" data-tex="E_B = \Delta m \, c^2 = \left(Z m_p + N m_n - M\right) c^2" data-display></div>
+          <button class="btn" data-next="p4">Final step</button>
+        </div>
+        <div class="pstep" id="p4" hidden>
+          <div class="num">STEP 4 · THE SHORTCUT</div>
+          <p>Atom masses are tiny, so we measure them in u. Run <span data-tex="E = mc^2"></span> on exactly 1 u and convert joules to MeV, and you always get the same number:</p>
+          <div class="disp" data-tex="\boxed{1\ \text{u} \;\leftrightarrow\; 931.5\ \text{MeV}}" data-display></div>
+          <p>So: missing mass in u, times 931.5, is the energy released in MeV. Check it on helium: <span data-tex="0.030377 \times 931.5 \approx 28.3"></span> MeV.</p>
+          <div class="status good"><b>The big idea</b>Every nuclear reaction that releases energy moves atoms toward tighter binding, toward iron. The energy released is the mass that went missing, times c².</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEVEL 6 -->
+    <section class="level" id="s6">
+      <div class="lvl"><span class="tag">Level 6</span><span class="mode">Solve · boss level</span><span class="check">✓ cleared</span></div>
+      <h2>Your turn: the reaction that could power the world.</h2>
+      <p>This is the fusion reaction that reactors like ITER are built around. Two heavy forms of hydrogen, deuterium (H-2) and tritium (H-3), fuse into helium and throw out a neutron:</p>
+      <div class="disp" data-tex="{}^{2}\text{H} + {}^{3}\text{H} \;\rightarrow\; {}^{4}\text{He} + n" data-display></div>
+      <div class="masses">
+        <div><b>H-2</b>2.014102 u</div><div><b>H-3</b>3.016049 u</div><div><b>He-4</b>4.002602 u</div><div><b>n</b>1.008665 u</div>
+      </div>
+      <p>Use the tools from Level 5 to find out how much energy one reaction releases.</p>
+      <div class="lab" id="problem"></div>
+    </section>
+
+    <!-- REVIEW -->
+    <section class="level" id="review">
+      <div class="lvl"><span class="tag">Debrief</span><span class="mode">Your intuition vs. the physics</span></div>
+      <h2>How did your gut do?</h2>
+      <div class="review" id="reviewList"></div>
+      <h3 style="margin-top:34px">If fusion is so good, why don't we have it yet?</h3>
+      <div class="obst">
+        <div><b>A · Heat</b>Nuclei repel each other. To get close enough to fuse, the fuel has to be around 100 million °C, hotter than the Sun's core.</div>
+        <div><b>B · Holding it</b>Nothing solid can touch fuel that hot. Reactors hold it in magnetic fields, and keeping it stable is very hard.</div>
+        <div><b>C · Fuel</b>Tritium barely exists in nature. Reactors will have to breed their own from lithium.</div>
+        <div><b>D · Materials</b>The 14 MeV neutrons from each reaction slowly damage the walls of the machine.</div>
+      </div>
+      <p>That's the whole method of nuclear physics in miniature: weigh the before and after, find the mass that went missing, and multiply by c².</p>
+    </section>
+
+    <div class="next">
+      <div><div class="kicker">See it happen · What Happened</div><div class="big">The day Fermi switched on the first reactor</div></div>
+      <a class="btn" href="chicago-pile.html" style="text-decoration:none">Play the story →</a>
+    </div>
+    <footer>Simplify It · Issue 04 · <a href="simplify.html">All issues</a></footer>
+  </div>
+</main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function tex(s,d){try{return katex.renderToString(s,{output:'mathml',displayMode:!!d,throwOnError:false})}catch(e){return s}}
+function renderTex(root){(root||document).querySelectorAll('[data-tex]').forEach(el=>{el.innerHTML=tex(el.dataset.tex,el.hasAttribute('data-display'))})}
+renderTex();
+const fmt=(x,d=0)=>x.toLocaleString('en-US',{maximumFractionDigits:d,minimumFractionDigits:d});
+
+/* ---------- XP + progress ---------- */
+const MAXXP=640; let xp=0; const got=new Set();
+function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2200)}
+const STORE='simplifyit:energy',LEVELS=['s0','s1','s2','s3','s4','s5','s6'];const cleared=new Set();
+function save(){try{localStorage.setItem(STORE,JSON.stringify({xp,cleared:[...cleared],total:LEVELS.length,got:[...got]}))}catch(e){}}
+function paintXP(){$('#xpnum').textContent=xp+' XP';$('#xpfill').style.width=Math.min(100,xp/MAXXP*100)+'%'}
+function award(id,pts,msg){if(got.has(id))return;got.add(id);xp+=pts;paintXP();toast('+'+pts+' XP · '+msg);save()}
+function markDone(s){cleared.add(s);document.getElementById(s).classList.add('complete');$('.dot[data-s="'+s+'"]').classList.add('done')}
+function complete(s,msg){if(cleared.has(s))return;markDone(s);award('done-'+s,50,msg);save()}
+try{const d=JSON.parse(localStorage.getItem(STORE)||'null');if(d){xp=d.xp||0;(d.got||[]).forEach(g=>got.add(g));(d.cleared||[]).forEach(s=>{markDone(s);got.add('done-'+s)});paintXP()}}catch(e){}
+
+/* ---------- Level 0: pretest ---------- */
+const PRE=[
+ {q:'You split a uranium atom into two smaller pieces. Together, the pieces weigh…',
+  o:['More than the uranium did','Exactly the same','Less than the uranium did'],
+  physics:'Less. The pieces are held more tightly, so some mass left as energy, mostly as the speed of the flying fragments.',best:2},
+ {q:'Where does a nuclear power plant\'s energy actually come from?',
+  o:['Uranium burns, like coal','A tiny amount of mass turns into energy','Neutrons are just very fast'],
+  physics:'Nothing burns. The nucleus rearranges into a tighter shape and about 0.1% of the mass becomes energy.',best:1},
+ {q:'Could you get energy by fusing two iron atoms into one bigger atom?',
+  o:['Yes, fusing always releases energy','No, it would cost energy','Only inside a star'],
+  physics:'No. Iron is the bottom of the valley. Fusing two irons climbs uphill and costs about 47 MeV.',best:1}];
+const preAns={};
+$('#pretest').innerHTML=PRE.map((p,i)=>`<div class="q"><p class="prompt">${i+1}. ${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-q="${i}" data-j="${j}"><span class="k">${'ABCD'[j]}</span>${o}</button>`).join('')}</div></div>`).join('')+'<p class="fb" id="preFb">Pick one answer per question.</p>';
+$('#pretest').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const q=+b.dataset.q;
+  $$(`#pretest .opt[data-q="${q}"]`).forEach(x=>x.classList.toggle('picked',x===b));preAns[q]=+b.dataset.j;
+  const n=Object.keys(preAns).length;$('#preFb').textContent=n<3?`${n}/3 locked in.`:'All three locked in. We\'ll grade them in the debrief.';
+  if(n===3)complete('s0','Gut check done');renderReview()});
+
+/* ---------- Level 1: scale ---------- */
+const MP=1.007276,MN=1.008665,UMEV=931.494;
+const NUC={H2:{Z:1,N:1,BE:2.2246,name:'Hydrogen-2'},He4:{Z:2,N:2,BE:28.296,name:'Helium-4'},C12:{Z:6,N:6,BE:92.162,name:'Carbon-12'},Fe56:{Z:26,N:30,BE:492.26,name:'Iron-56'},U235:{Z:92,N:143,BE:1783.9,name:'Uranium-235'}};
+const cvS=$('#cvScale'),gS=cvS.getContext('2d');let curN='He4',ang=0,angT=0,flash=0;const weighed=new Set();
+function weigh(k,silent){curN=k;const n=NUC[k],parts=n.Z*MP+n.N*MN,dm=n.BE/UMEV,whole=parts-dm,pct=dm/parts*100;
+  $('#r1n').textContent=n.Z+' + '+n.N;$('#r1a').textContent=parts.toFixed(6)+' u';$('#r1b').textContent=whole.toFixed(6)+' u';$('#r1c').textContent=dm.toFixed(6)+' u';$('#r1p').textContent=pct.toFixed(2)+'%';
+  angT=Math.min(0.2,pct/0.9*0.2);flash=silent?0:1;$$('#nucChips .chip').forEach(c=>c.setAttribute('aria-pressed',c.dataset.n===k));
+  if(silent)return;weighed.add(k);award('w-'+k,10,n.name+' weighed');
+  const st=$('#scaleStatus');st.className='status exotic';st.innerHTML=`<b>${fmt(n.BE,1)} MeV escaped</b>${n.name} is ${pct.toFixed(2)}% lighter than its parts. ${weighed.size<3?(3-weighed.size)+' more to clear the level.':'Level cleared. Iron loses the biggest share per particle; remember that for Level 4.'}`;
+  if(weighed.size>=3)complete('s1','The missing mass is real')}
+$('#nucChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(b)weigh(b.dataset.n)});
+function drawScale(){const W=cvS.width,H=cvS.height,ink=tok('--ink'),mut=tok('--muted'),vio=tok('--violet'),red=tok('--red'),blu=tok('--blue'),line=tok('--line');
+  ang+=(angT-ang)*(reduce?1:0.08);gS.clearRect(0,0,W,H);const cx=W/2,py=110,L=210;
+  gS.fillStyle=line;gS.beginPath();gS.moveTo(cx,py);gS.lineTo(cx-34,H-40);gS.lineTo(cx+34,H-40);gS.closePath();gS.fill();
+  gS.fillStyle=mut;gS.fillRect(cx-90,H-42,180,8);
+  const lx=cx-Math.cos(ang)*L,ly=py-Math.sin(ang)*L,rx=cx+Math.cos(ang)*L,ry=py+Math.sin(ang)*L;
+  gS.strokeStyle=ink;gS.lineWidth=6;gS.lineCap='round';gS.beginPath();gS.moveTo(lx,ly);gS.lineTo(rx,ry);gS.stroke();
+  gS.fillStyle=vio;gS.beginPath();gS.arc(cx,py,9,0,7);gS.fill();
+  const n=NUC[curN],A=n.Z+n.N;
+  const pan=(x,y)=>{gS.strokeStyle=mut;gS.lineWidth=1.5;gS.beginPath();gS.moveTo(x,y);gS.lineTo(x-46,y+90);gS.moveTo(x,y);gS.lineTo(x+46,y+90);gS.stroke();
+    gS.strokeStyle=ink;gS.lineWidth=3;gS.beginPath();gS.moveTo(x-62,y+90);gS.quadraticCurveTo(x,y+118,x+62,y+90);gS.stroke();return y+90};
+  // left pan: loose parts
+  const ly2=pan(lx,ly),show=Math.min(A,48),r=A<=4?10:A<=12?7:4.6;
+  for(let i=0;i<show;i++){const row=Math.floor(i/12),col=i%12;const x=lx-50+col*(100/11)+(row%2)*2,y=ly2-r-row*r*1.7+4;gS.fillStyle=i<Math.round(show*n.Z/A)?red:blu;gS.beginPath();gS.arc(x,y,r,0,7);gS.fill()}
+  if(A>48){gS.fillStyle=mut;gS.font='12px "IBM Plex Mono", monospace';gS.textAlign='center';gS.fillText('+'+(A-48)+' more',lx,ly2-70)}
+  // right pan: packed nucleus
+  const ry2=pan(rx,ry),cnt=Math.min(A,120),R=Math.max(3.4,Math.min(10,40/Math.sqrt(cnt)));
+  for(let i=0;i<cnt;i++){const a=i*2.39996,rr=Math.sqrt(i+0.5)*R*1.0;const x=rx+Math.cos(a)*rr,y=ry2-Math.sqrt(cnt)*R-4+Math.sin(a)*rr;gS.fillStyle=(Math.floor(i*n.Z/A)!==Math.floor((i+1)*n.Z/A))?red:blu;gS.beginPath();gS.arc(x,y,R*0.95,0,7);gS.fill()}
+  gS.fillStyle=mut;gS.font='13px "IBM Plex Mono", monospace';gS.textAlign='center';gS.fillText('loose parts',lx,ly2+44);gS.fillText(n.name,rx,ry2+44);
+  if(flash>0){gS.globalAlpha=flash;gS.fillStyle=vio;gS.font='600 18px "Fraunces", serif';gS.fillText('− '+fmt(n.BE,1)+' MeV as energy',rx,Math.max(26,ry2-Math.sqrt(cnt)*R*2-20));gS.globalAlpha=1;flash=Math.max(0,flash-0.006)}
+  gS.textAlign='left'}
+
+/* ---------- SEMF ---------- */
+const aV=15.75,aS=17.8,aC=0.711,aA=23.7;
+const terms=(A,Z,push)=>[aV*A,-aS*Math.pow(A,2/3),push?-aC*Z*Z/Math.pow(A,1/3):0,-aA*Math.pow(A-2*Z,2)/A];
+const BE=(A,Z,push=true)=>terms(A,Z,push).reduce((a,b)=>a+b,0);
+const Zs=A=>A/(1.98+0.0155*Math.pow(A,2/3));
+
+/* ---------- Level 2 ---------- */
+const cvN=$('#cvNuc'),gN=cvN.getContext('2d');let push=true,noPushHeavy=false,nt=0;
+$('#pushChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;push=b.dataset.p==='on';$$('#pushChips .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));updNuc()});
+$('#A2').addEventListener('input',updNuc);
+const SC=18;
+function setBar(el,v){const w=Math.min(50,Math.abs(v)/SC*50);el.style.width=w+'%';el.style.left=v>=0?'50%':(50-w)+'%';el.style.background=v>=0?tok('--good'):tok('--red')}
+function updNuc(){const A=+$('#A2').value,Z=Math.round(Zs(A));$('#A2o').textContent=A;const t=terms(A,Z,push);const tot=t.reduce((a,b)=>a+b,0);
+  t.forEach((v,i)=>{setBar($('#b'+i),v/A);$('#v'+i).textContent=(v>=0?'+':'')+(v/A).toFixed(2)});
+  $('#r2z').textContent=Z+' / '+(A-Z);$('#r2b').textContent=(tot/A).toFixed(2)+' MeV';
+  const st=$('#nucStatus');
+  if(!push){st.className='status exotic';st.innerHTML='<b>No electric push</b>Without the protons pushing apart, bigger keeps getting tighter. There would be no reason for heavy atoms to split.';if(A>200){noPushHeavy=true;award('nopush',20,'Found the culprit')}}
+  else if(A>=50&&A<=70){st.className='status good';st.innerHTML='<b>The sweet spot</b>Around 56 particles, near iron, the glue wins by the most.'}
+  else if(A>200){st.className='status bad';st.innerHTML='<b>Heavy and strained</b>All those protons pushing on each other loosen the grip. A nucleus like this releases energy by splitting.'}
+  else if(A<30){st.className='status';st.innerHTML='<b>Mostly surface</b>Most particles sit on the edge with few neighbours to hold. Light nuclei release energy by joining.'}
+  else{st.className='status';st.innerHTML='<b>Building up</b>Keep sliding. Find where glue per particle peaks.'}
+  checkL2()}
+function drawNuc(){const W=cvN.width,H=cvN.height,ink=tok('--ink'),mut=tok('--muted'),vio=tok('--violet'),red=tok('--red'),blu=tok('--blue'),line=tok('--line');
+  nt+=reduce?0:0.03;gN.clearRect(0,0,W,H);const A=+$('#A2').value,Z=Math.round(Zs(A));
+  const cx=W*0.24,cy=H/2,R=Math.max(3.6,Math.min(13,H*0.4/Math.sqrt(A)));
+  for(let i=0;i<A;i++){const a=i*2.39996,rr=Math.sqrt(i+0.5)*R*1.02;const isP=Math.floor(i*Z/A)!==Math.floor((i+1)*Z/A);const j=push&&isP?Math.sin(nt*3+i)*R*0.12*Math.min(1,Z/40):0;
+    gN.fillStyle=isP?red:blu;gN.beginPath();gN.arc(cx+Math.cos(a)*rr+j,cy+Math.sin(a)*rr,R*0.92,0,7);gN.fill()}
+  const gx=W*0.5,gw=W*0.47,gy=26,gh=H-60,X=a=>gx+(a-8)/252*gw,Y=v=>gy+gh-(v-3)/7*gh;
+  gN.strokeStyle=line;gN.lineWidth=1;gN.fillStyle=mut;gN.font='12px "IBM Plex Mono", monospace';
+  [4,6,8,10].forEach(v=>{gN.beginPath();gN.moveTo(gx,Y(v));gN.lineTo(gx+gw,Y(v));gN.stroke();gN.fillText(v,gx-18,Y(v)+4)});
+  gN.fillText('glue per particle (MeV)',gx,14);gN.fillText('A →',gx+gw-26,H-14);[50,150,250].forEach(a=>gN.fillText(a,X(a)-10,H-30));
+  const curve=(pu,col,lw)=>{gN.strokeStyle=col;gN.lineWidth=lw;gN.beginPath();for(let a=8;a<=260;a+=2){const v=BE(a,Zs(a),pu)/a;a===8?gN.moveTo(X(a),Y(v)):gN.lineTo(X(a),Y(v))}gN.stroke()};
+  if(!push)curve(true,mut,1.2);curve(push,vio,2.5);
+  const v=BE(A,Z,push)/A;gN.fillStyle=ink;gN.beginPath();gN.arc(X(A),Math.max(gy,Y(v)),6,0,7);gN.fill()}
+const TERMS={V:'<b>Sticky glue.</b> Every particle grabs its neighbours. More particles, more grabbing. This is the only term that holds the nucleus together.',
+ S:'<b>Edge penalty.</b> Particles on the surface have fewer neighbours to grab. Surface area grows like A to the power 2/3, which is why small nuclei are weakly held.',
+ C:'<b>Electric push.</b> Every proton repels every other proton, and unlike the glue, the push reaches across the whole nucleus. It grows with Z², so it takes over in heavy atoms.',
+ A:'<b>Balance tax.</b> Nuclei are most stable with roughly equal numbers of protons and neutrons. Being lopsided costs energy.'};
+const seen=new Set();
+$('#eq').addEventListener('click',e=>{const b=e.target.closest('.term');if(!b)return;$$('#eq .term').forEach(x=>x.setAttribute('aria-pressed',x===b));$('#termNote').innerHTML=TERMS[b.dataset.t];seen.add(b.dataset.t);if(seen.size===4)award('terms',20,'Equation decoded');checkL2()});
+function checkL2(){if(seen.size===4&&noPushHeavy)complete('s2','Glue versus push')}
+
+/* ---------- Level 3: mission ---------- */
+const LESSONS=[
+ ['chem','Burning only rearranges electrons, a few eV per atom. You\'d need about 2 million tonnes of coal a year.'],
+ ['iron','Iron sits at the bottom of the valley. Splitting it or fusing it costs energy instead of releasing it.'],
+ ['steady','A chain reaction must be held at exactly one new split per split. Above that, power grows exponentially.'],
+ ['mass','Fission turns about 0.1% of the fuel\'s mass into energy. Half a tonne of uranium powers the whole city for a year.'],
+ ['fusion','Fusion gives about four times more energy per kilogram than fission, if you can reach 100 million °C.']];
+const unlocked=new Set();
+const NODES={
+ start:{step:'Decision 1 of 3',h:'Where does the energy come from?',p:'The city needs about 4 billion kilowatt-hours of electricity a year. A power plant turns about a third of its heat into electricity, so you need three times that much heat.',
+  o:[['Burn coal, like most of the 20th century did','coal'],['Split heavy atoms','fission'],['Fuse light atoms','fusion']]},
+ coal:{end:true,lesson:'chem',h:'A mountain of coal',p:'Each carbon atom that burns releases about 4 eV. To make the heat you need, you\'d burn roughly 2 million tonnes of coal a year, about 50 trainloads a week. It works, and many cities do it, but it\'s chemistry, not nuclear physics.'},
+ fission:{step:'Decision 2 of 3',h:'Which atoms do you split?',p:'Level 4 showed you the valley. Pick your fuel.',
+  o:[['Iron: cheap, strong and everywhere','iron'],['Uranium-235: rare, heavy and unstable','u235']]},
+ iron:{end:true,lesson:'iron',h:'Nothing happens',p:'Iron is the most tightly bound nucleus there is. Splitting it would climb uphill out of the valley, so it costs energy instead of releasing it. Your reactor is a very expensive pile of metal.'},
+ u235:{step:'Decision 3 of 3',h:'How do you run the chain reaction?',p:'Each split releases two or three neutrons, which can split more uranium. You control how many of them do, using rods that soak up neutrons.',
+  o:[['Pull out every rod and run it as hard as possible','runaway'],['Keep it at exactly one new split per split','steady']]},
+ runaway:{end:true,lesson:'steady',h:'Power climbs out of control',p:'If each split causes even slightly more than one more split, power grows exponentially, generation after generation. Real reactors are designed and operated to stay at exactly one. When that failed at Chernobyl in 1986, the result was a disaster.'},
+ steady:{end:true,win:true,lesson:'mass',h:'The city has power',p:'Each split releases about 200 MeV, about 50 million times more than burning one carbon atom. Only about 0.1% of the uranium\'s mass turns into energy, but that\'s enough: roughly half a tonne of uranium-235 runs the city for a year, against 2 million tonnes of coal.'},
+ fusion:{step:'Decision 2 of 3',h:'Which atoms do you fuse?',p:'Light atoms sit high on the side of the valley. Pick a pair.',
+  o:[['Two iron atoms','iron'],['Deuterium and tritium, two kinds of hydrogen','dt']]},
+ dt:{end:true,win:true,lesson:'fusion',h:'The best fuel there is, if you can light it',p:'Each reaction releases 17.6 MeV from just five particles, so per kilogram it\'s about four times better than uranium. About 140 kg of fuel would run the city for a year. The catch: the fuel has to be heated to around 100 million °C, and nobody has yet built a fusion plant that sends power to the grid.'}};
+let node='start';
+function renderShelf(){$('#shelf').innerHTML=LESSONS.map(([k,t],i)=>`<div class="lesson${unlocked.has(k)?' on':''}"><i>${unlocked.has(k)?'✓':i+1}</i><span>${unlocked.has(k)?t:'Locked'}</span></div>`).join('');$('#lessonCount').textContent=unlocked.size+'/5'}
+function renderNode(){const n=NODES[node],c=$('#missionCard');
+  if(n.end){if(!unlocked.has(n.lesson)){unlocked.add(n.lesson);award('l-'+n.lesson,30,'Lesson unlocked')}renderShelf();if(unlocked.size>=3)complete('s3','Mission cleared');
+    c.innerHTML=`<div class="step">${n.win?'Success':'Mission failed'}</div><h3>${n.h}</h3><div class="outcome${n.win?' win':''}"><p style="margin:0">${n.p}</p></div><div class="btnrow"><button class="btn" data-go="start">Try another path</button>${unlocked.size<5?`<span class="note" style="align-self:center">${5-unlocked.size} lesson${5-unlocked.size>1?'s':''} still hidden</span>`:'<span class="note" style="align-self:center">All five lessons found</span>'}</div>`}
+  else c.innerHTML=`<div class="step">${n.step}</div><h3>${n.h}</h3><p class="note">${n.p}</p><div class="opts">${n.o.map((o,i)=>`<button class="opt" data-go="${o[1]}"><span class="k">${'ABC'[i]}</span>${o[0]}</button>`).join('')}</div>`}
+$('#missionCard').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;node=b.dataset.go;renderNode()});
+renderShelf();renderNode();
+
+/* ---------- Level 4: valley ---------- */
+const LIGHT=[[2,1.112],[3,2.827],[4,7.074],[6,5.332],[7,5.606],[9,6.463],[12,7.680],[14,7.476],[16,7.976],[20,8.032],[24,8.261],[28,8.448]];
+const REAL={2:2.2246,3:8.482,4:28.296,12:92.162,24:198.257,56:492.26};
+const FUSE={dt:{lbl:'H-2 + H-3 → He-4 + n',inA:[2,3],out:[4],q:REAL[4]-REAL[2]-REAL[3]},aaa:{lbl:'3 He-4 → C-12',inA:[4,4,4],out:[12],q:REAL[12]-3*REAL[4]},
+ cc:{lbl:'C-12 + C-12 → Mg-24',inA:[12,12],out:[24],q:REAL[24]-2*REAL[12]},fefe:{lbl:'Fe-56 + Fe-56 → A = 112',inA:[56,56],out:[112],q:BE(112,52)-2*REAL[56]}};
+function perA(A){if(A<=28){for(let i=0;i<LIGHT.length;i++)if(LIGHT[i][0]>=A){if(LIGHT[i][0]===A||i===0)return LIGHT[i][1];const [a0,v0]=LIGHT[i-1],[a1,v1]=LIGHT[i];return v0+(v1-v0)*(A-a0)/(a1-a0)}}return BE(A,Zs(A))/A}
+let mode='split',fk=null,an=1,got165=false,gotFe=false;
+$('#modeChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;mode=b.dataset.m;$$('#modeChips .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));$('#splitCtrl').hidden=mode!=='split';$('#fuseChips').hidden=mode!=='fuse';an=0;updValley()});
+$('#fuseChips').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;fk=b.dataset.f;$$('#fuseChips .chip').forEach(c=>c.setAttribute('aria-pressed',c===b));an=0;updValley()});
+$('#sp').addEventListener('input',()=>{an=0;updValley()});
+let vFrom=[236],vTo=[140,94];
+function updValley(){let q=null,lbl='Pick a reaction';
+  if(mode==='split'){const A1=+$('#sp').value,A2=234-A1,Z1=92*A1/234;$('#spo').textContent=A1;q=BE(A1,Z1)+BE(A2,92-Z1)-BE(236,92);lbl='U-236 → '+A1+' + '+A2+' + 2n';vFrom=[236];vTo=[A1,A2];if(q>165&&!got165){got165=true;award('split',20,'Big split found')}}
+  else if(fk){const f=FUSE[fk];q=f.q;lbl=f.lbl;vFrom=f.inA;vTo=f.out;if(fk==='fefe'&&!gotFe){gotFe=true;award('fefe',20,'Tried to climb out')}}
+  else{vFrom=[];vTo=[]}
+  $('#r4a').textContent=lbl;$('#r4b').textContent=q===null?'—':(q>=0?'+':'')+fmt(q,1)+' MeV';
+  const st=$('#valleyStatus');
+  if(q===null){st.className='status';st.innerHTML='<b>Pick a pair</b>Each button fuses real light nuclei. One of them doesn\'t belong.'}
+  else if(q>0){st.className='status good';st.innerHTML='<b>Downhill: energy released</b>'+(mode==='split'?'Both pieces sit lower in the valley than uranium.':'The product sits lower in the valley than the pieces you started with.')}
+  else{st.className='status bad';st.innerHTML='<b>Uphill: energy needed</b>Past iron, joining atoms climbs out of the valley. This reaction costs about '+fmt(-q,0)+' MeV.'}
+  if(got165&&gotFe)complete('s4','Iron is the bottom')}
+const cvV=$('#cvValley'),gV=cvV.getContext('2d');
+function drawValley(){const W=cvV.width,H=cvV.height,ink=tok('--ink'),mut=tok('--muted'),vio=tok('--violet'),red=tok('--red'),good=tok('--good'),line=tok('--line');
+  gV.clearRect(0,0,W,H);const pad=40,X=a=>pad+(Math.log(a)-Math.log(2))/(Math.log(250)-Math.log(2))*(W-pad-16),Y=v=>24+v/9*(H-80);
+  gV.strokeStyle=line;gV.fillStyle=mut;gV.lineWidth=1;gV.font='12px "IBM Plex Mono", monospace';
+  [2,4,12,56,120,240].forEach(a=>{gV.beginPath();gV.moveTo(X(a),18);gV.lineTo(X(a),H-40);gV.stroke();gV.fillText(a,X(a)-8,H-22)});
+  gV.fillText('loosely held',6,16);gV.fillText('tightly held',6,H-48);gV.textAlign='right';gV.fillText('atom size A (log scale)',W-10,H-6);gV.textAlign='left';
+  gV.beginPath();gV.moveTo(X(2),H-40);for(let a=2;a<=250;a*=1.02)gV.lineTo(X(a),Y(perA(a)));gV.lineTo(X(250),H-40);gV.closePath();gV.globalAlpha=.12;gV.fillStyle=vio;gV.fill();gV.globalAlpha=1;
+  gV.strokeStyle=vio;gV.lineWidth=2.5;gV.beginPath();for(let a=2;a<=250;a*=1.02){const x=X(a),y=Y(perA(a));a===2?gV.moveTo(x,y):gV.lineTo(x,y)}gV.stroke();
+  gV.fillStyle=ink;gV.font='600 13px "Literata", serif';gV.textAlign='center';gV.fillText('iron',X(56),Y(perA(56))+22);gV.textAlign='left';
+  an=Math.min(1,an+(reduce?1:0.02));const e=1-Math.pow(1-an,3);
+  const ball=(a,col,lab)=>{const x=X(a),y=Y(perA(Math.min(a,250)));gV.fillStyle=col;gV.beginPath();gV.arc(x,y-8,8,0,7);gV.fill();if(lab){gV.fillStyle=ink;gV.font='12px "IBM Plex Mono", monospace';gV.textAlign='center';gV.fillText(lab,x,y-22);gV.textAlign='left'}};
+  vFrom.forEach(a=>{gV.globalAlpha=1-e*0.65;ball(a,red,an<1?String(a):'');gV.globalAlpha=1});
+  if(vFrom.length){const start=Math.exp(vFrom.reduce((s,a)=>s+Math.log(a),0)/vFrom.length);vTo.forEach(a=>ball(Math.exp(Math.log(start)+(Math.log(a)-Math.log(start))*e),good,an>=1?String(a):''))}}
+
+/* ---------- Level 5: proof ---------- */
+const HOME_J=10500*3.6e6;
+function updClip(){const kg=Math.pow(10,+$('#clip').value),g=kg*1000;$('#clipo').textContent=g>=1000?fmt(g/1000,1)+' kg':g>=1?fmt(g,g<10?1:0)+' g':fmt(g*1000,0)+' mg';
+  const E=kg*9e16,ex=Math.floor(Math.log10(E)),m=(E/10**ex).toFixed(1);$('#r5a').innerHTML=`${m} × 10<sup>${ex}</sup> J`;$('#r5b').textContent=fmt(E/HOME_J,E/HOME_J<10?1:0)}
+$('#clip').addEventListener('input',()=>{updClip();award('clip',10,'Weighed some energy')});updClip();
+document.querySelector('.proof').addEventListener('click',e=>{const b=e.target.closest('[data-next]');if(!b)return;const nx=document.getElementById(b.dataset.next);nx.hidden=false;b.hidden=true;
+  if(b.dataset.next==='p4')complete('s5','Proof complete');nx.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+let predicted=null;
+$('#predictOpts').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||predicted)return;predicted=b.dataset.v;
+  $$('#predictOpts .opt').forEach(x=>{x.disabled=true;if(x.dataset.v==='out')x.classList.add('right');else if(x===b)x.classList.add('wrong')});
+  $('#predictFb').textContent=predicted==='out'?'Right. Energy left, and it took mass with it.':'Reasonable guess. Watch where the energy goes.';
+  if(predicted==='out')award('pred',30,'Correct prediction');const p3=$('#p3');p3.hidden=false;p3.scrollIntoView({behavior:reduce?'auto':'smooth',block:'nearest'})});
+
+/* ---------- Level 6: problem ---------- */
+const PARTS=[
+ {t:'Weigh the left side',q:'What is the total mass before the reaction?',
+  o:['5.030151\\ \\text{u}','4.002602\\ \\text{u}','5.011267\\ \\text{u}'],a:0,
+  hint:'Add the masses of H-2 and H-3.',sol:'2.014102 + 3.016049 = 5.030151 u.'},
+ {t:'Find the missing mass',q:'The right side weighs 4.002602 + 1.008665 = 5.011267 u. How much mass went missing?',
+  o:['0.018884\\ \\text{u}','1.008665\\ \\text{u}','0.030377\\ \\text{u}'],a:0,
+  hint:'Before minus after.',sol:'5.030151 − 5.011267 = 0.018884 u. That\'s about 0.4% of the fuel.'},
+ {t:'Turn it into energy',q:'Use the shortcut from Level 5. How much energy does one reaction release?',
+  o:['17.6\\ \\text{MeV}','28.3\\ \\text{MeV}','1.76\\ \\text{MeV}'],a:0,
+  hint:'Multiply the missing mass in u by 931.5.',sol:'0.018884 × 931.5 ≈ 17.6 MeV. Most of it, about 14.1 MeV, leaves with the neutron.'},
+ {t:'Compare with uranium',q:'Fission releases about 200 MeV from 236 particles. Fusion releases 17.6 MeV from 5. Which gives more energy per particle?',
+  o:['\\text{Fusion: about } 3.5\\ \\text{MeV per particle, roughly 4× more}','\\text{Fission: about } 0.85\\ \\text{MeV per particle}','\\text{They are about the same}'],a:0,
+  hint:'Divide each energy by its number of particles: 17.6 ÷ 5 and 200 ÷ 236.',sol:'17.6 ÷ 5 ≈ 3.5 MeV per particle, against 200 ÷ 236 ≈ 0.85 for fission. Fusion wins by about four times, kilogram for kilogram.'}];
+const solved=new Set();
+$('#problem').innerHTML=PARTS.map((p,i)=>`<div class="part" data-p="${i}"><div class="ph"><b>PART ${i+1}</b><h3>${p.t}</h3></div><p class="note" style="margin:0 0 10px">${p.q}</p><div class="opts">${p.o.map((o,j)=>`<button class="opt" data-p="${i}" data-j="${j}"><span class="k">${'ABC'[j]}</span><span>${tex(o)}</span></button>`).join('')}</div><p class="fb" id="fb${i}"></p><button class="linkbtn" data-hint="${i}">Show hint</button><div class="hint" id="hint${i}" hidden>${p.hint}</div></div>`).join('')+
+ `<div class="finale" id="finale" hidden><h3>Boss level cleared.</h3><p>You just calculated the energy of the reaction that fusion reactors are built around, using nothing but four masses, a subtraction, and E = mc².</p><p style="margin:0">Bonus: the Sun runs a slower chain that turns four hydrogen nuclei into one helium nucleus. It loses about 4 million tonnes of mass every second doing it, and that lost mass is the sunlight on your face.</p></div>`;
+$('#problem').addEventListener('click',e=>{const h=e.target.closest('[data-hint]');if(h){const el=$('#hint'+h.dataset.hint);el.hidden=!el.hidden;h.textContent=el.hidden?'Show hint':'Hide hint';return}
+  const b=e.target.closest('.opt');if(!b)return;const i=+b.dataset.p,j=+b.dataset.j,p=PARTS[i];if(solved.has(i))return;
+  if(j===p.a){solved.add(i);$$(`#problem .opt[data-p="${i}"]`).forEach(x=>{x.disabled=true;if(+x.dataset.j===j)x.classList.add('right')});$('#fb'+i).innerHTML='Correct. '+p.sol;award('part'+i,40,'Part '+(i+1)+' solved')}
+  else{b.classList.add('wrong');b.disabled=true;$('#fb'+i).textContent='Not that one. Try the hint.'}
+  if(solved.size===4){$('#finale').hidden=false;complete('s6','Boss level cleared')}});
+
+/* ---------- Review ---------- */
+function renderReview(){$('#reviewList').innerHTML=PRE.map((p,i)=>{const a=preAns[i];const you=a===undefined?'<em>Not answered. Scroll up to Level 0.</em>':(p.o[a]+(a===p.best?' ✓':''));
+  return `<div class="rv"><div><span class="lab2">You guessed · Q${i+1}</span>${you}</div><div><span class="lab2">The physics</span>${p.physics}</div></div>`}).join('')}
+renderReview();
+
+/* ---------- loop + theme ---------- */
+weigh('He4',true);updNuc();updValley();
+function frame(){drawScale();drawNuc();drawValley();if(!reduce)requestAnimationFrame(frame)}
+frame();if(reduce){setInterval(()=>{drawScale();drawNuc();drawValley()},500)}
+const redraw=()=>{updNuc();drawScale();drawNuc();drawValley()};
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',redraw);
+new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+})();
+</script>
+
+</body>
+</html>

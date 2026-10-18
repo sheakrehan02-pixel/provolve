@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>What Happened</title>
+<meta name="description" content="What Happened: real moments from history, rebuilt so you stand in the room and do the math the people there did.">
+<style>
+/* What Happened, as a personal homepage from 1997: a browser window on a teal desktop, Times New Roman, grey bevelled buttons, blue underlined links. */
+:root{--desk:#008080;--face:#C0C0C0;--hi:#FFFFFF;--lo:#808080;--dk:#000000;--page:#FFFFFF;--ink:#000000;--navy:#000080;--link:#0000EE;--visited:#551A8B;--red:#CC0000;--yellow:#FFFFE1;--muted:#404040;color-scheme:light}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--desk);color:var(--ink);font-family:"Times New Roman",Times,serif;font-size:17px;line-height:1.45;padding:14px 10px 40px}
+a{color:var(--link)} a:visited{color:var(--visited)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:1px dotted #000;outline-offset:2px}
+.win{max-width:820px;margin:0 auto;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);box-shadow:inset -1px -1px 0 var(--lo),inset 1px 1px 0 #DFDFDF;padding:3px}
+.titlebar{display:flex;align-items:center;gap:6px;background:linear-gradient(90deg,#000080,#1084D0);color:#fff;font:bold 13px Arial,Helvetica,sans-serif;padding:3px 4px}
+.titlebar .tb{margin-left:auto;display:flex;gap:2px}
+.titlebar .tb i{display:inline-block;width:16px;height:14px;background:var(--face);border:1px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);font:bold 10px/12px Arial;color:#000;text-align:center;font-style:normal}
+.menubar{display:flex;gap:14px;font:13px Arial,Helvetica,sans-serif;padding:3px 6px}
+.menubar a{color:#000;text-decoration:none}
+.menubar a::first-letter{text-decoration:underline}
+.addr{display:flex;align-items:center;gap:6px;font:12px Arial,sans-serif;padding:2px 6px 5px}
+.addr span.box{flex:1;background:#fff;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:1px 4px;font-family:Arial,sans-serif;white-space:nowrap;overflow:hidden}
+.doc{background:var(--page);border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:14px 18px 22px}
+.btn95,.btn,.chip,.cta,.vote{display:inline-block;font:13px Arial,Helvetica,sans-serif;color:#000;background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);box-shadow:inset -1px -1px 0 var(--lo);padding:4px 12px;cursor:pointer;text-decoration:none;border-radius:0}
+.btn:active,.chip:active,.cta:active,.vote:active,.chip[aria-pressed="true"],.vote[aria-pressed="true"]{border-color:var(--dk) var(--hi) var(--hi) var(--dk);box-shadow:inset 1px 1px 0 var(--lo);background:#D4D0C8}
+.btn:disabled{color:var(--lo);text-shadow:1px 1px 0 #fff;cursor:default}
+hr{border:0;border-top:1px solid var(--lo);border-bottom:1px solid var(--hi);margin:18px 0}
+.marq{overflow:hidden;white-space:nowrap;background:#000;color:#00FF00;font:13px "Courier New",Courier,monospace;padding:3px 0;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.marq span{display:inline-block;padding-left:100%;animation:marq 26s linear infinite}
+@keyframes marq{to{transform:translateX(-100%)}}
+.blink{animation:blink 1s steps(1) infinite;color:var(--red);font-weight:bold}
+@keyframes blink{50%{visibility:hidden}}
+.counter{display:inline-block;background:#000;color:#FF3030;font:bold 14px "Courier New",monospace;letter-spacing:3px;padding:1px 6px;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.statusbar{display:flex;gap:4px;font:12px Arial,sans-serif;padding:3px 2px 0}
+.statusbar span{border:1px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);padding:1px 6px}
+.statusbar span:first-child{flex:1}
+@media (prefers-reduced-motion: reduce){.marq span,.blink{animation:none}.marq span{padding-left:0}}
+
+.mast{text-align:center}
+.logo{display:block;font:bold 40px "Times New Roman",Times,serif;color:var(--navy);text-decoration:none;letter-spacing:1px}
+.logo span{color:var(--red)}
+.mast nav{margin:6px 0;font-size:16px}
+.mast nav a{margin:0 4px}
+.mast nav a+a::before{content:"| ";color:#000;margin-right:4px;text-decoration:none;display:inline-block}
+.prog{font-size:14px}
+.strip{margin:10px 0}
+.hero table,.hero{width:100%}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:18px;align-items:start;margin-top:14px}
+@media (max-width:700px){.hero{grid-template-columns:1fr}}
+.eyebrow{font:bold 13px Arial,sans-serif;color:var(--red)}
+h1{font:bold 34px/1.1 "Times New Roman",Times,serif;color:var(--navy);margin:4px 0 10px}
+h1 .mark{background:#FFFF00}
+.lede{margin:0 0 12px}
+.ctas{display:flex;gap:8px;flex-wrap:wrap}
+.cta.solid{font-weight:bold}
+.dial{background:var(--face);border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);padding:6px;position:relative}
+.dial canvas{display:block;width:100%;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);background:#000}
+.dial .row{display:flex;align-items:center;gap:8px;margin-top:6px;font:12px Arial,sans-serif}
+.dial input{flex:1;min-width:0;accent-color:var(--navy)}
+.dial .cap{display:flex;justify-content:space-between;gap:8px;font:12px Arial,sans-serif;margin-top:4px}
+.badge{position:absolute;top:-10px;right:8px;background:#FFFF00;color:var(--red);font:bold 12px Arial,sans-serif;padding:1px 6px;border:1px solid #000;transform:rotate(4deg)}
+.sh{margin-top:26px;border-top:0}
+.sh h2{font:bold 24px "Times New Roman",serif;color:var(--navy);margin:0;display:inline}
+.sh p{margin:4px 0 10px;font-size:15px;font-style:italic}
+.cover{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0;text-decoration:none;color:#000;border:2px solid;border-color:var(--hi) var(--dk) var(--dk) var(--hi);background:var(--face)}
+.cover:hover{background:#D4D0C8}
+@media (max-width:700px){.cover{grid-template-columns:1fr}}
+.cover .top{grid-column:1/-1;display:flex;justify-content:space-between;background:linear-gradient(90deg,#000080,#1084D0);color:#fff;font:bold 13px Arial,sans-serif;padding:3px 6px}
+.cover .art{padding:6px}
+.cover .art canvas{width:100%;display:block;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo)}
+.cover .foot{padding:8px 12px}
+.cover h3{font:bold 24px/1.15 "Times New Roman",serif;margin:0 0 6px;color:#000}
+.cover h3 span{color:var(--red)}
+.cover .dek{margin:0 0 8px;font-size:16px}
+.meta{font:12px Arial,sans-serif;margin-bottom:8px;display:flex;gap:10px;flex-wrap:wrap}
+.pbar{height:16px;background:#fff;border:2px solid;border-color:var(--lo) var(--hi) var(--hi) var(--lo);margin-bottom:6px;padding:1px}
+.pbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(90deg,var(--navy) 0 8px,transparent 8px 10px)}
+.go{display:flex;justify-content:space-between;font:13px Arial,sans-serif}
+.go b{color:var(--link);text-decoration:underline}
+.new{color:#FFFF00}
+.method{display:table;width:100%;border-collapse:collapse}
+.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border:1px solid #000}
+@media (max-width:700px){.method{grid-template-columns:1fr 1fr}}
+.step{border:1px solid #000;padding:8px;display:grid;gap:4px;align-content:start}
+.step .n{font:bold 12px Arial,sans-serif;color:var(--red)}
+.step h3{font:bold 17px "Times New Roman",serif;margin:0}
+.step p{margin:0;font-size:15px}
+.step .eg{font:12px "Courier New",monospace;background:#FFFFE1;border:1px dashed #000;padding:4px}
+.why{margin-top:14px}
+.why blockquote{margin:0 0 10px 30px;font-style:italic;font-size:19px}
+.why p{margin:0 0 8px}
+.queue{border:0}
+.qi{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px dotted #000}
+@media (max-width:560px){.qi{grid-template-columns:1fr}}
+.qi .no{font:bold 13px "Courier New",monospace;color:var(--red)}
+.qi h4{font:bold 17px "Times New Roman",serif;margin:0}
+.qi p{margin:0;font-size:15px}
+.qi .when{font:12px Arial,sans-serif;color:var(--muted)}
+footer{margin-top:20px;text-align:center;font-size:14px}
+footer .logo{font-size:18px;display:inline}
+.footnote{font:12px Arial,sans-serif;color:var(--muted);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div class="win">
+  <div class="titlebar">What Happened - Netscape Navigator<span class="tb"><i>_</i><i>□</i><i>×</i></span></div>
+  <div class="menubar"><a href="index.html">File</a><a href="#stories">Edit</a><a href="#method">View</a><a href="#next">Go</a><a href="what-happened.html">Bookmarks</a><a href="#method">Help</a></div>
+  <div class="addr">Location: <span class="box">http://www.provolve.net/what-happened.html</span></div>
+  <div class="doc">
+  <header class="mast">
+    <a class="logo" href="index.html">What Happened<span>.</span></a>
+    <nav aria-label="Sections"><a href="#stories">Stories</a><a href="#method">How it works</a><a href="#next">Coming up</a></nav>
+    <div class="prog" id="prog">Your progress: <b>0</b> chapters cleared</div>
+  </header>
+  <div class="strip marq"><span>*** NEW STORY: December 2, 1942, Chicago Pile-1. Pull the control rod yourself! *** Real history. Real numbers. You do the math. *** Coming soon: Apollo 13, the free kick that bent, and measuring the Earth with a shadow. Vote below! ***</span></div>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">History you calculate</div>
+      <h1>Stand in the room. <span class="mark">Do</span> the math.</h1>
+      <p class="lede">Every story drops you into a real moment, with the same numbers the people there had. <strong>You make the prediction, run the instrument, and do the calculation that decided the day.</strong> The physics is the plot.</p>
+      <div class="ctas"><a class="cta solid" href="chicago-pile.html">Play the latest story →</a><a class="cta" href="#next">See what's coming</a></div>
+    </div>
+    <div class="dial">
+      <span class="badge">Drag me</span>
+      <canvas id="cvDial" width="720" height="420" aria-label="A time dial: a scene from each moment in history"></canvas>
+      <div class="row"><span>240 BC</span><input type="range" id="year" min="0" max="3" step="0.001" value="1" aria-label="Move through history"><span>Today</span></div>
+      <div class="cap"><span id="dDate">Dec 2, 1942 · Chicago</span><b id="dTitle">The first nuclear reactor</b></div>
+    </div>
+  </section>
+
+  <section id="stories">
+    <hr><div class="sh"><h2>Stories</h2><p>Every story is its own world: its own place, its own instruments, its own deciding calculation.</p></div>
+    <div class="covers">
+      <a class="cover cp" href="chicago-pile.html">
+        <div class="top"><span>Chicago · December 2, 1942</span><span class="new blink">NEW!</span></div>
+        <div class="art"><canvas id="cvPile" width="760" height="380" aria-label="A cutaway of Chicago Pile-1 with neutrons flying"></canvas></div>
+        <div class="foot">
+          <h3>The day Fermi switched on <span>the first reactor</span></h3>
+          <p class="dek">Under a football stadium, 49 people watch a pile of graphite and uranium wake up. Pull the control rod yourself and work out how fast it rises.</p>
+          <div class="meta"><span>6 chapters</span><span>~30 min</span><span>Exponential growth · Logarithms · Doubling time</span></div>
+          <div class="pbar"><i id="pCP"></i></div>
+          <div class="go"><span id="tCP">Not started</span><b id="gCP">Play →</b></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="method" style="margin-top:6px">
+    <hr><div class="sh"><h2>How every story plays</h2><p>The same four moves, in this order, every time.</p></div>
+    <div class="method">
+      <div class="step"><span class="n">1 · Predict</span><h3>Before it happens</h3><p>Make a call about what's about to happen. Your guesses lock until the end.</p><div class="eg">"When the pile goes critical, what will the counters do?"</div></div>
+      <div class="step"><span class="n">2 · Stand there</span><h3>Their instruments</h3><p>Simulations running the real equations with the real numbers from that day.</p><div class="eg">Pull the last control rod six inches at a time.</div></div>
+      <div class="step"><span class="n">3 · Calculate</span><h3>Their math</h3><p>The equations arrive one step at a time, each tied to something you just did.</p><div class="eg">T = ln 2 × ℓ ÷ (k − 1)</div></div>
+      <div class="step"><span class="n">4 · Debrief</span><h3>What really happened</h3><p>Your predictions next to the record, and the deciding calculation done by you.</p><div class="eg">The count doubled about every two minutes.</div></div>
+    </div>
+    <div class="why">
+      <blockquote>Every equation in your textbook was once a decision someone had to make in a real room.</blockquote>
+      <div>
+        <p>Most history skips the math, and most math skips the history. What Happened puts them back together: <strong>the people in the room didn't have the answer in the back of the book.</strong> They had numbers, a deadline and a lot at stake.</p>
+        <p>Places, dates and numbers are real. Where a scene is simplified so you can play with it, the page says so.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="next" style="margin-top:6px">
+    <hr><div class="sh"><h2>Coming up</h2> <img alt="" width="1" height="1" style="display:none"><span class="blink" style="font:bold 13px Arial">UNDER CONSTRUCTION</span><p>Stories in production. Vote for the one you want next (saved in your browser).</p></div>
+    <div class="queue" id="queue"></div>
+  </section>
+
+  <hr>
+  <footer><a class="logo" href="index.html">What Happened<span style="color:var(--red)">.</span></a><br>
+    You have visited this page <span class="counter" id="visits">000001</span> times.<br>
+    <a href="index.html">Provolve home</a> | <a href="simplify.html">Simplify It</a> | <a href="what-if.html">What if</a> | <a href="problem.html">A Problem a Day</a>
+    <div class="footnote">Last updated October 18, 2026. Best viewed at 1024×768. Progress is stored in this browser only.</div></footer>
+  </div>
+  <div class="statusbar"><span>Document: Done</span><span>What Happened</span></div>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* visit counter (this browser only) */
+try{const v=(+localStorage.getItem('whathappened:visits')||0)+1;localStorage.setItem('whathappened:visits',v);$('#visits').textContent=String(v).padStart(6,'0')}catch(e){}
+/* progress */
+(function(){const d=store.get('whathappened:chicago');const c=d&&d.cleared?d.cleared.length:0,T=(d&&d.total)||6;
+  $('#pCP').style.width=(c/T*100)+'%';$('#tCP').textContent=c?`${c} of ${T} chapters cleared · ${d.xp||0} XP`:'Not started';$('#gCP').textContent=c>=T?'Replay →':c?'Continue →':'Play →';
+  $('#prog').innerHTML=`Your progress: <b>${c}</b> chapter${c===1?'':'s'} cleared`})();
+
+/* time dial */
+const EV=[['c. 240 BC · Alexandria','Measuring the Earth with a shadow'],['Dec 2, 1942 · Chicago','The first nuclear reactor'],['Apr 13, 1970 · 320,000 km out','Apollo 13 comes home'],['Jun 3, 1997 · Lyon','The free kick that bent']];
+const cv=$('#cvDial'),g=cv.getContext('2d'),W=cv.width,H=cv.height;let y=1,t=0;const ns=[];
+$('#year').addEventListener('input',e=>{y=+e.target.value;const i=Math.round(y);$('#dDate').textContent=EV[i][0];$('#dTitle').textContent=EV[i][1]});
+function scene(i,c,alpha){g.save();g.globalAlpha=alpha;g.translate(c,0);
+  if(i===0){const s=g.createLinearGradient(0,0,0,H);s.addColorStop(0,'#3D6C9E');s.addColorStop(1,'#E5C489');g.fillStyle=s;g.fillRect(0,0,W,H);
+    g.fillStyle='#C7A266';g.beginPath();g.arc(W/2,H*0.7+H*2,H*2,0,7);g.fill();g.strokeStyle='rgba(255,240,190,.8)';g.lineWidth=2;const o=(t*40)%44;for(let x=-44+o;x<W;x+=44){g.beginPath();g.moveTo(x,0);g.lineTo(x,H*0.6);g.stroke()}
+    [[-0.0,'Syene'],[-0.17,'Alexandria']].forEach(([a,n])=>{const A=-Math.PI/2+a,R=H*2,bx=W/2+Math.cos(A)*R,by=H*0.7+H*2+Math.sin(A)*R;g.strokeStyle='#2B241A';g.lineWidth=5;g.beginPath();g.moveTo(bx,by);g.lineTo(bx+Math.cos(A)*60,by+Math.sin(A)*60);g.stroke();g.fillStyle='#2B241A';g.font='18px "Special Elite", monospace';g.fillText(n,bx-44,by+30)});
+    g.fillStyle='#FFF0B8';g.beginPath();g.arc(W-70,60,28,0,7);g.fill()}
+  else if(i===1){g.fillStyle='#0E0D0B';g.fillRect(0,0,W,H);const cx=W/2,cy=H/2,R=150;g.fillStyle='#25231F';g.beginPath();g.arc(cx,cy,R,0,7);g.fill();
+    g.fillStyle='#D9C25A';for(let a=-8;a<=8;a++)for(let b=-8;b<=8;b++){const x=cx+a*20,yy=cy+b*20;if((x-cx)**2+(yy-cy)**2<(R-8)**2){g.beginPath();g.arc(x,yy,3.2,0,7);g.fill()}}
+    if(ns.length<70&&Math.random()<.3){const a=Math.random()*6.28;ns.push({x:cx,y:cy,vx:Math.cos(a)*2.4,vy:Math.sin(a)*2.4})}g.fillStyle='#CDE8FF';for(let k=ns.length-1;k>=0;k--){const n=ns[k];n.x+=reduce?0:n.vx;n.y+=reduce?0:n.vy;if((n.x-cx)**2+(n.y-cy)**2>R*R){ns.splice(k,1);continue}g.fillRect(n.x-1.5,n.y-1.5,3,3)}
+    g.fillStyle='#F2D23C';g.fillRect(cx-5,cy-R-24,10,R*0.9);g.fillStyle='#A49B88';g.font='16px "Special Elite", monospace';g.fillText('k ≈ 1.0006',22,34)}
+  else if(i===2){g.fillStyle='#04060C';g.fillRect(0,0,W,H);for(let k=0;k<90;k++){g.fillStyle='rgba(255,255,255,'+(.3+(k%5)/8)+')';g.fillRect((k*97)%W,(k*53)%H,1.6,1.6)}
+    const ex=W*0.2,ey=H/2,mx=W*0.78,my=H/2;g.fillStyle='#3E8EDE';g.beginPath();g.arc(ex,ey,34,0,7);g.fill();g.fillStyle='#BFC4CB';g.beginPath();g.arc(mx,my,15,0,7);g.fill();
+    g.strokeStyle='rgba(255,179,71,.7)';g.setLineDash([5,7]);g.lineWidth=2;g.beginPath();g.moveTo(ex+30,ey-10);g.bezierCurveTo(W*0.45,H*0.1,mx+20,my-80,mx+48,my);g.bezierCurveTo(mx+20,my+80,W*0.45,H*0.9,ex+30,ey+10);g.stroke();g.setLineDash([]);
+    g.fillStyle='#A49B88';g.font='16px "Special Elite", monospace';g.fillText('free-return path, not to scale',22,34)}
+  else{for(let x=0;x<W;x+=60){g.fillStyle=(x/60)%2?'#2C7332':'#33833A';g.fillRect(x,0,60,H)}g.strokeStyle='#fff';g.lineWidth=5;g.strokeRect(W-40,H*0.3,26,H*0.4);
+    for(let k=0;k<4;k++){g.fillStyle='#1E3A8A';g.beginPath();g.arc(W*0.46,H*0.4+k*22,9,0,7);g.fill()}
+    const P=u=>[W*0.08+(W-60-W*0.08)*u,H*0.62-4*u*(1-u)*H*0.36];g.strokeStyle='rgba(255,255,255,.55)';g.setLineDash([4,6]);g.lineWidth=2;g.beginPath();for(let u=0;u<=1;u+=.02){const[x,yy]=P(u);u?g.lineTo(x,yy):g.moveTo(x,yy)}g.stroke();g.setLineDash([]);
+    const u=(t*.3)%1.2;if(u<=1){const[x,yy]=P(u);g.fillStyle='#fff';g.beginPath();g.arc(x,yy,8,0,7);g.fill()}g.fillStyle='rgba(255,255,255,.85)';g.font='16px "Special Elite", monospace';g.fillText('top view: spin bends the path',22,34)}
+  g.restore()}
+function drawDial(){t+=.016;g.clearRect(0,0,W,H);const i=Math.floor(y),f=y-i;scene(i,-f*W,1);if(i<3&&f>0)scene(i+1,(1-f)*W,1);
+  g.fillStyle='rgba(0,0,0,.55)';g.fillRect(0,H-36,W,36);g.fillStyle='#EFE8DA';g.font='15px "Special Elite", monospace';g.fillText(EV[Math.round(y)][0],18,H-13);
+  if(!reduce)requestAnimationFrame(drawDial)}
+drawDial();
+
+/* cover art: pile cutaway */
+(function(){const c=$('#cvPile'),p=c.getContext('2d'),W=c.width,H=c.height;const n=[];let fl=[];
+  function draw(){p.fillStyle='#161513';p.fillRect(0,0,W,H);const cx=W/2,cy=H/2+10,R=150;
+    for(let l=0;l<14;l++){const yy=cy-R+l*(2*R/14);const hw=Math.sqrt(Math.max(0,R*R-(yy+R/14-cy)**2));p.fillStyle=l%2?'#22201C':'#2A2723';p.fillRect(cx-hw,yy,hw*2,2*R/14-1)}
+    p.fillStyle='#D9C25A';for(let a=-7;a<=7;a++)for(let b=-7;b<=7;b++){const x=cx+a*21,yy=cy+b*21;if((x-cx)**2+(yy-cy)**2<(R-10)**2&&(a+b)%2===0){p.beginPath();p.arc(x,yy,3.4,0,7);p.fill()}}
+    if(n.length<60&&Math.random()<.35){const a=Math.random()*6.28;n.push({x:cx+(Math.random()-.5)*80,y:cy+(Math.random()-.5)*80,vx:Math.cos(a)*2.2,vy:Math.sin(a)*2.2})}
+    p.fillStyle='#CDE8FF';for(let k=n.length-1;k>=0;k--){const q=n[k];q.x+=reduce?0:q.vx;q.y+=reduce?0:q.vy;if((q.x-cx)**2+(q.y-cy)**2>R*R){n.splice(k,1);continue}if(Math.random()<.004){fl.push({x:q.x,y:q.y,a:1})}p.fillRect(q.x-1.5,q.y-1.5,3,3)}
+    fl=fl.filter(f=>(f.a-=.04)>0);fl.forEach(f=>{const gr=p.createRadialGradient(f.x,f.y,0,f.x,f.y,18);gr.addColorStop(0,'rgba(255,190,110,'+f.a+')');gr.addColorStop(1,'rgba(255,120,60,0)');p.fillStyle=gr;p.fillRect(f.x-18,f.y-18,36,36)});
+    p.fillStyle='#F2D23C';p.fillRect(cx+R*0.45-5,cy-R-36,10,R*0.95);p.fillStyle='#A49B88';p.font='15px "Special Elite", monospace';p.fillText('57 layers · uranium in graphite · one rod left',22,H-20);
+    if(!reduce)requestAnimationFrame(draw)}draw()})();
+
+/* queue with votes */
+const Q=[['Apr 13, 1970','Apollo 13: getting three people home','An oxygen tank fails on the way to the Moon. Use gravity and energy budgets to plan the way back.','Orbits · Energy'],
+ ['Jun 3, 1997','The free kick that bent around the wall','Roberto Carlos curls a ball wide, then back into the net. Work out the spin and the sideways force.','Projectiles · Magnus force'],
+ ['c. 240 BC','Measuring the Earth with a stick and a shadow','Two shadows 800 km apart give Eratosthenes the size of the whole planet.','Angles · Proportion']];
+const votes=store.get('whathappened:votes')||{};
+function renderQ(){$('#queue').innerHTML=Q.map(([n,h,p,w],i)=>`<div class="qi"><span class="no">${n}</span><div><h4>${h}</h4><p>${p}</p></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="when">${w}</span><button class="vote" data-n="${i}" aria-pressed="${!!votes[i]}">${votes[i]?'Voted ✓':'I want this'}</button></div></div>`).join('')}
+renderQ();$('#queue').addEventListener('click',e=>{const b=e.target.closest('.vote');if(!b)return;votes[b.dataset.n]=!votes[b.dataset.n];store.set('whathappened:votes',votes);renderQ()});
+})();
+</script>
+</body>
+</html>

@@ -6,7 +6,7 @@
 <title>Simplify It</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&family=Unbounded:wght@800&family=Archivo:wdth,wght@62..125,800..900&family=Spectral:ital,wght@1,400&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,400&family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&family=Unbounded:wght@800&family=Archivo:wdth,wght@62..125,800..900&family=Spectral:ital,wght@1,400&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,400&family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@400&family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,800&family=Literata:opsz@7..72&family=IBM+Plex+Mono:wght@400&display=swap">
 <style>
 /* Layout: a magazine front page. Masthead, a split hero (promise left, live "simplifier" right), then each issue as a cover rendered in that issue's own visual world, then the method, then the lab queue. */
 :root{
@@ -124,6 +124,22 @@ h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,7vw,92px);lin
 .c03 .pbar{background:#24312D} .c03 .pbar i{background:#F2D14B}
 .c03 .go b{color:#F2D14B}
 .c03 .art canvas{border-radius:12px}
+/* Issue 04 world (weighing room) */
+.c04{background:#EEECE7;color:#1B1915;border:1px solid #D2CEC4}
+.c04 .top,.c04 .meta,.c04 .go{font-family:"IBM Plex Mono",var(--mono);color:#615C52}
+.c04 .new{background:#9A5B00;color:#F9F8F5}
+.c04 h3{font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(36px,4.2vw,54px);letter-spacing:-.03em;line-height:.98}
+.c04 h3 em{color:#9A5B00}
+.c04 .dek{color:#615C52;font-family:"Literata",Georgia,serif;font-size:18px}
+.c04 .pbar{background:#D2CEC4} .c04 .pbar i{background:#9A5B00}
+.c04 .go b{color:#9A5B00}
+.c04 .art canvas{border-radius:12px}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .c04{background:#1E1B16;color:#EDE8DF;border-color:#34302A}
+  :root:not([data-theme="light"]) .c04 .top,:root:not([data-theme="light"]) .c04 .meta,:root:not([data-theme="light"]) .c04 .go,:root:not([data-theme="light"]) .c04 .dek{color:#A39C8E}
+  :root:not([data-theme="light"]) .c04 h3 em,:root:not([data-theme="light"]) .c04 .go b{color:#E2A63B}:root:not([data-theme="light"]) .c04 .pbar i,:root:not([data-theme="light"]) .c04 .new{background:#E2A63B;color:#14120E}}
+:root[data-theme="dark"] .c04{background:#1E1B16;color:#EDE8DF;border-color:#34302A}
+:root[data-theme="dark"] .c04 .top,:root[data-theme="dark"] .c04 .meta,:root[data-theme="dark"] .c04 .go,:root[data-theme="dark"] .c04 .dek{color:#A39C8E}
+:root[data-theme="dark"] .c04 h3 em,:root[data-theme="dark"] .c04 .go b{color:#E2A63B}:root[data-theme="dark"] .c04 .pbar i,:root[data-theme="dark"] .c04 .new{background:#E2A63B;color:#14120E}
 /* method */
 .method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:18px;overflow:hidden;margin-top:6px}
 @media (max-width:860px){.method{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -161,18 +177,18 @@ footer .logo{font-size:20px;color:var(--ink)}
 
 <div class="page">
   <header class="mast">
-    <a class="logo" href="simplify.html">Simplify<span>/</span>It</a>
-    <nav aria-label="Sections"><a href="index.html">Provolve</a><a href="#issues">Issues</a><a href="#method">How it works</a><a href="#lab">In the lab</a></nav>
+    <a class="logo" href="index.html">Simplify<span>/</span>It</a>
+    <nav aria-label="Sections"><a href="#issues">Issues</a><a href="#method">How it works</a><a href="#lab">In the lab</a></nav>
     <div class="prog" id="prog">Your progress: <b>0</b> levels cleared</div>
   </header>
-  <div class="strip"><span>Hard topics, broken down to first principles. One a week.</span><span>Latest: Issue 03 · The Patient You Cannot See</span></div>
+  <div class="strip"><span>Hard topics, broken down to first principles. One a week.</span><span>Latest: Issue 04 · Where Does the Energy Come From?</span></div>
 
   <section class="hero">
     <div>
       <div class="eyebrow">An interactive blog you play</div>
       <h1>Hard ideas, <span class="mark">played</span> until they're obvious.</h1>
       <p class="lede">Each week, one topic that usually takes a PhD gets stripped down to its fundamentals and rebuilt as a game. <strong>You guess first, then play with the real physics, then derive it yourself.</strong> By the end, you understand it from your own intuition instead of a definition.</p>
-      <div class="ctas"><a class="cta solid" href="patient.html">Play the latest issue →</a><a class="cta" href="wormhole.html">Start at Issue 01</a></div>
+      <div class="ctas"><a class="cta solid" href="energy.html">Play the latest issue →</a><a class="cta" href="wormhole.html">Start at Issue 01</a></div>
     </div>
     <div class="simp">
       <span class="badge">Drag me</span>
@@ -185,8 +201,19 @@ footer .logo{font-size:20px;color:var(--ink)}
   <section id="issues">
     <div class="sh"><h2>Issues</h2><p>Every issue is its own world: its own look, its own instruments, its own boss level.</p></div>
     <div class="covers">
+      <a class="cover c04 feature" href="energy.html">
+        <div class="top"><span>Issue 04 · Nuclear physics</span><span class="new">New</span></div>
+        <div class="art"><canvas id="cvEn" width="760" height="380" aria-label="The valley of binding energy, with iron at the bottom"></canvas></div>
+        <div class="foot">
+          <h3>Where does the <em>energy</em> come from?</h3>
+          <p class="dek">Put an atom on a scale and it weighs less than its parts. Find the missing mass, then calculate the energy that powers the Sun.</p>
+          <div class="meta"><span>7 levels</span><span>~35 min</span><span>Mass defect · Binding energy · E = mc²</span></div>
+          <div class="pbar"><i id="p04"></i></div>
+          <div class="go"><span id="t04">Not started</span><b id="g04">Play →</b></div>
+        </div>
+      </a>
       <a class="cover c03 feature" href="patient.html">
-        <div class="top"><span>Issue 03 · Mathematics × medicine</span><span class="new">New</span></div>
+        <div class="top"><span>Issue 03 · Mathematics × medicine</span></div>
         <div class="art"><canvas id="cvPat" width="760" height="380" aria-label="Hidden biology behind a few measurements"></canvas></div>
         <div class="foot">
           <h3>The patient you <em>cannot</em> see</h3>
@@ -243,7 +270,7 @@ footer .logo{font-size:20px;color:var(--ink)}
     <div class="queue" id="queue"></div>
   </section>
 
-  <footer><a class="logo" href="simplify.html">Simplify<span style="color:var(--cobalt)">/</span>It</a><span>Sample site built to preview the format · progress is stored in this browser only</span></footer>
+  <footer><a class="logo" href="index.html">Simplify<span style="color:var(--cobalt)">/</span>It</a><span>Sample site built to preview the format · progress is stored in this browser only</span></footer>
 </div>
 
 <script>
@@ -254,7 +281,7 @@ const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim
 const store={get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
 /* progress */
-let total=0;[['simplifyit:patient','03',15],['simplifyit:chern','02',13],['simplifyit:wormhole','01',7]].forEach(([k,id,n])=>{const d=store.get(k);const c=d&&d.cleared?d.cleared.length:0,T=(d&&d.total)||n;total+=c;
+let total=0;[['simplifyit:energy','04',7],['simplifyit:patient','03',15],['simplifyit:chern','02',13],['simplifyit:wormhole','01',7]].forEach(([k,id,n])=>{const d=store.get(k);const c=d&&d.cleared?d.cleared.length:0,T=(d&&d.total)||n;total+=c;
   $('#p'+id).style.width=(c/T*100)+'%';$('#t'+id).textContent=c?`${c} of ${T} levels cleared · ${d.xp||0} ${id==='02'?'charge':id==='03'?'evidence':'XP'}`:'Not started';$('#g'+id).textContent=c>=T?'Replay →':c?'Continue →':'Play →'});
 $('#prog').innerHTML=`Your progress: <b>${total}</b> level${total===1?'':'s'} cleared`;
 
@@ -296,10 +323,24 @@ const re=()=>{drawWorm();if(reduce)draw()};matchMedia('(prefers-color-scheme: da
   let s=3;const rn=()=>{s=(s*16807)%2147483647;return s/2147483647-0.5};[0.08,0.24,0.41,0.57,0.74,0.9].forEach(t=>{const y=Y(T(t)+rn()*0.12);g.strokeStyle='rgba(243,239,227,.25)';g.beginPath();g.moveTo(X(t),y+12);g.lineTo(X(t),H-60);g.stroke();g.fillStyle='#F3EFE3';g.beginPath();g.arc(X(t),y,9,0,7);g.fill()});
   g.fillStyle='#90A099';g.font='500 15px "Azeret Mono", monospace';g.fillText('hidden biology (blurred) · what you measure (dots)',30,H-28)})();
 
+/* issue 04 cover art: the valley of binding energy */
+(function(){const cv=$('#cvEn');if(!cv)return;const g=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const dark=()=>document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme: dark)').matches);
+  const L=[[2,1.112],[3,2.827],[4,7.074],[6,5.332],[7,5.606],[9,6.463],[12,7.68],[14,7.476],[16,7.976],[20,8.032],[24,8.261],[28,8.448]];
+  const be=A=>{if(A<=28){for(let i=0;i<L.length;i++)if(L[i][0]>=A){if(i===0||L[i][0]===A)return L[i][1];const[a0,v0]=L[i-1],[a1,v1]=L[i];return v0+(v1-v0)*(A-a0)/(a1-a0)}}const Z=A/(1.98+.0155*Math.pow(A,2/3));return(15.75*A-17.8*Math.pow(A,2/3)-.711*Z*Z/Math.pow(A,1/3)-23.7*Math.pow(A-2*Z,2)/A)/A};
+  function draw(){const d=dark(),ink=d?'#EDE8DF':'#1B1915',mut=d?'#A39C8E':'#615C52',acc=d?'#E2A63B':'#9A5B00',bg=d?'#14120E':'#F9F8F5',red=d?'#F07A5C':'#C8462B',blu=d?'#7FA6FF':'#2F62C9';
+    g.fillStyle=bg;g.fillRect(0,0,W,H);const X=a=>40+(Math.log(a)-Math.log(2))/(Math.log(250)-Math.log(2))*(W-80),Y=v=>30+v/9*(H-90);
+    g.beginPath();g.moveTo(X(2),H-50);for(let a=2;a<=250;a*=1.02)g.lineTo(X(a),Y(be(a)));g.lineTo(X(250),H-50);g.closePath();g.globalAlpha=.14;g.fillStyle=acc;g.fill();g.globalAlpha=1;
+    g.strokeStyle=acc;g.lineWidth=4;g.beginPath();for(let a=2;a<=250;a*=1.02){a===2?g.moveTo(X(a),Y(be(a))):g.lineTo(X(a),Y(be(a)))}g.stroke();
+    const dot=(a,c)=>{g.fillStyle=c;g.beginPath();g.arc(X(a),Y(be(a))-10,10,0,7);g.fill()};dot(2,blu);dot(3,blu);dot(236,red);
+    g.fillStyle=ink;g.font='600 18px "Literata", Georgia, serif';g.textAlign='center';g.fillText('iron',X(56),Y(be(56))+28);
+    g.fillStyle=mut;g.font='15px "IBM Plex Mono", monospace';g.textAlign='left';g.fillText('fusion rolls down this way →',X(2)+14,Y(be(3))+40);g.textAlign='right';g.fillText('← fission rolls down this way',X(236)-14,Y(be(236))-34);g.textAlign='left'}
+  draw();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']})})();
+
 /* lab queue with per-viewer votes */
-const Q=[['04','Why does time slow down when you move?','Race a light clock against a stationary one, then derive the Lorentz factor from a triangle.','Week of Oct 26'],
- ['05','Are some infinities bigger than others?','Try to list every real number. Lose. Then see Cantor\'s diagonal trick catch you.','Week of Nov 2'],
- ['06','Why can\'t you unscramble an egg?','Shuffle particles in a box and watch probability, not physics, forbid the reverse.','Week of Nov 9']];
+const Q=[['05','Why does time slow down when you move?','Race a light clock against a stationary one, then derive the Lorentz factor from a triangle.','Week of Oct 26'],
+ ['06','Are some infinities bigger than others?','Try to list every real number. Lose. Then see Cantor\'s diagonal trick catch you.','Week of Nov 2'],
+ ['07','Why can\'t you unscramble an egg?','Shuffle particles in a box and watch probability, not physics, forbid the reverse.','Week of Nov 9']];
 const votes=store.get('simplifyit:votes')||{};
 function renderQ(){$('#queue').innerHTML=Q.map(([n,h,p,w])=>`<div class="qi"><span class="no">Issue ${n}</span><div><h4>${h}</h4><p>${p}</p></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="when">${w}</span><button class="vote" data-n="${n}" aria-pressed="${!!votes[n]}">${votes[n]?'Voted ✓':'I want this'}</button></div></div>`).join('')}
 renderQ();$('#queue').addEventListener('click',e=>{const b=e.target.closest('.vote');if(!b)return;votes[b.dataset.n]=!votes[b.dataset.n];store.set('simplifyit:votes',votes);renderQ()});

@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Provolve</title>
-<meta name="description" content="Provolve is two things: Simplify It, an interactive blog, and What if, a set of 3D simulations.">
+<meta name="description" content="Provolve: Simplify It, an interactive blog; What if, 3D simulations; What Happened, real history you do the math for; and A Problem a Day.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
@@ -32,20 +32,20 @@ a{color:inherit}
 }
 .top span{color:rgba(244,237,228,.64);font-size:14px}
 .doors{
-  flex:1;display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(min-content,1fr);gap:14px;
   padding:14px clamp(14px,3vw,36px) clamp(18px,3vw,36px);
   min-height:0;
 }
 .door{
   display:flex;flex-direction:column;justify-content:flex-end;gap:14px;
-  min-height:420px;padding:clamp(22px,4vw,48px);
+  min-height:300px;padding:clamp(22px,3.4vw,44px);position:relative;
   border-radius:28px;text-decoration:none;
   border:1px solid transparent;
   transition:transform .2s,border-color .2s;
 }
 .door:hover{transform:translateY(-3px)}
 .kicker{font-size:13px;letter-spacing:.16em;text-transform:uppercase}
-h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(52px,7vw,104px)}
+h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84px)}
 .door p{margin:0;max-width:34ch;font-size:clamp(16px,1.5vw,19px);line-height:1.5}
 .go{margin-top:8px;font-weight:500;font-size:15px}
 .simplify{
@@ -68,18 +68,35 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(52px,7vw,104p
 .whatif h2 span{color:#ffb36b}
 .whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif}
 .whatif .go{color:#ffb36b}
+.happened{border-radius:0;background:#C0C0C0;color:#000;font-family:"Times New Roman",Times,serif;border:3px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -2px -2px 0 #808080}
+.happened:hover{border-color:#fff #000 #000 #fff;background:#CFCFCF}
+.happened .kicker{font:bold 13px Arial,Helvetica,sans-serif;letter-spacing:0;text-transform:none;color:#fff;background:linear-gradient(90deg,#000080,#1084D0);padding:3px 8px;align-self:flex-start}
+.happened h2{font-family:"Times New Roman",Times,serif;font-weight:700;letter-spacing:-.02em;line-height:.95;color:#000080}
+.happened h2 span{color:#CC0000}
+.happened p{color:#000}
+.happened .go{font-family:"Times New Roman",Times,serif;color:#0000EE;text-decoration:underline;font-size:17px}
+.happened .stamp{position:absolute;top:clamp(22px,4vw,40px);right:clamp(22px,4vw,40px);font:bold 14px Arial,sans-serif;color:#CC0000;background:#FFFF00;border:1px solid #000;padding:2px 8px;animation:blink95 1s steps(1) infinite}
+@keyframes blink95{50%{visibility:hidden}}
+.daily{background:#2A3CEB;color:#fff;font-family:"IBM Plex Sans",sans-serif}
+.daily:hover{border-color:#E6FB3C}
+.daily .kicker{font-family:"DM Mono",monospace;color:rgba(255,255,255,.72)}
+.daily h2{font-family:"Bricolage Grotesque","Avenir Next",sans-serif;font-weight:800;font-variation-settings:"wdth" 82,"opsz" 96}
+.daily h2 em{font-style:normal;color:#E6FB3C}
+.daily p{color:rgba(255,255,255,.8)}
+.daily .go{font-family:"DM Mono",monospace;color:#E6FB3C}
+.daily .num{position:absolute;top:clamp(22px,4vw,40px);right:clamp(22px,4vw,40px);font-family:"DM Mono",monospace;font-size:13px;background:#E6FB3C;color:#121317;border-radius:999px;padding:5px 11px}
 @media (max-width:800px){
   .doors{grid-template-columns:1fr}
   .door{min-height:240px}
   h2{font-size:clamp(40px,12vw,64px)}
 }
-@media (prefers-reduced-motion:reduce){.door{transition:none}}
+@media (prefers-reduced-motion:reduce){.door{transition:none}.happened .stamp{animation:none}}
 </style>
 </head>
 <body>
   <header class="top">
     <b>Provolve</b>
-    <span>Two separate things. Pick one.</span>
+    <span>Four separate things. Pick one.</span>
   </header>
   <main class="doors">
     <a class="door simplify" href="simplify.html">
@@ -94,6 +111,21 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(52px,7vw,104p
       <p>Impossible situations, simulated in 3D. Real physics and real history. Look around, walk, and change the variables.</p>
       <span class="go">Enter What if →</span>
     </a>
+    <a class="door happened" href="what-happened.html">
+      <span class="stamp">NEW!</span>
+      <span class="kicker">History, with the math</span>
+      <h2>What Happened<span>.</span></h2>
+      <p>Real moments from history, rebuilt so you stand in the room and do the calculation that decided the day.</p>
+      <span class="go">Enter What Happened →</span>
+    </a>
+    <a class="door daily" href="problem.html">
+      <span class="num" id="pnum">#1</span>
+      <span class="kicker">Apply it</span>
+      <h2>A Problem <em>a Day</em></h2>
+      <p>One real-world problem every day. Six guesses. Every miss tells you how close you are and which way to go.</p>
+      <span class="go">Play today’s problem →</span>
+    </a>
   </main>
+  <script>(function(){var d=new Date(),t=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5),n=Math.max(1,t-Date.UTC(2026,9,18)/864e5+1);document.getElementById('pnum').textContent='#'+n})();</script>
 </body>
 </html>
