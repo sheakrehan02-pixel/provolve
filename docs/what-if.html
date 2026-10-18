@@ -72,6 +72,8 @@ button:focus-visible,input:focus-visible{outline:2px solid var(--amber);outline-
 .drift{animation:drift 9s ease-in-out infinite alternate}
 @keyframes drift{to{transform:translateX(-18px)}}
 #home footer{margin-top:44px;color:var(--dim);font-size:13px;max-width:72ch;line-height:1.55}
+.brandhome{position:relative;z-index:3;display:inline-flex;align-items:center;gap:8px;margin:0 0 28px;padding:4px 0;color:var(--dim);text-decoration:none;font-size:13px;letter-spacing:.14em;text-transform:uppercase}
+.brandhome:hover{color:var(--fg)}
 @media (max-width:900px){
   .hero{grid-template-columns:1fr}
   .hero aside{align-items:flex-start;text-align:left;max-width:none}
@@ -201,6 +203,7 @@ body.clean #cleanExit{opacity:1;pointer-events:auto}
 <canvas id="stars"></canvas>
 
 <main id="home">
+  <a class="brandhome" href="index.html">← Provolve</a>
   <header class="hero">
     <div>
       <h1>What if<span class="dots">…</span></h1>

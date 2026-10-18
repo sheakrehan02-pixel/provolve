@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Simplify It</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&family=Unbounded:wght@800&family=Archivo:wdth,wght@62..125,800..900&family=Spectral:ital,wght@1,400&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,400&family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@400&display=swap">
+<style>
+/* Layout: a magazine front page. Masthead, a split hero (promise left, live "simplifier" right), then each issue as a cover rendered in that issue's own visual world, then the method, then the lab queue. */
+:root{
+  --bg:#FFFFFF; --paper:#F3F4F1; --ink:#121317; --muted:#5E616B; --rule:#DDDFE3;
+  --cobalt:#2A3CEB; --hl:#E6FB3C; --on-hl:#121317;
+  /* Issue 01 world (wormhole) */
+  --w-paper:#ECEEF3; --w-panel:#F8F9FC; --w-ink:#12172A; --w-muted:#565E76; --w-red:#C2412A; --w-violet:#5643C4; --w-line:#CBD0DC;
+  /* Issue 02 world (topology, always dark) */
+  --c-void:#07080C; --c-grid:#151a27; --c-text:#E8E9EE; --c-dim:#8D93A6; --c-amber:#FFB547; --c-line:#242a3a;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0F1013; --paper:#17191E; --ink:#F1F1EE; --muted:#9A9DA8; --rule:#2A2D35; --cobalt:#8794FF; --hl:#D9F23A;
+  --w-paper:#0B0F1E; --w-panel:#131A2D; --w-ink:#E5E8F2; --w-muted:#959CB3; --w-red:#F0765A; --w-violet:#A193FF; --w-line:#273049; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1013; --paper:#17191E; --ink:#F1F1EE; --muted:#9A9DA8; --rule:#2A2D35; --cobalt:#8794FF; --hl:#D9F23A;
+  --w-paper:#0B0F1E; --w-panel:#131A2D; --w-ink:#E5E8F2; --w-muted:#959CB3; --w-red:#F0765A; --w-violet:#A193FF; --w-line:#273049; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;padding-inline:16px}
+a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
+.page{max-width:1160px;margin:0 auto}
+
+/* masthead */
+.mast{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:18px;border-bottom:2px solid var(--ink)}
+.logo{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.03em;text-decoration:none;font-variation-settings:"wdth" 85}
+.logo span{color:var(--cobalt)}
+.mast nav{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
+.mast nav a{text-decoration:none;color:var(--muted)}
+.mast nav a:hover{color:var(--ink)}
+.prog{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.prog b{color:var(--ink);font-weight:500}
+.strip{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);padding-block:8px;border-bottom:1px solid var(--rule)}
+
+/* hero */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center;padding-block:56px 64px}
+@media (max-width:900px){.hero{grid-template-columns:1fr;gap:28px;padding-block:36px 40px}}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,7vw,92px);line-height:.92;letter-spacing:-.045em;margin:.25em 0 .35em;text-wrap:balance;font-variation-settings:"wdth" 82,"opsz" 96}
+.mark{background:linear-gradient(transparent 58%,var(--hl) 58%,var(--hl) 92%,transparent 92%);padding:0 .06em;color:var(--ink)}
+.lede{font-size:21px;line-height:1.5;max-width:34em;color:var(--muted);margin:0 0 26px}
+.lede strong{color:var(--ink);font-weight:500}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:14px;text-decoration:none;padding:12px 18px;border-radius:999px;border:1.5px solid var(--ink)}
+.cta.solid{background:var(--ink);color:var(--bg)}
+.cta:hover{transform:translateY(-1px)}
+
+.simp{background:var(--paper);border-radius:22px;padding:18px;position:relative}
+.simp canvas{display:block;width:100%;max-width:100%;border-radius:14px;background:var(--bg)}
+.simp .row{display:flex;align-items:center;gap:12px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.simp input{flex:1;min-width:0;accent-color:var(--cobalt)}
+.simp .cap{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
+.simp .cap b{color:var(--ink);font-weight:500}
+.badge{position:absolute;top:-12px;right:22px;background:var(--hl);color:var(--on-hl);font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:999px;transform:rotate(3deg)}
+
+/* section heads */
+.sh{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:14px;margin-top:20px;margin-bottom:22px}
+.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,40px);letter-spacing:-.035em;margin:0;line-height:1;font-variation-settings:"wdth" 85}
+.sh p{margin:0;font-family:var(--mono);font-size:12px;color:var(--muted)}
+
+/* covers */
+.covers{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px}
+@media (max-width:860px){.covers{grid-template-columns:1fr}}
+.cover{display:grid;grid-template-rows:auto 1fr auto;border-radius:18px;overflow:hidden;text-decoration:none;min-height:520px;position:relative;transition:transform .2s}
+.cover:hover{transform:translateY(-3px)}
+.cover .top{display:flex;justify-content:space-between;gap:10px;padding:18px 22px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+.cover .art{position:relative;display:grid;place-items:center;min-height:240px}
+.cover .art canvas{width:100%;max-width:100%;display:block}
+.cover .foot{padding:20px 22px 22px}
+.cover h3{margin:0 0 10px;line-height:.95;text-wrap:balance}
+.cover .dek{margin:0 0 16px;font-size:16px;line-height:1.45}
+.meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-bottom:14px}
+.pbar{height:5px;border-radius:3px;overflow:hidden;margin-bottom:12px}
+.pbar i{display:block;height:100%;width:0;transition:width .6s}
+.go{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
+.go b{font-weight:500}
+.new{padding:3px 9px;border-radius:999px;font-weight:600}
+
+.c02{background:var(--c-void);color:var(--c-text);font-family:"Spectral",Georgia,serif;background-image:linear-gradient(var(--c-grid) 1px,transparent 1px),linear-gradient(90deg,var(--c-grid) 1px,transparent 1px);background-size:32px 32px;border:1px solid var(--c-line)}
+.c02 .top,.c02 .meta,.c02 .go{font-family:"IBM Plex Mono",var(--mono);color:var(--c-dim)}
+.c02 .new{background:var(--c-amber);color:var(--c-void)}
+.c02 .one{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:62%;font-weight:900;font-size:clamp(170px,22vw,260px);line-height:.8;color:var(--c-amber);text-shadow:0 0 70px rgba(255,181,71,.35)}
+.c02 h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:118%;font-weight:850;text-transform:uppercase;font-size:clamp(30px,3.4vw,42px);letter-spacing:-.02em;color:var(--c-text)}
+.c02 h3 span{color:var(--c-amber)}
+.c02 .dek{color:var(--c-dim);font-style:italic}
+.c02 .pbar{background:var(--c-line)} .c02 .pbar i{background:var(--c-amber)}
+.c02 .go b{color:var(--c-amber)}
+
+.c01{background:var(--w-paper);color:var(--w-ink);border:1px solid var(--w-line)}
+.c01 .top,.c01 .meta,.c01 .go{font-family:var(--mono);color:var(--w-muted)}
+.c01 .new{border:1px solid var(--w-line)}
+.c01 h3{font-family:"Unbounded","Arial Black",sans-serif;font-weight:800;font-size:clamp(28px,3vw,36px);letter-spacing:-.035em}
+.c01 h3 em{font-style:normal;color:var(--w-violet)}
+.c01 .dek{color:var(--w-muted);font-family:"Newsreader",Georgia,serif}
+.c01 .pbar{background:var(--w-line)} .c01 .pbar i{background:var(--w-red)}
+.c01 .go b{color:var(--w-violet)}
+
+/* Issue 03 world (medicine, always dark) */
+.cover.feature{grid-column:1/-1;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto 1fr;min-height:0}
+.cover.feature .top{grid-column:1/-1}
+.cover.feature .art{min-height:300px;padding:0 0 0 22px}
+.cover.feature .foot{display:flex;flex-direction:column;justify-content:flex-end}
+@media (max-width:860px){.cover.feature{grid-template-columns:1fr}.cover.feature .art{padding:0}}
+.c03{background:#0A0F0E;color:#E8ECE4;border:1px solid #24312D;background-image:radial-gradient(#1A2421 1.2px,transparent 1.3px);background-size:22px 22px}
+.c03 .top,.c03 .meta,.c03 .go{font-family:"Azeret Mono",var(--mono);color:#90A099}
+.c03 .new{background:#F2D14B;color:#0A0F0E}
+.c03 h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(40px,4.6vw,60px);letter-spacing:-.01em;line-height:.95}
+.c03 h3 em{color:#FF7E6B}
+.c03 .dek{color:#90A099;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:20px;line-height:1.3}
+.c03 .pbar{background:#24312D} .c03 .pbar i{background:#F2D14B}
+.c03 .go b{color:#F2D14B}
+.c03 .art canvas{border-radius:12px}
+/* method */
+.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:18px;overflow:hidden;margin-top:6px}
+@media (max-width:860px){.method{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.method{grid-template-columns:1fr}}
+.step{padding:22px;border-right:1px solid var(--rule);display:grid;gap:8px;align-content:start;background:var(--bg)}
+.step:last-child{border-right:0}
+@media (max-width:860px){.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
+@media (max-width:480px){.step{border-right:0;border-bottom:1px solid var(--rule)}.step:last-child{border-bottom:0}}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--cobalt)}
+.step h3{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.035em;margin:0;line-height:1}
+.step p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
+.step .eg{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--paper);border-radius:8px;padding:8px 10px;line-height:1.4}
+.why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:40px;align-items:start}
+@media (max-width:860px){.why{grid-template-columns:1fr;gap:16px}}
+.why blockquote{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1.12;letter-spacing:-.03em;font-variation-settings:"wdth" 90}
+.why p{margin:0 0 1em;color:var(--muted)}
+.why p strong{color:var(--ink);font-weight:500}
+
+/* queue */
+.queue{border-top:1px solid var(--rule)}
+.qi{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--rule)}
+.qi .no{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.qi h4{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.025em;margin:0 0 2px;line-height:1.15}
+.qi p{margin:0;font-size:15px;color:var(--muted)}
+.qi .when{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.qi .vote{font-family:var(--mono);font-size:12px;border:1px solid var(--rule);background:var(--bg);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap}
+.qi .vote[aria-pressed="true"]{background:var(--hl);color:var(--on-hl);border-color:var(--hl)}
+@media (max-width:560px){.qi{grid-template-columns:1fr}.qi .no{order:-1}}
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);margin-top:70px;padding-block:18px 40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
+footer .logo{font-size:20px;color:var(--ink)}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <header class="mast">
+    <a class="logo" href="simplify.html">Simplify<span>/</span>It</a>
+    <nav aria-label="Sections"><a href="index.html">Provolve</a><a href="#issues">Issues</a><a href="#method">How it works</a><a href="#lab">In the lab</a></nav>
+    <div class="prog" id="prog">Your progress: <b>0</b> levels cleared</div>
+  </header>
+  <div class="strip"><span>Hard topics, broken down to first principles. One a week.</span><span>Latest: Issue 03 · The Patient You Cannot See</span></div>
+
+  <section class="hero">
+    <div>
+      <div class="eyebrow">An interactive blog you play</div>
+      <h1>Hard ideas, <span class="mark">played</span> until they're obvious.</h1>
+      <p class="lede">Each week, one topic that usually takes a PhD gets stripped down to its fundamentals and rebuilt as a game. <strong>You guess first, then play with the real physics, then derive it yourself.</strong> By the end, you understand it from your own intuition instead of a definition.</p>
+      <div class="ctas"><a class="cta solid" href="patient.html">Play the latest issue →</a><a class="cta" href="wormhole.html">Start at Issue 01</a></div>
+    </div>
+    <div class="simp">
+      <span class="badge">Drag me</span>
+      <canvas id="cvSimp" width="720" height="520" aria-label="A tangled scribble of jargon that becomes a clean circle as you simplify"></canvas>
+      <div class="row"><span>PhD</span><input type="range" id="simp" min="0" max="1" step="0.005" value="0.18" aria-label="Simplify"><span>Fundamental</span></div>
+      <div class="cap"><span>Jargon left: <b id="jl">12</b></span><span id="jmsg">Keep simplifying.</span></div>
+    </div>
+  </section>
+
+  <section id="issues">
+    <div class="sh"><h2>Issues</h2><p>Every issue is its own world: its own look, its own instruments, its own boss level.</p></div>
+    <div class="covers">
+      <a class="cover c03 feature" href="patient.html">
+        <div class="top"><span>Issue 03 · Mathematics × medicine</span><span class="new">New</span></div>
+        <div class="art"><canvas id="cvPat" width="760" height="380" aria-label="Hidden biology behind a few measurements"></canvas></div>
+        <div class="foot">
+          <h3>The patient you <em>cannot</em> see</h3>
+          <p class="dek">How mathematics reconstructs an invisible disease from a handful of noisy measurements, and where that reasoning runs out.</p>
+          <div class="meta"><span>15 levels</span><span>~45 min</span><span>Inverse problems · Bayes · Digital twins</span></div>
+          <div class="pbar"><i id="p03"></i></div>
+          <div class="go"><span id="t03">Not started</span><b id="g03">Play →</b></div>
+        </div>
+      </a>
+      <a class="cover c02" href="chern.html">
+        <div class="top"><span>Issue 02 · Mathematical physics</span><span class="new">Oct 16</span></div>
+        <div class="art"><div class="one" id="oneC">1</div></div>
+        <div class="foot">
+          <h3>The integer that <span>won't</span> go away</h3>
+          <p class="dek">How geometry hides inside quantum mechanics, and why an electron can know the shape of a space it never visits.</p>
+          <div class="meta"><span>13 levels</span><span>~40 min</span><span>Topology · Berry phase · Chern numbers</span></div>
+          <div class="pbar"><i id="p02"></i></div>
+          <div class="go"><span id="t02">Not started</span><b id="g02">Play →</b></div>
+        </div>
+      </a>
+      <a class="cover c01" href="wormhole.html">
+        <div class="top"><span>Issue 01 · Theoretical physics</span><span class="new">Oct 13</span></div>
+        <div class="art"><canvas id="cvWorm" width="560" height="300" aria-label="A wormhole throat"></canvas></div>
+        <div class="foot">
+          <h3>Can you build a <em>wormhole?</em></h3>
+          <p class="dek">Start knowing nothing. Finish having derived why a traversable wormhole needs matter nobody has ever bottled.</p>
+          <div class="meta"><span>7 levels</span><span>~25 min</span><span>Relativity · Energy conditions</span></div>
+          <div class="pbar"><i id="p01"></i></div>
+          <div class="go"><span id="t01">Not started</span><b id="g01">Play →</b></div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <section id="method" style="margin-top:70px">
+    <div class="sh"><h2>How every issue plays</h2><p>The same four moves, in this order, every week.</p></div>
+    <div class="method">
+      <div class="step"><span class="n">1 · Guess</span><h3>Gut check</h3><p>Answer a few questions before you know anything. Your guesses stay locked until the end.</p><div class="eg">"Can an arrow turn 0.37 times around a loop?"</div></div>
+      <div class="step"><span class="n">2 · Play</span><h3>Instruments</h3><p>Sliders and canvases running the real equations. You build intuition by poking the physics until it pushes back.</p><div class="eg">Squeeze Earth until light can't escape.</div></div>
+      <div class="step"><span class="n">3 · Derive</span><h3>The math</h3><p>Only now do the equations arrive, step by step, each one tied to something you already played with.</p><div class="eg">ρ + pᵣ = (b′ − 1) / 8πr₀² &lt; 0</div></div>
+      <div class="step"><span class="n">4 · Solve</span><h3>Boss level</h3><p>A real problem from the field. Then a debrief puts your first guesses next to the physics.</p><div class="eg">Mystery material: what is its Chern number?</div></div>
+    </div>
+    <div class="why">
+      <blockquote>Understanding you reach through your own intuition sticks. Facts you're handed don't.</blockquote>
+      <div>
+        <p>Most explainers give you a surface-level picture and a metaphor. Simplify It goes further down, to the <strong>fundamental principle</strong> the whole topic rests on, and then makes you rediscover it.</p>
+        <p>The abstract parts, the ones you can't hold in your hand or easily picture, get an instrument you can poke. Every number on these pages comes from an actual calculation, not an animation of one.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="lab" style="margin-top:70px">
+    <div class="sh"><h2>In the lab</h2><p>Planned issues. Vote for the one you want next (saved in your browser).</p></div>
+    <div class="queue" id="queue"></div>
+  </section>
+
+  <footer><a class="logo" href="simplify.html">Simplify<span style="color:var(--cobalt)">/</span>It</a><span>Sample site built to preview the format · progress is stored in this browser only</span></footer>
+</div>
+
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const store={get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* progress */
+let total=0;[['simplifyit:patient','03',15],['simplifyit:chern','02',13],['simplifyit:wormhole','01',7]].forEach(([k,id,n])=>{const d=store.get(k);const c=d&&d.cleared?d.cleared.length:0,T=(d&&d.total)||n;total+=c;
+  $('#p'+id).style.width=(c/T*100)+'%';$('#t'+id).textContent=c?`${c} of ${T} levels cleared · ${d.xp||0} ${id==='02'?'charge':id==='03'?'evidence':'XP'}`:'Not started';$('#g'+id).textContent=c>=T?'Replay →':c?'Continue →':'Play →'});
+$('#prog').innerHTML=`Your progress: <b>${total}</b> level${total===1?'':'s'} cleared`;
+
+/* simplifier */
+const cv=$('#cvSimp'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
+const NH=22,A=[],B=[],P1=[],P2=[];let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+for(let n=2;n<=NH+1;n++){A.push((rnd()*.9+.25)*.55/Math.pow(n,.62));B.push((rnd()*.9+.25)*.55/Math.pow(n,.62));P1.push(rnd()*6.283);P2.push(rnd()*6.283)}
+const JARGON=[['Berry curvature',.13,.16],['T_μν',.82,.13],['null energy condition',.6,.9],['Brillouin zone',.1,.82],['Chern class',.86,.55],['∮ A · dk',.25,.5],['Schwarzschild radius',.62,.27],['fiber bundle',.36,.08],['Pauli matrices',.78,.78],['homotopy',.07,.42],['ρ + pᵣ < 0',.44,.72],['gauge freedom',.9,.33]];
+let s=.18,t=0;
+function w(n,s){return Math.max(0,Math.min(1,((1-s)*(NH+4)-n)/3))}
+function draw(){const ink=tok('--ink'),cob=tok('--cobalt'),mut=tok('--muted'),bg=tok('--bg'),hl=tok('--hl');g.fillStyle=bg;g.fillRect(0,0,W,H);
+  const cx=W/2,cy=H/2,R=Math.min(W,H)*.3;
+  // jargon
+  g.textAlign='center';g.font='500 18px "DM Mono", monospace';let left=0;
+  JARGON.forEach(([txt,x,y],i)=>{const fade=Math.max(0,Math.min(1,1-(s-i/JARGON.length*0.85)*4));if(fade>0.05)left++;if(fade<=0)return;g.globalAlpha=fade*.85;g.fillStyle=mut;const jx=x*W+Math.sin(t*.7+i)*4*(1-s),jy=y*H+Math.cos(t*.6+i*1.3)*4*(1-s);g.fillText(txt,jx,jy)});g.globalAlpha=1;
+  // scribble
+  const layers=s<.95?3:1;
+  for(let L=0;L<layers;L++){g.beginPath();for(let k=0;k<=720;k++){const th=k/720*Math.PI*2;let x=Math.cos(th),y=Math.sin(th);for(let n=0;n<NH;n++){const ww=w(n,s);if(!ww)continue;const ph=t*(.15+n*.01)*(L?-.7:1)+L*.9;x+=ww*A[n]*Math.cos((n+2)*th+P1[n]+ph);y+=ww*B[n]*Math.sin((n+2)*th+P2[n]+ph*1.1)}const X=cx+x*R,Y=cy+y*R;k?g.lineTo(X,Y):g.moveTo(X,Y)}
+    g.strokeStyle=L?ink:cob;g.globalAlpha=L?(1-s)*.35:1;g.lineWidth=L?1.2:3;g.lineJoin='round';g.stroke()}g.globalAlpha=1;
+  if(s>.9){const a=(s-.9)/.1;g.globalAlpha=a;g.fillStyle=hl;g.beginPath();g.arc(cx,cy,R*.44,0,Math.PI*2);g.fill();g.fillStyle=tok('--on-hl');g.font='800 34px "Bricolage Grotesque", sans-serif';g.fillText('one idea',cx,cy+12);g.globalAlpha=1}
+  $('#jl').textContent=left;$('#jmsg').textContent=s>.97?'That\'s the fundamental principle.':s>.6?'Almost there.':s>.3?'The shape is showing through.':'Keep simplifying.'}
+$('#simp').addEventListener('input',e=>{s=+e.target.value;if(reduce)draw()});
+(function loop(){t+=.016;draw();if(!reduce)requestAnimationFrame(loop)})();
+
+/* wormhole cover art: catenoid (the embedding shape of an Ellis wormhole) */
+const cw=$('#cvWorm'),gw=cw.getContext('2d');
+function drawWorm(){const Wd=cw.width,Hd=cw.height,ink=tok('--w-ink'),vio=tok('--w-violet'),mut=tok('--w-muted');gw.clearRect(0,0,Wd,Hd);const cx=Wd/2,cy=Hd/2,r0=34,sc=1;
+  for(let k=-9;k<=9;k++){const z=k*15,r=r0*Math.cosh(z/r0/1.15);if(r>Wd*.47)continue;gw.strokeStyle=k===0?vio:mut;gw.globalAlpha=k===0?1:.45;gw.lineWidth=k===0?3:1;gw.beginPath();gw.ellipse(cx,cy-z,r,r*.2,0,0,Math.PI*2);gw.stroke()}
+  gw.globalAlpha=.9;gw.strokeStyle=ink;gw.lineWidth=1.6;[-1,1].forEach(sd=>{gw.beginPath();let on=false;for(let z=-140;z<=140;z+=2){const r=r0*Math.cosh(z/r0/1.15);if(r>Wd*.47){on=false;continue}const X=cx+sd*r,Y=cy-z;if(on)gw.lineTo(X,Y);else{gw.moveTo(X,Y);on=true}}gw.stroke()});gw.globalAlpha=1;
+  gw.fillStyle=vio;gw.font='500 13px "DM Mono", monospace';gw.textAlign='left';gw.fillText('throat r₀',cx+r0+12,cy+4)}
+drawWorm();
+const re=()=>{drawWorm();if(reduce)draw()};matchMedia('(prefers-color-scheme: dark)').addEventListener('change',re);new MutationObserver(re).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+/* issue 03 cover art */
+(function(){const cv=$('#cvPat');if(!cv)return;const g=cv.getContext('2d'),W=cv.width,H=cv.height;g.fillStyle='#0E1513';g.fillRect(0,0,W,H);
+  const T=t=>0.5+0.42*Math.tanh((t-0.45)*5)*0.9-0.08*Math.sin(t*9),I=t=>0.55-0.35*Math.tanh((t-0.45)*5)+0.06*Math.cos(t*7);
+  const X=t=>30+t*(W-60),Y=v=>30+(1-v)*(H-90);g.save();g.filter='blur(7px)';g.globalAlpha=.7;[[T,[]],[I,[14,10]]].forEach(([f,d])=>{g.strokeStyle='#FF7E6B';g.lineWidth=6;g.setLineDash(d);g.beginPath();for(let t=0;t<=1;t+=0.01)t?g.lineTo(X(t),Y(f(t))):g.moveTo(X(t),Y(f(t)));g.stroke()});g.restore();g.setLineDash([]);
+  g.strokeStyle='#24312D';g.beginPath();g.moveTo(30,H-60);g.lineTo(W-30,H-60);g.stroke();
+  let s=3;const rn=()=>{s=(s*16807)%2147483647;return s/2147483647-0.5};[0.08,0.24,0.41,0.57,0.74,0.9].forEach(t=>{const y=Y(T(t)+rn()*0.12);g.strokeStyle='rgba(243,239,227,.25)';g.beginPath();g.moveTo(X(t),y+12);g.lineTo(X(t),H-60);g.stroke();g.fillStyle='#F3EFE3';g.beginPath();g.arc(X(t),y,9,0,7);g.fill()});
+  g.fillStyle='#90A099';g.font='500 15px "Azeret Mono", monospace';g.fillText('hidden biology (blurred) · what you measure (dots)',30,H-28)})();
+
+/* lab queue with per-viewer votes */
+const Q=[['04','Why does time slow down when you move?','Race a light clock against a stationary one, then derive the Lorentz factor from a triangle.','Week of Oct 26'],
+ ['05','Are some infinities bigger than others?','Try to list every real number. Lose. Then see Cantor\'s diagonal trick catch you.','Week of Nov 2'],
+ ['06','Why can\'t you unscramble an egg?','Shuffle particles in a box and watch probability, not physics, forbid the reverse.','Week of Nov 9']];
+const votes=store.get('simplifyit:votes')||{};
+function renderQ(){$('#queue').innerHTML=Q.map(([n,h,p,w])=>`<div class="qi"><span class="no">Issue ${n}</span><div><h4>${h}</h4><p>${p}</p></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="when">${w}</span><button class="vote" data-n="${n}" aria-pressed="${!!votes[n]}">${votes[n]?'Voted ✓':'I want this'}</button></div></div>`).join('')}
+renderQ();$('#queue').addEventListener('click',e=>{const b=e.target.closest('.vote');if(!b)return;votes[b.dataset.n]=!votes[b.dataset.n];store.set('simplifyit:votes',votes);renderQ()});
+})();
+</script>
+
+</body>
+</html>
