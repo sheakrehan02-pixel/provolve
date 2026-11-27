@@ -4,86 +4,113 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rehan’s Thoughts</title>
-<meta name="description" content="Rehan’s Thoughts. What I’m thinking about and working on. The newest idea always takes first place.">
+<meta name="description" content="Rehan’s Thoughts. Every new idea fights for first place.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&family=Sancreek&family=Ultra&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#161514;--mute:#77746e;--rule:#e3e0d8;--bg:#fbfaf7;--gold:#94700a}
+:root{--paper:#ece2c9;--ink:#1b1814;--red:#c4261c;--dim:#5b5347}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);
-  font:19px/1.6 "Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
-  font-variant-numeric:oldstyle-nums}
-a{color:inherit;text-decoration-thickness:1px;text-underline-offset:3px}
-a:hover{color:var(--gold)}
-main{max-width:640px;margin:0 auto;padding:56px 24px 40px}
-header{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:88px}
-header .name{font-size:19px;text-decoration:none}
-header .name b{font-weight:600}
-header nav{font-size:15px;color:var(--mute)}
-header nav a{text-decoration:none;margin-left:18px}
+[hidden]{display:none!important}
+html{background:#24201c}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:"Old Standard TT",Georgia,serif;
+  background:#24201c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
+  padding:clamp(0px,4vw,48px) clamp(0px,3vw,40px) 60px}
+a{color:inherit}
 
-.owner{font-size:15px;color:var(--mute);border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);padding:8px 0;margin:-60px 0 60px}
-.owner button,.link{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
-.owner button:hover,.link:hover{color:var(--gold)}
-.owner span+span::before{content:" · "}
+/* the bill */
+.bill{position:relative;max-width:820px;margin:0 auto;background:var(--paper);padding:clamp(18px,4vw,44px);
+  clip-path:polygon(0 .3%,3% 0,40% .25%,71% 0,100% .2%,99.8% 38%,100% 71%,99.7% 100%,64% 99.8%,22% 100%,0 99.7%,.25% 60%);}
+.bill::before{ /* paper: speckle, foxing, old fold lines */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;mix-blend-mode:multiply;
+  background:
+    linear-gradient(90deg,transparent calc(50% - 1px),rgba(90,70,40,.18) 50%,rgba(255,255,255,.25) calc(50% + 1px),transparent calc(50% + 2px)),
+    linear-gradient(180deg,transparent calc(33% - 1px),rgba(90,70,40,.15) 33%,rgba(255,255,255,.22) calc(33% + 1px),transparent calc(33% + 2px)),
+    linear-gradient(180deg,transparent calc(67% - 1px),rgba(90,70,40,.15) 67%,rgba(255,255,255,.22) calc(67% + 1px),transparent calc(67% + 2px)),
+    radial-gradient(ellipse at 12% 88%,rgba(150,110,50,.18),transparent 30%),
+    radial-gradient(ellipse at 90% 8%,rgba(150,110,50,.14),transparent 25%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .2 0 0 0 .45 -.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");}
+.frame{position:relative;border:7px solid var(--ink);outline:2px solid var(--ink);outline-offset:-14px;padding:clamp(20px,4vw,40px) clamp(16px,3.5vw,36px)}
+.ink{filter:url(#rough)}
+.red{color:var(--red)}
 
-.first{position:relative}
-.rank{display:block;font-size:15px;letter-spacing:.08em;color:var(--gold);margin-bottom:10px;font-variant:small-caps;font-variant-numeric:lining-nums}
-.rank::before{content:"";display:inline-block;width:28px;height:1px;background:var(--gold);vertical-align:middle;margin-right:10px}
-@media (min-width:980px){
-  .first .rank{position:absolute;left:-190px;top:4px;margin:0;width:160px;text-align:right;white-space:nowrap}
-  .first .rank::before{display:none}
-  .first .rank b{display:block;font-size:52px;line-height:.9;font-weight:400;letter-spacing:-.02em;font-variant:normal}
+/* fitted wood type: each line is stretched to the full width by fit() */
+.fit{display:block;white-space:nowrap;text-align:center;line-height:.84;text-transform:uppercase;margin:0 auto;font-weight:400}
+.f-anton{font-family:Anton,Impact,"Arial Narrow",sans-serif;letter-spacing:.005em}
+.f-ultra{font-family:Ultra,"Rockwell Extra Bold",serif;line-height:.9}
+.f-abril{font-family:"Abril Fatface","Bodoni 72",serif;line-height:.9}
+.f-tusc{font-family:Sancreek,Ultra,serif;line-height:1}
+.f-osw{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:700;letter-spacing:.02em;line-height:1}
+.gap{height:clamp(8px,1.4vw,14px)}
+.stars{text-align:center;font-family:Oswald,sans-serif;letter-spacing:.6em;font-size:14px;margin:12px 0}
+.small{text-align:center;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.18em;font-size:clamp(11px,1.5vw,14px)}
+.rule{border:0;height:9px;margin:clamp(18px,3vw,28px) 0;border-top:4px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+
+/* the fight itself: the post */
+.copy{columns:2 270px;column-gap:34px;column-rule:1px solid rgba(27,24,20,.35);font-size:17.5px;line-height:1.5;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.copy p{margin:0 0 .8em}
+.copy p:first-child::first-letter{float:left;font-family:Ultra,serif;color:var(--red);font-size:4.1em;line-height:.8;margin:.06em .08em 0 0}
+.copy blockquote{margin:0 0 .8em;padding:0 0 0 14px;border-left:3px solid var(--red);font-style:italic;text-align:left}
+.copy strong{font-weight:700}
+.copy a{color:var(--red)}
+
+/* former champions */
+.champs{list-style:none;margin:0;padding:0;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase}
+.champs li{display:flex;align-items:baseline;gap:10px;padding:6px 0;font-size:clamp(16px,2.2vw,21px)}
+.champs a{text-decoration:none;max-width:70%}
+.champs a:hover{color:var(--red)}
+.champs .dots{flex:1;border-bottom:2px dotted var(--ink);transform:translateY(-5px);min-width:20px}
+.champs .held{white-space:nowrap;font-size:.78em;letter-spacing:.06em}
+
+/* small print, management */
+.print{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;font-family:"Old Standard TT",serif;font-style:italic;font-size:14px;color:var(--dim);margin-top:4px}
+.print button,.print a{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--ink);font-style:normal;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:12px}
+.print button:hover,.print a:hover{color:var(--red)}
+.mgmt{max-width:820px;margin:0 auto 10px;display:flex;gap:6px 22px;flex-wrap:wrap;align-items:baseline;padding:9px 14px;background:var(--ink);color:var(--paper);font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:13px}
+.mgmt b{color:#e9b23a;font-weight:700}
+.mgmt a,.mgmt button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.mgmt a:hover,.mgmt button:hover{color:#e9b23a}
+.tools{margin-top:14px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:13px;text-align:center}
+.tools a,.tools button{all:unset;cursor:pointer;text-decoration:underline;margin:0 10px}
+.tools a:hover,.tools button:hover{color:var(--red)}
+.back{display:inline-block;margin-bottom:14px;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.12em;font-size:13px;text-decoration:none}
+.back:hover{color:var(--red)}
+
+/* booking form */
+.book label{display:block;font-family:Oswald,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:13px;margin:0 0 6px}
+.book input,.book textarea{display:block;width:100%;background:transparent;border:0;border-bottom:2px solid var(--ink);color:var(--ink);outline:none;resize:none;padding:6px 0;margin-bottom:26px}
+.book input{font:clamp(30px,6vw,52px)/1 Anton,Impact,sans-serif;text-transform:uppercase}
+.book textarea{font:17.5px/1.5 "Old Standard TT",serif;min-height:300px;border:2px solid var(--ink);padding:14px;background:rgba(255,255,255,.18)}
+.book input:focus,.book textarea:focus{border-color:var(--red)}
+.book .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.book .hint{font-style:italic;font-size:14px;color:var(--dim)}
+.go{all:unset;cursor:pointer;font:clamp(20px,3vw,26px)/1 Ultra,serif;text-transform:uppercase;color:var(--paper);background:var(--red);padding:12px 20px 10px;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.go:hover{background:var(--ink)}
+.go:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.go[disabled]{opacity:.5;pointer-events:none}
+.err{color:var(--red);font-style:italic}
+
+@media (max-width:600px){
+  body{padding:0 0 40px}
+  .bill{clip-path:none}
+  .frame{border-width:5px;outline-offset:-11px}
+  .copy{columns:1;text-align:left;hyphens:manual}
 }
-.rank b{font-weight:400}
-h1{font-size:40px;line-height:1.12;font-weight:400;margin:0 0 12px;letter-spacing:-.01em}
-.since{color:var(--mute);font-style:italic;font-size:16px;margin:0 0 34px}
-.body p{margin:0 0 1.1em}
-.body blockquote{margin:0 0 1.1em;padding-left:20px;border-left:1px solid var(--ink);font-style:italic}
-.tools{font-size:15px;color:var(--mute);margin-top:6px}
-.tools .link+.link{margin-left:14px}
-
-.vacant h1{color:var(--mute)}
-
-hr{border:0;border-top:1px solid var(--rule);margin:72px 0 28px}
-h2{font-size:15px;font-weight:400;letter-spacing:.08em;font-variant:small-caps;color:var(--mute);margin:0 0 14px}
-ol.past{list-style:none;margin:0;padding:0}
-ol.past li{display:flex;justify-content:space-between;gap:20px;padding:9px 0;border-bottom:1px solid var(--rule)}
-ol.past li a{text-decoration:none}
-ol.past li a:hover{text-decoration:underline}
-ol.past li span{color:var(--mute);font-size:15px;white-space:nowrap;padding-top:3px}
-
-.back{font-size:15px;color:var(--mute);margin:0 0 40px;display:inline-block}
-
-form.write label{display:block;font-size:15px;color:var(--mute);margin:0 0 4px}
-form.write input,form.write textarea{width:100%;border:0;border-bottom:1px solid var(--rule);background:transparent;color:inherit;font:inherit;padding:6px 0;outline:none;resize:none}
-form.write input{font-size:40px;line-height:1.12;margin-bottom:30px}
-form.write textarea{min-height:320px;line-height:1.6}
-form.write input:focus,form.write textarea:focus{border-bottom-color:var(--ink)}
-form.write .row{display:flex;gap:22px;align-items:baseline;margin-top:22px;font-size:16px;flex-wrap:wrap}
-form.write .hint{color:var(--mute);font-size:14px;margin-left:auto}
-.publish{all:unset;cursor:pointer;background:var(--ink);color:var(--bg);padding:7px 16px 8px;font-size:16px}
-.publish:hover{background:var(--gold)}
-.publish[disabled]{opacity:.4;cursor:default}
-.note{font-size:15px;color:var(--mute);font-style:italic}
-
-footer{max-width:640px;margin:0 auto;padding:60px 24px 50px;font-size:14px;color:var(--mute);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-footer .link{text-decoration:none}
+@media (prefers-reduced-motion:no-preference){
+  .stamp-in{animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both}
+  @keyframes stamp{from{transform:scale(1.6);opacity:0}}
+}
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <a class="name" href="thoughts.html"><b>Rehan’s Thoughts</b></a>
-    <nav><a href="index.html">Provolve</a></nav>
-  </header>
-  <div class="owner" id="owner" hidden></div>
-  <div id="view"><p class="note">Loading…</p></div>
-</main>
-<footer>
-  <span>Ideas worth backing. The newest one always takes first place.</span>
-  <span><button class="link" id="signin" type="button">Sign in</button></span>
-</footer>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
+</svg>
+<div class="mgmt" id="mgmt" hidden></div>
+<div class="bill">
+  <div class="frame" id="view"><p class="small">Setting the type…</p></div>
+</div>
 
 <script type="module">
 /* ─────────────────────────────────────────────────────────────────────
@@ -100,15 +127,15 @@ const firebaseConfig = {
 
 const V = "10.12.2";
 const view = document.getElementById('view');
-const ownerBar = document.getElementById('owner');
-const signinBtn = document.getElementById('signin');
+const mgmt = document.getElementById('mgmt');
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const long = d => d.toLocaleDateString('en-US', {month:'long', day:'numeric', year:'numeric'});
-const short = d => d.toLocaleDateString('en-US', {month:'short', year:'numeric'});
+const MON = ['JAN.','FEB.','MARCH','APRIL','MAY','JUNE','JULY','AUG.','SEPT.','OCT.','NOV.','DEC.'];
+const bigDate = d => `${MON[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
 const days = (a, b) => Math.max(1, Math.round((b - a) / 864e5));
+const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
 
-/* Plain text in, paragraphs out. Supports *italic*, **bold**, [text](url) and lines starting with "> ". */
+/* Plain text in, paragraphs out. *italic* **bold** [text](url) and "> " quotes. */
 function render(src){
   return String(src || '').trim().split(/\n\s*\n/).map(block => {
     const quote = /^>\s?/.test(block);
@@ -121,86 +148,135 @@ function render(src){
   }).join('');
 }
 
-let thoughts = [];      // newest first: {id, title, body, at: Date}
-let isOwner = false;
-let fb = null;          // firebase handles, once loaded
+/* Break a title into poster lines of roughly even length, then give each line its own face and ink. */
+const FACES = [['f-anton',''],['f-ultra','red'],['f-abril',''],['f-anton','red'],['f-ultra',''],['f-abril','red']];
+function titleLines(title){
+  const words = String(title).toUpperCase().split(/\s+/).filter(Boolean);
+  const len = words.join(' ').length;
+  const n = Math.min(words.length, Math.max(1, Math.round(len / 11)));
+  const target = len / n, lines = [];
+  let cur = '';
+  for (const w of words){
+    if (cur && (cur.length + 1 + w.length) > target * 1.25 && lines.length < n - 1){ lines.push(cur); cur = w; }
+    else cur = cur ? cur + ' ' + w : w;
+  }
+  lines.push(cur);
+  return lines.map((l, i) => { const [f, c] = FACES[i % FACES.length]; return `<span class="fit ink ${f} ${c}" data-max="240">${esc(l)}</span>`; }).join('');
+}
 
-/* ───────── views ───────── */
+/* Stretch every .fit line to the width of the bill, like hand-set wood type. */
+function fit(){
+  view.querySelectorAll('.fit').forEach(el => {
+    const max = +el.dataset.max || 200, P = el.parentElement, cs = getComputedStyle(P);
+    const W = P.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    el.style.fontSize = '100px'; el.style.width = 'max-content';
+    const w = el.getBoundingClientRect().width || 1;
+    el.style.width = '';
+    el.style.fontSize = Math.min(max, Math.floor(100 * W / w * 0.995)) + 'px';
+  });
+}
+let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(fit, 80); });
+
+let thoughts = [];   // newest first: {id, title, body, at}
+let isOwner = false, signedIn = null;
+let fb = null;
+
+/* ───────── pages ───────── */
+const head = `<div class="small">Rehan’s Thoughts &nbsp;·&nbsp; provolve.net</div><hr class="rule">`;
+function foot(){
+  return `<hr class="rule">
+  <div class="print"><span>Admission free. Every new idea fights for first place, and the newest one always takes the belt.</span>
+    <span><a href="index.html">← Provolve</a>&nbsp;&nbsp;&nbsp;<button type="button" data-auth>${signedIn ? 'Sign out' : 'Management'}</button></span></div>`;
+}
+function tools(t){
+  return isOwner ? `<div class="tools"><a href="#edit/${esc(t.id)}">Edit</a><button type="button" data-del="${esc(t.id)}">Delete</button></div>` : '';
+}
+
 function show(){
   const id = decodeURIComponent(location.hash.slice(1));
-  if (id === 'write') return isOwner ? editor() : (location.hash = '');
-  if (id.startsWith('edit/')) {
-    const t = thoughts.find(x => x.id === id.slice(5));
-    return isOwner && t ? editor(t) : (location.hash = '');
-  }
-  if (id) { const i = thoughts.findIndex(t => t.id === id); if (i >= 0) return single(i); }
-  home();
+  if (id === 'write') { if (isOwner) return booking(); location.hash = ''; return; }
+  if (id.startsWith('edit/')) { const t = thoughts.find(x => x.id === id.slice(5)); if (isOwner && t) return booking(t); location.hash = ''; return; }
+  const i = id ? thoughts.findIndex(t => t.id === id) : -1;
+  i > 0 ? bout(i) : main();
+}
+
+function main(){
   document.title = 'Rehan’s Thoughts';
-}
-
-function ownerTools(t){
-  return isOwner ? `<div class="tools"><a class="link" href="#edit/${esc(t.id)}">Edit</a><button class="link" type="button" data-del="${esc(t.id)}">Delete</button></div>` : '';
-}
-
-function home(){
   if (!thoughts.length){
-    view.innerHTML = `<section class="first vacant">
-      <span class="rank"><b>No. 1</b></span>
-      <h1>Vacant.</h1>
-      <p class="since">Nothing here yet. The first idea gets first place.</p>
-    </section>`;
-    return;
+    view.innerHTML = `${head}
+      <span class="fit ink f-tusc red" data-max="70">The Main Event</span>
+      <div class="gap"></div>
+      <span class="fit ink f-anton" data-max="260">Title</span>
+      <span class="fit ink f-ultra red stamp-in" data-max="200">Vacant</span>
+      <div class="gap"></div>
+      <span class="fit ink f-osw" data-max="56">No contenders yet</span>
+      <div class="stars ink">★ ★ ★</div>
+      <p class="small">The first idea through the door takes the belt</p>
+      ${foot()}`;
+    return fit();
   }
-  const [top, ...rest] = thoughts;
-  view.innerHTML = `<article class="first">
-      <span class="rank"><b>No. 1</b></span>
-      <h1>${esc(top.title)}</h1>
-      <p class="since">In first place since ${long(top.at)}</p>
-      <div class="body">${render(top.body)}</div>
-      ${ownerTools(top)}
-    </article>
-    ${rest.length ? `<hr><h2>Former No. 1s</h2><ol class="past">${rest.map((t, k) =>
-      `<li><a href="#${esc(t.id)}">${esc(t.title)}</a><span>${short(t.at)} · held ${days(t.at, thoughts[k].at)}d</span></li>`
-    ).join('')}</ol>` : ''}`;
+  const [champ, ...rest] = thoughts;
+  view.innerHTML = `${head}
+    <span class="fit ink f-tusc red" data-max="70">The Main Event</span>
+    <div class="gap"></div>
+    ${titleLines(champ.title)}
+    <div class="gap"></div>
+    <span class="fit ink f-osw" data-max="48">★ Reigning Champion ★</span>
+    <p class="small" style="margin:14px 0 4px">In first place since</p>
+    <span class="fit ink f-anton red" data-max="64">${bigDate(champ.at)}</span>
+    <hr class="rule">
+    <div class="copy">${render(champ.body)}</div>
+    ${tools(champ)}
+    ${rest.length ? `<hr class="rule">
+      <span class="fit ink f-abril" data-max="54">Former Champions</span>
+      <div class="gap"></div>
+      <ul class="champs">${rest.map((t, k) =>
+        `<li><a href="#${esc(t.id)}">${esc(t.title)}</a><span class="dots"></span><span class="held">held ${plural(days(t.at, thoughts[k].at), 'day')}</span></li>`).join('')}</ul>` : ''}
+    ${foot()}`;
+  fit();
 }
 
-function single(i){
-  const t = thoughts[i], next = thoughts[i - 1];
-  const line = next
-    ? `${long(t.at)}. Held first place for ${days(t.at, next.at)} day${days(t.at, next.at) === 1 ? '' : 's'}.`
-    : `In first place since ${long(t.at)}`;
-  view.innerHTML = `<a class="back" href="#">← All thoughts</a>
-    <article class="first">
-      <span class="rank"><b>${next ? 'Former No. 1' : 'No. 1'}</b></span>
-      <h1>${esc(t.title)}</h1>
-      <p class="since">${line}</p>
-      <div class="body">${render(t.body)}</div>
-      ${ownerTools(t)}
-    </article>`;
+function bout(i){
+  const t = thoughts[i], beat = thoughts[i - 1];
   document.title = t.title + ' · Rehan’s Thoughts';
-  scrollTo(0, 0);
+  view.innerHTML = `<a class="back" href="#">← Tonight’s main event</a>${head}
+    <span class="fit ink f-tusc" data-max="62">Former Champion</span>
+    <div class="gap"></div>
+    ${titleLines(t.title)}
+    <div class="gap"></div>
+    <span class="fit ink f-osw" data-max="44">Held the title ${plural(days(t.at, beat.at), 'day')}</span>
+    <p class="small" style="margin:12px 0 0">${bigDate(t.at)} – ${bigDate(beat.at)}</p>
+    <hr class="rule">
+    <div class="copy">${render(t.body)}</div>
+    ${tools(t)}
+    ${foot()}`;
+  fit(); scrollTo(0, 0);
 }
 
-function editor(t){
-  view.innerHTML = `<a class="back" href="#">← Cancel</a>
-    <form class="write" id="write">
-      <label for="wt">${t ? 'Editing' : 'New thought. Publishing puts it in first place.'}</label>
-      <input id="wt" name="title" placeholder="Title" maxlength="200" required value="${esc(t?.title)}">
-      <textarea id="wb" name="body" placeholder="Write it out." required>${esc(t?.body)}</textarea>
+function booking(t){
+  view.innerHTML = `<a class="back" href="#">← Cancel</a>${head}
+    <span class="fit ink f-tusc red" data-max="64">${t ? 'Edit the bout' : 'New contender'}</span>
+    <div class="gap"></div>
+    <form class="book" id="book">
+      <label for="bt">Title</label>
+      <input id="bt" name="title" maxlength="200" required value="${esc(t?.title)}" autocomplete="off">
+      <label for="bb">The thought</label>
+      <textarea id="bb" name="body" required>${esc(t?.body)}</textarea>
       <div class="row">
-        <button class="publish" type="submit">${t ? 'Save' : 'Publish'}</button>
-        <a href="#" class="link">Cancel</a>
-        <span class="hint">Blank line for a new paragraph. *italic* **bold** [link](url)</span>
+        <button class="go" type="submit">${t ? 'Save it' : 'Into the ring'}</button>
+        <span class="hint">${t ? '' : 'Publishing makes it the reigning champion. '}Blank line between paragraphs. *italic* **bold** [link](url)</span>
       </div>
-      <p class="note" id="werr"></p>
-    </form>`;
-  const ta = document.getElementById('wb');
-  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(320, ta.scrollHeight) + 'px'; };
+      <p class="err" id="berr"></p>
+    </form>
+    ${foot()}`;
+  fit();
+  const ta = document.getElementById('bb');
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(300, ta.scrollHeight + 4) + 'px'; };
   ta.addEventListener('input', grow); grow();
-  document.getElementById(t ? 'wb' : 'wt').focus();
-  document.getElementById('write').addEventListener('submit', async e => {
+  document.getElementById(t ? 'bb' : 'bt').focus();
+  document.getElementById('book').addEventListener('submit', async e => {
     e.preventDefault();
-    const f = e.target, btn = f.querySelector('.publish'), err = document.getElementById('werr');
+    const f = e.target, btn = f.querySelector('.go'), err = document.getElementById('berr');
     const title = f.elements.title.value.trim(), body = f.elements.body.value.trim();
     if (!title || !body) return;
     btn.disabled = true; err.textContent = '';
@@ -210,74 +286,70 @@ function editor(t){
       else await addDoc(collection(fb.db, 'thoughts'), { title, body, createdAt: serverTimestamp() });
       await load();
       history.replaceState(null, '', location.pathname);
-      show();
-    } catch (x) {
-      btn.disabled = false;
-      err.textContent = 'Couldn’t save: ' + (x.code || x.message);
-    }
+      show(); scrollTo(0, 0);
+    } catch (x) { btn.disabled = false; err.textContent = 'Couldn’t save: ' + (x.code || x.message); }
   });
 }
 
 view.addEventListener('click', async e => {
+  if (e.target.closest('[data-auth]')) return authClick();
   const del = e.target.closest('[data-del]');
   if (!del || !isOwner) return;
   const t = thoughts.find(x => x.id === del.dataset.del);
   if (!t || !confirm(`Delete “${t.title}”? This can’t be undone.`)) return;
-  try {
-    await fb.fs.deleteDoc(fb.fs.doc(fb.db, 'thoughts', t.id));
-    await load();
-    history.replaceState(null, '', location.pathname);
-    show();
-  } catch (x) { alert('Couldn’t delete: ' + (x.code || x.message)); }
+  try { await fb.fs.deleteDoc(fb.fs.doc(fb.db, 'thoughts', t.id)); await load(); history.replaceState(null, '', location.pathname); show(); }
+  catch (x) { alert('Couldn’t delete: ' + (x.code || x.message)); }
 });
 addEventListener('hashchange', show);
 
 /* ───────── data + sign-in ───────── */
+let authClick = () => alert('Sign-in isn’t set up yet. See THOUGHTS-SETUP.md in the repo.');
+
 async function load(){
   const { collection, getDocs, query, orderBy } = fb.fs;
   const snap = await getDocs(query(collection(fb.db, 'thoughts'), orderBy('createdAt', 'desc')));
   thoughts = snap.docs.map(d => ({ id: d.id, ...d.data(), at: d.data().createdAt?.toDate?.() || new Date() }));
 }
 
-function paintOwner(user){
-  if (!user){ ownerBar.hidden = true; signinBtn.textContent = 'Sign in'; return; }
-  signinBtn.textContent = 'Sign out';
-  ownerBar.hidden = false;
-  ownerBar.innerHTML = isOwner
-    ? `<span>Signed in as owner</span><span><a class="link" href="#write">Write a new thought</a></span><span><button type="button" id="so">Sign out</button></span>`
-    : `<span>${esc(user.email)} isn’t an owner account.</span><span><button type="button" id="so">Sign out</button></span>`;
-  ownerBar.querySelector('#so').onclick = () => fb.signOut(fb.auth);
+function paintMgmt(){
+  if (!signedIn){ mgmt.hidden = true; return; }
+  mgmt.hidden = false;
+  mgmt.innerHTML = isOwner
+    ? `<b>Management</b><a href="#write">Put a new idea in the ring</a><button type="button" id="so">Sign out</button>`
+    : `<span>${esc(signedIn.email)} isn’t management.</span><button type="button" id="so">Sign out</button>`;
+  mgmt.querySelector('#so').onclick = () => fb.signOut(fb.auth);
 }
 
 async function start(){
-  if (!firebaseConfig.projectId){
-    show();
-    signinBtn.onclick = () => alert('Sign-in isn’t set up yet. See THOUGHTS-SETUP.md in the repo.');
-    return;
-  }
+  // Load every poster face before measuring, and re-fit if any arrive late.
+  const fontsReady = document.fonts
+    ? Promise.all(['Anton','Ultra','Abril Fatface','Sancreek','Oswald'].map(f => document.fonts.load(`700 40px "${f}"`).catch(() => {}))).then(() => document.fonts.ready)
+    : Promise.resolve();
+  document.fonts?.addEventListener?.('loadingdone', fit);
+  if (!firebaseConfig.projectId){ await fontsReady; show(); return; }
+
   const app = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
   const auth = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`);
   const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
   const a = app.initializeApp(firebaseConfig);
   fb = { fs, db: fs.getFirestore(a), auth: auth.getAuth(a), signOut: auth.signOut };
 
-  try { await load(); } catch (x) { console.error(x); }
-  show();
-
-  signinBtn.onclick = () => fb.auth.currentUser
+  authClick = () => fb.auth.currentUser
     ? auth.signOut(fb.auth)
     : auth.signInWithPopup(fb.auth, new auth.GoogleAuthProvider())
         .catch(x => x.code !== 'auth/popup-closed-by-user' && alert('Sign-in failed: ' + x.code));
 
+  try { await load(); } catch (x) { console.error(x); }
+  await fontsReady; show();
+
   auth.onAuthStateChanged(fb.auth, async user => {
-    isOwner = false;
+    signedIn = user; isOwner = false;
     if (user){
-      // Only owner accounts are allowed to read owner/check (see firestore.rules),
+      // Only owner accounts may read owner/check (see firestore.rules),
       // so the owner emails never appear in this public page.
       try { await fs.getDoc(fs.doc(fb.db, 'owner', 'check')); isOwner = true; } catch { isOwner = false; }
     }
-    paintOwner(user);
-    show();
+    paintMgmt(); show();
   });
 }
 start();
