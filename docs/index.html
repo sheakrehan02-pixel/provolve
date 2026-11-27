@@ -65,21 +65,25 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
 .simplify .go .after{display:none}
 .simplify:hover .go .before{display:none}.simplify:hover .go .after{display:inline}
 
-/* What if: gravity follows you */
-.whatif{background:#05050a;color:#f4ede4;border-color:rgba(244,237,228,.14);overflow:hidden;cursor:none}
-.whatif:hover{border-color:rgba(255,179,107,.7)}
-.whatif::before{content:"";position:absolute;inset:0;opacity:.7;pointer-events:none;
-  background-image:radial-gradient(1px 1px at 12% 18%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 78% 12%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 64% 44%,#ffd9b0 50%,transparent 51%),radial-gradient(1px 1px at 32% 62%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 88% 70%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 46% 26%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 22% 86%,#fff 50%,transparent 51%),radial-gradient(1.5px 1.5px at 92% 38%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 56% 84%,#fff 50%,transparent 51%),radial-gradient(1px 1px at 6% 48%,#fff 50%,transparent 51%)}
-.whatif>*{position:relative}
-.whatif .kicker{color:#ffb36b;font-family:"DM Mono",monospace;text-transform:lowercase;letter-spacing:.04em}
-.whatif h2{font-family:"Syne","Arial Black",sans-serif;font-weight:800}
-.whatif h2 .slot{display:inline-block;width:1.05em}
-.whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif}
+/* What if: a peculiar little blob floating in space */
+.whatif{background:radial-gradient(120% 90% at 80% 20%,#1d1442 0%,#0a0718 55%,#05040c 100%);color:#f4ede4;border-color:rgba(244,237,228,.14);overflow:hidden}
+.whatif:hover{border-color:#9b7bff}
+.whatif .stars{position:absolute;inset:0;pointer-events:none}
+.whatif .stars i{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;animation:tw 3s ease-in-out infinite}
+@keyframes tw{50%{opacity:.2}}
+.whatif>*:not(.stars):not(.mon){position:relative}
+.whatif .kicker{color:#c7b6ff;font-family:"DM Mono",monospace;text-transform:lowercase;letter-spacing:.04em}
+.whatif h2{font-family:"Syne","Arial Black",sans-serif;font-weight:800;max-width:60%}
+.whatif h2 span{color:#ffb36b}
+.whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif;max-width:30ch}
 .whatif .go{color:#ffb36b;font-family:"DM Mono",monospace;font-size:13px;text-transform:lowercase}
-.whatif .ball{position:absolute;left:0;top:0;width:var(--b);height:var(--b);margin:calc(var(--b) / -2) 0 0 calc(var(--b) / -2);border-radius:50%;background:#ffb36b;box-shadow:0 0 18px rgba(255,179,107,.65);pointer-events:none;will-change:transform;z-index:2}
-.whatif .well{position:absolute;left:0;top:0;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;border:1.5px dashed rgba(255,179,107,.6);pointer-events:none;opacity:0;transition:opacity .2s;animation:spin 6s linear infinite;z-index:1}
-.whatif:hover .well{opacity:1}
-@keyframes spin{to{rotate:360deg}}
+.mon{position:absolute;right:clamp(-10px,2vw,30px);top:50%;width:clamp(190px,25vw,300px);aspect-ratio:1;margin-top:calc(clamp(190px,25vw,300px) / -2);pointer-events:none;animation:bob 3.4s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-14px) rotate(3deg)}}
+.mon svg{width:100%;height:100%;overflow:visible}
+.mon .say{position:absolute;left:58%;top:6%;font:500 12px/1.2 "DM Mono",monospace;background:#fff;color:#0a0718;padding:7px 10px;border-radius:14px 14px 14px 2px;opacity:0;transform:scale(.6) rotate(-6deg);transform-origin:0 100%;transition:all .25s cubic-bezier(.3,1.8,.5,1);white-space:nowrap}
+.whatif:hover .mon .say{opacity:1;transform:rotate(6deg)}
+@media (max-width:800px){.mon{width:118px;margin-top:-59px;top:30%;right:-6px}.whatif h2{max-width:62%}.mon .say{display:none}}
+@media (prefers-reduced-motion:reduce){.mon,.whatif .stars i{animation:none}}
 .thoughts{background:#ffe9d6;color:#16140f;overflow:hidden;font-family:Archivo,sans-serif}
 .thoughts:hover{border-color:#ff4a12}
 .thoughts>*{position:relative}
@@ -98,33 +102,23 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
 .thoughts:hover .eye i{--p:calc(var(--s) * .56)}
 @media (prefers-reduced-motion:reduce){.thoughts h2 .q{animation:none}}
 @media (max-width:800px){.thoughts .eye:nth-of-type(5){display:none}}
-/* A Problem a Day: a tear-off calendar on a nail */
+/* A Problem a Day: crack today's safe */
 .daily{background:#2A3CEB;color:#fff;font-family:"IBM Plex Sans",sans-serif;overflow:hidden}
 .daily:hover{border-color:#E6FB3C}
-.daily>*{position:relative}
+.daily::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;background-image:radial-gradient(circle,rgba(255,255,255,.22) 2px,transparent 2.5px);background-size:46px 46px;background-position:12px 12px}
+.daily>*:not(.dial){position:relative}
 .daily .kicker{font-family:"DM Mono",monospace;color:rgba(255,255,255,.72);text-transform:lowercase;letter-spacing:.04em}
 .daily h2{font-family:"Bricolage Grotesque","Avenir Next",sans-serif;font-weight:800;font-variation-settings:"wdth" 82,"opsz" 96}
 .daily h2 em{font-style:normal;color:#E6FB3C}
-.daily p{color:rgba(255,255,255,.8);max-width:30ch}
-.daily h2{max-width:62%}
+.daily p{color:rgba(255,255,255,.8);max-width:28ch}
 .daily .go{font-family:"DM Mono",monospace;font-size:13px;color:#E6FB3C;text-transform:lowercase}
-.daily .doodles{position:absolute;inset:0;pointer-events:none;font:500 22px/1 "DM Mono",monospace;color:rgba(255,255,255,.16)}
-.daily .doodles span{position:absolute;transform:rotate(var(--r))}
-.cal{display:block;position:absolute;top:0;right:clamp(26px,6vw,70px);width:clamp(118px,15vw,170px);transform-origin:50% 0;animation:swing 4.2s ease-in-out infinite}
-.daily:hover .cal{animation-duration:1.1s}
-@keyframes swing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
-.cal .string{position:relative;display:block;width:2px;height:clamp(20px,3vw,34px);margin:0 auto;background:rgba(255,255,255,.7)}
-.cal .string::before{content:"";position:absolute;top:-5px;left:50%;width:12px;height:12px;margin-left:-6px;border-radius:50%;background:#E6FB3C;border:2px solid #121317}
-.pad{display:block;position:relative;background:#fff;color:#121317;border-radius:6px;box-shadow:0 3px 0 #dcd9cf,0 6px 0 #c9c6bb,0 14px 22px rgba(0,0,0,.3);overflow:hidden;text-align:center}
-.pad .ptop{display:block;background:#ff4a12;color:#fff;font:500 11px/1 "DM Mono",monospace;letter-spacing:.06em;text-transform:uppercase;padding:9px 0 8px}
-.pad .rings{display:flex;position:absolute;top:-4px;left:0;right:0;display:flex;justify-content:space-around;padding:0 22%}
-.pad .rings i{width:8px;height:14px;border-radius:4px;background:#121317;border:2px solid #fff}
-.pad b{display:block;font:800 clamp(56px,8vw,88px)/1 "Bricolage Grotesque","Avenir Next",sans-serif;font-variation-settings:"wdth" 82,"opsz" 96;letter-spacing:-.04em;padding:10px 0 2px}
-.pad small{display:block;font:500 11px/1 "DM Mono",monospace;color:#5E616B;padding:0 0 14px;text-transform:lowercase}
-.pad::after{content:"";position:absolute;right:0;bottom:0;width:0;height:0;background:linear-gradient(225deg,#2A3CEB 50%,#e7e4da 50%);box-shadow:-3px -3px 6px rgba(0,0,0,.15);transition:width .3s cubic-bezier(.3,1.6,.5,1),height .3s cubic-bezier(.3,1.6,.5,1)}
-.daily:hover .pad::after{width:42px;height:42px}
-@media (prefers-reduced-motion:reduce){.cal{animation:none}.whatif{cursor:auto}}
-@media (max-width:800px){.cal{width:84px;right:14px}.pad b{font-size:36px}.pad small{font-size:9px}.pad .ptop{font-size:9px}.daily h2{max-width:68%}}
+.dial{position:absolute;right:calc(clamp(220px,28vw,330px) * -.28);top:50%;width:clamp(220px,28vw,330px);aspect-ratio:1;margin-top:calc(clamp(220px,28vw,330px) / -2);pointer-events:none}
+.dial svg{width:100%;height:100%;overflow:visible;filter:drop-shadow(0 14px 18px rgba(0,0,30,.45))}
+.dial .face{transform-origin:50% 50%;transform-box:fill-box}
+.pins{display:flex;gap:7px;margin-top:-2px}
+.pins i{width:12px;height:12px;border-radius:50%;border:2px solid #E6FB3C;transition:background .2s,transform .2s}
+.pins i.on{background:#E6FB3C;transform:scale(1.15)}
+@media (max-width:800px){.dial{width:160px;margin-top:-80px;top:38%;right:-74px}.daily h2{max-width:none}}
 @media (max-width:800px){
   .doors{grid-template-columns:1fr}
   .door{min-height:240px}
@@ -147,11 +141,25 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
       <span class="go"><span class="before">hover to untangle it</span><span class="after">see? simple. go in →</span></span>
     </a>
     <a class="door whatif" href="what-if.html" id="whatif">
-      <span class="well" aria-hidden="true"></span>
-      <span class="kicker">what if gravity followed you?</span>
-      <h2>What if<span class="slot" aria-hidden="true"></span></h2>
+      <span class="stars" aria-hidden="true" id="stars"></span>
+      <span class="mon" aria-hidden="true">
+        <span class="say">wanna go in?</span>
+        <svg viewBox="-120 -130 240 250">
+          <defs><radialGradient id="mg" cx="35%" cy="30%" r="80%"><stop offset="0" stop-color="#c3a8ff"/><stop offset=".6" stop-color="#8a5cff"/><stop offset="1" stop-color="#5a2fd6"/></radialGradient></defs>
+          <g id="ant"><path id="antL" d="M0 0" stroke="#5a2fd6" stroke-width="5" fill="none" stroke-linecap="round"/><circle id="antB" r="10" fill="#ffb36b"/></g>
+          <ellipse cx="-38" cy="96" rx="20" ry="11" fill="#5a2fd6"/><ellipse cx="38" cy="96" rx="20" ry="11" fill="#5a2fd6"/>
+          <path id="blob" fill="url(#mg)" stroke="#2a1470" stroke-width="4"/>
+          <circle cx="-52" cy="40" r="7" fill="#b393ff" opacity=".6"/><circle cx="58" cy="18" r="5" fill="#b393ff" opacity=".6"/><circle cx="40" cy="58" r="9" fill="#b393ff" opacity=".5"/>
+          <g class="me" data-r="30" transform="translate(-26 -14)"><circle r="30" fill="#fff" stroke="#2a1470" stroke-width="4"/><circle class="pp" r="13" fill="#0a0718"/><rect class="lid" x="-34" y="-34" width="68" height="0" fill="#7a4cf0"/></g>
+          <g class="me" data-r="19" transform="translate(34 -30)"><circle r="19" fill="#fff" stroke="#2a1470" stroke-width="4"/><circle class="pp" r="8" fill="#0a0718"/><rect class="lid" x="-22" y="-22" width="44" height="0" fill="#7a4cf0"/></g>
+          <g class="me" data-r="12" transform="translate(30 6)"><circle r="12" fill="#fff" stroke="#2a1470" stroke-width="3.5"/><circle class="pp" r="5" fill="#0a0718"/><rect class="lid" x="-14" y="-14" width="28" height="0" fill="#7a4cf0"/></g>
+          <path id="mouth" fill="#2a1470"/>
+        </svg>
+      </span>
+      <span class="kicker">it’s weirder than you think</span>
+      <h2>What if<span>…</span></h2>
       <p>Impossible situations, simulated in 3D. Real physics and real history. Look around, walk, and change the variables.</p>
-      <span class="go">pull the dots around, then go in →</span>
+      <span class="go">go poke the universe →</span>
     </a>
     <a class="door thoughts" href="thoughts.html">
       <span class="eye" aria-hidden="true" style="--s:clamp(70px,9vw,118px);--p:calc(var(--s)*.42);top:22px;right:clamp(84px,11vw,150px)"><i></i></span>
@@ -165,16 +173,29 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
       <p>The ideas I can’t stop poking at. Something’s always watching.</p>
       <span class="go">go take a peek →</span>
     </a>
-    <a class="door daily" href="problem.html">
-      <span class="doodles" aria-hidden="true"><span style="left:8%;top:12%;--r:-8deg">x² + 1 = ?</span><span style="left:46%;top:64%;--r:6deg">π ≈ 3.14</span><span style="left:30%;top:6%;--r:12deg">÷</span><span style="left:62%;top:86%;--r:-10deg">√2</span><span style="left:6%;top:56%;--r:4deg">%</span><span style="left:54%;top:30%;--r:-16deg">∞</span></span>
-      <span class="cal" aria-hidden="true"><span class="string"></span><span class="pad"><span class="rings"><i></i><i></i></span><span class="ptop">today’s problem</span><b id="pnum">1</b><small>6 guesses left</small></span></span>
-      <span class="kicker">one a day, every day</span>
-      <h2>A Problem <em>a Day</em></h2>
+    <a class="door daily" href="problem.html" id="daily">
+      <span class="dial" aria-hidden="true">
+        <svg viewBox="-110 -118 220 228">
+          <path d="M0 -114 L-9 -100 L9 -100 Z" fill="#ff4a12" stroke="#121317" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle r="100" fill="#121317"/>
+          <g class="face" id="dialFace">
+            <circle r="95" fill="#E6FB3C"/>
+            <g id="ticks"></g>
+            <circle r="56" fill="#d7ea2c" stroke="#121317" stroke-width="3"/>
+            <g id="grip"></g>
+          </g>
+          <circle r="38" fill="#121317"/>
+          <text id="pnum" y="9" text-anchor="middle" fill="#E6FB3C" font-family="Bricolage Grotesque, Avenir Next, sans-serif" font-weight="800" font-size="26" letter-spacing="-1">#1</text>
+        </svg>
+      </span>
+      <span class="kicker">crack today’s code</span>
+      <h2>A Problem<br><em>a Day</em></h2>
       <p>One real-world problem every day. Six guesses. Every miss tells you how close you are and which way to go.</p>
-      <span class="go">tear off today’s page →</span>
+      <span class="pins" aria-label="six guesses"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+      <span class="go">spin the dial, then crack it →</span>
     </a>
   </main>
-  <script>(function(){var d=new Date(),t=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5),n=Math.max(1,t-Date.UTC(2026,9,18)/864e5+1);document.getElementById('pnum').textContent=n})();</script>
+  <script>(function(){var d=new Date(),t=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5),n=Math.max(1,t-Date.UTC(2026,9,18)/864e5+1);document.getElementById('pnum').textContent='#'+n})();</script>
   <script>(function(){
   var eyes=[].slice.call(document.querySelectorAll('.thoughts .eye'));if(!eyes.length)return;
   var red=matchMedia('(prefers-reduced-motion: reduce)').matches,mx=innerWidth/2,my=innerHeight/2,idle=0;
@@ -213,29 +234,40 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
   size();draw();addEventListener('resize',size);
 })();</script>
   <script>(function(){
-  /* What if: the three dots of the ellipsis escape and fall toward your cursor */
-  var card=document.getElementById('whatif'),slot=card.querySelector('.slot'),well=card.querySelector('.well'),red=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var B=[],inside=false,mx=0,my=0,W,H,started=false;
-  for(var i=0;i<3;i++){var e=document.createElement('span');e.className='ball';e.setAttribute('aria-hidden','true');card.appendChild(e);B.push({el:e,x:0,y:0,vx:0,vy:0,r:0})}
-  function home(){var c=card.getBoundingClientRect(),s=slot.getBoundingClientRect(),fs=parseFloat(getComputedStyle(slot).fontSize),b=Math.max(10,fs*.17);
-    W=c.width;H=c.height;B.forEach(function(p,i){p.r=b/2;p.el.style.setProperty('--b',b+'px');p.x=s.left-c.left+b*.6+i*fs*.3;p.y=s.bottom-c.top-fs*.16;p.vx=p.vy=0;put(p)})}
-  function put(p){p.el.style.transform='translate('+p.x.toFixed(1)+'px,'+p.y.toFixed(1)+'px)'}
-  card.addEventListener('pointermove',function(ev){var c=card.getBoundingClientRect();mx=ev.clientX-c.left;my=ev.clientY-c.top;inside=true;well.style.transform='translate('+mx+'px,'+my+'px)';if(!started)go()});
-  card.addEventListener('pointerleave',function(){inside=false});
-  function go(){if(started||red)return;started=true;requestAnimationFrame(step)}
-  function step(){
-    B.forEach(function(p){
-      if(inside){var dx=mx-p.x,dy=my-p.y,d=Math.hypot(dx,dy)||1,f=Math.min(1.1,90/d);p.vx+=dx/d*f;p.vy+=dy/d*f}else p.vy+=.5;
-      p.vx*=.985;p.vy*=.985;p.x+=p.vx;p.y+=p.vy;
-      if(p.x<p.r){p.x=p.r;p.vx*=-.75}if(p.x>W-p.r){p.x=W-p.r;p.vx*=-.75}
-      if(p.y<p.r){p.y=p.r;p.vy*=-.75}if(p.y>H-p.r){p.y=H-p.r;p.vy*=-.6;p.vx*=.96}
-    });
-    for(var i=0;i<3;i++)for(var j=i+1;j<3;j++){var a=B[i],b=B[j],dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||1,m=a.r+b.r;if(d<m){var o=(m-d)/2,nx=dx/d,ny=dy/d;a.x-=nx*o;a.y-=ny*o;b.x+=nx*o;b.y+=ny*o;var dv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(dv<0){a.vx+=dv*nx;a.vy+=dv*ny;b.vx-=dv*nx;b.vy-=dv*ny}}}
-    B.forEach(put);requestAnimationFrame(step)}
-  /* on touch screens there's no cursor, so let them drop after a moment */
-  if(matchMedia('(hover: none)').matches)setTimeout(go,1400);
-  var rt;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){var c=card.getBoundingClientRect();W=c.width;H=c.height;if(!started)home()},150)});
-  (document.fonts?document.fonts.ready:Promise.resolve()).then(home);home();
+  /* What if: a wobbly three-eyed blob that watches you */
+  var red=matchMedia('(prefers-reduced-motion: reduce)').matches,card=document.getElementById('whatif'),svg=card.querySelector('.mon svg');
+  var st=document.getElementById('stars');for(var i=0;i<38;i++){var e=document.createElement('i');e.style.left=Math.random()*100+'%';e.style.top=Math.random()*100+'%';e.style.opacity=.3+Math.random()*.7;e.style.animationDelay=(Math.random()*3)+'s';if(Math.random()<.15){e.style.width=e.style.height='3px'}st.appendChild(e)}
+  var blob=document.getElementById('blob'),mouth=document.getElementById('mouth'),antL=document.getElementById('antL'),antB=document.getElementById('antB');
+  var eyes=[].slice.call(card.querySelectorAll('.me')),hover=0,hv=0,mx=0,my=0,has=false,t=0;
+  card.addEventListener('pointerenter',function(){hover=1});card.addEventListener('pointerleave',function(){hover=0});
+  addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;has=true},{passive:true});
+  function frame(){t+=.03;hv+=(hover-hv)*.12;
+    var d='',N=40;for(var k=0;k<=N;k++){var a=k/N*Math.PI*2,r=82*(1+.06*Math.sin(3*a+t)+.04*Math.sin(5*a-t*1.4)+.03*Math.sin(2*a+t*.7))+hv*6;
+      var x=Math.cos(a)*r*1.05,y=Math.sin(a)*r*.92+8;d+=(k?'L':'M')+x.toFixed(1)+' '+y.toFixed(1)}
+    blob.setAttribute('d',d+'Z');
+    var mw=16+hv*6,mh=4+hv*16,my0=46;mouth.setAttribute('d','M'+(-mw)+' '+my0+' Q0 '+(my0+mh+6)+' '+mw+' '+my0+' Q0 '+(my0+mh*.4)+' '+(-mw)+' '+my0+'Z');
+    var sw=Math.sin(t*1.3)*14+hv*Math.sin(t*6)*10,tx=sw,ty=-118;antL.setAttribute('d','M0 -66 Q'+(sw*.4)+' -96 '+tx+' '+ty);antB.setAttribute('cx',tx);antB.setAttribute('cy',ty);
+    var b=svg.getBoundingClientRect(),sc=b.width/240;
+    eyes.forEach(function(g){var m=g.getAttribute('transform').match(/-?[\d.]+/g),ex=b.left+(+m[0]+120)*sc,ey=b.top+(+m[1]+130)*sc,R=+g.dataset.r,dx=has?mx-ex:Math.cos(t*.5)*50,dy=has?my-ey:Math.sin(t*.4)*30,dd=Math.hypot(dx,dy)||1,k=Math.min(1,dd/120)*R*.45;
+      var p=g.querySelector('.pp');p.setAttribute('cx',(dx/dd*k).toFixed(1));p.setAttribute('cy',(dy/dd*k).toFixed(1));p.setAttribute('r',(R*.43*(1+hv*.25)).toFixed(1))});
+    if(!red)requestAnimationFrame(frame)}
+  function blink(){var g=eyes[Math.random()*eyes.length|0],l=g.querySelector('.lid'),R=+g.dataset.r;l.setAttribute('height',2*R+8);setTimeout(function(){l.setAttribute('height',0)},120);setTimeout(blink,900+Math.random()*2600)}
+  frame();if(!red)setTimeout(blink,1200);
+})();</script>
+  <script>(function(){
+  /* A Problem a Day: a safe dial that turns toward you */
+  var red=matchMedia('(prefers-reduced-motion: reduce)').matches,card=document.getElementById('daily'),face=document.getElementById('dialFace'),ns='http://www.w3.org/2000/svg';
+  var tk=document.getElementById('ticks');for(var i=0;i<100;i++){var a=i*3.6,big=i%10===0,l=document.createElementNS(ns,'line');l.setAttribute('x1',0);l.setAttribute('y1',-93);l.setAttribute('x2',0);l.setAttribute('y2',big?-80:-86);l.setAttribute('stroke','#121317');l.setAttribute('stroke-width',big?3:1.6);l.setAttribute('transform','rotate('+a+')');tk.appendChild(l);
+    if(big){var tx=document.createElementNS(ns,'text');tx.textContent=i;tx.setAttribute('x',0);tx.setAttribute('y',-64);tx.setAttribute('text-anchor','middle');tx.setAttribute('font-family','DM Mono, monospace');tx.setAttribute('font-size','12');tx.setAttribute('font-weight','500');tx.setAttribute('fill','#121317');tx.setAttribute('transform','rotate('+a+')');tk.appendChild(tx)}}
+  var gp=document.getElementById('grip');for(var i=0;i<16;i++){var r=document.createElementNS(ns,'rect');r.setAttribute('x',-3);r.setAttribute('y',-56);r.setAttribute('width',6);r.setAttribute('height',10);r.setAttribute('rx',2);r.setAttribute('fill','#121317');r.setAttribute('transform','rotate('+(i*22.5)+')');gp.appendChild(r)}
+  var pins=[].slice.call(card.querySelectorAll('.pins i')),ang=0,vel=0,target=0,inside=false,last=0,t=0,clicks=0;
+  card.addEventListener('pointermove',function(e){var b=card.querySelector('.dial').getBoundingClientRect(),cx=b.left+b.width/2,cy=b.top+b.height/2;target=Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI*3;inside=true});
+  card.addEventListener('pointerleave',function(){inside=false;clicks=0;pins.forEach(function(p){p.classList.remove('on')})});
+  function frame(){t+=.016;if(!inside)target=Math.sin(t*.7)*40+Math.sin(t*.23)*90;
+    var d=target-ang;vel+=d*.02;vel*=.82;ang+=vel;face.setAttribute('transform','rotate('+ang.toFixed(2)+')');
+    var notch=Math.round(ang/36);if(inside&&notch!==last){clicks++;if(clicks%4===0){var off=pins.filter(function(p){return!p.classList.contains('on')});if(off.length)off[0].classList.add('on')}}last=notch;
+    if(!red)requestAnimationFrame(frame)}
+  frame();
 })();</script>
 </body>
 </html>
