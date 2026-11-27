@@ -7,7 +7,7 @@
 <meta name="description" content="Provolve: Simplify It, an interactive blog; What if, 3D simulations; Rehan’s Thoughts, a personal blog; and A Problem a Day.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=Anton&family=Ultra&family=Sancreek&family=Old+Standard+TT:ital@1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=Bowlby+One&family=Archivo:wght@600;800&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
@@ -68,13 +68,13 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
 .whatif h2 span{color:#ffb36b}
 .whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif}
 .whatif .go{color:#ffb36b}
-.thoughts{background:#ece2c9;color:#1b1814;border-radius:0;border:6px solid #1b1814;outline:2px solid #1b1814;outline-offset:-12px;justify-content:center;align-items:center;text-align:center;gap:6px}
-.thoughts:hover{border-color:#c4261c}
-.thoughts .kicker{font:22px Sancreek,serif;letter-spacing:0;text-transform:uppercase;color:#c4261c}
-.thoughts h2{font-family:Anton,Impact,sans-serif;font-weight:400;text-transform:uppercase;letter-spacing:0;line-height:.86}
-.thoughts h2 span{display:block;font-family:Ultra,serif;color:#c4261c;font-size:.62em;line-height:1}
-.thoughts p{font-family:"Old Standard TT",serif;font-style:italic;color:#5b5347;max-width:30ch;margin-top:6px}
-.thoughts .go{font-family:Anton,Impact,sans-serif;text-transform:uppercase;letter-spacing:.06em;color:#1b1814;border-top:3px double #1b1814;padding-top:8px}
+.thoughts{background:#ffd23f;color:#141210;border:3px solid #141210;box-shadow:7px 7px 0 #f6efe0;font-family:Archivo,sans-serif}
+.thoughts:hover{border-color:#141210;box-shadow:10px 10px 0 #ee4a35}
+.thoughts .kicker{font:800 12px/1 Archivo,sans-serif;letter-spacing:.06em;align-self:flex-start;background:#141210;color:#ffd23f;padding:7px 11px;border-radius:999px}
+.thoughts h2{font-family:"Bowlby One","Arial Black",sans-serif;font-weight:400;letter-spacing:-.02em;line-height:.9;text-transform:uppercase}
+.thoughts p{color:#141210;font-weight:600}
+.thoughts .go{font:800 14px/1 Archivo,sans-serif;text-transform:uppercase;align-self:flex-start;background:#fff;border:2.5px solid #141210;border-radius:999px;padding:10px 14px;box-shadow:3px 3px 0 #141210}
+.thoughts .crown{position:absolute;top:clamp(22px,4vw,40px);right:clamp(22px,4vw,40px);width:clamp(54px,7vw,84px);transform:rotate(12deg)}
 .daily{background:#2A3CEB;color:#fff;font-family:"IBM Plex Sans",sans-serif}
 .daily:hover{border-color:#E6FB3C}
 .daily .kicker{font-family:"DM Mono",monospace;color:rgba(255,255,255,.72)}
@@ -110,10 +110,11 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
       <span class="go">Enter What if →</span>
     </a>
     <a class="door thoughts" href="thoughts.html">
-      <span class="kicker">The Main Event</span>
-      <h2>Rehan’s<span>Thoughts</span></h2>
-      <p>Every new idea fights for first place. The newest one always takes the belt.</p>
-      <span class="go">See the reigning champion →</span>
+      <svg class="crown" viewBox="0 0 40 30" aria-hidden="true"><path d="M3 26 L5 7 L13 15 L20 3 L27 15 L35 7 L37 26 Z" fill="#fff" stroke="#141210" stroke-width="2.6" stroke-linejoin="round"/><circle cx="20" cy="18" r="2.6" fill="#ee4a35" stroke="#141210" stroke-width="1.6"/></svg>
+      <span class="kicker">PERSONAL</span>
+      <h2>Rehan’s Thoughts!</h2>
+      <p>My ideas race each other. The newest one always wins the crown.</p>
+      <span class="go">Watch today’s race →</span>
     </a>
     <a class="door daily" href="problem.html">
       <span class="num" id="pnum">#1</span>

@@ -4,113 +4,164 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rehan’s Thoughts</title>
-<meta name="description" content="Rehan’s Thoughts. Every new idea fights for first place.">
+<meta name="description" content="Rehan’s Thoughts. Every idea races. The newest one wins.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Anton&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Oswald:wght@500;700&family=Sancreek&family=Ultra&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--paper:#ece2c9;--ink:#1b1814;--red:#c4261c;--dim:#5b5347}
+:root{--cream:#f6efe0;--ink:#141210;--red:#ee4a35;--blue:#3a5bff;--yellow:#ffd23f;--green:#2fbf71;--pink:#ff8fc7;
+  --pop:"Bowlby One","Arial Black",sans-serif;--sans:Archivo,"Helvetica Neue",Arial,sans-serif}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-html{background:#24201c}
-body{margin:0;min-height:100vh;color:var(--ink);font-family:"Old Standard TT",Georgia,serif;
-  background:#24201c url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.6' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 .12 0 0 0 0 .1 0 0 0 0 .08 0 0 0 .5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23w)'/%3E%3C/svg%3E");
-  padding:clamp(0px,4vw,48px) clamp(0px,3vw,40px) 60px}
+body{margin:0;color:var(--ink);font-family:var(--sans);background:var(--cream);
+  background-image:radial-gradient(rgba(20,18,16,.13) 1.2px,transparent 1.3px);background-size:18px 18px}
 a{color:inherit}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
+.chunk{border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:#fffaf0}
+.btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:800 13px/1 var(--sans);text-transform:uppercase;letter-spacing:.04em;
+  padding:9px 14px;border:2.5px solid var(--ink);border-radius:999px;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn.y{background:var(--yellow)}.btn.r{background:var(--red);color:#fff}.btn.b{background:var(--blue);color:#fff}
 
-/* the bill */
-.bill{position:relative;max-width:820px;margin:0 auto;background:var(--paper);padding:clamp(18px,4vw,44px);
-  clip-path:polygon(0 .3%,3% 0,40% .25%,71% 0,100% .2%,99.8% 38%,100% 71%,99.7% 100%,64% 99.8%,22% 100%,0 99.7%,.25% 60%);}
-.bill::before{ /* paper: speckle, foxing, old fold lines */
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:3;mix-blend-mode:multiply;
-  background:
-    linear-gradient(90deg,transparent calc(50% - 1px),rgba(90,70,40,.18) 50%,rgba(255,255,255,.25) calc(50% + 1px),transparent calc(50% + 2px)),
-    linear-gradient(180deg,transparent calc(33% - 1px),rgba(90,70,40,.15) 33%,rgba(255,255,255,.22) calc(33% + 1px),transparent calc(33% + 2px)),
-    linear-gradient(180deg,transparent calc(67% - 1px),rgba(90,70,40,.15) 67%,rgba(255,255,255,.22) calc(67% + 1px),transparent calc(67% + 2px)),
-    radial-gradient(ellipse at 12% 88%,rgba(150,110,50,.18),transparent 30%),
-    radial-gradient(ellipse at 90% 8%,rgba(150,110,50,.14),transparent 25%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.75' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .4 0 0 0 0 .32 0 0 0 0 .2 0 0 0 .45 -.05'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23p)'/%3E%3C/svg%3E");}
-.frame{position:relative;border:7px solid var(--ink);outline:2px solid var(--ink);outline-offset:-14px;padding:clamp(20px,4vw,40px) clamp(16px,3.5vw,36px)}
-.ink{filter:url(#rough)}
-.red{color:var(--red)}
+/* top bar + ticker */
+.bar{display:flex;align-items:center;gap:14px;padding:10px clamp(14px,3vw,28px);background:var(--ink);color:#fff}
+.logo{font:24px/1 var(--pop);color:var(--yellow);text-decoration:none;text-shadow:2px 2px 0 var(--red);letter-spacing:-.01em;white-space:nowrap}
+.bar .clock{font:600 12px/1 var(--sans);color:#bdb6a8;text-transform:uppercase;letter-spacing:.06em}
+.bar .sp{flex:1}
+.bar .btn{box-shadow:none;border-color:#fff;background:transparent;color:#fff;padding:7px 12px;font-size:12px}
+.bar .btn.y{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
+.bar .who{font:800 12px/1 var(--sans);text-transform:uppercase;border:2px solid #fff;border-radius:999px;padding:6px 11px}
+.bar .who b{color:var(--yellow)}
+.ticker{overflow:hidden;background:var(--yellow);border-bottom:3px solid var(--ink);white-space:nowrap}
+.ticker div{display:inline-block;padding:8px 0;font:14px/1 var(--pop);text-transform:uppercase;animation:tick 40s linear infinite}
+.ticker span{margin:0 18px}
+@keyframes tick{to{transform:translateX(-50%)}}
 
-/* fitted wood type: each line is stretched to the full width by fit() */
-.fit{display:block;white-space:nowrap;text-align:center;line-height:.84;text-transform:uppercase;margin:0 auto;font-weight:400}
-.f-anton{font-family:Anton,Impact,"Arial Narrow",sans-serif;letter-spacing:.005em}
-.f-ultra{font-family:Ultra,"Rockwell Extra Bold",serif;line-height:.9}
-.f-abril{font-family:"Abril Fatface","Bodoni 72",serif;line-height:.9}
-.f-tusc{font-family:Sancreek,Ultra,serif;line-height:1}
-.f-osw{font-family:Oswald,"Arial Narrow",sans-serif;font-weight:700;letter-spacing:.02em;line-height:1}
-.gap{height:clamp(8px,1.4vw,14px)}
-.stars{text-align:center;font-family:Oswald,sans-serif;letter-spacing:.6em;font-size:14px;margin:12px 0}
-.small{text-align:center;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.18em;font-size:clamp(11px,1.5vw,14px)}
-.rule{border:0;height:9px;margin:clamp(18px,3vw,28px) 0;border-top:4px solid var(--ink);border-bottom:1.5px solid var(--ink)}
+main{max-width:1060px;margin:0 auto;padding:40px clamp(14px,3vw,28px) 30px}
 
-/* the fight itself: the post */
-.copy{columns:2 270px;column-gap:34px;column-rule:1px solid rgba(27,24,20,.35);font-size:17.5px;line-height:1.5;text-align:justify;hyphens:auto;-webkit-hyphens:auto}
-.copy p{margin:0 0 .8em}
-.copy p:first-child::first-letter{float:left;font-family:Ultra,serif;color:var(--red);font-size:4.1em;line-height:.8;margin:.06em .08em 0 0}
-.copy blockquote{margin:0 0 .8em;padding:0 0 0 14px;border-left:3px solid var(--red);font-style:italic;text-align:left}
-.copy strong{font-weight:700}
-.copy a{color:var(--red)}
+/* the race */
+.race{position:relative;padding:22px 22px 18px;border-radius:22px;background:#2b8a4f;overflow:hidden}
+.race::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 60px,transparent 60px 120px);pointer-events:none}
+.race h1{position:relative;margin:0 0 14px;font:clamp(28px,5vw,52px)/.95 var(--pop);color:#fff;text-shadow:3px 3px 0 var(--ink);display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
+.race h1 small{font:800 12px/1 var(--sans);text-shadow:none;text-transform:uppercase;letter-spacing:.06em}
+.track{position:relative;background:#c9653f;border:3px solid var(--ink);border-radius:12px;padding:6px 0;
+  background-image:radial-gradient(rgba(0,0,0,.12) 1px,transparent 1.5px);background-size:7px 7px}
+.finish{position:absolute;top:0;bottom:0;right:56px;width:18px;z-index:1;border-left:2px solid var(--ink);border-right:2px solid var(--ink);
+  background:conic-gradient(#fff 25%,var(--ink) 0 50%,#fff 0 75%,var(--ink) 0) 0 0/9px 9px}
+.lane{position:relative;height:58px;border-bottom:3px dashed rgba(255,255,255,.55);display:flex;align-items:center}
+.lane:last-child{border-bottom:0}
+.lane .no{position:absolute;left:10px;font:22px/1 var(--pop);color:rgba(255,255,255,.75)}
+.runner{all:unset;cursor:pointer;position:absolute;left:40px;z-index:2;max-width:min(300px,52vw);
+  transform:translateX(var(--x,0px));transition:transform var(--t,2s) var(--ease,cubic-bezier(.3,.1,.2,1)) var(--d,0s)}
+.runner .tag{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 14px/1 var(--sans);padding:10px 14px;border:3px solid var(--ink);border-radius:12px;
+  background:var(--c,#fff);box-shadow:3px 3px 0 var(--ink);transition:transform .15s}
+.runner:hover .tag{transform:translateY(-3px) rotate(-1.5deg)}
+.runner.going .tag{animation:bob .22s ease-in-out infinite alternate}
+@keyframes bob{to{transform:translateY(-3px) rotate(-1deg)}}
+.runner::before{content:"";position:absolute;right:100%;top:50%;width:0;height:12px;margin-top:-6px;opacity:0;
+  background:repeating-linear-gradient(180deg,var(--ink) 0 2px,transparent 2px 5px);transition:width .3s,opacity .3s}
+.runner.going::before{width:34px;opacity:.7}
+.crown{position:absolute;left:50%;top:-24px;width:34px;margin-left:-17px;opacity:0;transform:translateY(8px) scale(.4) rotate(-20deg);transition:all .4s cubic-bezier(.2,1.8,.4,1)}
+.runner.won .crown{opacity:1;transform:none}
+.place{position:absolute;right:-12px;top:-12px;font:13px/1 var(--pop);background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:5px 7px 4px;opacity:0;transition:opacity .3s}
+.runner.done .place{opacity:1}
+.race .foot{position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;color:#fff;font:600 13px/1.3 var(--sans)}
+.empty-lane{position:absolute;left:44px;color:#fff;font:800 15px/1.2 var(--sans);text-transform:uppercase}
+.cone{position:absolute;right:110px;bottom:4px;width:30px}
 
-/* former champions */
-.champs{list-style:none;margin:0;padding:0;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase}
-.champs li{display:flex;align-items:baseline;gap:10px;padding:6px 0;font-size:clamp(16px,2.2vw,21px)}
-.champs a{text-decoration:none;max-width:70%}
-.champs a:hover{color:var(--red)}
-.champs .dots{flex:1;border-bottom:2px dotted var(--ink);transform:translateY(-5px);min-width:20px}
-.champs .held{white-space:nowrap;font-size:.78em;letter-spacing:.06em}
+/* the winner */
+.win{position:relative;margin:56px 0 0;padding:clamp(26px,5vw,56px);transform:rotate(-.6deg)}
+.win .label{position:absolute;top:-20px;left:28px;font:16px/1 var(--pop);text-transform:uppercase;background:var(--yellow);border:3px solid var(--ink);padding:9px 14px 7px;transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
+.win .bigcrown{position:absolute;top:-38px;right:30px;width:70px;transform:rotate(14deg)}
+.win h2{margin:6px 0 14px;font:clamp(38px,7vw,82px)/.92 var(--pop);letter-spacing:-.015em;text-transform:uppercase;transform:rotate(.6deg)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
+.chip{font:800 12px/1 var(--sans);text-transform:uppercase;letter-spacing:.04em;padding:7px 11px;border:2.5px solid var(--ink);border-radius:999px;background:#fff}
+.chip.r{background:var(--red);color:#fff}.chip.b{background:var(--blue);color:#fff}.chip.g{background:var(--green)}
+.body{max-width:680px;font-size:19px;line-height:1.62;transform:rotate(.6deg)}
+.body p{margin:0 0 1em}
+.body p:first-child{font-size:22px;line-height:1.5;font-weight:600}
+.body blockquote{margin:24px 0;padding:16px 20px;font:22px/1.3 var(--pop);text-transform:uppercase;background:var(--pink);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-1deg)}
+.body strong{background:var(--yellow);padding:0 3px}
+.body a{color:var(--blue);font-weight:800}
+.tools{display:flex;gap:10px;margin-top:20px;transform:rotate(.6deg)}
 
-/* small print, management */
-.print{display:flex;justify-content:space-between;gap:10px 24px;flex-wrap:wrap;font-family:"Old Standard TT",serif;font-style:italic;font-size:14px;color:var(--dim);margin-top:4px}
-.print button,.print a{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:2px;color:var(--ink);font-style:normal;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:12px}
-.print button:hover,.print a:hover{color:var(--red)}
-.mgmt{max-width:820px;margin:0 auto 10px;display:flex;gap:6px 22px;flex-wrap:wrap;align-items:baseline;padding:9px 14px;background:var(--ink);color:var(--paper);font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.1em;font-size:13px}
-.mgmt b{color:#e9b23a;font-weight:700}
-.mgmt a,.mgmt button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
-.mgmt a:hover,.mgmt button:hover{color:#e9b23a}
-.tools{margin-top:14px;font-family:Oswald,sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:13px;text-align:center}
-.tools a,.tools button{all:unset;cursor:pointer;text-decoration:underline;margin:0 10px}
-.tools a:hover,.tools button:hover{color:var(--red)}
-.back{display:inline-block;margin-bottom:14px;font-family:Oswald,sans-serif;font-weight:500;text-transform:uppercase;letter-spacing:.12em;font-size:13px;text-decoration:none}
-.back:hover{color:var(--red)}
+/* vacant winner */
+.vacant{text-align:center}
+.vacant h2{color:#b9b1a0}
+.vacant p{font-size:18px;max-width:440px;margin:0 auto}
 
-/* booking form */
-.book label{display:block;font-family:Oswald,sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.14em;font-size:13px;margin:0 0 6px}
-.book input,.book textarea{display:block;width:100%;background:transparent;border:0;border-bottom:2px solid var(--ink);color:var(--ink);outline:none;resize:none;padding:6px 0;margin-bottom:26px}
-.book input{font:clamp(30px,6vw,52px)/1 Anton,Impact,sans-serif;text-transform:uppercase}
-.book textarea{font:17.5px/1.5 "Old Standard TT",serif;min-height:300px;border:2px solid var(--ink);padding:14px;background:rgba(255,255,255,.18)}
-.book input:focus,.book textarea:focus{border-color:var(--red)}
-.book .row{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.book .hint{font-style:italic;font-size:14px;color:var(--dim)}
-.go{all:unset;cursor:pointer;font:clamp(20px,3vw,26px)/1 Ultra,serif;text-transform:uppercase;color:var(--paper);background:var(--red);padding:12px 20px 10px;border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink)}
-.go:hover{background:var(--ink)}
-.go:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
-.go[disabled]{opacity:.5;pointer-events:none}
-.err{color:var(--red);font-style:italic}
+/* runners-up */
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:70px 0 18px}
+.sh h3{margin:0;font:clamp(32px,5vw,54px)/1 var(--pop);text-transform:uppercase;background:var(--yellow);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:8px 16px 4px;transform:rotate(-1.2deg)}
+.sh span{font:600 14px/1.3 var(--sans);max-width:260px;text-align:right}
+.board{padding:0;overflow:hidden;border-radius:14px}
+.row{display:grid;grid-template-columns:54px 1fr auto auto;align-items:center;gap:16px;padding:14px 18px;border-bottom:2.5px solid var(--ink);text-decoration:none}
+.row:last-child{border-bottom:0}
+.row:hover{background:var(--yellow)}
+.row .n{font:24px/1 var(--pop)}
+.row b{font:800 18px/1.25 var(--sans)}
+.row small{display:block;font:600 12px/1.3 var(--sans);color:#6e675c;margin-top:2px}
+.row .held{font:800 12px/1 var(--sans);text-transform:uppercase;padding:6px 9px;border:2px solid var(--ink);border-radius:999px;background:#fff;white-space:nowrap}
+.row .go{font:20px/1 var(--pop)}
 
-@media (max-width:600px){
-  body{padding:0 0 40px}
-  .bill{clip-path:none}
-  .frame{border-width:5px;outline-offset:-11px}
-  .copy{columns:1;text-align:left;hyphens:manual}
+.back{display:inline-block;margin-bottom:10px}
+
+/* write */
+.write{padding:clamp(22px,4vw,40px);margin-top:30px}
+.write h2{margin:0 0 22px;font:clamp(34px,6vw,62px)/.95 var(--pop);text-transform:uppercase}
+.write label{display:block;font:800 12px/1 var(--sans);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
+.write input,.write textarea{display:block;width:100%;border:3px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);padding:12px 14px;outline:none;resize:none;margin-bottom:22px}
+.write input{font:clamp(22px,3.4vw,34px)/1.1 var(--pop);text-transform:uppercase}
+.write textarea{font:18px/1.6 var(--sans);min-height:280px}
+.write input:focus,.write textarea:focus{box-shadow:4px 4px 0 var(--blue)}
+.write .row2{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.write .hint{font:600 13px/1.4 var(--sans);color:#6e675c}
+.write .err{color:var(--red);font-weight:800}
+
+footer{max-width:1060px;margin:0 auto;padding:40px clamp(14px,3vw,28px) 50px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font:600 13px/1.4 var(--sans)}
+footer a{text-decoration:none;border-bottom:2px solid}
+
+.confetti{position:fixed;top:0;left:0;width:10px;height:16px;z-index:50;pointer-events:none;border:1.5px solid var(--ink)}
+
+@media (max-width:640px){
+  .bar{flex-wrap:wrap;gap:8px 10px}
+  .logo{font-size:20px}
+  .bar .clock,.bar>.btn{display:none}
+  #me>span{flex-wrap:wrap}
+  .row .held{display:none}
+  .sh{flex-direction:column;align-items:flex-start}
+  .sh span{text-align:left}
+  .finish{right:26px}
+  .runner{max-width:46vw}
+  .row{grid-template-columns:36px 1fr auto;gap:10px}
+  .row .go{display:none}
+  .win,.win h2,.body,.tools{transform:none}
 }
-@media (prefers-reduced-motion:no-preference){
-  .stamp-in{animation:stamp .5s cubic-bezier(.2,1.6,.4,1) both}
-  @keyframes stamp{from{transform:scale(1.6);opacity:0}}
+@media (prefers-reduced-motion:reduce){
+  .ticker div{animation:none}
+  .runner,.runner .tag,.crown{transition:none!important;animation:none!important}
 }
 </style>
 </head>
 <body>
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.4"/></filter>
-</svg>
-<div class="mgmt" id="mgmt" hidden></div>
-<div class="bill">
-  <div class="frame" id="view"><p class="small">Setting the type…</p></div>
-</div>
+<header class="bar">
+  <a class="logo" href="thoughts.html">REHAN’S THOUGHTS!</a>
+  <span class="clock" id="clock"></span>
+  <span class="sp"></span>
+  <span id="me"></span>
+  <a class="btn" href="index.html">Provolve</a>
+</header>
+<div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+
+<main id="view"></main>
+
+<footer>
+  <span>Made by Rehan in Chicago. Every idea races. The newest one wins.</span>
+  <span><a href="index.html">← back to Provolve</a></span>
+</footer>
 
 <script type="module">
 /* ─────────────────────────────────────────────────────────────────────
@@ -126,16 +177,24 @@ const firebaseConfig = {
 };
 
 const V = "10.12.2";
-const view = document.getElementById('view');
-const mgmt = document.getElementById('mgmt');
+const $ = id => document.getElementById(id);
+const view = $('view');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const COLORS = ['var(--yellow)','var(--pink)','#8fd3ff','#b8f28a','#ffb36b','#d7c2ff'];
+const CROWN = `<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M3 26 L5 7 L13 15 L20 3 L27 15 L35 7 L37 26 Z" fill="#ffd23f" stroke="#141210" stroke-width="2.6" stroke-linejoin="round"/><circle cx="20" cy="18" r="2.6" fill="#ee4a35" stroke="#141210" stroke-width="1.6"/></svg>`;
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const MON = ['JAN.','FEB.','MARCH','APRIL','MAY','JUNE','JULY','AUG.','SEPT.','OCT.','NOV.','DEC.'];
-const bigDate = d => `${MON[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`;
-const days = (a, b) => Math.max(1, Math.round((b - a) / 864e5));
-const plural = (n, w) => `${n} ${w}${n === 1 ? '' : 's'}`;
+const days = (a, b) => Math.max(0, Math.round((b - a) / 864e5));
+const ago = d => { const n = days(d, new Date()); return n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`; };
+const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+const mins = s => Math.max(1, Math.round(String(s).split(/\s+/).length / 220));
+const ord = n => n + (['th','st','nd','rd'][(n % 100 - 20) % 10] || ['th','st','nd','rd'][n % 100] || 'th');
 
-/* Plain text in, paragraphs out. *italic* **bold** [text](url) and "> " quotes. */
+/* live Chicago clock, because it's my site */
+const tickClock = () => $('clock').textContent = 'Chicago · ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
+tickClock(); setInterval(tickClock, 15000);
+
+/* Plain text in, paragraphs out. *italic* **bold** [text](url) and "> " for a big pull quote. */
 function render(src){
   return String(src || '').trim().split(/\n\s*\n/).map(block => {
     const quote = /^>\s?/.test(block);
@@ -148,135 +207,113 @@ function render(src){
   }).join('');
 }
 
-/* Break a title into poster lines of roughly even length, then give each line its own face and ink. */
-const FACES = [['f-anton',''],['f-ultra','red'],['f-abril',''],['f-anton','red'],['f-ultra',''],['f-abril','red']];
-function titleLines(title){
-  const words = String(title).toUpperCase().split(/\s+/).filter(Boolean);
-  const len = words.join(' ').length;
-  const n = Math.min(words.length, Math.max(1, Math.round(len / 11)));
-  const target = len / n, lines = [];
-  let cur = '';
-  for (const w of words){
-    if (cur && (cur.length + 1 + w.length) > target * 1.25 && lines.length < n - 1){ lines.push(cur); cur = w; }
-    else cur = cur ? cur + ' ' + w : w;
-  }
-  lines.push(cur);
-  return lines.map((l, i) => { const [f, c] = FACES[i % FACES.length]; return `<span class="fit ink ${f} ${c}" data-max="240">${esc(l)}</span>`; }).join('');
-}
-
-/* Stretch every .fit line to the width of the bill, like hand-set wood type. */
-function fit(){
-  view.querySelectorAll('.fit').forEach(el => {
-    const max = +el.dataset.max || 200, P = el.parentElement, cs = getComputedStyle(P);
-    const W = P.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
-    el.style.fontSize = '100px'; el.style.width = 'max-content';
-    const w = el.getBoundingClientRect().width || 1;
-    el.style.width = '';
-    el.style.fontSize = Math.min(max, Math.floor(100 * W / w * 0.995)) + 'px';
-  });
-}
-let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(fit, 80); });
-
 let thoughts = [];   // newest first: {id, title, body, at}
-let isOwner = false, signedIn = null;
-let fb = null;
+let isOwner = false, signedIn = null, fb = null;
 
-/* ───────── pages ───────── */
-const head = `<div class="small">Rehan’s Thoughts &nbsp;·&nbsp; provolve.net</div><hr class="rule">`;
-function foot(){
-  return `<hr class="rule">
-  <div class="print"><span>Admission free. Every new idea fights for first place, and the newest one always takes the belt.</span>
-    <span><a href="index.html">← Provolve</a>&nbsp;&nbsp;&nbsp;<button type="button" data-auth>${signedIn ? 'Sign out' : 'Management'}</button></span></div>`;
-}
-function tools(t){
-  return isOwner ? `<div class="tools"><a href="#edit/${esc(t.id)}">Edit</a><button type="button" data-del="${esc(t.id)}">Delete</button></div>` : '';
+/* ───────── ticker ───────── */
+function paintTicker(){
+  const items = thoughts.length
+    ? thoughts.slice(0, 8).map((t, i) => i === 0 ? `★ Winner: ${esc(t.title)}` : `${ord(i + 1)} · ${esc(t.title)}`)
+    : ['★ Track is empty', 'First thought wins by default', 'Warming up', 'Stay tuned'];
+  const run = items.map(x => `<span>${x}</span>`).join('');
+  $('ticker').innerHTML = run + run + run + run;
 }
 
+/* ───────── views ───────── */
 function show(){
+  paintTicker();
   const id = decodeURIComponent(location.hash.slice(1));
-  if (id === 'write') { if (isOwner) return booking(); location.hash = ''; return; }
-  if (id.startsWith('edit/')) { const t = thoughts.find(x => x.id === id.slice(5)); if (isOwner && t) return booking(t); location.hash = ''; return; }
+  if (id === 'write') { if (isOwner) return writer(); location.hash = ''; return; }
+  if (id.startsWith('edit/')) { const t = thoughts.find(x => x.id === id.slice(5)); if (isOwner && t) return writer(t); location.hash = ''; return; }
   const i = id ? thoughts.findIndex(t => t.id === id) : -1;
-  i > 0 ? bout(i) : main();
+  i > 0 ? single(i) : home();
 }
 
-function main(){
+function ownerTools(t){
+  return isOwner ? `<div class="tools"><a class="btn" href="#edit/${esc(t.id)}">Edit</a><button class="btn" type="button" data-del="${esc(t.id)}">Delete</button></div>` : '';
+}
+
+function raceHTML(){
+  const field = thoughts.slice(0, 5);
+  const lanes = field.length
+    ? field.map((t, i) => `<div class="lane"><span class="no">${i + 1}</span>
+        <button class="runner" type="button" data-open="${esc(t.id)}" style="--c:${COLORS[i % COLORS.length]}">
+          <span class="crown">${CROWN}</span><span class="tag">${esc(t.title)}</span><span class="place">${ord(i + 1)}</span>
+        </button></div>`).join('')
+    : `<div class="lane"><span class="no">1</span><span class="empty-lane">Nobody on the track yet</span></div>
+       <div class="lane"><span class="no">2</span><svg class="cone" viewBox="0 0 30 34" aria-hidden="true"><path d="M9 30 L15 3 L21 30Z" fill="#ff7a1a" stroke="#141210" stroke-width="2.4" stroke-linejoin="round"/><path d="M11.5 19 H18.5" stroke="#fff" stroke-width="3"/><rect x="3" y="29" width="24" height="4" fill="#ff7a1a" stroke="#141210" stroke-width="2.4"/></svg></div>`;
+  return `<section class="race chunk" aria-label="Today's race">
+      <h1>Today’s race <small>${field.length ? 'Newest idea always wins. Tap a racer.' : 'Lanes open'}</small></h1>
+      <div class="track"><span class="finish" aria-hidden="true"></span>${lanes}</div>
+      <div class="foot"><span>${thoughts.length ? `${thoughts.length} idea${thoughts.length === 1 ? '' : 's'} entered so far` : 'First thought in wins by default.'}</span>
+        ${field.length ? '<button class="btn y" type="button" id="again">Race again ↻</button>' : ''}</div>
+    </section>`;
+}
+
+function home(){
   document.title = 'Rehan’s Thoughts';
   if (!thoughts.length){
-    view.innerHTML = `${head}
-      <span class="fit ink f-tusc red" data-max="70">The Main Event</span>
-      <div class="gap"></div>
-      <span class="fit ink f-anton" data-max="260">Title</span>
-      <span class="fit ink f-ultra red stamp-in" data-max="200">Vacant</span>
-      <div class="gap"></div>
-      <span class="fit ink f-osw" data-max="56">No contenders yet</span>
-      <div class="stars ink">★ ★ ★</div>
-      <p class="small">The first idea through the door takes the belt</p>
-      ${foot()}`;
-    return fit();
+    view.innerHTML = `${raceHTML()}
+      <section class="win chunk vacant">
+        <span class="label">Today’s winning idea</span>
+        <h2>Nobody yet</h2>
+        <p>The crown’s just sitting here. The first thought I post takes it.</p>
+      </section>`;
+    return;
   }
-  const [champ, ...rest] = thoughts;
-  view.innerHTML = `${head}
-    <span class="fit ink f-tusc red" data-max="70">The Main Event</span>
-    <div class="gap"></div>
-    ${titleLines(champ.title)}
-    <div class="gap"></div>
-    <span class="fit ink f-osw" data-max="48">★ Reigning Champion ★</span>
-    <p class="small" style="margin:14px 0 4px">In first place since</p>
-    <span class="fit ink f-anton red" data-max="64">${bigDate(champ.at)}</span>
-    <hr class="rule">
-    <div class="copy">${render(champ.body)}</div>
-    ${tools(champ)}
-    ${rest.length ? `<hr class="rule">
-      <span class="fit ink f-abril" data-max="54">Former Champions</span>
-      <div class="gap"></div>
-      <ul class="champs">${rest.map((t, k) =>
-        `<li><a href="#${esc(t.id)}">${esc(t.title)}</a><span class="dots"></span><span class="held">held ${plural(days(t.at, thoughts[k].at), 'day')}</span></li>`).join('')}</ul>` : ''}
-    ${foot()}`;
-  fit();
+  const [w, ...rest] = thoughts;
+  view.innerHTML = `${raceHTML()}
+    ${winnerCard(w, 0)}
+    ${rest.length ? `<div class="sh"><h3>Runners-up</h3><span>Old winners. Each one held the crown until something newer beat it.</span></div>
+      <div class="board chunk">${rest.map((t, k) => `<a class="row" href="#${esc(t.id)}">
+        <span class="n">${k + 2}</span><span><b>${esc(t.title)}</b><small>${fmt(t.at)}</small></span>
+        <span class="held">held the crown ${days(t.at, thoughts[k].at) || 1}d</span><span class="go">→</span></a>`).join('')}</div>` : ''}`;
+  startRace();
 }
 
-function bout(i){
-  const t = thoughts[i], beat = thoughts[i - 1];
+function winnerCard(t, i){
+  const beat = thoughts[i - 1];
+  const chips = i === 0
+    ? `<span class="chip r">Won ${ago(t.at)}</span><span class="chip">${fmt(t.at)}</span><span class="chip b">${mins(t.body)} min read</span>`
+    : `<span class="chip">${ord(i + 1)} place</span><span class="chip g">Held the crown ${days(t.at, beat.at) || 1}d</span><span class="chip">${fmt(t.at)}</span><span class="chip b">${mins(t.body)} min read</span>`;
+  return `<article class="win chunk">
+      <span class="label">${i === 0 ? 'Today’s winning idea' : 'Former winner'}</span>
+      ${i === 0 ? `<span class="bigcrown">${CROWN}</span>` : ''}
+      <h2>${esc(t.title)}</h2>
+      <div class="meta">${chips}</div>
+      <div class="body">${render(t.body)}</div>
+      ${ownerTools(t)}
+    </article>`;
+}
+
+function single(i){
+  const t = thoughts[i];
   document.title = t.title + ' · Rehan’s Thoughts';
-  view.innerHTML = `<a class="back" href="#">← Tonight’s main event</a>${head}
-    <span class="fit ink f-tusc" data-max="62">Former Champion</span>
-    <div class="gap"></div>
-    ${titleLines(t.title)}
-    <div class="gap"></div>
-    <span class="fit ink f-osw" data-max="44">Held the title ${plural(days(t.at, beat.at), 'day')}</span>
-    <p class="small" style="margin:12px 0 0">${bigDate(t.at)} – ${bigDate(beat.at)}</p>
-    <hr class="rule">
-    <div class="copy">${render(t.body)}</div>
-    ${tools(t)}
-    ${foot()}`;
-  fit(); scrollTo(0, 0);
+  view.innerHTML = `<a class="btn back" href="#">← Back to the race</a>${winnerCard(t, i)}`;
+  scrollTo(0, 0);
 }
 
-function booking(t){
-  view.innerHTML = `<a class="back" href="#">← Cancel</a>${head}
-    <span class="fit ink f-tusc red" data-max="64">${t ? 'Edit the bout' : 'New contender'}</span>
-    <div class="gap"></div>
-    <form class="book" id="book">
-      <label for="bt">Title</label>
-      <input id="bt" name="title" maxlength="200" required value="${esc(t?.title)}" autocomplete="off">
-      <label for="bb">The thought</label>
-      <textarea id="bb" name="body" required>${esc(t?.body)}</textarea>
-      <div class="row">
-        <button class="go" type="submit">${t ? 'Save it' : 'Into the ring'}</button>
-        <span class="hint">${t ? '' : 'Publishing makes it the reigning champion. '}Blank line between paragraphs. *italic* **bold** [link](url)</span>
+function writer(t){
+  view.innerHTML = `<a class="btn back" href="#">← Cancel</a>
+    <form class="write chunk" id="write">
+      <h2>${t ? 'Edit this one' : 'New challenger!'}</h2>
+      <label for="wt">Title</label>
+      <input id="wt" name="title" maxlength="200" required value="${esc(t?.title)}" autocomplete="off">
+      <label for="wb">The thought</label>
+      <textarea id="wb" name="body" required>${esc(t?.body)}</textarea>
+      <div class="row2">
+        <button class="btn r" type="submit">${t ? 'Save it' : 'Send it into the race →'}</button>
+        <span class="hint">${t ? '' : 'Whatever you post wins today’s race. '}Blank line = new paragraph · *italic* · **highlight** · [link](url) · start a line with &gt; for a big pull quote</span>
       </div>
-      <p class="err" id="berr"></p>
-    </form>
-    ${foot()}`;
-  fit();
-  const ta = document.getElementById('bb');
-  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(300, ta.scrollHeight + 4) + 'px'; };
+      <p class="err" id="werr"></p>
+    </form>`;
+  const ta = $('wb');
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(280, ta.scrollHeight + 6) + 'px'; };
   ta.addEventListener('input', grow); grow();
-  document.getElementById(t ? 'bb' : 'bt').focus();
-  document.getElementById('book').addEventListener('submit', async e => {
+  $(t ? 'wb' : 'wt').focus();
+  $('write').addEventListener('submit', async e => {
     e.preventDefault();
-    const f = e.target, btn = f.querySelector('.go'), err = document.getElementById('berr');
+    const f = e.target, btn = f.querySelector('button[type=submit]'), err = $('werr');
     const title = f.elements.title.value.trim(), body = f.elements.body.value.trim();
     if (!title || !body) return;
     btn.disabled = true; err.textContent = '';
@@ -291,8 +328,58 @@ function booking(t){
   });
 }
 
+/* ───────── the race ───────── */
+function startRace(){
+  const runners = [...view.querySelectorAll('.runner')];
+  if (!runners.length) return;
+  const track = view.querySelector('.track');
+  const reset = () => runners.forEach(r => { r.classList.remove('won','done','going'); r.style.setProperty('--t','0s'); r.style.setProperty('--d','0s'); r.style.setProperty('--x','0px'); });
+  const go = () => {
+    const finishX = track.clientWidth - (innerWidth < 640 ? 26 : 56) - 40;  // where the finish line sits
+    let last = 0;
+    runners.forEach((r, i) => {
+      const w = r.offsetWidth;
+      const target = i === 0 ? finishX - w + 26 : (finishX - w) * Math.max(.18, .86 - i * .17);
+      const t = reduce ? 0 : 2.1 + i * .25 + Math.random() * .3, d = reduce ? 0 : Math.random() * .25;
+      last = Math.max(last, t + d);
+      r.style.setProperty('--t', t + 's'); r.style.setProperty('--d', d + 's');
+      r.style.setProperty('--ease', i === 0 ? 'cubic-bezier(.5,0,.15,1)' : `cubic-bezier(.2,${(.3 + Math.random() * .4).toFixed(2)},.3,1)`);
+      r.style.setProperty('--x', Math.max(0, target) + 'px');
+      if (!reduce) r.classList.add('going');
+    });
+    setTimeout(() => {
+      runners.forEach(r => { r.classList.remove('going'); r.classList.add('done'); });
+      runners[0].classList.add('won');
+      confetti(runners[0]);
+    }, reduce ? 0 : (2.1 + .2) * 1000);
+    setTimeout(() => runners.forEach(r => r.classList.remove('going')), last * 1000);
+  };
+  reset();
+  requestAnimationFrame(() => requestAnimationFrame(go));
+  const again = $('again'); if (again) again.onclick = () => { reset(); requestAnimationFrame(() => requestAnimationFrame(go)); };
+  addEventListener('resize', onResizeRace);
+}
+let rz; function onResizeRace(){ clearTimeout(rz); rz = setTimeout(() => { if (view.querySelector('.runner')) { removeEventListener('resize', onResizeRace); startRace(); } }, 200); }
+
+function confetti(from){
+  if (reduce) return;
+  const r = from.getBoundingClientRect(), cols = ['#ffd23f','#ee4a35','#3a5bff','#2fbf71','#ff8fc7','#fff'];
+  for (let i = 0; i < 46; i++){
+    const c = document.createElement('i');
+    c.className = 'confetti'; c.style.background = cols[i % cols.length];
+    document.body.appendChild(c);
+    const x0 = r.left + r.width / 2, y0 = r.top, dx = (Math.random() - .5) * 360, up = 120 + Math.random() * 160, rot = Math.random() * 720;
+    c.animate([
+      { transform: `translate(${x0}px,${y0}px) rotate(0deg)` },
+      { transform: `translate(${x0 + dx * .6}px,${y0 - up}px) rotate(${rot / 2}deg)`, offset: .35 },
+      { transform: `translate(${x0 + dx}px,${y0 + 220}px) rotate(${rot}deg)`, opacity: 0 }
+    ], { duration: 1300 + Math.random() * 700, easing: 'cubic-bezier(.2,.6,.4,1)' }).onfinish = () => c.remove();
+  }
+}
+
 view.addEventListener('click', async e => {
-  if (e.target.closest('[data-auth]')) return authClick();
+  const o = e.target.closest('[data-open]');
+  if (o){ const i = thoughts.findIndex(t => t.id === o.dataset.open); if (i === 0) return view.querySelector('.win')?.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'}); location.hash = o.dataset.open; return; }
   const del = e.target.closest('[data-del]');
   if (!del || !isOwner) return;
   const t = thoughts.find(x => x.id === del.dataset.del);
@@ -311,21 +398,18 @@ async function load(){
   thoughts = snap.docs.map(d => ({ id: d.id, ...d.data(), at: d.data().createdAt?.toDate?.() || new Date() }));
 }
 
-function paintMgmt(){
-  if (!signedIn){ mgmt.hidden = true; return; }
-  mgmt.hidden = false;
-  mgmt.innerHTML = isOwner
-    ? `<b>Management</b><a href="#write">Put a new idea in the ring</a><button type="button" id="so">Sign out</button>`
-    : `<span>${esc(signedIn.email)} isn’t management.</span><button type="button" id="so">Sign out</button>`;
-  mgmt.querySelector('#so').onclick = () => fb.signOut(fb.auth);
+function paintMe(){
+  const me = $('me');
+  if (!signedIn) { me.innerHTML = `<button class="btn" type="button" id="si">Sign in</button>`; $('si').onclick = () => authClick(); return; }
+  me.innerHTML = isOwner
+    ? `<span style="display:flex;gap:10px;align-items:center"><span class="who">Player · <b>Rehan</b></span><a class="btn y" href="#write">+ New thought</a><button class="btn" type="button" id="so">Sign out</button></span>`
+    : `<span style="display:flex;gap:10px;align-items:center"><span class="who">Not the owner</span><button class="btn" type="button" id="so">Sign out</button></span>`;
+  $('so').onclick = () => fb.signOut(fb.auth);
 }
 
 async function start(){
-  // Load every poster face before measuring, and re-fit if any arrive late.
-  const fontsReady = document.fonts
-    ? Promise.all(['Anton','Ultra','Abril Fatface','Sancreek','Oswald'].map(f => document.fonts.load(`700 40px "${f}"`).catch(() => {}))).then(() => document.fonts.ready)
-    : Promise.resolve();
-  document.fonts?.addEventListener?.('loadingdone', fit);
+  const fontsReady = document.fonts ? Promise.all(['Bowlby One','Archivo'].map(f => document.fonts.load(`400 20px "${f}"`).catch(() => {}))) : Promise.resolve();
+  paintMe();
   if (!firebaseConfig.projectId){ await fontsReady; show(); return; }
 
   const app = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
@@ -334,10 +418,8 @@ async function start(){
   const a = app.initializeApp(firebaseConfig);
   fb = { fs, db: fs.getFirestore(a), auth: auth.getAuth(a), signOut: auth.signOut };
 
-  authClick = () => fb.auth.currentUser
-    ? auth.signOut(fb.auth)
-    : auth.signInWithPopup(fb.auth, new auth.GoogleAuthProvider())
-        .catch(x => x.code !== 'auth/popup-closed-by-user' && alert('Sign-in failed: ' + x.code));
+  authClick = () => auth.signInWithPopup(fb.auth, new auth.GoogleAuthProvider())
+    .catch(x => x.code !== 'auth/popup-closed-by-user' && alert('Sign-in failed: ' + x.code));
 
   try { await load(); } catch (x) { console.error(x); }
   await fontsReady; show();
@@ -349,7 +431,7 @@ async function start(){
       // so the owner emails never appear in this public page.
       try { await fs.getDoc(fs.doc(fb.db, 'owner', 'check')); isOwner = true; } catch { isOwner = false; }
     }
-    paintMgmt(); show();
+    paintMe(); show();
   });
 }
 start();
