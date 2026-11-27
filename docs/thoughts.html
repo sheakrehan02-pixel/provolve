@@ -105,7 +105,7 @@ footer a{color:var(--ink)}
 
 <main class="read" id="read" hidden></main>
 
-<footer>Made by Rehan in Chicago.<br>Every thought starts in the swarm. The newest one pulls itself together.<br><br><a href="index.html">← Provolve</a></footer>
+<footer>Made by Rehan in Texas.<br>Every thought starts in the swarm. The newest one pulls itself together.<br><br><a href="index.html">← Provolve</a></footer>
 
 <script type="module">
 /* ─────────────────────────────────────────────────────────────────────
@@ -130,7 +130,7 @@ const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', ye
 const mins = s => Math.max(1, Math.round(String(s).split(/\s+/).length / 220));
 
 /* ───────── little human bits ───────── */
-const tick = () => $('clock').textContent = 'Chicago ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
+const tick = () => $('clock').textContent = 'Texas ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
 tick(); setInterval(tick, 15000);
 
 function scramble(el, text, ms = 900){
