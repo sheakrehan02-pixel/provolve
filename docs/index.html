@@ -68,14 +68,24 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
 .whatif h2 span{color:#ffb36b}
 .whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif}
 .whatif .go{color:#ffb36b}
-.thoughts{background:#eeeae0;color:#16140f;overflow:hidden;font-family:Archivo,sans-serif}
+.thoughts{background:#ffe9d6;color:#16140f;overflow:hidden;font-family:Archivo,sans-serif}
 .thoughts:hover{border-color:#ff4a12}
-.thoughts canvas{position:absolute;inset:0;width:100%;height:100%;border-radius:inherit}
-.thoughts>*:not(canvas){position:relative}
-.thoughts .kicker{font:500 12px/1 "DM Mono",monospace;letter-spacing:.06em;color:#ff4a12}
-.thoughts h2{font-family:Archivo,sans-serif;font-weight:900;letter-spacing:-.045em}
-.thoughts p{color:#4a463e}
-.thoughts .go{font:500 13px/1 "DM Mono",monospace;text-transform:uppercase;letter-spacing:.06em;color:#16140f}
+.thoughts>*{position:relative}
+.thoughts .kicker{font:500 12px/1 "DM Mono",monospace;letter-spacing:.06em;color:#ff4a12;text-transform:lowercase}
+.thoughts h2{font-family:Archivo,sans-serif;font-weight:900;letter-spacing:-.045em;transform:rotate(-2deg);transform-origin:left;transition:transform .3s cubic-bezier(.3,1.8,.5,1)}
+.thoughts:hover h2{transform:rotate(1deg) scale(1.03)}
+.thoughts h2 .q{display:inline-block;color:#ff4a12;transform-origin:50% 90%;animation:huh 2.6s ease-in-out infinite}
+@keyframes huh{0%,60%,100%{transform:rotate(0)}68%{transform:rotate(-16deg)}76%{transform:rotate(12deg)}84%{transform:rotate(-6deg)}}
+.thoughts p{color:#4a3f35;max-width:28ch}
+.thoughts .go{font:500 13px/1 "DM Mono",monospace;text-transform:lowercase;letter-spacing:.04em;color:#16140f;background:#fff;border:2px solid #16140f;border-radius:999px;padding:9px 14px;align-self:flex-start;box-shadow:3px 3px 0 #16140f;transition:transform .15s}
+.thoughts:hover .go{transform:translate(-2px,-2px) rotate(-2deg)}
+.eye{position:absolute;width:var(--s);height:var(--s);border-radius:50%;background:#fff;border:3px solid #16140f;box-shadow:inset -4px -5px 0 rgba(0,0,0,.08);transition:transform .09s ease-in;z-index:0}
+.eye.blink{transform:scaleY(.08)}
+.eye i{position:absolute;left:50%;top:50%;width:var(--p);height:var(--p);margin:calc(var(--p) / -2) 0 0 calc(var(--p) / -2);border-radius:50%;background:#16140f;transition:width .2s,height .2s,margin .2s}
+.eye i::after{content:"";position:absolute;width:30%;height:30%;left:22%;top:18%;border-radius:50%;background:#fff}
+.thoughts:hover .eye i{--p:calc(var(--s) * .56)}
+@media (prefers-reduced-motion:reduce){.thoughts h2 .q{animation:none}}
+@media (max-width:800px){.thoughts .eye:nth-of-type(5){display:none}}
 .daily{background:#2A3CEB;color:#fff;font-family:"IBM Plex Sans",sans-serif}
 .daily:hover{border-color:#E6FB3C}
 .daily .kicker{font-family:"DM Mono",monospace;color:rgba(255,255,255,.72)}
@@ -111,11 +121,16 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
       <span class="go">Enter What if →</span>
     </a>
     <a class="door thoughts" href="thoughts.html">
-      <canvas id="tswarm" aria-hidden="true"></canvas>
-      <span class="kicker">● A swarm of ideas</span>
-      <h2>Rehan’s Thoughts</h2>
-      <p>Everything I’m thinking about, drifting around. The newest idea pulls itself together.</p>
-      <span class="go">Enter the swarm →</span>
+      <span class="eye" aria-hidden="true" style="--s:clamp(70px,9vw,118px);--p:calc(var(--s)*.42);top:22px;right:clamp(84px,11vw,150px)"><i></i></span>
+      <span class="eye" aria-hidden="true" style="--s:clamp(58px,7.4vw,96px);--p:calc(var(--s)*.42);top:46px;right:clamp(18px,3vw,44px)"><i></i></span>
+      <span class="eye" aria-hidden="true" style="--s:44px;--p:18px;bottom:24%;right:16%"><i></i></span>
+      <span class="eye" aria-hidden="true" style="--s:90px;--p:38px;bottom:-34px;right:34%"><i></i></span>
+      <span class="eye" aria-hidden="true" style="--s:26px;--p:11px;top:30%;left:58%"><i></i></span>
+      <span class="eye" aria-hidden="true" style="--s:60px;--p:25px;top:-26px;left:30%"><i></i></span>
+      <span class="kicker">● curious about everything</span>
+      <h2>Rehan’s Thoughts<span class="q">?</span></h2>
+      <p>The ideas I can’t stop poking at. Something’s always watching.</p>
+      <span class="go">go take a peek →</span>
     </a>
     <a class="door daily" href="problem.html">
       <span class="num" id="pnum">#1</span>
@@ -126,9 +141,18 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
     </a>
   </main>
   <script>(function(){var d=new Date(),t=Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/864e5),n=Math.max(1,t-Date.UTC(2026,9,18)/864e5+1);document.getElementById('pnum').textContent='#'+n})();</script>
-  <script>(function(){var c=document.getElementById('tswarm');if(!c)return;var x=c.getContext('2d'),P=[],W,H,t=0,red=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function sz(){var d=Math.min(2,devicePixelRatio||1);W=c.clientWidth;H=c.clientHeight;c.width=W*d;c.height=H*d;x.setTransform(d,0,0,d,0,0);P=[];for(var i=0;i<W*H/700;i++)P.push({x:Math.random()*W,y:Math.random()*H,h:Math.random()<.07,s:.8+Math.random()})}
-  function f(){t+=.004;x.clearRect(0,0,W,H);for(var i=0;i<P.length;i++){var p=P[i],a=Math.sin(p.x*.006+t*3)*2+Math.cos(p.y*.006-t*2)*2;p.x+=Math.cos(a)*.35;p.y+=Math.sin(a)*.35;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;x.fillStyle=p.h?'#ff4a12':'rgba(22,20,15,.28)';x.fillRect(p.x,p.y,p.s*1.6,p.s*1.6)}if(!red)requestAnimationFrame(f)}
-  sz();f();addEventListener('resize',sz)})();</script>
+  <script>(function(){
+  var eyes=[].slice.call(document.querySelectorAll('.thoughts .eye'));if(!eyes.length)return;
+  var red=matchMedia('(prefers-reduced-motion: reduce)').matches,mx=innerWidth/2,my=innerHeight/2,idle=0;
+  function look(){eyes.forEach(function(e){var r=e.getBoundingClientRect(),cx=r.left+r.width/2,cy=r.top+r.height/2,dx=mx-cx,dy=my-cy,d=Math.hypot(dx,dy)||1,max=r.width*.24,k=Math.min(1,d/180);
+    e.firstChild.style.transform='translate('+(dx/d*max*k).toFixed(1)+'px,'+(dy/d*max*k).toFixed(1)+'px)'})}
+  addEventListener('pointermove',function(ev){mx=ev.clientX;my=ev.clientY;idle=Date.now();look()},{passive:true});
+  addEventListener('scroll',look,{passive:true});
+  /* when nobody's moving a mouse (phones), they get bored and look around on their own */
+  setInterval(function(){if(Date.now()-idle>2500){mx=Math.random()*innerWidth;my=Math.random()*innerHeight;look()}},1600);
+  function blink(e){if(red)return;e.classList.add('blink');setTimeout(function(){e.classList.remove('blink')},130);setTimeout(function(){blink(e)},2200+Math.random()*5200)}
+  eyes.forEach(function(e,i){setTimeout(function(){blink(e)},600+i*700+Math.random()*1500)});
+  look();
+})();</script>
 </body>
 </html>
