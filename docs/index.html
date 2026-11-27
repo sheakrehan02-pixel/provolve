@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Provolve</title>
-<meta name="description" content="Provolve: Simplify It, an interactive blog; What if, 3D simulations; What Happened, real history you do the math for; and A Problem a Day.">
+<meta name="description" content="Provolve: Simplify It, an interactive blog; What if, 3D simulations; Rehan’s Thoughts, a personal blog; and A Problem a Day.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,700..800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;1,400&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500&family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@1&family=Kalam:wght@400;700&family=Bagel+Fat+One&display=swap" rel="stylesheet">
 <style>
 :root{color-scheme:dark}
 *{box-sizing:border-box}
@@ -68,15 +68,21 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
 .whatif h2 span{color:#ffb36b}
 .whatif p{color:rgba(244,237,228,.72);font-family:"IBM Plex Sans",sans-serif}
 .whatif .go{color:#ffb36b}
-.happened{border-radius:0;background:#C0C0C0;color:#000;font-family:"Times New Roman",Times,serif;border:3px solid;border-color:#fff #000 #000 #fff;box-shadow:inset -2px -2px 0 #808080}
-.happened:hover{border-color:#fff #000 #000 #fff;background:#CFCFCF}
-.happened .kicker{font:bold 13px Arial,Helvetica,sans-serif;letter-spacing:0;text-transform:none;color:#fff;background:linear-gradient(90deg,#000080,#1084D0);padding:3px 8px;align-self:flex-start}
-.happened h2{font-family:"Times New Roman",Times,serif;font-weight:700;letter-spacing:-.02em;line-height:.95;color:#000080}
-.happened h2 span{color:#CC0000}
-.happened p{color:#000}
-.happened .go{font-family:"Times New Roman",Times,serif;color:#0000EE;text-decoration:underline;font-size:17px}
-.happened .stamp{position:absolute;top:clamp(22px,4vw,40px);right:clamp(22px,4vw,40px);font:bold 14px Arial,sans-serif;color:#CC0000;background:#FFFF00;border:1px solid #000;padding:2px 8px;animation:blink95 1s steps(1) infinite}
-@keyframes blink95{50%{visibility:hidden}}
+.thoughts{
+  border-radius:4px;color:#1f1b16;font-family:"Kalam",cursive;
+  background:radial-gradient(500px 260px at 90% 0%,rgba(255,224,74,.35),transparent 70%),#f2eadb;
+  transform:rotate(-.6deg);box-shadow:0 18px 30px -18px rgba(0,0,0,.7);
+}
+.thoughts:hover{transform:rotate(.4deg) translateY(-3px);border-color:#d7392a}
+.thoughts::before{content:"";position:absolute;top:-11px;left:50%;width:110px;height:26px;margin-left:-55px;background:rgba(255,250,220,.7);transform:rotate(-4deg);clip-path:polygon(3% 0,97% 5%,100% 50%,96% 100%,2% 95%,0 50%)}
+.thoughts .kicker{font-family:"Kalam",cursive;font-weight:700;letter-spacing:0;text-transform:none;font-size:20px;color:#2747c7;transform:rotate(-3deg);align-self:flex-start}
+.thoughts h2{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.03em;line-height:.9;position:relative;align-self:flex-start}
+.thoughts h2 em{font-style:italic;background:linear-gradient(transparent 55%,#ffe04a 55%,#ffe04a 90%,transparent 90%)}
+.thoughts h2 span{color:#d7392a;font-style:normal}
+.thoughts p{color:#5a5148;font-family:"IBM Plex Sans",sans-serif}
+.thoughts .go{font-family:"Kalam",cursive;font-weight:700;color:#d7392a;font-size:18px}
+.thoughts .medal{position:absolute;top:clamp(22px,4vw,40px);right:clamp(22px,4vw,40px);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+  font:20px "Bagel Fat One","Arial Black",sans-serif;color:#9c6a10;background:radial-gradient(circle at 35% 30%,#ffe7a0,#e3a72f 60%,#b07a18);box-shadow:0 0 0 4px #f2eadb,0 0 0 6px #9c6a10,3px 6px 8px rgba(0,0,0,.3);transform:rotate(12deg)}
 .daily{background:#2A3CEB;color:#fff;font-family:"IBM Plex Sans",sans-serif}
 .daily:hover{border-color:#E6FB3C}
 .daily .kicker{font-family:"DM Mono",monospace;color:rgba(255,255,255,.72)}
@@ -90,7 +96,7 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
   .door{min-height:240px}
   h2{font-size:clamp(40px,12vw,64px)}
 }
-@media (prefers-reduced-motion:reduce){.door{transition:none}.happened .stamp{animation:none}}
+@media (prefers-reduced-motion:reduce){.door{transition:none}}
 </style>
 </head>
 <body>
@@ -111,12 +117,12 @@ h2{margin:0;line-height:.88;letter-spacing:-.045em;font-size:clamp(44px,5.2vw,84
       <p>Impossible situations, simulated in 3D. Real physics and real history. Look around, walk, and change the variables.</p>
       <span class="go">Enter What if →</span>
     </a>
-    <a class="door happened" href="what-happened.html">
-      <span class="stamp">NEW!</span>
-      <span class="kicker">History, with the math</span>
-      <h2>What Happened<span>.</span></h2>
-      <p>Real moments from history, rebuilt so you stand in the room and do the calculation that decided the day.</p>
-      <span class="go">Enter What Happened →</span>
+    <a class="door thoughts" href="thoughts.html">
+      <span class="medal" aria-hidden="true">1st</span>
+      <span class="kicker">my brain, unfiltered</span>
+      <h2>Rehan’s <em>Thoughts</em><span>.</span></h2>
+      <p>A personal blog. A winners’ podium for the ideas that survived the week, and a corkboard for all the ones still fighting.</p>
+      <span class="go">Come see the mess →</span>
     </a>
     <a class="door daily" href="problem.html">
       <span class="num" id="pnum">#1</span>
