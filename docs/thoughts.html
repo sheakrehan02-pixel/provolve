@@ -4,164 +4,108 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Rehan’s Thoughts</title>
-<meta name="description" content="Rehan’s Thoughts. Every idea races. The newest one wins.">
+<meta name="description" content="Rehan’s Thoughts. A swarm of ideas. The winning one pulls itself together.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Archivo:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{--cream:#f6efe0;--ink:#141210;--red:#ee4a35;--blue:#3a5bff;--yellow:#ffd23f;--green:#2fbf71;--pink:#ff8fc7;
-  --pop:"Bowlby One","Arial Black",sans-serif;--sans:Archivo,"Helvetica Neue",Arial,sans-serif}
+:root{--bg:#eeeae0;--ink:#16140f;--dim:#8b8578;--hot:#ff4a12;--mono:"DM Mono",ui-monospace,Menlo,monospace;--sans:Archivo,"Helvetica Neue",Arial,sans-serif}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
-body{margin:0;color:var(--ink);font-family:var(--sans);background:var(--cream);
-  background-image:radial-gradient(rgba(20,18,16,.13) 1.2px,transparent 1.3px);background-size:18px 18px}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--sans);background:var(--bg)}
 a{color:inherit}
 button{font:inherit;color:inherit}
-:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-.chunk{border:3px solid var(--ink);box-shadow:6px 6px 0 var(--ink);background:#fffaf0}
-.btn{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:6px;font:800 13px/1 var(--sans);text-transform:uppercase;letter-spacing:.04em;
-  padding:9px 14px;border:2.5px solid var(--ink);border-radius:999px;background:#fff;box-shadow:3px 3px 0 var(--ink);transition:transform .08s,box-shadow .08s}
-.btn:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
-.btn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
-.btn.y{background:var(--yellow)}.btn.r{background:var(--red);color:#fff}.btn.b{background:var(--blue);color:#fff}
+::selection{background:var(--hot);color:#fff}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* top bar + ticker */
-.bar{display:flex;align-items:center;gap:14px;padding:10px clamp(14px,3vw,28px);background:var(--ink);color:#fff}
-.logo{font:24px/1 var(--pop);color:var(--yellow);text-decoration:none;text-shadow:2px 2px 0 var(--red);letter-spacing:-.01em;white-space:nowrap}
-.bar .clock{font:600 12px/1 var(--sans);color:#bdb6a8;text-transform:uppercase;letter-spacing:.06em}
-.bar .sp{flex:1}
-.bar .btn{box-shadow:none;border-color:#fff;background:transparent;color:#fff;padding:7px 12px;font-size:12px}
-.bar .btn.y{background:var(--yellow);color:var(--ink);border-color:var(--yellow)}
-.bar .who{font:800 12px/1 var(--sans);text-transform:uppercase;border:2px solid #fff;border-radius:999px;padding:6px 11px}
-.bar .who b{color:var(--yellow)}
-.ticker{overflow:hidden;background:var(--yellow);border-bottom:3px solid var(--ink);white-space:nowrap}
-.ticker div{display:inline-block;padding:8px 0;font:14px/1 var(--pop);text-transform:uppercase;animation:tick 40s linear infinite}
-.ticker span{margin:0 18px}
-@keyframes tick{to{transform:translateX(-50%)}}
+/* corners */
+.corner{position:absolute;z-index:20;font:500 11px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:18px 20px;mix-blend-mode:multiply}
+.tl{top:0;left:0}.tr{top:0;right:0;text-align:right}.bl{bottom:0;left:0}.br{bottom:0;right:0;text-align:right}
+.corner a,.corner button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.corner a:hover,.corner button:hover{color:var(--hot)}
+.corner .dim{color:var(--dim)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hot);margin-right:6px;vertical-align:0}
 
-main{max-width:1060px;margin:0 auto;padding:40px clamp(14px,3vw,28px) 30px}
+/* the swarm */
+.hero{position:relative;height:100vh;height:100svh;min-height:520px;overflow:hidden;cursor:crosshair;touch-action:pan-y}
+#swarm{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hint{position:absolute;left:0;right:0;bottom:56px;text-align:center;font:500 11px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);pointer-events:none;transition:opacity .6s}
+.hint b{color:var(--ink);font-weight:500}
+.waiting{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font:500 12px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;pointer-events:none;background:var(--bg);padding:10px 16px}
 
-/* the race */
-.race{position:relative;padding:22px 22px 18px;border-radius:22px;background:#2b8a4f;overflow:hidden}
-.race::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 60px,transparent 60px 120px);pointer-events:none}
-.race h1{position:relative;margin:0 0 14px;font:clamp(28px,5vw,52px)/.95 var(--pop);color:#fff;text-shadow:3px 3px 0 var(--ink);display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap}
-.race h1 small{font:800 12px/1 var(--sans);text-shadow:none;text-transform:uppercase;letter-spacing:.06em}
-.track{position:relative;background:#c9653f;border:3px solid var(--ink);border-radius:12px;padding:6px 0;
-  background-image:radial-gradient(rgba(0,0,0,.12) 1px,transparent 1.5px);background-size:7px 7px}
-.finish{position:absolute;top:0;bottom:0;right:56px;width:18px;z-index:1;border-left:2px solid var(--ink);border-right:2px solid var(--ink);
-  background:conic-gradient(#fff 25%,var(--ink) 0 50%,#fff 0 75%,var(--ink) 0) 0 0/9px 9px}
-.lane{position:relative;height:58px;border-bottom:3px dashed rgba(255,255,255,.55);display:flex;align-items:center}
-.lane:last-child{border-bottom:0}
-.lane .no{position:absolute;left:10px;font:22px/1 var(--pop);color:rgba(255,255,255,.75)}
-.runner{all:unset;cursor:pointer;position:absolute;left:40px;z-index:2;max-width:min(300px,52vw);
-  transform:translateX(var(--x,0px));transition:transform var(--t,2s) var(--ease,cubic-bezier(.3,.1,.2,1)) var(--d,0s)}
-.runner .tag{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:800 14px/1 var(--sans);padding:10px 14px;border:3px solid var(--ink);border-radius:12px;
-  background:var(--c,#fff);box-shadow:3px 3px 0 var(--ink);transition:transform .15s}
-.runner:hover .tag{transform:translateY(-3px) rotate(-1.5deg)}
-.runner.going .tag{animation:bob .22s ease-in-out infinite alternate}
-@keyframes bob{to{transform:translateY(-3px) rotate(-1deg)}}
-.runner::before{content:"";position:absolute;right:100%;top:50%;width:0;height:12px;margin-top:-6px;opacity:0;
-  background:repeating-linear-gradient(180deg,var(--ink) 0 2px,transparent 2px 5px);transition:width .3s,opacity .3s}
-.runner.going::before{width:34px;opacity:.7}
-.crown{position:absolute;left:50%;top:-24px;width:34px;margin-left:-17px;opacity:0;transform:translateY(8px) scale(.4) rotate(-20deg);transition:all .4s cubic-bezier(.2,1.8,.4,1)}
-.runner.won .crown{opacity:1;transform:none}
-.place{position:absolute;right:-12px;top:-12px;font:13px/1 var(--pop);background:#fff;border:2.5px solid var(--ink);border-radius:999px;padding:5px 7px 4px;opacity:0;transition:opacity .3s}
-.runner.done .place{opacity:1}
-.race .foot{position:relative;display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;color:#fff;font:600 13px/1.3 var(--sans)}
-.empty-lane{position:absolute;left:44px;color:#fff;font:800 15px/1.2 var(--sans);text-transform:uppercase}
-.cone{position:absolute;right:110px;bottom:4px;width:30px}
+/* the reading */
+.read{position:relative;z-index:5;background:var(--bg);padding:90px 20px 40px}
+.col{max-width:660px;margin:0 auto}
+.kick{font:500 11px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:26px}
+.kick span:first-child{color:var(--hot)}
+h2.title{margin:0 0 34px;font:900 clamp(40px,7vw,76px)/.95 var(--sans);letter-spacing:-.035em}
+.body{font:400 19px/1.62 var(--sans)}
+.body p{margin:0 0 1.05em}
+.body em{font-style:italic}
+.body strong{font-weight:500;background:linear-gradient(transparent 62%,rgba(255,74,18,.32) 62%)}
+.body blockquote{margin:1.4em 0;padding-left:22px;border-left:3px solid var(--hot);font:900 clamp(24px,3.4vw,32px)/1.15 var(--sans);letter-spacing:-.02em}
+.body a{color:var(--hot);text-underline-offset:3px}
+.tools{margin-top:26px;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;display:flex;gap:18px}
+.tools a,.tools button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tools a:hover,.tools button:hover{color:var(--hot)}
 
-/* the winner */
-.win{position:relative;margin:56px 0 0;padding:clamp(26px,5vw,56px);transform:rotate(-.6deg)}
-.win .label{position:absolute;top:-20px;left:28px;font:16px/1 var(--pop);text-transform:uppercase;background:var(--yellow);border:3px solid var(--ink);padding:9px 14px 7px;transform:rotate(-2deg);box-shadow:3px 3px 0 var(--ink)}
-.win .bigcrown{position:absolute;top:-38px;right:30px;width:70px;transform:rotate(14deg)}
-.win h2{margin:6px 0 14px;font:clamp(38px,7vw,82px)/.92 var(--pop);letter-spacing:-.015em;text-transform:uppercase;transform:rotate(.6deg)}
-.meta{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 30px}
-.chip{font:800 12px/1 var(--sans);text-transform:uppercase;letter-spacing:.04em;padding:7px 11px;border:2.5px solid var(--ink);border-radius:999px;background:#fff}
-.chip.r{background:var(--red);color:#fff}.chip.b{background:var(--blue);color:#fff}.chip.g{background:var(--green)}
-.body{max-width:680px;font-size:19px;line-height:1.62;transform:rotate(.6deg)}
-.body p{margin:0 0 1em}
-.body p:first-child{font-size:22px;line-height:1.5;font-weight:600}
-.body blockquote{margin:24px 0;padding:16px 20px;font:22px/1.3 var(--pop);text-transform:uppercase;background:var(--pink);border:3px solid var(--ink);box-shadow:4px 4px 0 var(--ink);transform:rotate(-1deg)}
-.body strong{background:var(--yellow);padding:0 3px}
-.body a{color:var(--blue);font-weight:800}
-.tools{display:flex;gap:10px;margin-top:20px;transform:rotate(.6deg)}
-
-/* vacant winner */
-.vacant{text-align:center}
-.vacant h2{color:#b9b1a0}
-.vacant p{font-size:18px;max-width:440px;margin:0 auto}
-
-/* runners-up */
-.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;margin:70px 0 18px}
-.sh h3{margin:0;font:clamp(32px,5vw,54px)/1 var(--pop);text-transform:uppercase;background:var(--yellow);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink);padding:8px 16px 4px;transform:rotate(-1.2deg)}
-.sh span{font:600 14px/1.3 var(--sans);max-width:260px;text-align:right}
-.board{padding:0;overflow:hidden;border-radius:14px}
-.row{display:grid;grid-template-columns:54px 1fr auto auto;align-items:center;gap:16px;padding:14px 18px;border-bottom:2.5px solid var(--ink);text-decoration:none}
-.row:last-child{border-bottom:0}
-.row:hover{background:var(--yellow)}
-.row .n{font:24px/1 var(--pop)}
-.row b{font:800 18px/1.25 var(--sans)}
-.row small{display:block;font:600 12px/1.3 var(--sans);color:#6e675c;margin-top:2px}
-.row .held{font:800 12px/1 var(--sans);text-transform:uppercase;padding:6px 9px;border:2px solid var(--ink);border-radius:999px;background:#fff;white-space:nowrap}
-.row .go{font:20px/1 var(--pop)}
-
-.back{display:inline-block;margin-bottom:10px}
+/* everything else in the swarm */
+.others{margin-top:110px}
+.others h3{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 14px;display:flex;justify-content:space-between;gap:10px}
+.others h3 span{color:var(--dim)}
+.idea{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:28px 1fr auto;gap:14px;align-items:baseline;width:100%;padding:14px 0;border-top:1px solid rgba(22,20,15,.16)}
+.idea:last-child{border-bottom:1px solid rgba(22,20,15,.16)}
+.idea i{font:500 11px/1 var(--mono);font-style:normal;color:var(--dim)}
+.idea b{font:900 clamp(20px,2.6vw,26px)/1.1 var(--sans);letter-spacing:-.02em;transition:color .15s,transform .2s}
+.idea span{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
+.idea:hover b,.idea:focus-visible b{color:var(--hot);transform:translateX(6px)}
+.idea.on b{color:var(--hot)}
+.idea.on i::before{content:"● ";color:var(--hot)}
 
 /* write */
-.write{padding:clamp(22px,4vw,40px);margin-top:30px}
-.write h2{margin:0 0 22px;font:clamp(34px,6vw,62px)/.95 var(--pop);text-transform:uppercase}
-.write label{display:block;font:800 12px/1 var(--sans);text-transform:uppercase;letter-spacing:.06em;margin:0 0 8px}
-.write input,.write textarea{display:block;width:100%;border:3px solid var(--ink);border-radius:12px;background:#fff;color:var(--ink);padding:12px 14px;outline:none;resize:none;margin-bottom:22px}
-.write input{font:clamp(22px,3.4vw,34px)/1.1 var(--pop);text-transform:uppercase}
-.write textarea{font:18px/1.6 var(--sans);min-height:280px}
-.write input:focus,.write textarea:focus{box-shadow:4px 4px 0 var(--blue)}
-.write .row2{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
-.write .hint{font:600 13px/1.4 var(--sans);color:#6e675c}
-.write .err{color:var(--red);font-weight:800}
+.write{max-width:660px;margin:0 auto}
+.write input,.write textarea{display:block;width:100%;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);outline:none;resize:none;padding:8px 0;margin:0 0 28px}
+.write input{font:900 clamp(32px,6vw,60px)/1 var(--sans);letter-spacing:-.03em}
+.write textarea{font:400 19px/1.62 var(--sans);min-height:300px;border:1px solid rgba(22,20,15,.3);padding:14px}
+.write input:focus,.write textarea:focus{border-color:var(--hot)}
+.write label{display:block;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+.write .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.write .hint2{font:400 12px/1.5 var(--mono);color:var(--dim)}
+.send{all:unset;cursor:pointer;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:14px 18px;border-radius:999px}
+.send:hover{background:var(--hot)}
+.send[disabled]{opacity:.4;pointer-events:none}
+.err{font:400 12px/1.5 var(--mono);color:var(--hot)}
 
-footer{max-width:1060px;margin:0 auto;padding:40px clamp(14px,3vw,28px) 50px;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;font:600 13px/1.4 var(--sans)}
-footer a{text-decoration:none;border-bottom:2px solid}
-
-.confetti{position:fixed;top:0;left:0;width:10px;height:16px;z-index:50;pointer-events:none;border:1.5px solid var(--ink)}
+footer{position:relative;z-index:5;background:var(--bg);padding:90px 20px 90px;text-align:center;font:500 11px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+footer a{color:var(--ink)}
 
 @media (max-width:640px){
-  .bar{flex-wrap:wrap;gap:8px 10px}
-  .logo{font-size:20px}
-  .bar .clock,.bar>.btn{display:none}
-  #me>span{flex-wrap:wrap}
-  .row .held{display:none}
-  .sh{flex-direction:column;align-items:flex-start}
-  .sh span{text-align:left}
-  .finish{right:26px}
-  .runner{max-width:46vw}
-  .row{grid-template-columns:36px 1fr auto;gap:10px}
-  .row .go{display:none}
-  .win,.win h2,.body,.tools{transform:none}
-}
-@media (prefers-reduced-motion:reduce){
-  .ticker div{animation:none}
-  .runner,.runner .tag,.crown{transition:none!important;animation:none!important}
+  .corner{padding:14px 14px;font-size:10px}
+  .hint{bottom:64px;padding:0 30px}
+  .idea{grid-template-columns:22px 1fr}
+  .idea span{display:none}
 }
 </style>
 </head>
 <body>
-<header class="bar">
-  <a class="logo" href="thoughts.html">REHAN’S THOUGHTS!</a>
-  <span class="clock" id="clock"></span>
-  <span class="sp"></span>
-  <span id="me"></span>
-  <a class="btn" href="index.html">Provolve</a>
-</header>
-<div class="ticker" aria-hidden="true"><div id="ticker"></div></div>
+<section class="hero" id="hero">
+<div class="corner tl"><a href="thoughts.html" id="name" style="text-decoration:none">Rehan’s Thoughts</a><br><span class="dim" id="sub">A swarm of ideas</span></div>
+<div class="corner tr"><span id="clock"></span><br><a href="index.html">Provolve</a></div>
+<div class="corner bl" id="status"></div>
+<div class="corner br" id="me"></div>
 
-<main id="view"></main>
+  <h1 class="sr" id="h1">Rehan’s Thoughts</h1>
+  <canvas id="swarm" aria-hidden="true"></canvas>
+  <div class="waiting" id="waiting" hidden>No idea has won yet.<br><span style="color:var(--dim)">The swarm is waiting.</span></div>
+  <div class="hint" id="hint">Move through it <b>·</b> click to shake it <b>·</b> scroll to read</div>
+</section>
 
-<footer>
-  <span>Made by Rehan in Chicago. Every idea races. The newest one wins.</span>
-  <span><a href="index.html">← back to Provolve</a></span>
-</footer>
+<main class="read" id="read" hidden></main>
+
+<footer>Made by Rehan in Chicago.<br>Every thought starts in the swarm. The newest one pulls itself together.<br><br><a href="index.html">← Provolve</a></footer>
 
 <script type="module">
 /* ─────────────────────────────────────────────────────────────────────
@@ -178,23 +122,125 @@ const firebaseConfig = {
 
 const V = "10.12.2";
 const $ = id => document.getElementById(id);
-const view = $('view');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const COLORS = ['var(--yellow)','var(--pink)','#8fd3ff','#b8f28a','#ffb36b','#d7c2ff'];
-const CROWN = `<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M3 26 L5 7 L13 15 L20 3 L27 15 L35 7 L37 26 Z" fill="#ffd23f" stroke="#141210" stroke-width="2.6" stroke-linejoin="round"/><circle cx="20" cy="18" r="2.6" fill="#ee4a35" stroke="#141210" stroke-width="1.6"/></svg>`;
-
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const days = (a, b) => Math.max(0, Math.round((b - a) / 864e5));
 const ago = d => { const n = days(d, new Date()); return n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`; };
 const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
 const mins = s => Math.max(1, Math.round(String(s).split(/\s+/).length / 220));
-const ord = n => n + (['th','st','nd','rd'][(n % 100 - 20) % 10] || ['th','st','nd','rd'][n % 100] || 'th');
 
-/* live Chicago clock, because it's my site */
-const tickClock = () => $('clock').textContent = 'Chicago · ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
-tickClock(); setInterval(tickClock, 15000);
+/* ───────── little human bits ───────── */
+const tick = () => $('clock').textContent = 'Chicago ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
+tick(); setInterval(tick, 15000);
 
-/* Plain text in, paragraphs out. *italic* **bold** [text](url) and "> " for a big pull quote. */
+function scramble(el, text, ms = 900){
+  if (reduce) { el.textContent = text; return; }
+  const chars = '·•○●◦+×/\\#%&*ABCDEFGHJKLMNPRSTUVWXYZ', t0 = performance.now();
+  (function step(now){
+    const k = Math.min(1, (now - t0) / ms), n = Math.floor(k * text.length);
+    el.textContent = text.slice(0, n) + [...text.slice(n)].map(c => c === ' ' ? ' ' : chars[Math.random() * chars.length | 0]).join('');
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ───────── the swarm ───────── */
+const cv = $('swarm'), cx = cv.getContext('2d'), hero = $('hero');
+let W = 0, H = 0, DPR = 1, P = [], mouse = {x: -1e4, y: -1e4}, t = 0, goal = null;
+
+function size(){
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = hero.clientWidth; H = hero.clientHeight;
+  cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+
+/* Draw the title off-screen, then read back every lit pixel on a grid. Those are the spots the winners fly to. */
+function pointsFor(text){
+  const step = W < 640 ? 4 : 5, maxW = W * (W < 640 ? .86 : .78), maxH = H * .56;
+  const oc = document.createElement('canvas'); oc.width = W; oc.height = H;
+  const o = oc.getContext('2d');
+  const words = String(text).split(/\s+/).filter(Boolean);
+  let fs = Math.min(W < 640 ? 84 : 170, W / 4), lines = [];
+  for (; fs > 18; fs -= 4){
+    o.font = `900 ${fs}px Archivo, "Helvetica Neue", Arial, sans-serif`;
+    lines = []; let cur = '';
+    for (const w of words){
+      const tryL = cur ? cur + ' ' + w : w;
+      if (o.measureText(tryL).width > maxW && cur){ lines.push(cur); cur = w; } else cur = tryL;
+    }
+    lines.push(cur);
+    if (lines.length * fs * .92 <= maxH && lines.every(l => o.measureText(l).width <= maxW)) break;
+  }
+  o.fillStyle = '#000'; o.textAlign = 'center'; o.textBaseline = 'middle';
+  const lh = fs * .92, y0 = H * .47 - (lines.length - 1) * lh / 2;
+  lines.forEach((l, i) => o.fillText(l, W / 2, y0 + i * lh));
+  const data = o.getImageData(0, 0, W, H).data, pts = [];
+  for (let y = 0; y < H; y += step) for (let x = 0; x < W; x += step) if (data[(y * W + x) * 4 + 3] > 140) pts.push([x, y]);
+  for (let i = pts.length - 1; i > 0; i--){ const j = Math.random() * (i + 1) | 0; [pts[i], pts[j]] = [pts[j], pts[i]]; }
+  return pts;
+}
+
+function seed(){
+  const n = Math.round(W * H / (W < 640 ? 260 : 330));
+  P = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: null, ty: null, heat: 0, s: .7 + Math.random() * 1.1}));
+}
+
+/* Hand the winning title to the swarm. Extra dots join if the title needs more than we have. */
+function form(text, instant){
+  goal = text;
+  P.forEach(p => { p.tx = null; p.delay = 0; });
+  if (!text) return;
+  const pts = pointsFor(text);
+  while (P.length < pts.length + Math.round(W * H / 900)) P.push({x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: null, ty: null, heat: 0, s: .7 + Math.random() * 1.1});
+  const order = [...P].sort(() => Math.random() - .5);
+  pts.forEach((pt, i) => { const p = order[i]; p.tx = pt[0]; p.ty = pt[1]; p.delay = instant || reduce ? 0 : performance.now() + Math.random() * 1100; });
+}
+
+function shake(x, y){
+  P.forEach(p => {
+    const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) || 1, f = Math.min(26, 5200 / d);
+    p.vx += dx / d * f * (.6 + Math.random() * .8); p.vy += dy / d * f * (.6 + Math.random() * .8);
+    if (p.tx != null) p.delay = performance.now() + 250 + Math.random() * 700;
+  });
+}
+
+function frame(now){
+  t += .004;
+  cx.clearRect(0, 0, W, H);
+  const R = W < 640 ? 70 : 110, R2 = R * R;
+  for (const p of P){
+    const pulled = p.tx != null && now >= p.delay;
+    if (pulled){
+      p.vx += (p.tx - p.x) * .045; p.vy += (p.ty - p.y) * .045;
+      p.vx *= .8; p.vy *= .8;
+      p.heat += (1 - p.heat) * .06;
+    } else {
+      const a = Math.sin(p.x * .0042 + t * 3) * 2.1 + Math.cos(p.y * .0047 - t * 2) * 2.1;   // a lazy current the loose ideas drift in
+      p.vx += Math.cos(a) * .045; p.vy += Math.sin(a) * .045;
+      p.vx *= .965; p.vy *= .965;
+      p.heat += (0 - p.heat) * .04;
+    }
+    const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+    if (d2 < R2){ const d = Math.sqrt(d2) || 1, f = (1 - d / R) * 3.2; p.vx += dx / d * f; p.vy += dy / d * f; }
+    p.x += p.vx; p.y += p.vy;
+    if (!pulled){ if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10; if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10; }
+  }
+  // loose ideas: ink, faint
+  cx.fillStyle = 'rgba(22,20,15,.34)';
+  for (const p of P) if (p.heat < .5){ const s = p.s * 1.6; cx.fillRect(p.x, p.y, s, s); }
+  // the winner: hot
+  cx.fillStyle = '#ff4a12';
+  for (const p of P) if (p.heat >= .5){ const s = 1.3 + p.heat * 1.9; cx.fillRect(p.x - s / 2, p.y - s / 2, s, s); }
+  requestAnimationFrame(frame);
+}
+
+hero.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -1e4; });
+hero.addEventListener('pointerdown', e => { const r = cv.getBoundingClientRect(); shake(e.clientX - r.left, e.clientY - r.top); });
+let rs; addEventListener('resize', () => { clearTimeout(rs); rs = setTimeout(() => { const g = goal; size(); seed(); form(g, true); }, 150); });
+
+/* ───────── content ───────── */
+let thoughts = [], current = 0, isOwner = false, signedIn = null, fb = null;
+
 function render(src){
   return String(src || '').trim().split(/\n\s*\n/).map(block => {
     const quote = /^>\s?/.test(block);
@@ -207,113 +253,66 @@ function render(src){
   }).join('');
 }
 
-let thoughts = [];   // newest first: {id, title, body, at}
-let isOwner = false, signedIn = null, fb = null;
-
-/* ───────── ticker ───────── */
-function paintTicker(){
-  const items = thoughts.length
-    ? thoughts.slice(0, 8).map((t, i) => i === 0 ? `★ Winner: ${esc(t.title)}` : `${ord(i + 1)} · ${esc(t.title)}`)
-    : ['★ Track is empty', 'First thought wins by default', 'Warming up', 'Stay tuned'];
-  const run = items.map(x => `<span>${x}</span>`).join('');
-  $('ticker').innerHTML = run + run + run + run;
+function status(){
+  $('status').innerHTML = thoughts.length
+    ? `<span class="dot"></span>${current === 0 ? 'Winning idea' : 'Old winner'} · won ${ago(thoughts[current].at)}<br><span class="dim">${thoughts.length} idea${thoughts.length === 1 ? '' : 's'} in the swarm</span>`
+    : `No winner yet<br><span class="dim">0 ideas in the swarm</span>`;
 }
 
-/* ───────── views ───────── */
 function show(){
-  paintTicker();
+  const read = $('read');
   const id = decodeURIComponent(location.hash.slice(1));
-  if (id === 'write') { if (isOwner) return writer(); location.hash = ''; return; }
-  if (id.startsWith('edit/')) { const t = thoughts.find(x => x.id === id.slice(5)); if (isOwner && t) return writer(t); location.hash = ''; return; }
-  const i = id ? thoughts.findIndex(t => t.id === id) : -1;
-  i > 0 ? single(i) : home();
-}
-
-function ownerTools(t){
-  return isOwner ? `<div class="tools"><a class="btn" href="#edit/${esc(t.id)}">Edit</a><button class="btn" type="button" data-del="${esc(t.id)}">Delete</button></div>` : '';
-}
-
-function raceHTML(){
-  const field = thoughts.slice(0, 5);
-  const lanes = field.length
-    ? field.map((t, i) => `<div class="lane"><span class="no">${i + 1}</span>
-        <button class="runner" type="button" data-open="${esc(t.id)}" style="--c:${COLORS[i % COLORS.length]}">
-          <span class="crown">${CROWN}</span><span class="tag">${esc(t.title)}</span><span class="place">${ord(i + 1)}</span>
-        </button></div>`).join('')
-    : `<div class="lane"><span class="no">1</span><span class="empty-lane">Nobody on the track yet</span></div>
-       <div class="lane"><span class="no">2</span><svg class="cone" viewBox="0 0 30 34" aria-hidden="true"><path d="M9 30 L15 3 L21 30Z" fill="#ff7a1a" stroke="#141210" stroke-width="2.4" stroke-linejoin="round"/><path d="M11.5 19 H18.5" stroke="#fff" stroke-width="3"/><rect x="3" y="29" width="24" height="4" fill="#ff7a1a" stroke="#141210" stroke-width="2.4"/></svg></div>`;
-  return `<section class="race chunk" aria-label="Today's race">
-      <h1>Today’s race <small>${field.length ? 'Newest idea always wins. Tap a racer.' : 'Lanes open'}</small></h1>
-      <div class="track"><span class="finish" aria-hidden="true"></span>${lanes}</div>
-      <div class="foot"><span>${thoughts.length ? `${thoughts.length} idea${thoughts.length === 1 ? '' : 's'} entered so far` : 'First thought in wins by default.'}</span>
-        ${field.length ? '<button class="btn y" type="button" id="again">Race again ↻</button>' : ''}</div>
-    </section>`;
-}
-
-function home(){
-  document.title = 'Rehan’s Thoughts';
+  if (id === 'write' && isOwner) return writer();
+  if (id.startsWith('edit/') && isOwner){ const t = thoughts.find(x => x.id === id.slice(5)); if (t) return writer(t); }
   if (!thoughts.length){
-    view.innerHTML = `${raceHTML()}
-      <section class="win chunk vacant">
-        <span class="label">Today’s winning idea</span>
-        <h2>Nobody yet</h2>
-        <p>The crown’s just sitting here. The first thought I post takes it.</p>
-      </section>`;
-    return;
+    read.hidden = true; $('waiting').hidden = false; $('hint').innerHTML = 'Move through it <b>·</b> click to shake it';
+    form(null); status(); return;
   }
-  const [w, ...rest] = thoughts;
-  view.innerHTML = `${raceHTML()}
-    ${winnerCard(w, 0)}
-    ${rest.length ? `<div class="sh"><h3>Runners-up</h3><span>Old winners. Each one held the crown until something newer beat it.</span></div>
-      <div class="board chunk">${rest.map((t, k) => `<a class="row" href="#${esc(t.id)}">
-        <span class="n">${k + 2}</span><span><b>${esc(t.title)}</b><small>${fmt(t.at)}</small></span>
-        <span class="held">held the crown ${days(t.at, thoughts[k].at) || 1}d</span><span class="go">→</span></a>`).join('')}</div>` : ''}`;
-  startRace();
-}
-
-function winnerCard(t, i){
-  const beat = thoughts[i - 1];
-  const chips = i === 0
-    ? `<span class="chip r">Won ${ago(t.at)}</span><span class="chip">${fmt(t.at)}</span><span class="chip b">${mins(t.body)} min read</span>`
-    : `<span class="chip">${ord(i + 1)} place</span><span class="chip g">Held the crown ${days(t.at, beat.at) || 1}d</span><span class="chip">${fmt(t.at)}</span><span class="chip b">${mins(t.body)} min read</span>`;
-  return `<article class="win chunk">
-      <span class="label">${i === 0 ? 'Today’s winning idea' : 'Former winner'}</span>
-      ${i === 0 ? `<span class="bigcrown">${CROWN}</span>` : ''}
-      <h2>${esc(t.title)}</h2>
-      <div class="meta">${chips}</div>
-      <div class="body">${render(t.body)}</div>
-      ${ownerTools(t)}
-    </article>`;
-}
-
-function single(i){
-  const t = thoughts[i];
-  document.title = t.title + ' · Rehan’s Thoughts';
-  view.innerHTML = `<a class="btn back" href="#">← Back to the race</a>${winnerCard(t, i)}`;
-  scrollTo(0, 0);
+  $('waiting').hidden = true; $('hint').innerHTML = 'Move through it <b>·</b> click to shake it <b>·</b> scroll to read';
+  const i = Math.max(0, thoughts.findIndex(t => t.id === id));
+  current = i;
+  const th = thoughts[i], beat = thoughts[i - 1];
+  form(th.title);
+  $('h1').textContent = th.title;
+  document.title = (i ? th.title + ' · ' : '') + 'Rehan’s Thoughts';
+  read.hidden = false;
+  read.innerHTML = `<div class="col">
+      <div class="kick"><span>${i === 0 ? '● The winning idea' : `Old winner · held it ${days(th.at, beat.at) || 1}d`}</span><span>${fmt(th.at)}</span><span>${mins(th.body)} min read</span></div>
+      <h2 class="title">${esc(th.title)}</h2>
+      <div class="body">${render(th.body)}</div>
+      ${isOwner ? `<div class="tools"><a href="#edit/${esc(th.id)}">Edit</a><button type="button" data-del="${esc(th.id)}">Delete</button></div>` : ''}
+      ${thoughts.length > 1 ? `<div class="others"><h3>Everything in the swarm <span>pick one, it’ll pull itself together</span></h3>
+        ${thoughts.map((x, k) => `<button class="idea${k === i ? ' on' : ''}" type="button" data-pick="${esc(x.id)}"><i>${String(thoughts.length - k).padStart(2, '0')}</i><b>${esc(x.title)}</b><span>${k === 0 ? 'winning now' : fmt(x.at)}</span></button>`).join('')}
+      </div>` : ''}
+    </div>`;
+  status();
 }
 
 function writer(t){
-  view.innerHTML = `<a class="btn back" href="#">← Cancel</a>
-    <form class="write chunk" id="write">
-      <h2>${t ? 'Edit this one' : 'New challenger!'}</h2>
+  form(t ? t.title : null);
+  const read = $('read'); read.hidden = false; $('waiting').hidden = true;
+  read.innerHTML = `<form class="write" id="write">
+      <div class="kick"><span>● ${t ? 'Editing' : 'New idea. Publishing makes it the winner.'}</span></div>
       <label for="wt">Title</label>
-      <input id="wt" name="title" maxlength="200" required value="${esc(t?.title)}" autocomplete="off">
+      <input id="wt" name="title" maxlength="140" required value="${esc(t?.title)}" autocomplete="off" placeholder="The idea">
       <label for="wb">The thought</label>
       <textarea id="wb" name="body" required>${esc(t?.body)}</textarea>
-      <div class="row2">
-        <button class="btn r" type="submit">${t ? 'Save it' : 'Send it into the race →'}</button>
-        <span class="hint">${t ? '' : 'Whatever you post wins today’s race. '}Blank line = new paragraph · *italic* · **highlight** · [link](url) · start a line with &gt; for a big pull quote</span>
+      <div class="row">
+        <button class="send" type="submit">${t ? 'Save' : 'Release it into the swarm'}</button>
+        <a href="#" class="hint2">cancel</a>
+        <span class="hint2">blank line = new paragraph · *italic* · **highlight** · [link](url) · &gt; big pull quote</span>
       </div>
       <p class="err" id="werr"></p>
     </form>`;
-  const ta = $('wb');
-  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(280, ta.scrollHeight + 6) + 'px'; };
+  const ta = $('wb'), ti = $('wt');
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(300, ta.scrollHeight + 6) + 'px'; };
   ta.addEventListener('input', grow); grow();
-  $(t ? 'wb' : 'wt').focus();
+  let ft; ti.addEventListener('input', () => { clearTimeout(ft); ft = setTimeout(() => form(ti.value.trim() || null), 350); });  // the swarm spells it as you type
+  read.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+  ti.focus({preventScroll: true});
   $('write').addEventListener('submit', async e => {
     e.preventDefault();
-    const f = e.target, btn = f.querySelector('button[type=submit]'), err = $('werr');
+    const f = e.target, btn = f.querySelector('.send'), err = $('werr');
     const title = f.elements.title.value.trim(), body = f.elements.body.value.trim();
     if (!title || !body) return;
     btn.disabled = true; err.textContent = '';
@@ -323,68 +322,26 @@ function writer(t){
       else await addDoc(collection(fb.db, 'thoughts'), { title, body, createdAt: serverTimestamp() });
       await load();
       history.replaceState(null, '', location.pathname);
-      show(); scrollTo(0, 0);
+      scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+      show(); shake(W / 2, H / 2);
     } catch (x) { btn.disabled = false; err.textContent = 'Couldn’t save: ' + (x.code || x.message); }
   });
 }
 
-/* ───────── the race ───────── */
-function startRace(){
-  const runners = [...view.querySelectorAll('.runner')];
-  if (!runners.length) return;
-  const track = view.querySelector('.track');
-  const reset = () => runners.forEach(r => { r.classList.remove('won','done','going'); r.style.setProperty('--t','0s'); r.style.setProperty('--d','0s'); r.style.setProperty('--x','0px'); });
-  const go = () => {
-    const finishX = track.clientWidth - (innerWidth < 640 ? 26 : 56) - 40;  // where the finish line sits
-    let last = 0;
-    runners.forEach((r, i) => {
-      const w = r.offsetWidth;
-      const target = i === 0 ? finishX - w + 26 : (finishX - w) * Math.max(.18, .86 - i * .17);
-      const t = reduce ? 0 : 2.1 + i * .25 + Math.random() * .3, d = reduce ? 0 : Math.random() * .25;
-      last = Math.max(last, t + d);
-      r.style.setProperty('--t', t + 's'); r.style.setProperty('--d', d + 's');
-      r.style.setProperty('--ease', i === 0 ? 'cubic-bezier(.5,0,.15,1)' : `cubic-bezier(.2,${(.3 + Math.random() * .4).toFixed(2)},.3,1)`);
-      r.style.setProperty('--x', Math.max(0, target) + 'px');
-      if (!reduce) r.classList.add('going');
-    });
-    setTimeout(() => {
-      runners.forEach(r => { r.classList.remove('going'); r.classList.add('done'); });
-      runners[0].classList.add('won');
-      confetti(runners[0]);
-    }, reduce ? 0 : (2.1 + .2) * 1000);
-    setTimeout(() => runners.forEach(r => r.classList.remove('going')), last * 1000);
-  };
-  reset();
-  requestAnimationFrame(() => requestAnimationFrame(go));
-  const again = $('again'); if (again) again.onclick = () => { reset(); requestAnimationFrame(() => requestAnimationFrame(go)); };
-  addEventListener('resize', onResizeRace);
-}
-let rz; function onResizeRace(){ clearTimeout(rz); rz = setTimeout(() => { if (view.querySelector('.runner')) { removeEventListener('resize', onResizeRace); startRace(); } }, 200); }
-
-function confetti(from){
-  if (reduce) return;
-  const r = from.getBoundingClientRect(), cols = ['#ffd23f','#ee4a35','#3a5bff','#2fbf71','#ff8fc7','#fff'];
-  for (let i = 0; i < 46; i++){
-    const c = document.createElement('i');
-    c.className = 'confetti'; c.style.background = cols[i % cols.length];
-    document.body.appendChild(c);
-    const x0 = r.left + r.width / 2, y0 = r.top, dx = (Math.random() - .5) * 360, up = 120 + Math.random() * 160, rot = Math.random() * 720;
-    c.animate([
-      { transform: `translate(${x0}px,${y0}px) rotate(0deg)` },
-      { transform: `translate(${x0 + dx * .6}px,${y0 - up}px) rotate(${rot / 2}deg)`, offset: .35 },
-      { transform: `translate(${x0 + dx}px,${y0 + 220}px) rotate(${rot}deg)`, opacity: 0 }
-    ], { duration: 1300 + Math.random() * 700, easing: 'cubic-bezier(.2,.6,.4,1)' }).onfinish = () => c.remove();
+document.addEventListener('click', async e => {
+  const pick = e.target.closest('[data-pick]');
+  if (pick){
+    const id = pick.dataset.pick, k = thoughts.findIndex(x => x.id === id);
+    history.replaceState(null, '', k === 0 ? location.pathname : '#' + id);
+    scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+    shake(W / 2, H / 2); show();
+    return;
   }
-}
-
-view.addEventListener('click', async e => {
-  const o = e.target.closest('[data-open]');
-  if (o){ const i = thoughts.findIndex(t => t.id === o.dataset.open); if (i === 0) return view.querySelector('.win')?.scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block:'start'}); location.hash = o.dataset.open; return; }
   const del = e.target.closest('[data-del]');
   if (!del || !isOwner) return;
-  const t = thoughts.find(x => x.id === del.dataset.del);
-  if (!t || !confirm(`Delete “${t.title}”? This can’t be undone.`)) return;
-  try { await fb.fs.deleteDoc(fb.fs.doc(fb.db, 'thoughts', t.id)); await load(); history.replaceState(null, '', location.pathname); show(); }
+  const th = thoughts.find(x => x.id === del.dataset.del);
+  if (!th || !confirm(`Delete “${th.title}”? This can’t be undone.`)) return;
+  try { await fb.fs.deleteDoc(fb.fs.doc(fb.db, 'thoughts', th.id)); await load(); history.replaceState(null, '', location.pathname); show(); }
   catch (x) { alert('Couldn’t delete: ' + (x.code || x.message)); }
 });
 addEventListener('hashchange', show);
@@ -400,24 +357,27 @@ async function load(){
 
 function paintMe(){
   const me = $('me');
-  if (!signedIn) { me.innerHTML = `<button class="btn" type="button" id="si">Sign in</button>`; $('si').onclick = () => authClick(); return; }
+  if (!signedIn){ me.innerHTML = `<button type="button" id="si">Sign in</button>`; $('si').onclick = () => authClick(); return; }
   me.innerHTML = isOwner
-    ? `<span style="display:flex;gap:10px;align-items:center"><span class="who">Player · <b>Rehan</b></span><a class="btn y" href="#write">+ New thought</a><button class="btn" type="button" id="so">Sign out</button></span>`
-    : `<span style="display:flex;gap:10px;align-items:center"><span class="who">Not the owner</span><button class="btn" type="button" id="so">Sign out</button></span>`;
+    ? `<span class="dot"></span>Rehan<br><a href="#write">New idea</a> · <button type="button" id="so">Sign out</button>`
+    : `Not the owner<br><button type="button" id="so">Sign out</button>`;
   $('so').onclick = () => fb.signOut(fb.auth);
 }
 
 async function start(){
-  const fontsReady = document.fonts ? Promise.all(['Bowlby One','Archivo'].map(f => document.fonts.load(`400 20px "${f}"`).catch(() => {}))) : Promise.resolve();
-  paintMe();
-  if (!firebaseConfig.projectId){ await fontsReady; show(); return; }
+  size(); seed(); requestAnimationFrame(frame);
+  scramble($('name'), 'Rehan’s Thoughts', 1100);
+  setTimeout(() => scramble($('sub'), 'A swarm of ideas', 900), 300);
+  paintMe(); status();
+  const fontsReady = document.fonts ? document.fonts.load('900 80px Archivo').catch(() => {}) : Promise.resolve();
+
+  if (!firebaseConfig.projectId){ await fontsReady; setTimeout(show, reduce ? 0 : 700); return; }
 
   const app = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
   const auth = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`);
   const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
   const a = app.initializeApp(firebaseConfig);
   fb = { fs, db: fs.getFirestore(a), auth: auth.getAuth(a), signOut: auth.signOut };
-
   authClick = () => auth.signInWithPopup(fb.auth, new auth.GoogleAuthProvider())
     .catch(x => x.code !== 'auth/popup-closed-by-user' && alert('Sign-in failed: ' + x.code));
 
