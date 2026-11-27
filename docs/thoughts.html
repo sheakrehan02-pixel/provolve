@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rehan’s Thoughts</title>
+<meta name="description" content="Rehan’s Thoughts. A swarm of ideas. The winning one pulls itself together.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eeeae0;--ink:#16140f;--dim:#8b8578;--hot:#ff4a12;--mono:"DM Mono",ui-monospace,Menlo,monospace;--sans:Archivo,"Helvetica Neue",Arial,sans-serif}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{background:var(--bg)}
+body{margin:0;color:var(--ink);font-family:var(--sans);background:var(--bg)}
+a{color:inherit}
+button{font:inherit;color:inherit}
+::selection{background:var(--hot);color:#fff}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* corners */
+.corner{position:absolute;z-index:20;font:500 11px/1.35 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:18px 20px;mix-blend-mode:multiply}
+.tl{top:0;left:0}.tr{top:0;right:0;text-align:right}.bl{bottom:0;left:0}.br{bottom:0;right:0;text-align:right}
+.corner a,.corner button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+.corner a:hover,.corner button:hover{color:var(--hot)}
+.corner .dim{color:var(--dim)}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--hot);margin-right:6px;vertical-align:0}
+
+/* the swarm */
+.hero{position:relative;height:100vh;height:100svh;min-height:520px;overflow:hidden;cursor:crosshair;touch-action:pan-y}
+#swarm{position:absolute;inset:0;width:100%;height:100%;display:block}
+.hint{position:absolute;left:0;right:0;bottom:56px;text-align:center;font:500 11px/1.4 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim);pointer-events:none;transition:opacity .6s}
+.hint b{color:var(--ink);font-weight:500}
+.waiting{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);text-align:center;font:500 12px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;pointer-events:none;background:var(--bg);padding:10px 16px}
+
+/* the reading */
+.read{position:relative;z-index:5;background:var(--bg);padding:90px 20px 40px}
+.col{max-width:660px;margin:0 auto}
+.kick{font:500 11px/1.5 var(--mono);letter-spacing:.06em;text-transform:uppercase;display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:26px}
+.kick span:first-child{color:var(--hot)}
+h2.title{margin:0 0 34px;font:900 clamp(40px,7vw,76px)/.95 var(--sans);letter-spacing:-.035em}
+.body{font:400 19px/1.62 var(--sans)}
+.body p{margin:0 0 1.05em}
+.body em{font-style:italic}
+.body strong{font-weight:500;background:linear-gradient(transparent 62%,rgba(255,74,18,.32) 62%)}
+.body blockquote{margin:1.4em 0;padding-left:22px;border-left:3px solid var(--hot);font:900 clamp(24px,3.4vw,32px)/1.15 var(--sans);letter-spacing:-.02em}
+.body a{color:var(--hot);text-underline-offset:3px}
+.tools{margin-top:26px;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;display:flex;gap:18px}
+.tools a,.tools button{all:unset;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.tools a:hover,.tools button:hover{color:var(--hot)}
+
+/* everything else in the swarm */
+.others{margin-top:110px}
+.others h3{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 14px;display:flex;justify-content:space-between;gap:10px}
+.others h3 span{color:var(--dim)}
+.idea{all:unset;box-sizing:border-box;cursor:pointer;display:grid;grid-template-columns:28px 1fr auto;gap:14px;align-items:baseline;width:100%;padding:14px 0;border-top:1px solid rgba(22,20,15,.16)}
+.idea:last-child{border-bottom:1px solid rgba(22,20,15,.16)}
+.idea i{font:500 11px/1 var(--mono);font-style:normal;color:var(--dim)}
+.idea b{font:900 clamp(20px,2.6vw,26px)/1.1 var(--sans);letter-spacing:-.02em;transition:color .15s,transform .2s}
+.idea span{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--dim);white-space:nowrap}
+.idea:hover b,.idea:focus-visible b{color:var(--hot);transform:translateX(6px)}
+.idea.on b{color:var(--hot)}
+.idea.on i::before{content:"● ";color:var(--hot)}
+
+/* write */
+.write{max-width:660px;margin:0 auto}
+.write input,.write textarea{display:block;width:100%;border:0;border-bottom:1px solid var(--ink);background:transparent;color:var(--ink);outline:none;resize:none;padding:8px 0;margin:0 0 28px}
+.write input{font:900 clamp(32px,6vw,60px)/1 var(--sans);letter-spacing:-.03em}
+.write textarea{font:400 19px/1.62 var(--sans);min-height:300px;border:1px solid rgba(22,20,15,.3);padding:14px}
+.write input:focus,.write textarea:focus{border-color:var(--hot)}
+.write label{display:block;font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;margin:0 0 8px}
+.write .row{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.write .hint2{font:400 12px/1.5 var(--mono);color:var(--dim)}
+.send{all:unset;cursor:pointer;font:500 12px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:14px 18px;border-radius:999px}
+.send:hover{background:var(--hot)}
+.send[disabled]{opacity:.4;pointer-events:none}
+.err{font:400 12px/1.5 var(--mono);color:var(--hot)}
+
+footer{position:relative;z-index:5;background:var(--bg);padding:90px 20px 90px;text-align:center;font:500 11px/1.6 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
+footer a{color:var(--ink)}
+
+@media (max-width:640px){
+  .corner{padding:14px 14px;font-size:10px}
+  .hint{bottom:64px;padding:0 30px}
+  .idea{grid-template-columns:22px 1fr}
+  .idea span{display:none}
+}
+</style>
+</head>
+<body>
+<section class="hero" id="hero">
+<div class="corner tl"><a href="thoughts.html" id="name" style="text-decoration:none">Rehan’s Thoughts</a><br><span class="dim" id="sub">A swarm of ideas</span></div>
+<div class="corner tr"><span id="clock"></span><br><a href="index.html">Provolve</a></div>
+<div class="corner bl" id="status"></div>
+<div class="corner br" id="me"></div>
+
+  <h1 class="sr" id="h1">Rehan’s Thoughts</h1>
+  <canvas id="swarm" aria-hidden="true"></canvas>
+  <div class="waiting" id="waiting" hidden>No idea has won yet.<br><span style="color:var(--dim)">The swarm is waiting.</span></div>
+  <div class="hint" id="hint">Move through it <b>·</b> click to shake it <b>·</b> scroll to read</div>
+</section>
+
+<main class="read" id="read" hidden></main>
+
+<footer>Made by Rehan in Chicago.<br>Every thought starts in the swarm. The newest one pulls itself together.<br><br><a href="index.html">← Provolve</a></footer>
+
+<script type="module">
+/* ─────────────────────────────────────────────────────────────────────
+   Firebase settings. Paste the config from:
+   Firebase console → Project settings → Your apps → Web app → Config.
+   See THOUGHTS-SETUP.md in the repo for the full steps.
+   ───────────────────────────────────────────────────────────────────── */
+const firebaseConfig = {
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  appId: ""
+};
+
+const V = "10.12.2";
+const $ = id => document.getElementById(id);
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const days = (a, b) => Math.max(0, Math.round((b - a) / 864e5));
+const ago = d => { const n = days(d, new Date()); return n === 0 ? 'today' : n === 1 ? 'yesterday' : `${n} days ago`; };
+const fmt = d => d.toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+const mins = s => Math.max(1, Math.round(String(s).split(/\s+/).length / 220));
+
+/* ───────── little human bits ───────── */
+const tick = () => $('clock').textContent = 'Chicago ' + new Date().toLocaleTimeString('en-US', {timeZone:'America/Chicago', hour:'numeric', minute:'2-digit'});
+tick(); setInterval(tick, 15000);
+
+function scramble(el, text, ms = 900){
+  if (reduce) { el.textContent = text; return; }
+  const chars = '·•○●◦+×/\\#%&*ABCDEFGHJKLMNPRSTUVWXYZ', t0 = performance.now();
+  (function step(now){
+    const k = Math.min(1, (now - t0) / ms), n = Math.floor(k * text.length);
+    el.textContent = text.slice(0, n) + [...text.slice(n)].map(c => c === ' ' ? ' ' : chars[Math.random() * chars.length | 0]).join('');
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ───────── the swarm ───────── */
+const cv = $('swarm'), cx = cv.getContext('2d'), hero = $('hero');
+let W = 0, H = 0, DPR = 1, P = [], mouse = {x: -1e4, y: -1e4}, t = 0, goal = null;
+
+function size(){
+  DPR = Math.min(2, devicePixelRatio || 1);
+  W = hero.clientWidth; H = hero.clientHeight;
+  cv.width = W * DPR; cv.height = H * DPR; cx.setTransform(DPR, 0, 0, DPR, 0, 0);
+}
+
+/* Draw the title off-screen, then read back every lit pixel on a grid. Those are the spots the winners fly to. */
+function pointsFor(text){
+  const step = W < 640 ? 4 : 5, maxW = W * (W < 640 ? .86 : .78), maxH = H * .56;
+  const oc = document.createElement('canvas'); oc.width = W; oc.height = H;
+  const o = oc.getContext('2d');
+  const words = String(text).split(/\s+/).filter(Boolean);
+  let fs = Math.min(W < 640 ? 84 : 170, W / 4), lines = [];
+  for (; fs > 18; fs -= 4){
+    o.font = `900 ${fs}px Archivo, "Helvetica Neue", Arial, sans-serif`;
+    lines = []; let cur = '';
+    for (const w of words){
+      const tryL = cur ? cur + ' ' + w : w;
+      if (o.measureText(tryL).width > maxW && cur){ lines.push(cur); cur = w; } else cur = tryL;
+    }
+    lines.push(cur);
+    if (lines.length * fs * .92 <= maxH && lines.every(l => o.measureText(l).width <= maxW)) break;
+  }
+  o.fillStyle = '#000'; o.textAlign = 'center'; o.textBaseline = 'middle';
+  const lh = fs * .92, y0 = H * .47 - (lines.length - 1) * lh / 2;
+  lines.forEach((l, i) => o.fillText(l, W / 2, y0 + i * lh));
+  const data = o.getImageData(0, 0, W, H).data, pts = [];
+  for (let y = 0; y < H; y += step) for (let x = 0; x < W; x += step) if (data[(y * W + x) * 4 + 3] > 140) pts.push([x, y]);
+  for (let i = pts.length - 1; i > 0; i--){ const j = Math.random() * (i + 1) | 0; [pts[i], pts[j]] = [pts[j], pts[i]]; }
+  return pts;
+}
+
+function seed(){
+  const n = Math.round(W * H / (W < 640 ? 260 : 330));
+  P = Array.from({length: n}, () => ({x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: null, ty: null, heat: 0, s: .7 + Math.random() * 1.1}));
+}
+
+/* Hand the winning title to the swarm. Extra dots join if the title needs more than we have. */
+function form(text, instant){
+  goal = text;
+  P.forEach(p => { p.tx = null; p.delay = 0; });
+  if (!text) return;
+  const pts = pointsFor(text);
+  while (P.length < pts.length + Math.round(W * H / 900)) P.push({x: Math.random() * W, y: Math.random() * H, vx: 0, vy: 0, tx: null, ty: null, heat: 0, s: .7 + Math.random() * 1.1});
+  const order = [...P].sort(() => Math.random() - .5);
+  pts.forEach((pt, i) => { const p = order[i]; p.tx = pt[0]; p.ty = pt[1]; p.delay = instant || reduce ? 0 : performance.now() + Math.random() * 1100; });
+}
+
+function shake(x, y){
+  P.forEach(p => {
+    const dx = p.x - x, dy = p.y - y, d = Math.hypot(dx, dy) || 1, f = Math.min(26, 5200 / d);
+    p.vx += dx / d * f * (.6 + Math.random() * .8); p.vy += dy / d * f * (.6 + Math.random() * .8);
+    if (p.tx != null) p.delay = performance.now() + 250 + Math.random() * 700;
+  });
+}
+
+function frame(now){
+  t += .004;
+  cx.clearRect(0, 0, W, H);
+  const R = W < 640 ? 70 : 110, R2 = R * R;
+  for (const p of P){
+    const pulled = p.tx != null && now >= p.delay;
+    if (pulled){
+      p.vx += (p.tx - p.x) * .045; p.vy += (p.ty - p.y) * .045;
+      p.vx *= .8; p.vy *= .8;
+      p.heat += (1 - p.heat) * .06;
+    } else {
+      const a = Math.sin(p.x * .0042 + t * 3) * 2.1 + Math.cos(p.y * .0047 - t * 2) * 2.1;   // a lazy current the loose ideas drift in
+      p.vx += Math.cos(a) * .045; p.vy += Math.sin(a) * .045;
+      p.vx *= .965; p.vy *= .965;
+      p.heat += (0 - p.heat) * .04;
+    }
+    const dx = p.x - mouse.x, dy = p.y - mouse.y, d2 = dx * dx + dy * dy;
+    if (d2 < R2){ const d = Math.sqrt(d2) || 1, f = (1 - d / R) * 3.2; p.vx += dx / d * f; p.vy += dy / d * f; }
+    p.x += p.vx; p.y += p.vy;
+    if (!pulled){ if (p.x < -10) p.x = W + 10; else if (p.x > W + 10) p.x = -10; if (p.y < -10) p.y = H + 10; else if (p.y > H + 10) p.y = -10; }
+  }
+  // loose ideas: ink, faint
+  cx.fillStyle = 'rgba(22,20,15,.34)';
+  for (const p of P) if (p.heat < .5){ const s = p.s * 1.6; cx.fillRect(p.x, p.y, s, s); }
+  // the winner: hot
+  cx.fillStyle = '#ff4a12';
+  for (const p of P) if (p.heat >= .5){ const s = 1.3 + p.heat * 1.9; cx.fillRect(p.x - s / 2, p.y - s / 2, s, s); }
+  requestAnimationFrame(frame);
+}
+
+hero.addEventListener('pointermove', e => { const r = cv.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+hero.addEventListener('pointerleave', () => { mouse.x = mouse.y = -1e4; });
+hero.addEventListener('pointerdown', e => { const r = cv.getBoundingClientRect(); shake(e.clientX - r.left, e.clientY - r.top); });
+let rs; addEventListener('resize', () => { clearTimeout(rs); rs = setTimeout(() => { const g = goal; size(); seed(); form(g, true); }, 150); });
+
+/* ───────── content ───────── */
+let thoughts = [], current = 0, isOwner = false, signedIn = null, fb = null;
+
+function render(src){
+  return String(src || '').trim().split(/\n\s*\n/).map(block => {
+    const quote = /^>\s?/.test(block);
+    const h = esc(block.replace(/^>\s?/gm, ''))
+      .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+|[\w./#-]+)\)/g, '<a href="$2">$1</a>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*([^*]+)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+    return quote ? `<blockquote>${h}</blockquote>` : `<p>${h}</p>`;
+  }).join('');
+}
+
+function status(){
+  $('status').innerHTML = thoughts.length
+    ? `<span class="dot"></span>${current === 0 ? 'Winning idea' : 'Old winner'} · won ${ago(thoughts[current].at)}<br><span class="dim">${thoughts.length} idea${thoughts.length === 1 ? '' : 's'} in the swarm</span>`
+    : `No winner yet<br><span class="dim">0 ideas in the swarm</span>`;
+}
+
+function show(){
+  const read = $('read');
+  const id = decodeURIComponent(location.hash.slice(1));
+  if (id === 'write' && isOwner) return writer();
+  if (id.startsWith('edit/') && isOwner){ const t = thoughts.find(x => x.id === id.slice(5)); if (t) return writer(t); }
+  if (!thoughts.length){
+    read.hidden = true; $('waiting').hidden = false; $('hint').innerHTML = 'Move through it <b>·</b> click to shake it';
+    form(null); status(); return;
+  }
+  $('waiting').hidden = true; $('hint').innerHTML = 'Move through it <b>·</b> click to shake it <b>·</b> scroll to read';
+  const i = Math.max(0, thoughts.findIndex(t => t.id === id));
+  current = i;
+  const th = thoughts[i], beat = thoughts[i - 1];
+  form(th.title);
+  $('h1').textContent = th.title;
+  document.title = (i ? th.title + ' · ' : '') + 'Rehan’s Thoughts';
+  read.hidden = false;
+  read.innerHTML = `<div class="col">
+      <div class="kick"><span>${i === 0 ? '● The winning idea' : `Old winner · held it ${days(th.at, beat.at) || 1}d`}</span><span>${fmt(th.at)}</span><span>${mins(th.body)} min read</span></div>
+      <h2 class="title">${esc(th.title)}</h2>
+      <div class="body">${render(th.body)}</div>
+      ${isOwner ? `<div class="tools"><a href="#edit/${esc(th.id)}">Edit</a><button type="button" data-del="${esc(th.id)}">Delete</button></div>` : ''}
+      ${thoughts.length > 1 ? `<div class="others"><h3>Everything in the swarm <span>pick one, it’ll pull itself together</span></h3>
+        ${thoughts.map((x, k) => `<button class="idea${k === i ? ' on' : ''}" type="button" data-pick="${esc(x.id)}"><i>${String(thoughts.length - k).padStart(2, '0')}</i><b>${esc(x.title)}</b><span>${k === 0 ? 'winning now' : fmt(x.at)}</span></button>`).join('')}
+      </div>` : ''}
+    </div>`;
+  status();
+}
+
+function writer(t){
+  form(t ? t.title : null);
+  const read = $('read'); read.hidden = false; $('waiting').hidden = true;
+  read.innerHTML = `<form class="write" id="write">
+      <div class="kick"><span>● ${t ? 'Editing' : 'New idea. Publishing makes it the winner.'}</span></div>
+      <label for="wt">Title</label>
+      <input id="wt" name="title" maxlength="140" required value="${esc(t?.title)}" autocomplete="off" placeholder="The idea">
+      <label for="wb">The thought</label>
+      <textarea id="wb" name="body" required>${esc(t?.body)}</textarea>
+      <div class="row">
+        <button class="send" type="submit">${t ? 'Save' : 'Release it into the swarm'}</button>
+        <a href="#" class="hint2">cancel</a>
+        <span class="hint2">blank line = new paragraph · *italic* · **highlight** · [link](url) · &gt; big pull quote</span>
+      </div>
+      <p class="err" id="werr"></p>
+    </form>`;
+  const ta = $('wb'), ti = $('wt');
+  const grow = () => { ta.style.height = 'auto'; ta.style.height = Math.max(300, ta.scrollHeight + 6) + 'px'; };
+  ta.addEventListener('input', grow); grow();
+  let ft; ti.addEventListener('input', () => { clearTimeout(ft); ft = setTimeout(() => form(ti.value.trim() || null), 350); });  // the swarm spells it as you type
+  read.scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+  ti.focus({preventScroll: true});
+  $('write').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = e.target, btn = f.querySelector('.send'), err = $('werr');
+    const title = f.elements.title.value.trim(), body = f.elements.body.value.trim();
+    if (!title || !body) return;
+    btn.disabled = true; err.textContent = '';
+    try {
+      const { addDoc, updateDoc, doc, collection, serverTimestamp } = fb.fs;
+      if (t) await updateDoc(doc(fb.db, 'thoughts', t.id), { title, body, updatedAt: serverTimestamp() });
+      else await addDoc(collection(fb.db, 'thoughts'), { title, body, createdAt: serverTimestamp() });
+      await load();
+      history.replaceState(null, '', location.pathname);
+      scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+      show(); shake(W / 2, H / 2);
+    } catch (x) { btn.disabled = false; err.textContent = 'Couldn’t save: ' + (x.code || x.message); }
+  });
+}
+
+document.addEventListener('click', async e => {
+  const pick = e.target.closest('[data-pick]');
+  if (pick){
+    const id = pick.dataset.pick, k = thoughts.findIndex(x => x.id === id);
+    history.replaceState(null, '', k === 0 ? location.pathname : '#' + id);
+    scrollTo({top: 0, behavior: reduce ? 'auto' : 'smooth'});
+    shake(W / 2, H / 2); show();
+    return;
+  }
+  const del = e.target.closest('[data-del]');
+  if (!del || !isOwner) return;
+  const th = thoughts.find(x => x.id === del.dataset.del);
+  if (!th || !confirm(`Delete “${th.title}”? This can’t be undone.`)) return;
+  try { await fb.fs.deleteDoc(fb.fs.doc(fb.db, 'thoughts', th.id)); await load(); history.replaceState(null, '', location.pathname); show(); }
+  catch (x) { alert('Couldn’t delete: ' + (x.code || x.message)); }
+});
+addEventListener('hashchange', show);
+
+/* ───────── data + sign-in ───────── */
+let authClick = () => alert('Sign-in isn’t set up yet. See THOUGHTS-SETUP.md in the repo.');
+
+async function load(){
+  const { collection, getDocs, query, orderBy } = fb.fs;
+  const snap = await getDocs(query(collection(fb.db, 'thoughts'), orderBy('createdAt', 'desc')));
+  thoughts = snap.docs.map(d => ({ id: d.id, ...d.data(), at: d.data().createdAt?.toDate?.() || new Date() }));
+}
+
+function paintMe(){
+  const me = $('me');
+  if (!signedIn){ me.innerHTML = `<button type="button" id="si">Sign in</button>`; $('si').onclick = () => authClick(); return; }
+  me.innerHTML = isOwner
+    ? `<span class="dot"></span>Rehan<br><a href="#write">New idea</a> · <button type="button" id="so">Sign out</button>`
+    : `Not the owner<br><button type="button" id="so">Sign out</button>`;
+  $('so').onclick = () => fb.signOut(fb.auth);
+}
+
+async function start(){
+  size(); seed(); requestAnimationFrame(frame);
+  scramble($('name'), 'Rehan’s Thoughts', 1100);
+  setTimeout(() => scramble($('sub'), 'A swarm of ideas', 900), 300);
+  paintMe(); status();
+  const fontsReady = document.fonts ? document.fonts.load('900 80px Archivo').catch(() => {}) : Promise.resolve();
+
+  if (!firebaseConfig.projectId){ await fontsReady; setTimeout(show, reduce ? 0 : 700); return; }
+
+  const app = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-app.js`);
+  const auth = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-auth.js`);
+  const fs = await import(`https://www.gstatic.com/firebasejs/${V}/firebase-firestore.js`);
+  const a = app.initializeApp(firebaseConfig);
+  fb = { fs, db: fs.getFirestore(a), auth: auth.getAuth(a), signOut: auth.signOut };
+  authClick = () => auth.signInWithPopup(fb.auth, new auth.GoogleAuthProvider())
+    .catch(x => x.code !== 'auth/popup-closed-by-user' && alert('Sign-in failed: ' + x.code));
+
+  try { await load(); } catch (x) { console.error(x); }
+  await fontsReady; show();
+
+  auth.onAuthStateChanged(fb.auth, async user => {
+    signedIn = user; isOwner = false;
+    if (user){
+      // Only owner accounts may read owner/check (see firestore.rules),
+      // so the owner emails never appear in this public page.
+      try { await fs.getDoc(fs.doc(fb.db, 'owner', 'check')); isOwner = true; } catch { isOwner = false; }
+    }
+    paintMe(); show();
+  });
+}
+start();
+</script>
+</body>
+</html>
