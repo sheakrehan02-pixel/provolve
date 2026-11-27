@@ -1,0 +1,35 @@
+rules_version = '2';
+
+// Rules for Rehan's Thoughts (docs/thoughts.html).
+// Paste this into Firebase console → Firestore Database → Rules → Publish.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email in [
+          'sheak.rehan02@gmail.com',
+          'rehan.renks@gmail.com'
+        ];
+    }
+
+    // Anyone can read thoughts. Only the owner can publish, edit or delete.
+    match /thoughts/{id} {
+      allow read: if true;
+      allow create, update: if isOwner()
+        && request.resource.data.title is string
+        && request.resource.data.title.size() > 0
+        && request.resource.data.title.size() <= 200
+        && request.resource.data.body is string
+        && request.resource.data.body.size() <= 100000;
+      allow delete: if isOwner();
+    }
+
+    // The page reads this to find out whether the signed-in account is the owner.
+    // It doesn't need to exist; only the permission check matters.
+    match /owner/{id} {
+      allow read: if isOwner();
+    }
+  }
+}
