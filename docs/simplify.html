@@ -4,348 +4,330 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Simplify It</title>
+<meta name="description" content="Simplify It: hard ideas go into the machine, obvious ones come out. An interactive blog you play.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&family=Unbounded:wght@800&family=Archivo:wdth,wght@62..125,800..900&family=Spectral:ital,wght@1,400&family=IBM+Plex+Mono:wght@400&family=Newsreader:opsz,wght@6..72,400&family=Instrument+Serif:ital@0;1&family=Azeret+Mono:wght@400&family=Fraunces:ital,opsz,wght@0,9..144,800;1,9..144,800&family=Literata:opsz@7..72&family=IBM+Plex+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,400..800&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;1,8..60,400&family=DM+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a magazine front page. Masthead, a split hero (promise left, live "simplifier" right), then each issue as a cover rendered in that issue's own visual world, then the method, then the lab queue. */
 :root{
-  --bg:#FFFFFF; --paper:#F3F4F1; --ink:#121317; --muted:#5E616B; --rule:#DDDFE3;
-  --cobalt:#2A3CEB; --hl:#E6FB3C; --on-hl:#121317;
-  /* Issue 01 world (wormhole) */
-  --w-paper:#ECEEF3; --w-panel:#F8F9FC; --w-ink:#12172A; --w-muted:#565E76; --w-red:#C2412A; --w-violet:#5643C4; --w-line:#CBD0DC;
-  /* Issue 02 world (topology, always dark) */
-  --c-void:#07080C; --c-grid:#151a27; --c-text:#E8E9EE; --c-dim:#8D93A6; --c-amber:#FFB547; --c-line:#242a3a;
+  --bg:#efede6;--ink:#121317;--muted:#6a6c73;--rule:#d8d6cd;
+  --cobalt:#2A3CEB;--cob-d:#1a27b8;--cob-dd:#0d145e;--lime:#E6FB3C;--hot:#ff5a36;--white:#fffdf8;
   --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
-  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
-  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  --body:"Source Serif 4",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0F1013; --paper:#17191E; --ink:#F1F1EE; --muted:#9A9DA8; --rule:#2A2D35; --cobalt:#8794FF; --hl:#D9F23A;
-  --w-paper:#0B0F1E; --w-panel:#131A2D; --w-ink:#E5E8F2; --w-muted:#959CB3; --w-red:#F0765A; --w-violet:#A193FF; --w-line:#273049; color-scheme:dark}}
-:root[data-theme="dark"]{
-  --bg:#0F1013; --paper:#17191E; --ink:#F1F1EE; --muted:#9A9DA8; --rule:#2A2D35; --cobalt:#8794FF; --hl:#D9F23A;
-  --w-paper:#0B0F1E; --w-panel:#131A2D; --w-ink:#E5E8F2; --w-muted:#959CB3; --w-red:#F0765A; --w-violet:#A193FF; --w-line:#273049; color-scheme:dark}
 *{box-sizing:border-box}
-html,body{margin:0}
 [hidden]{display:none!important}
-body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.55;padding-inline:16px}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--body)}
 a{color:inherit}
 button{font:inherit;color:inherit}
-:focus-visible{outline:2px solid var(--cobalt);outline-offset:3px}
-.page{max-width:1160px;margin:0 auto}
+:focus-visible{outline:2.5px solid var(--cobalt);outline-offset:3px}
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,44px)}
 
-/* masthead */
-.mast{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:18px;border-bottom:2px solid var(--ink)}
-.logo{font-family:var(--display);font-weight:800;font-size:26px;letter-spacing:-.03em;text-decoration:none;font-variation-settings:"wdth" 85}
-.logo span{color:var(--cobalt)}
-.mast nav{display:flex;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:13px}
-.mast nav a{text-decoration:none;color:var(--muted)}
-.mast nav a:hover{color:var(--ink)}
-.prog{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.prog b{color:var(--ink);font-weight:500}
-.strip{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:12px;color:var(--muted);padding-block:8px;border-bottom:1px solid var(--rule)}
+/* top line */
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;padding:22px 0 0;font:500 12px/1.4 var(--mono);text-transform:lowercase;letter-spacing:.03em}
+.top a{text-decoration:none}
+.top .logo{font:800 22px/1 var(--display);font-variation-settings:"wdth" 82,"opsz" 96;letter-spacing:-.02em;text-transform:none}
+.top .logo span{color:var(--cobalt)}
+.top .r{color:var(--muted);text-align:right}
+.top .r b{color:var(--ink);font-weight:500}
 
 /* hero */
-.hero{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px;align-items:center;padding-block:56px 64px}
-@media (max-width:900px){.hero{grid-template-columns:1fr;gap:28px;padding-block:36px 40px}}
-.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
-h1{font-family:var(--display);font-weight:800;font-size:clamp(46px,7vw,92px);line-height:.92;letter-spacing:-.045em;margin:.25em 0 .35em;text-wrap:balance;font-variation-settings:"wdth" 82,"opsz" 96}
-.mark{background:linear-gradient(transparent 58%,var(--hl) 58%,var(--hl) 92%,transparent 92%);padding:0 .06em;color:var(--ink)}
-.lede{font-size:21px;line-height:1.5;max-width:34em;color:var(--muted);margin:0 0 26px}
-.lede strong{color:var(--ink);font-weight:500}
-.ctas{display:flex;gap:10px;flex-wrap:wrap}
-.cta{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:14px;text-decoration:none;padding:12px 18px;border-radius:999px;border:1.5px solid var(--ink)}
-.cta.solid{background:var(--ink);color:var(--bg)}
-.cta:hover{transform:translateY(-1px)}
+.hero{display:grid;grid-template-columns:1fr minmax(0,560px);gap:clamp(20px,4vw,60px);align-items:center;min-height:calc(100svh - 60px);padding:30px 0 40px}
+.pitch h1{margin:0;font:800 clamp(44px,6.2vw,90px)/.9 var(--display);font-variation-settings:"wdth" 80,"opsz" 96;letter-spacing:-.035em}
+.pitch h1 .in{display:block}
+.pitch h1 .out{display:block;color:var(--cobalt)}
+.pitch h1 mark{background:var(--lime);color:var(--ink);padding:0 .08em;border-radius:.08em}
+.pitch p{font-size:clamp(17px,1.5vw,20px);line-height:1.5;color:#3d3f45;max-width:30ch;margin:22px 0 0}
+.pitch .how{margin-top:26px;font:500 12px/1.6 var(--mono);text-transform:lowercase;color:var(--muted)}
+.pitch .how b{color:var(--ink);font-weight:500;background:var(--lime);padding:1px 5px;border-radius:3px}
+.arrow{display:inline-block;animation:nudge 1.4s ease-in-out infinite}
+@keyframes nudge{50%{transform:translateX(6px)}}
 
-.simp{background:var(--paper);border-radius:22px;padding:18px;position:relative}
-.simp canvas{display:block;width:100%;max-width:100%;border-radius:14px;background:var(--bg)}
-.simp .row{display:flex;align-items:center;gap:12px;margin-top:14px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-.simp input{flex:1;min-width:0;accent-color:var(--cobalt)}
-.simp .cap{display:flex;justify-content:space-between;gap:10px;font-family:var(--mono);font-size:12px;color:var(--muted);margin-top:8px}
-.simp .cap b{color:var(--ink);font-weight:500}
-.badge{position:absolute;top:-12px;right:22px;background:var(--hl);color:var(--on-hl);font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:999px;transform:rotate(3deg)}
+/* ───────── the machine ───────── */
+.stage{display:flex;justify-content:center}
+.m{position:relative;font-size:clamp(9.4px,1.45vw,15.5px);width:36em;height:52em;user-select:none;-webkit-user-select:none}
+.m *{position:absolute}
+.m .feed{left:7em;top:0;width:18em;height:13.1em;overflow:hidden}
+.sheet{left:1em;top:1.4em;width:16em;height:12.6em;background:var(--white);border-radius:.4em .4em 0 0;padding:1em 1.1em;box-shadow:0 .2em .6em rgba(0,0,0,.12);transition:transform .9s cubic-bezier(.6,0,.4,1),opacity .3s;transform:rotate(-1.5deg)}
+.sheet *{position:static}
+.sheet .lab{display:block;font:500 .72em/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--hot);margin-bottom:.7em}
+.sheet p{margin:0;font:400 .78em/1.38 var(--body);color:#2a2b30;text-align:justify;hyphens:auto}
+.sheet p i{font-family:var(--mono);font-style:normal;font-size:.95em;color:#000}
+.sheet.gone{transform:translateY(14em) rotate(0)}
+.sheet.wait{transform:translateY(-14em) rotate(-4deg);opacity:0;transition:none}
 
-/* section heads */
-.sh{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:14px;margin-top:20px;margin-bottom:22px}
-.sh h2{font-family:var(--display);font-weight:800;font-size:clamp(28px,3.6vw,40px);letter-spacing:-.035em;margin:0;line-height:1;font-variation-settings:"wdth" 85}
-.sh p{margin:0;font-family:var(--mono);font-size:12px;color:var(--muted)}
+.pipe{left:4.2em;top:6.4em;width:2.6em;height:7em;background:linear-gradient(90deg,#3a3d48,#6b6f7d 45%,#3a3d48);border-radius:.4em .4em 0 0}
+.pipe::before{content:"";position:absolute;left:-.5em;top:-.6em;width:3.6em;height:1.2em;border-radius:.4em;background:#2b2d35}
+.puff{left:5.5em;top:5em;font:500 .9em/1 var(--mono);color:var(--muted);white-space:nowrap;pointer-events:none;will-change:transform,opacity}
 
-/* covers */
-.covers{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:20px}
-@media (max-width:860px){.covers{grid-template-columns:1fr}}
-.cover{display:grid;grid-template-rows:auto 1fr auto;border-radius:18px;overflow:hidden;text-decoration:none;min-height:520px;position:relative;transition:transform .2s}
-.cover:hover{transform:translateY(-3px)}
-.cover .top{display:flex;justify-content:space-between;gap:10px;padding:18px 22px;font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-.cover .art{position:relative;display:grid;place-items:center;min-height:240px}
-.cover .art canvas{width:100%;max-width:100%;display:block}
-.cover .foot{padding:20px 22px 22px}
-.cover h3{margin:0 0 10px;line-height:.95;text-wrap:balance}
-.cover .dek{margin:0 0 16px;font-size:16px;line-height:1.45}
-.meta{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;margin-bottom:14px}
-.pbar{height:5px;border-radius:3px;overflow:hidden;margin-bottom:12px}
-.pbar i{display:block;height:100%;width:0;transition:width .6s}
-.go{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px}
-.go b{font-weight:500}
-.new{padding:3px 9px;border-radius:999px;font-weight:600}
+.body{left:1em;top:12.4em;width:29em;height:23em;border-radius:2.6em;background:var(--cobalt);
+  box-shadow:inset 0 .55em 0 rgba(255,255,255,.18),inset 0 -1em 0 var(--cob-d),0 1.6em 2.2em -1em rgba(13,20,94,.55)}
+.m.shake .body,.m.shake .pipe,.m.shake .lights,.m.shake .gauge,.m.shake .lcd,.m.shake .win,.m.shake .plate{animation:shake .09s linear infinite}
+@keyframes shake{0%{translate:0 0}25%{translate:.12em -.1em}50%{translate:-.1em .12em}75%{translate:.1em .08em}}
+.slot{left:6em;width:20em;height:1.15em;border-radius:.6em;background:var(--cob-dd);box-shadow:inset 0 .25em .3em rgba(0,0,0,.6)}
+.slot.in{top:12.4em}
+.slot.outs{top:34.2em}
+.plate{left:3.4em;top:14.6em;width:13.6em;height:3.4em;background:#11131a;border-radius:.6em;padding:.55em .8em}
+.plate b{position:static;display:block;font:800 1.2em/1 var(--display);font-variation-settings:"wdth" 80,"opsz" 96;color:var(--lime);letter-spacing:.02em}
+.plate small{position:static;display:block;font:400 .66em/1.5 var(--mono);color:#8f93a3;text-transform:lowercase}
+.win{left:3.4em;top:19em;width:10.4em;height:10.4em;border-radius:50%;background:radial-gradient(circle at 40% 35%,#1b2370,#090d33 70%);box-shadow:inset 0 0 0 .5em #1626a6,inset 0 .6em 1em rgba(0,0,0,.6);overflow:hidden}
+.win svg{left:0;top:0;width:100%;height:100%}
+.win::after{content:"";position:absolute;left:18%;top:12%;width:30%;height:18%;border-radius:50%;background:rgba(255,255,255,.12);transform:rotate(-30deg)}
+.gauge{left:16.3em;top:15em;width:11.4em;height:7.2em;background:var(--white);border-radius:6em 6em .8em .8em;box-shadow:inset 0 -.3em 0 #e2dfd4,0 0 0 .35em var(--cob-d)}
+.gauge svg{left:0;top:0;width:100%;height:100%;overflow:visible}
+.lcd{left:16.3em;top:23.6em;width:11.4em;height:3em;border-radius:.5em;background:#0d1a0b;box-shadow:inset 0 .2em .4em rgba(0,0,0,.7);font:500 .95em/3.15em var(--mono);color:#c8ff4d;text-align:center;letter-spacing:.06em;text-shadow:0 0 .4em rgba(200,255,77,.7);white-space:nowrap;overflow:hidden}
+.lights{left:16.3em;top:28.2em;width:11.4em;display:flex;justify-content:space-between}
+.lights button{all:unset;position:relative;cursor:pointer;width:2.3em;text-align:center}
+.lights button i{position:relative;display:block;width:2.1em;height:2.1em;margin:0 auto;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4a56f0,#141c80);box-shadow:inset 0 -.2em 0 rgba(0,0,0,.35),0 .15em 0 var(--cob-dd);transition:background .2s,box-shadow .2s}
+.lights button span{position:relative;display:block;margin-top:.35em;font:500 .7em/1 var(--mono);color:#c7ccff}
+.lights button[aria-pressed="true"] i{background:radial-gradient(circle at 35% 30%,#fbffb5,var(--lime) 55%,#9bb000);box-shadow:0 0 1em rgba(230,251,60,.8),inset 0 -.2em 0 rgba(0,0,0,.2)}
+.lights button:focus-visible{outline-offset:2px}
+.foot{top:34.6em;width:4em;height:1.6em;border-radius:0 0 .8em .8em;background:var(--cob-dd)}
+.foot.a{left:4em}.foot.b{left:23em}
 
-.c02{background:var(--c-void);color:var(--c-text);font-family:"Spectral",Georgia,serif;background-image:linear-gradient(var(--c-grid) 1px,transparent 1px),linear-gradient(90deg,var(--c-grid) 1px,transparent 1px);background-size:32px 32px;border:1px solid var(--c-line)}
-.c02 .top,.c02 .meta,.c02 .go{font-family:"IBM Plex Mono",var(--mono);color:var(--c-dim)}
-.c02 .new{background:var(--c-amber);color:var(--c-void)}
-.c02 .one{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:62%;font-weight:900;font-size:clamp(170px,22vw,260px);line-height:.8;color:var(--c-amber);text-shadow:0 0 70px rgba(255,181,71,.35)}
-.c02 h3{font-family:"Archivo","Arial Narrow",sans-serif;font-stretch:118%;font-weight:850;text-transform:uppercase;font-size:clamp(30px,3.4vw,42px);letter-spacing:-.02em;color:var(--c-text)}
-.c02 h3 span{color:var(--c-amber)}
-.c02 .dek{color:var(--c-dim);font-style:italic}
-.c02 .pbar{background:var(--c-line)} .c02 .pbar i{background:var(--c-amber)}
-.c02 .go b{color:var(--c-amber)}
+/* lever */
+.lbase{left:29.2em;top:21.4em;width:3.2em;height:3.2em;border-radius:50%;background:radial-gradient(circle at 40% 35%,#7a7f90,#2b2e38);box-shadow:0 .2em 0 #1a1c22}
+.lever{all:unset;position:absolute;left:30.35em;top:13.1em;width:.9em;height:9.9em;cursor:grab;transform-origin:50% 100%;transform:rotate(18deg);transition:transform .5s cubic-bezier(.3,1.7,.5,1);touch-action:none}
+.lever::before{content:"";position:absolute;left:0;top:1.6em;width:.9em;height:8.3em;border-radius:.45em;background:linear-gradient(90deg,#8d92a3,#d6d9e2 45%,#6c7080)}
+.lever::after{content:"";position:absolute;left:-1.35em;top:-1.6em;width:3.6em;height:3.6em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fbffb5,var(--lime) 50%,#8aa000);box-shadow:0 .3em .5em rgba(0,0,0,.3)}
+.lever.down{transform:rotate(158deg);transition:transform .25s cubic-bezier(.5,0,.8,.4)}
+.lever:hover::after{filter:brightness(1.05)}
+.tag{left:32.4em;top:9.6em;font:500 .78em/1.25 var(--mono);color:var(--muted);transform:rotate(8deg);text-align:left;width:8em;pointer-events:none;transition:opacity .3s}
+.tag::before{content:"↙";position:absolute;left:-1.1em;top:1.1em;font-size:1.3em}
 
-.c01{background:var(--w-paper);color:var(--w-ink);border:1px solid var(--w-line)}
-.c01 .top,.c01 .meta,.c01 .go{font-family:var(--mono);color:var(--w-muted)}
-.c01 .new{border:1px solid var(--w-line)}
-.c01 h3{font-family:"Unbounded","Arial Black",sans-serif;font-weight:800;font-size:clamp(28px,3vw,36px);letter-spacing:-.035em}
-.c01 h3 em{font-style:normal;color:var(--w-violet)}
-.c01 .dek{color:var(--w-muted);font-family:"Newsreader",Georgia,serif}
-.c01 .pbar{background:var(--w-line)} .c01 .pbar i{background:var(--w-red)}
-.c01 .go b{color:var(--w-violet)}
+/* the ticket that comes out */
+.outw{left:4.5em;top:34.8em;width:23em;height:17em;overflow:hidden;pointer-events:none}
+.ticket{position:absolute;left:0;top:0;width:23em;pointer-events:auto;transform:translateY(-105%);transition:transform 1s cubic-bezier(.25,.9,.3,1)}
+.ticket.out{transform:translateY(0) rotate(.8deg)}
+.ticket *{position:static}
+.tk{display:block;background:var(--white);border-radius:0 0 .8em .8em;padding:1.3em 1.4em 1.3em;text-decoration:none;color:var(--ink);box-shadow:0 .8em 1.4em -0.6em rgba(0,0,0,.35);
+  background-image:radial-gradient(circle at 0 0,var(--bg) .5em,transparent .55em),radial-gradient(circle at 100% 0,var(--bg) .5em,transparent .55em)}
+.tk .lab{display:block;font:500 .72em/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--cobalt);margin-bottom:.6em}
+.tk b{display:block;font:800 1.9em/.98 var(--display);font-variation-settings:"wdth" 82,"opsz" 96;letter-spacing:-.025em}
+.tk b em{font-style:normal;background:var(--lime);padding:0 .08em}
+.tk p{margin:.6em 0 0;font:400 .95em/1.4 var(--body);color:#45474e}
+.tk .go{display:inline-block;margin-top:.9em;font:500 .82em/1 var(--mono);text-transform:lowercase;background:var(--cobalt);color:#fff;padding:.7em 1em;border-radius:2em}
+.tk:hover .go{background:var(--ink)}
 
-/* Issue 03 world (medicine, always dark) */
-.cover.feature{grid-column:1/-1;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);grid-template-rows:auto 1fr;min-height:0}
-.cover.feature .top{grid-column:1/-1}
-.cover.feature .art{min-height:300px;padding:0 0 0 22px}
-.cover.feature .foot{display:flex;flex-direction:column;justify-content:flex-end}
-@media (max-width:860px){.cover.feature{grid-template-columns:1fr}.cover.feature .art{padding:0}}
-.c03{background:#0A0F0E;color:#E8ECE4;border:1px solid #24312D;background-image:radial-gradient(#1A2421 1.2px,transparent 1.3px);background-size:22px 22px}
-.c03 .top,.c03 .meta,.c03 .go{font-family:"Azeret Mono",var(--mono);color:#90A099}
-.c03 .new{background:#F2D14B;color:#0A0F0E}
-.c03 h3{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:clamp(40px,4.6vw,60px);letter-spacing:-.01em;line-height:.95}
-.c03 h3 em{color:#FF7E6B}
-.c03 .dek{color:#90A099;font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-size:20px;line-height:1.3}
-.c03 .pbar{background:#24312D} .c03 .pbar i{background:#F2D14B}
-.c03 .go b{color:#F2D14B}
-.c03 .art canvas{border-radius:12px}
-/* Issue 04 world (weighing room) */
-.c04{background:#EEECE7;color:#1B1915;border:1px solid #D2CEC4}
-.c04 .top,.c04 .meta,.c04 .go{font-family:"IBM Plex Mono",var(--mono);color:#615C52}
-.c04 .new{background:#9A5B00;color:#F9F8F5}
-.c04 h3{font-family:"Fraunces",Georgia,serif;font-weight:800;font-size:clamp(36px,4.2vw,54px);letter-spacing:-.03em;line-height:.98}
-.c04 h3 em{color:#9A5B00}
-.c04 .dek{color:#615C52;font-family:"Literata",Georgia,serif;font-size:18px}
-.c04 .pbar{background:#D2CEC4} .c04 .pbar i{background:#9A5B00}
-.c04 .go b{color:#9A5B00}
-.c04 .art canvas{border-radius:12px}
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .c04{background:#1E1B16;color:#EDE8DF;border-color:#34302A}
-  :root:not([data-theme="light"]) .c04 .top,:root:not([data-theme="light"]) .c04 .meta,:root:not([data-theme="light"]) .c04 .go,:root:not([data-theme="light"]) .c04 .dek{color:#A39C8E}
-  :root:not([data-theme="light"]) .c04 h3 em,:root:not([data-theme="light"]) .c04 .go b{color:#E2A63B}:root:not([data-theme="light"]) .c04 .pbar i,:root:not([data-theme="light"]) .c04 .new{background:#E2A63B;color:#14120E}}
-:root[data-theme="dark"] .c04{background:#1E1B16;color:#EDE8DF;border-color:#34302A}
-:root[data-theme="dark"] .c04 .top,:root[data-theme="dark"] .c04 .meta,:root[data-theme="dark"] .c04 .go,:root[data-theme="dark"] .c04 .dek{color:#A39C8E}
-:root[data-theme="dark"] .c04 h3 em,:root[data-theme="dark"] .c04 .go b{color:#E2A63B}:root[data-theme="dark"] .c04 .pbar i,:root[data-theme="dark"] .c04 .new{background:#E2A63B;color:#14120E}
-/* method */
-.method{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:18px;overflow:hidden;margin-top:6px}
-@media (max-width:860px){.method{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:480px){.method{grid-template-columns:1fr}}
-.step{padding:22px;border-right:1px solid var(--rule);display:grid;gap:8px;align-content:start;background:var(--bg)}
-.step:last-child{border-right:0}
-@media (max-width:860px){.step:nth-child(2){border-right:0}.step:nth-child(-n+2){border-bottom:1px solid var(--rule)}}
-@media (max-width:480px){.step{border-right:0;border-bottom:1px solid var(--rule)}.step:last-child{border-bottom:0}}
-.step .n{font-family:var(--mono);font-size:12px;color:var(--cobalt)}
-.step h3{font-family:var(--display);font-weight:800;font-size:28px;letter-spacing:-.035em;margin:0;line-height:1}
-.step p{margin:0;font-size:16px;color:var(--muted);line-height:1.45}
-.step .eg{font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--paper);border-radius:8px;padding:8px 10px;line-height:1.4}
-.why{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:40px;align-items:start}
-@media (max-width:860px){.why{grid-template-columns:1fr;gap:16px}}
-.why blockquote{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(24px,3vw,34px);line-height:1.12;letter-spacing:-.03em;font-variation-settings:"wdth" 90}
-.why p{margin:0 0 1em;color:var(--muted)}
-.why p strong{color:var(--ink);font-weight:500}
+/* ───────── below the fold ───────── */
+section{padding:70px 0 0}
+.sh{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:12px;margin-bottom:26px}
+.sh h2{margin:0;font:800 clamp(34px,4.6vw,58px)/.95 var(--display);font-variation-settings:"wdth" 80,"opsz" 96;letter-spacing:-.03em}
+.sh p{margin:0;font:500 12px/1.5 var(--mono);color:var(--muted);text-transform:lowercase;max-width:34ch;text-align:right}
 
-/* queue */
-.queue{border-top:1px solid var(--rule)}
-.qi{display:grid;grid-template-columns:90px minmax(0,1fr) auto;gap:16px;align-items:baseline;padding:18px 0;border-bottom:1px solid var(--rule)}
-.qi .no{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.qi h4{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.025em;margin:0 0 2px;line-height:1.15}
-.qi p{margin:0;font-size:15px;color:var(--muted)}
-.qi .when{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
-.qi .vote{font-family:var(--mono);font-size:12px;border:1px solid var(--rule);background:var(--bg);border-radius:999px;padding:6px 12px;cursor:pointer;white-space:nowrap}
-.qi .vote[aria-pressed="true"]{background:var(--hl);color:var(--on-hl);border-color:var(--hl)}
-@media (max-width:560px){.qi{grid-template-columns:1fr}.qi .no{order:-1}}
-footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;border-top:2px solid var(--ink);margin-top:70px;padding-block:18px 40px;font-family:var(--mono);font-size:12px;color:var(--muted)}
-footer .logo{font-size:20px;color:var(--ink)}
-@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+.tickets{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:26px 22px;align-items:start}
+.tickets .tk{font-size:15px;border-radius:.8em;transition:transform .25s cubic-bezier(.3,1.7,.5,1)}
+.tickets a:nth-child(odd) .tk{transform:rotate(-.8deg)}.tickets a:nth-child(even) .tk{transform:rotate(.7deg)}
+.tickets a{text-decoration:none}
+.tickets a:hover .tk{transform:translateY(-6px) rotate(0)}
+.tk .meta{display:block;margin-top:.9em;font:500 .72em/1.6 var(--mono);color:var(--muted);text-transform:lowercase}
+.tk .bar{display:block;height:.45em;border-radius:1em;background:#e9e6dc;margin-top:.7em;overflow:hidden}
+.tk .bar i{display:block;height:100%;background:var(--cobalt);border-radius:1em}
+.tk .st{display:block;margin-top:.45em;font:500 .72em/1.4 var(--mono);color:var(--ink);text-transform:lowercase}
+
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.step{border-top:6px solid var(--cobalt);padding-top:14px}
+.step:nth-child(2){border-color:var(--lime)}.step:nth-child(3){border-color:var(--hot)}.step:nth-child(4){border-color:var(--ink)}
+.step span{font:500 12px/1 var(--mono);color:var(--muted)}
+.step h3{margin:8px 0 6px;font:800 26px/1 var(--display);font-variation-settings:"wdth" 82,"opsz" 96;letter-spacing:-.02em}
+.step p{margin:0;font-size:16px;line-height:1.45;color:#3d3f45}
+
+.tray{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:18px}
+.wsheet{background:var(--white);border-radius:.5em;padding:18px 18px 16px;box-shadow:0 2px 0 #dcd9cf,0 4px 0 #cfccc1;display:flex;flex-direction:column;gap:8px}
+.wsheet .no{font:500 11px/1 var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--hot)}
+.wsheet h4{margin:0;font:800 22px/1.05 var(--display);font-variation-settings:"wdth" 82,"opsz" 96;letter-spacing:-.02em}
+.wsheet p{margin:0;font-size:15px;line-height:1.45;color:#45474e}
+.wsheet .row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px}
+.wsheet .when{font:500 11px/1 var(--mono);color:var(--muted);text-transform:lowercase}
+.vote{all:unset;cursor:pointer;font:500 12px/1 var(--mono);text-transform:lowercase;border:1.5px solid var(--ink);border-radius:2em;padding:8px 12px}
+.vote[aria-pressed="true"]{background:var(--lime)}
+
+footer{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:90px;padding:20px 0 50px;border-top:2px solid var(--ink);font:500 12px/1.5 var(--mono);color:var(--muted);text-transform:lowercase}
+footer a{color:var(--ink)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr;min-height:0;padding-top:20px}
+  .pitch p{max-width:none}
+  .m{font-size:clamp(8px,2.45vw,12px)}
+  .steps{grid-template-columns:1fr 1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  .arrow{animation:none}
+  .m.shake *{animation:none!important}
+}
 </style>
 </head>
 <body>
-
-<div class="page">
-  <header class="mast">
+<div class="wrap">
+  <header class="top">
     <a class="logo" href="index.html">Simplify<span>/</span>It</a>
-    <nav aria-label="Sections"><a href="#issues">Issues</a><a href="#method">How it works</a><a href="#lab">In the lab</a></nav>
-    <div class="prog" id="prog">Your progress: <b>0</b> levels cleared</div>
+    <span class="r" id="prog">your progress: <b>0</b> levels cleared</span>
   </header>
-  <div class="strip"><span>Hard topics, broken down to first principles. One a week.</span><span>Latest: Issue 04 · Where Does the Energy Come From?</span></div>
 
-  <section class="hero">
-    <div>
-      <div class="eyebrow">An interactive blog you play</div>
-      <h1>Hard ideas, <span class="mark">played</span> until they're obvious.</h1>
-      <p class="lede">Each week, one topic that usually takes a PhD gets stripped down to its fundamentals and rebuilt as a game. <strong>You guess first, then play with the real physics, then derive it yourself.</strong> By the end, you understand it from your own intuition instead of a definition.</p>
-      <div class="ctas"><a class="cta solid" href="energy.html">Play the latest issue →</a><a class="cta" href="wormhole.html">Start at Issue 01</a></div>
+  <section class="hero" style="padding-top:30px">
+    <div class="pitch">
+      <h1><span class="in">Hard ideas in.</span><span class="out"><mark>Obvious</mark> ones out.</span></h1>
+      <p>One topic a week that usually takes a PhD, fed through the machine until it’s simple enough to play with.</p>
+      <div class="how">pick an issue on the machine, then <b>pull the lever</b> <span class="arrow">→</span></div>
     </div>
-    <div class="simp">
-      <span class="badge">Drag me</span>
-      <canvas id="cvSimp" width="720" height="520" aria-label="A tangled scribble of jargon that becomes a clean circle as you simplify"></canvas>
-      <div class="row"><span>PhD</span><input type="range" id="simp" min="0" max="1" step="0.005" value="0.18" aria-label="Simplify"><span>Fundamental</span></div>
-      <div class="cap"><span>Jargon left: <b id="jl">12</b></span><span id="jmsg">Keep simplifying.</span></div>
-    </div>
-  </section>
 
-  <section id="issues">
-    <div class="sh"><h2>Issues</h2><p>Every issue is its own world: its own look, its own instruments, its own boss level.</p></div>
-    <div class="covers">
-      <a class="cover c04 feature" href="energy.html">
-        <div class="top"><span>Issue 04 · Nuclear physics</span><span class="new">New</span></div>
-        <div class="art"><canvas id="cvEn" width="760" height="380" aria-label="The valley of binding energy, with iron at the bottom"></canvas></div>
-        <div class="foot">
-          <h3>Where does the <em>energy</em> come from?</h3>
-          <p class="dek">Put an atom on a scale and it weighs less than its parts. Find the missing mass, then calculate the energy that powers the Sun.</p>
-          <div class="meta"><span>7 levels</span><span>~35 min</span><span>Mass defect · Binding energy · E = mc²</span></div>
-          <div class="pbar"><i id="p04"></i></div>
-          <div class="go"><span id="t04">Not started</span><b id="g04">Play →</b></div>
-        </div>
-      </a>
-      <a class="cover c03 feature" href="patient.html">
-        <div class="top"><span>Issue 03 · Mathematics × medicine</span></div>
-        <div class="art"><canvas id="cvPat" width="760" height="380" aria-label="Hidden biology behind a few measurements"></canvas></div>
-        <div class="foot">
-          <h3>The patient you <em>cannot</em> see</h3>
-          <p class="dek">How mathematics reconstructs an invisible disease from a handful of noisy measurements, and where that reasoning runs out.</p>
-          <div class="meta"><span>15 levels</span><span>~45 min</span><span>Inverse problems · Bayes · Digital twins</span></div>
-          <div class="pbar"><i id="p03"></i></div>
-          <div class="go"><span id="t03">Not started</span><b id="g03">Play →</b></div>
-        </div>
-      </a>
-      <a class="cover c02" href="chern.html">
-        <div class="top"><span>Issue 02 · Mathematical physics</span><span class="new">Oct 16</span></div>
-        <div class="art"><div class="one" id="oneC">1</div></div>
-        <div class="foot">
-          <h3>The integer that <span>won't</span> go away</h3>
-          <p class="dek">How geometry hides inside quantum mechanics, and why an electron can know the shape of a space it never visits.</p>
-          <div class="meta"><span>13 levels</span><span>~40 min</span><span>Topology · Berry phase · Chern numbers</span></div>
-          <div class="pbar"><i id="p02"></i></div>
-          <div class="go"><span id="t02">Not started</span><b id="g02">Play →</b></div>
-        </div>
-      </a>
-      <a class="cover c01" href="wormhole.html">
-        <div class="top"><span>Issue 01 · Theoretical physics</span><span class="new">Oct 13</span></div>
-        <div class="art"><canvas id="cvWorm" width="560" height="300" aria-label="A wormhole throat"></canvas></div>
-        <div class="foot">
-          <h3>Can you build a <em>wormhole?</em></h3>
-          <p class="dek">Start knowing nothing. Finish having derived why a traversable wormhole needs matter nobody has ever bottled.</p>
-          <div class="meta"><span>7 levels</span><span>~25 min</span><span>Relativity · Energy conditions</span></div>
-          <div class="pbar"><i id="p01"></i></div>
-          <div class="go"><span id="t01">Not started</span><b id="g01">Play →</b></div>
-        </div>
-      </a>
-    </div>
-  </section>
-
-  <section id="method" style="margin-top:70px">
-    <div class="sh"><h2>How every issue plays</h2><p>The same four moves, in this order, every week.</p></div>
-    <div class="method">
-      <div class="step"><span class="n">1 · Guess</span><h3>Gut check</h3><p>Answer a few questions before you know anything. Your guesses stay locked until the end.</p><div class="eg">"Can an arrow turn 0.37 times around a loop?"</div></div>
-      <div class="step"><span class="n">2 · Play</span><h3>Instruments</h3><p>Sliders and canvases running the real equations. You build intuition by poking the physics until it pushes back.</p><div class="eg">Squeeze Earth until light can't escape.</div></div>
-      <div class="step"><span class="n">3 · Derive</span><h3>The math</h3><p>Only now do the equations arrive, step by step, each one tied to something you already played with.</p><div class="eg">ρ + pᵣ = (b′ − 1) / 8πr₀² &lt; 0</div></div>
-      <div class="step"><span class="n">4 · Solve</span><h3>Boss level</h3><p>A real problem from the field. Then a debrief puts your first guesses next to the physics.</p><div class="eg">Mystery material: what is its Chern number?</div></div>
-    </div>
-    <div class="why">
-      <blockquote>Understanding you reach through your own intuition sticks. Facts you're handed don't.</blockquote>
-      <div>
-        <p>Most explainers give you a surface-level picture and a metaphor. Simplify It goes further down, to the <strong>fundamental principle</strong> the whole topic rests on, and then makes you rediscover it.</p>
-        <p>The abstract parts, the ones you can't hold in your hand or easily picture, get an instrument you can poke. Every number on these pages comes from an actual calculation, not an animation of one.</p>
+    <div class="stage">
+      <div class="m" id="m" aria-label="The Simplifier: a machine that turns jargon into plain English">
+        <div class="pipe" aria-hidden="true"></div>
+        <div class="feed" aria-hidden="true"><div class="sheet" id="sheet"></div></div>
+        <div class="body" aria-hidden="true"></div>
+        <div class="slot in" aria-hidden="true"></div>
+        <div class="plate" aria-hidden="true"><b>THE SIMPLIFIER</b><small>model 04 · made in texas</small></div>
+        <div class="win" aria-hidden="true"><svg viewBox="-50 -50 100 100"><g id="g1"></g><g id="g2"></g></svg></div>
+        <div class="gauge" aria-hidden="true"><svg viewBox="-60 -54 120 66"><g id="ticks"></g>
+          <text x="-44" y="8" font-family="DM Mono, monospace" font-size="7.5" fill="#6a6c73">obvious</text>
+          <text x="30" y="8" font-family="DM Mono, monospace" font-size="7.5" fill="#ff5a36">PhD</text>
+          <g id="needle"><line x1="0" y1="0" x2="0" y2="-40" stroke="#121317" stroke-width="2.6" stroke-linecap="round"/></g>
+          <circle r="5" fill="#121317"/></svg></div>
+        <div class="lcd" id="lcd" aria-live="polite">READY</div>
+        <div class="lights" id="lights" role="group" aria-label="Pick an issue"></div>
+        <div class="foot a" aria-hidden="true"></div><div class="foot b" aria-hidden="true"></div>
+        <div class="slot outs" aria-hidden="true"></div>
+        <div class="lbase" aria-hidden="true"></div>
+        <button class="lever" id="lever" type="button" aria-label="Pull the lever to simplify"></button>
+        <div class="tag" id="tag" aria-hidden="true">pull me (or drag me down)</div>
+        <div class="outw"><div class="ticket" id="ticket"></div></div>
       </div>
     </div>
   </section>
 
-  <section id="lab" style="margin-top:70px">
-    <div class="sh"><h2>In the lab</h2><p>Planned issues. Vote for the one you want next (saved in your browser).</p></div>
-    <div class="queue" id="queue"></div>
+  <section id="issues">
+    <div class="sh"><h2>Out of the machine</h2><p>every issue so far. each one is its own little world with its own instruments.</p></div>
+    <div class="tickets" id="tickets"></div>
   </section>
 
-  <footer><a class="logo" href="index.html">Simplify<span style="color:var(--cobalt)">/</span>It</a><span>Sample site built to preview the format · progress is stored in this browser only</span></footer>
+  <section id="method">
+    <div class="sh"><h2>What happens inside</h2><p>the same four moves, in this order, every week.</p></div>
+    <div class="steps">
+      <div class="step"><span>01</span><h3>Guess</h3><p>Answer a few questions before you know anything. Your guesses stay locked until the end.</p></div>
+      <div class="step"><span>02</span><h3>Play</h3><p>Sliders and canvases running the real equations. Poke the physics until it pushes back.</p></div>
+      <div class="step"><span>03</span><h3>Derive</h3><p>Only now does the math arrive, one step at a time, each tied to something you already played with.</p></div>
+      <div class="step"><span>04</span><h3>Solve</h3><p>A real problem from the field. Then your first guesses get put next to the physics.</p></div>
+    </div>
+  </section>
+
+  <section id="lab">
+    <div class="sh"><h2>Waiting in the tray</h2><p>next up. vote for the one you want fed in first (saved in your browser).</p></div>
+    <div class="tray" id="queue"></div>
+  </section>
+
+  <footer><span><a href="index.html">← provolve</a></span><span>made in texas · progress is stored in this browser only</span></footer>
 </div>
 
 <script>
 (function(){
 const $=s=>document.querySelector(s);
 const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const tok=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
 const store={get(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(e){return null}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* the issues: what goes in, and what comes out */
+const ISSUES=[
+ {n:'01',href:'wormhole.html',key:'simplifyit:wormhole',lv:7,mins:25,unit:'XP',
+  jargon:'Traversable Morris–Thorne wormholes: the flare-out condition <i>b′(r₀) &lt; 1</i> at the throat, the Einstein field equations <i>G_μν = 8πT_μν</i>, and the consequent violation of the null energy condition <i>ρ + pᵣ &lt; 0</i> by the stress–energy tensor of any supporting matter distribution.',
+  title:'Can you build a <em>wormhole?</em>',dek:'Start knowing nothing. Finish having worked out why one needs matter nobody has ever bottled.',tags:'relativity · energy conditions'},
+ {n:'02',href:'chern.html',key:'simplifyit:chern',lv:13,mins:40,unit:'charge',
+  jargon:'The first Chern number <i>C = (1/2π)∮ F dk</i> as the integral of Berry curvature over the Brillouin zone, its quantization as a topological invariant of the Bloch bundle, and the bulk–boundary correspondence for chiral edge states.',
+  title:'The integer that <em>won’t</em> go away',dek:'How geometry hides inside quantum mechanics, and why an electron knows the shape of a space it never visits.',tags:'topology · berry phase'},
+ {n:'03',href:'patient.html',key:'simplifyit:patient',lv:15,mins:45,unit:'evidence',
+  jargon:'Ill-posed inverse problems in physiological modelling: Bayesian posterior inference <i>p(θ | y) ∝ p(y | θ)p(θ)</i> over latent disease parameters from sparse, noisy observations, and the identifiability limits of patient-specific digital twins.',
+  title:'The patient you <em>cannot</em> see',dek:'How math rebuilds an invisible disease from a few noisy measurements, and where that reasoning runs out.',tags:'inverse problems · bayes'},
+ {n:'04',href:'energy.html',key:'simplifyit:energy',lv:7,mins:35,unit:'XP',isNew:true,
+  jargon:'Nuclear binding energy per nucleon <i>B/A</i> as a function of mass number, the mass defect <i>Δm = Zmₚ + Nmₙ − M</i>, and the Q-value of exothermic fusion and fission channels approaching the ⁵⁶Fe maximum of the semi-empirical mass formula.',
+  title:'Where does the <em>energy</em> come from?',dek:'Put an atom on a scale and it weighs less than its parts. Find the missing mass, then power the Sun.',tags:'mass defect · E = mc²'}
+];
+const JUNK=['Berry curvature','T_μν','null energy condition','Brillouin zone','homotopy','∮ A · dk','Schwarzschild radius','fiber bundle','posterior','Q-value','semi-empirical','ill-posed','gauge freedom','B/A','eigenstate','tensor'];
 
 /* progress */
-let total=0;[['simplifyit:energy','04',7],['simplifyit:patient','03',15],['simplifyit:chern','02',13],['simplifyit:wormhole','01',7]].forEach(([k,id,n])=>{const d=store.get(k);const c=d&&d.cleared?d.cleared.length:0,T=(d&&d.total)||n;total+=c;
-  $('#p'+id).style.width=(c/T*100)+'%';$('#t'+id).textContent=c?`${c} of ${T} levels cleared · ${d.xp||0} ${id==='02'?'charge':id==='03'?'evidence':'XP'}`:'Not started';$('#g'+id).textContent=c>=T?'Replay →':c?'Continue →':'Play →'});
-$('#prog').innerHTML=`Your progress: <b>${total}</b> level${total===1?'':'s'} cleared`;
+let total=0;
+ISSUES.forEach(it=>{const d=store.get(it.key);it.done=d&&d.cleared?d.cleared.length:0;it.T=(d&&d.total)||it.lv;it.xp=(d&&d.xp)||0;total+=it.done});
+$('#prog').innerHTML=`your progress: <b>${total}</b> level${total===1?'':'s'} cleared`;
+const status=it=>it.done?`${it.done} of ${it.T} levels cleared · ${it.xp} ${it.unit}`:'not started yet';
+const ticketHTML=(it,withBar)=>`<span class="tk"><span class="lab">Issue ${it.n}${it.isNew?' · new':''} · simplified</span><b>${it.title}</b><p>${esc(it.dek)}</p>${withBar?`<span class="meta">${it.lv} levels · ~${it.mins} min · ${esc(it.tags)}</span><span class="bar"><i style="width:${it.done/it.T*100}%"></i></span><span class="st">${status(it)}</span>`:''}<span class="go">${it.done>=it.T?'replay it':it.done?'keep going':'play it'} →</span></span>`;
+$('#tickets').innerHTML=ISSUES.slice().reverse().map(it=>`<a href="${it.href}">${ticketHTML(it,true)}</a>`).join('');
 
-/* simplifier */
-const cv=$('#cvSimp'),g=cv.getContext('2d'),W=cv.width,H=cv.height;
-const NH=22,A=[],B=[],P1=[],P2=[];let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
-for(let n=2;n<=NH+1;n++){A.push((rnd()*.9+.25)*.55/Math.pow(n,.62));B.push((rnd()*.9+.25)*.55/Math.pow(n,.62));P1.push(rnd()*6.283);P2.push(rnd()*6.283)}
-const JARGON=[['Berry curvature',.13,.16],['T_μν',.82,.13],['null energy condition',.6,.9],['Brillouin zone',.1,.82],['Chern class',.86,.55],['∮ A · dk',.25,.5],['Schwarzschild radius',.62,.27],['fiber bundle',.36,.08],['Pauli matrices',.78,.78],['homotopy',.07,.42],['ρ + pᵣ < 0',.44,.72],['gauge freedom',.9,.33]];
-let s=.18,t=0;
-function w(n,s){return Math.max(0,Math.min(1,((1-s)*(NH+4)-n)/3))}
-function draw(){const ink=tok('--ink'),cob=tok('--cobalt'),mut=tok('--muted'),bg=tok('--bg'),hl=tok('--hl');g.fillStyle=bg;g.fillRect(0,0,W,H);
-  const cx=W/2,cy=H/2,R=Math.min(W,H)*.3;
-  // jargon
-  g.textAlign='center';g.font='500 18px "DM Mono", monospace';let left=0;
-  JARGON.forEach(([txt,x,y],i)=>{const fade=Math.max(0,Math.min(1,1-(s-i/JARGON.length*0.85)*4));if(fade>0.05)left++;if(fade<=0)return;g.globalAlpha=fade*.85;g.fillStyle=mut;const jx=x*W+Math.sin(t*.7+i)*4*(1-s),jy=y*H+Math.cos(t*.6+i*1.3)*4*(1-s);g.fillText(txt,jx,jy)});g.globalAlpha=1;
-  // scribble
-  const layers=s<.95?3:1;
-  for(let L=0;L<layers;L++){g.beginPath();for(let k=0;k<=720;k++){const th=k/720*Math.PI*2;let x=Math.cos(th),y=Math.sin(th);for(let n=0;n<NH;n++){const ww=w(n,s);if(!ww)continue;const ph=t*(.15+n*.01)*(L?-.7:1)+L*.9;x+=ww*A[n]*Math.cos((n+2)*th+P1[n]+ph);y+=ww*B[n]*Math.sin((n+2)*th+P2[n]+ph*1.1)}const X=cx+x*R,Y=cy+y*R;k?g.lineTo(X,Y):g.moveTo(X,Y)}
-    g.strokeStyle=L?ink:cob;g.globalAlpha=L?(1-s)*.35:1;g.lineWidth=L?1.2:3;g.lineJoin='round';g.stroke()}g.globalAlpha=1;
-  if(s>.9){const a=(s-.9)/.1;g.globalAlpha=a;g.fillStyle=hl;g.beginPath();g.arc(cx,cy,R*.44,0,Math.PI*2);g.fill();g.fillStyle=tok('--on-hl');g.font='800 34px "Bricolage Grotesque", sans-serif';g.fillText('one idea',cx,cy+12);g.globalAlpha=1}
-  $('#jl').textContent=left;$('#jmsg').textContent=s>.97?'That\'s the fundamental principle.':s>.6?'Almost there.':s>.3?'The shape is showing through.':'Keep simplifying.'}
-$('#simp').addEventListener('input',e=>{s=+e.target.value;if(reduce)draw()});
-(function loop(){t+=.016;draw();if(!reduce)requestAnimationFrame(loop)})();
+/* ───────── the machine ───────── */
+const m=$('#m'),sheet=$('#sheet'),ticket=$('#ticket'),lcd=$('#lcd'),lever=$('#lever'),tag=$('#tag');
+let cur=ISSUES.length-1,busy=false,needle=1,needleGoal=1,spin=.25,spinGoal=.25;
 
-/* wormhole cover art: catenoid (the embedding shape of an Ellis wormhole) */
-const cw=$('#cvWorm'),gw=cw.getContext('2d');
-function drawWorm(){const Wd=cw.width,Hd=cw.height,ink=tok('--w-ink'),vio=tok('--w-violet'),mut=tok('--w-muted');gw.clearRect(0,0,Wd,Hd);const cx=Wd/2,cy=Hd/2,r0=34,sc=1;
-  for(let k=-9;k<=9;k++){const z=k*15,r=r0*Math.cosh(z/r0/1.15);if(r>Wd*.47)continue;gw.strokeStyle=k===0?vio:mut;gw.globalAlpha=k===0?1:.45;gw.lineWidth=k===0?3:1;gw.beginPath();gw.ellipse(cx,cy-z,r,r*.2,0,0,Math.PI*2);gw.stroke()}
-  gw.globalAlpha=.9;gw.strokeStyle=ink;gw.lineWidth=1.6;[-1,1].forEach(sd=>{gw.beginPath();let on=false;for(let z=-140;z<=140;z+=2){const r=r0*Math.cosh(z/r0/1.15);if(r>Wd*.47){on=false;continue}const X=cx+sd*r,Y=cy-z;if(on)gw.lineTo(X,Y);else{gw.moveTo(X,Y);on=true}}gw.stroke()});gw.globalAlpha=1;
-  gw.fillStyle=vio;gw.font='500 13px "DM Mono", monospace';gw.textAlign='left';gw.fillText('throat r₀',cx+r0+12,cy+4)}
-drawWorm();
-const re=()=>{drawWorm();if(reduce)draw()};matchMedia('(prefers-color-scheme: dark)').addEventListener('change',re);new MutationObserver(re).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+/* issue buttons */
+$('#lights').innerHTML=ISSUES.map((it,i)=>`<button type="button" data-i="${i}" aria-pressed="false" aria-label="Load issue ${it.n}"><i></i><span>${it.n}</span></button>`).join('');
+function load(i,animate){
+  cur=i;
+  [...document.querySelectorAll('#lights button')].forEach((b,k)=>b.setAttribute('aria-pressed',k===i));
+  const it=ISSUES[i];
+  sheet.innerHTML=`<span class="lab">input · issue ${it.n} · as written by experts</span><p>${it.jargon}</p>`;
+  if(animate&&!reduce){sheet.classList.remove('gone');sheet.classList.add('wait');void sheet.offsetWidth;sheet.classList.remove('wait')}else sheet.classList.remove('gone','wait');
+  needleGoal=1;lcd.textContent='ISSUE '+it.n+' LOADED';
+}
+$('#lights').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||busy)return;ticket.classList.remove('out');load(+b.dataset.i,true)});
 
-/* issue 03 cover art */
-(function(){const cv=$('#cvPat');if(!cv)return;const g=cv.getContext('2d'),W=cv.width,H=cv.height;g.fillStyle='#0E1513';g.fillRect(0,0,W,H);
-  const T=t=>0.5+0.42*Math.tanh((t-0.45)*5)*0.9-0.08*Math.sin(t*9),I=t=>0.55-0.35*Math.tanh((t-0.45)*5)+0.06*Math.cos(t*7);
-  const X=t=>30+t*(W-60),Y=v=>30+(1-v)*(H-90);g.save();g.filter='blur(7px)';g.globalAlpha=.7;[[T,[]],[I,[14,10]]].forEach(([f,d])=>{g.strokeStyle='#FF7E6B';g.lineWidth=6;g.setLineDash(d);g.beginPath();for(let t=0;t<=1;t+=0.01)t?g.lineTo(X(t),Y(f(t))):g.moveTo(X(t),Y(f(t)));g.stroke()});g.restore();g.setLineDash([]);
-  g.strokeStyle='#24312D';g.beginPath();g.moveTo(30,H-60);g.lineTo(W-30,H-60);g.stroke();
-  let s=3;const rn=()=>{s=(s*16807)%2147483647;return s/2147483647-0.5};[0.08,0.24,0.41,0.57,0.74,0.9].forEach(t=>{const y=Y(T(t)+rn()*0.12);g.strokeStyle='rgba(243,239,227,.25)';g.beginPath();g.moveTo(X(t),y+12);g.lineTo(X(t),H-60);g.stroke();g.fillStyle='#F3EFE3';g.beginPath();g.arc(X(t),y,9,0,7);g.fill()});
-  g.fillStyle='#90A099';g.font='500 15px "Azeret Mono", monospace';g.fillText('hidden biology (blurred) · what you measure (dots)',30,H-28)})();
+/* gears + gauge drawn once */
+const ns='http://www.w3.org/2000/svg';
+function gear(g,teeth,r,cx,cy,col){let d='';const n=teeth*2;for(let k=0;k<=n;k++){const a=k/n*Math.PI*2,rr=k%2?r:r*.8,a2=a+Math.PI/n;d+=(k?'L':'M')+(cx+Math.cos(a)*rr).toFixed(2)+' '+(cy+Math.sin(a)*rr).toFixed(2)+'L'+(cx+Math.cos(a2)*rr).toFixed(2)+' '+(cy+Math.sin(a2)*rr).toFixed(2)}
+  const p=document.createElementNS(ns,'path');p.setAttribute('d',d+'Z');p.setAttribute('fill',col);g.appendChild(p);const h=document.createElementNS(ns,'circle');h.setAttribute('cx',cx);h.setAttribute('cy',cy);h.setAttribute('r',r*.25);h.setAttribute('fill','#090d33');g.appendChild(h)}
+const g1=$('#g1'),g2=$('#g2');gear(g1,10,26,0,0,'#E6FB3C');gear(g2,7,17,0,0,'#8a96ff');
+const tk=$('#ticks');for(let k=0;k<=10;k++){const a=Math.PI+k/10*Math.PI,l=document.createElementNS(ns,'line');l.setAttribute('x1',Math.cos(a)*44);l.setAttribute('y1',Math.sin(a)*44);l.setAttribute('x2',Math.cos(a)*(k%5?48:51));l.setAttribute('y2',Math.sin(a)*(k%5?48:51));l.setAttribute('stroke',k>7?'#ff5a36':'#121317');l.setAttribute('stroke-width',k%5?1.4:2.4);tk.appendChild(l)}
+let ga=0;
+(function frame(){
+  spin+=(spinGoal-spin)*.06;needle+=(needleGoal-needle)*.05;ga+=spin*4;
+  g1.setAttribute('transform',`translate(-12 -6) rotate(${ga})`);g2.setAttribute('transform',`translate(21 19) rotate(${-ga*26/17+12})`);
+  const jitter=busy?Math.sin(performance.now()/40)*3:0;
+  $('#needle').setAttribute('transform',`rotate(${-80+needle*160+jitter})`);
+  requestAnimationFrame(frame);
+})();
 
-/* issue 04 cover art: the valley of binding energy */
-(function(){const cv=$('#cvEn');if(!cv)return;const g=cv.getContext('2d'),W=cv.width,H=cv.height;
-  const dark=()=>document.documentElement.dataset.theme==='dark'||(!document.documentElement.dataset.theme&&matchMedia('(prefers-color-scheme: dark)').matches);
-  const L=[[2,1.112],[3,2.827],[4,7.074],[6,5.332],[7,5.606],[9,6.463],[12,7.68],[14,7.476],[16,7.976],[20,8.032],[24,8.261],[28,8.448]];
-  const be=A=>{if(A<=28){for(let i=0;i<L.length;i++)if(L[i][0]>=A){if(i===0||L[i][0]===A)return L[i][1];const[a0,v0]=L[i-1],[a1,v1]=L[i];return v0+(v1-v0)*(A-a0)/(a1-a0)}}const Z=A/(1.98+.0155*Math.pow(A,2/3));return(15.75*A-17.8*Math.pow(A,2/3)-.711*Z*Z/Math.pow(A,1/3)-23.7*Math.pow(A-2*Z,2)/A)/A};
-  function draw(){const d=dark(),ink=d?'#EDE8DF':'#1B1915',mut=d?'#A39C8E':'#615C52',acc=d?'#E2A63B':'#9A5B00',bg=d?'#14120E':'#F9F8F5',red=d?'#F07A5C':'#C8462B',blu=d?'#7FA6FF':'#2F62C9';
-    g.fillStyle=bg;g.fillRect(0,0,W,H);const X=a=>40+(Math.log(a)-Math.log(2))/(Math.log(250)-Math.log(2))*(W-80),Y=v=>30+v/9*(H-90);
-    g.beginPath();g.moveTo(X(2),H-50);for(let a=2;a<=250;a*=1.02)g.lineTo(X(a),Y(be(a)));g.lineTo(X(250),H-50);g.closePath();g.globalAlpha=.14;g.fillStyle=acc;g.fill();g.globalAlpha=1;
-    g.strokeStyle=acc;g.lineWidth=4;g.beginPath();for(let a=2;a<=250;a*=1.02){a===2?g.moveTo(X(a),Y(be(a))):g.lineTo(X(a),Y(be(a)))}g.stroke();
-    const dot=(a,c)=>{g.fillStyle=c;g.beginPath();g.arc(X(a),Y(be(a))-10,10,0,7);g.fill()};dot(2,blu);dot(3,blu);dot(236,red);
-    g.fillStyle=ink;g.font='600 18px "Literata", Georgia, serif';g.textAlign='center';g.fillText('iron',X(56),Y(be(56))+28);
-    g.fillStyle=mut;g.font='15px "IBM Plex Mono", monospace';g.textAlign='left';g.fillText('fusion rolls down this way →',X(2)+14,Y(be(3))+40);g.textAlign='right';g.fillText('← fission rolls down this way',X(236)-14,Y(be(236))-34);g.textAlign='left'}
-  draw();matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']})})();
+function puff(){
+  if(reduce)return;
+  const w=document.createElement('span');w.className='puff';w.textContent=JUNK[Math.random()*JUNK.length|0];m.appendChild(w);
+  const dx=(Math.random()-.6)*160,dy=-90-Math.random()*90,r=(Math.random()-.5)*40;
+  w.animate([{transform:'translate(0,0) scale(.6)',opacity:0},{opacity:.9,offset:.2},{transform:`translate(${dx}px,${dy}px) rotate(${r}deg) scale(1.1)`,opacity:0}],{duration:1500+Math.random()*700,easing:'cubic-bezier(.2,.7,.3,1)'}).onfinish=()=>w.remove();
+}
 
-/* lab queue with per-viewer votes */
-const Q=[['05','Why does time slow down when you move?','Race a light clock against a stationary one, then derive the Lorentz factor from a triangle.','Week of Oct 26'],
- ['06','Are some infinities bigger than others?','Try to list every real number. Lose. Then see Cantor\'s diagonal trick catch you.','Week of Nov 2'],
- ['07','Why can\'t you unscramble an egg?','Shuffle particles in a box and watch probability, not physics, forbid the reverse.','Week of Nov 9']];
+const wait=ms=>new Promise(r=>setTimeout(r,reduce?0:ms));
+async function pull(){
+  if(busy)return;busy=true;tag.style.opacity=0;
+  const it=ISSUES[cur];
+  lever.classList.add('down');await wait(260);lever.classList.remove('down');
+  ticket.classList.remove('out');
+  lcd.textContent='FEEDING…';sheet.classList.add('gone');await wait(800);
+  lcd.textContent='SIMPLIFYING…';m.classList.add('shake');spinGoal=3.2;needleGoal=0;
+  const puffs=setInterval(puff,140);await wait(1700);clearInterval(puffs);
+  m.classList.remove('shake');spinGoal=.25;lcd.textContent='DONE · '+it.n;
+  ticket.innerHTML=`<a href="${it.href}" style="text-decoration:none">${ticketHTML(it,false)}</a>`;
+  void ticket.offsetWidth;ticket.classList.add('out');
+  await wait(1400);
+  busy=false;
+  /* load the next one so the next pull does something new */
+  const next=(cur+ISSUES.length-1)%ISSUES.length;load(next,true);lcd.textContent='DONE · NEXT: '+ISSUES[next].n;
+}
+lever.addEventListener('click',pull);
+/* you can also grab the lever and drag it down */
+let dragY=null;
+lever.addEventListener('pointerdown',e=>{dragY=e.clientY;lever.setPointerCapture(e.pointerId)});
+lever.addEventListener('pointermove',e=>{if(dragY==null)return;const d=Math.max(0,Math.min(1,(e.clientY-dragY)/120));lever.style.transform=`rotate(${18+d*140}deg)`;if(d>=1){dragY=null;lever.style.transform='';pull()}});
+lever.addEventListener('pointerup',()=>{dragY=null;lever.style.transform=''});
+lever.addEventListener('pointercancel',()=>{dragY=null;lever.style.transform=''});
+
+load(cur,false);
+setTimeout(pull,reduce?0:900);   // run it once so people see what it does
+
+/* tray: planned issues with per-viewer votes */
+const Q=[['05','Why does time slow down when you move?','Race a light clock against a stationary one, then derive the Lorentz factor from a triangle.','week of oct 26'],
+ ['06','Are some infinities bigger than others?','Try to list every real number. Lose. Then see Cantor’s diagonal trick catch you.','week of nov 2'],
+ ['07','Why can’t you unscramble an egg?','Shuffle particles in a box and watch probability, not physics, forbid the reverse.','week of nov 9']];
 const votes=store.get('simplifyit:votes')||{};
-function renderQ(){$('#queue').innerHTML=Q.map(([n,h,p,w])=>`<div class="qi"><span class="no">Issue ${n}</span><div><h4>${h}</h4><p>${p}</p></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="when">${w}</span><button class="vote" data-n="${n}" aria-pressed="${!!votes[n]}">${votes[n]?'Voted ✓':'I want this'}</button></div></div>`).join('')}
+function renderQ(){$('#queue').innerHTML=Q.map(([n,h,p,w])=>`<div class="wsheet"><span class="no">issue ${n} · waiting</span><h4>${h}</h4><p>${p}</p><div class="row"><span class="when">${w}</span><button class="vote" data-n="${n}" aria-pressed="${!!votes[n]}">${votes[n]?'voted ✓':'feed this next'}</button></div></div>`).join('')}
 renderQ();$('#queue').addEventListener('click',e=>{const b=e.target.closest('.vote');if(!b)return;votes[b.dataset.n]=!votes[b.dataset.n];store.set('simplifyit:votes',votes);renderQ()});
 })();
 </script>
-
 </body>
 </html>
